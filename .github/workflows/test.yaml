@@ -24,6 +24,9 @@ jobs:
       matrix:
         node-version: [20]
     steps:
+      - name: Go to client directory
+        run: cd client
+
       - name: Checkout
         uses: actions/checkout@v4
 

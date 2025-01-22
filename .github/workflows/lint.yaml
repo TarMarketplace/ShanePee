@@ -1,7 +1,12 @@
 name: Linter and style checker
 
 on:
-  push:
+  pull_request:
+    types:
+      - "opened"
+      - "edited"
+      - "reopened"
+      - "synchronize"
     paths:
       - "client/**"
     branches:

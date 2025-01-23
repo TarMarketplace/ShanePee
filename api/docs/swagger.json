@@ -1,0 +1,105 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Shanepee API",
+        "title": "Shanepee API",
+        "contact": {},
+        "version": "0.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/a": {
+            "get": {
+                "description": "get A",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "a"
+                ],
+                "summary": "get A",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.A"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create A",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "a"
+                ],
+                "summary": "create A",
+                "parameters": [
+                    {
+                        "description": "A body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.ACreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.A"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.A": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "long_data": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.ACreateBody": {
+            "type": "object",
+            "properties": {
+                "long_data": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

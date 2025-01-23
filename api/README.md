@@ -7,4 +7,5 @@
 ## Prerequisites
 - Golang 1.23
 - swaggo
+- make
 - Docker (optional)

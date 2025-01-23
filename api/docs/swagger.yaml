@@ -1,0 +1,68 @@
+definitions:
+  domain.A:
+    properties:
+      id:
+        type: string
+      long_data:
+        type: string
+    type: object
+  domain.ACreateBody:
+    properties:
+      long_data:
+        type: string
+    type: object
+  handler.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Shanepee API
+  title: Shanepee API
+  version: "0.0"
+paths:
+  /a:
+    get:
+      description: get A
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.A'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: get A
+      tags:
+      - a
+    post:
+      consumes:
+      - application/json
+      description: create A
+      parameters:
+      - description: A body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ACreateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.A'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: create A
+      tags:
+      - a
+swagger: "2.0"

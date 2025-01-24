@@ -3,6 +3,7 @@ BINDIR := $(DESTDIR)$(PREFIX)/bin
 GOBIN  := $(BINDIR)
 GO     := go
 GOFMT  := gofmt
+WIRE   := wire
 
 SWAG   := swag
 # Alternatively, with docker

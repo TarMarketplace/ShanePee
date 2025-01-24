@@ -7,6 +7,7 @@ HANDLERS := $(shell find infrastructure/handler -type f -name '*.handler.go')
 all: api
 
 api: $(SRCS) docs/docs.go
+	$(WIRE) ./cmd
 	$(GO) build -o api cmd/main.go
 
 docs/docs.go: $(HANDLERS)

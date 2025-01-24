@@ -1,13 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "shanepee.com/api/docs"
-	"shanepee.com/api/infrastructure/handler"
-	"shanepee.com/api/infrastructure/repository"
-	"shanepee.com/api/service"
 )
 
 //	@title			Shanepee API
@@ -16,14 +15,15 @@ import (
 
 // @host	localhost:8080
 func main() {
-	aRepo := repository.NewARepository()
-	aSvc := service.NewAService(aRepo)
-	aHdr := handler.NewAHandler(aSvc)
+	app, err := InitializeApp()
+	if err != nil {
+		log.Fatal(err)
+	}
 	// TODO: api versioning and prefix
 	// TODO: make document dynamic
 	r := gin.Default()
-	r.GET("/a", aHdr.GetA)
-	r.POST("/a", aHdr.CreateA)
+	r.GET("/a", app.aHdr.GetA)
+	r.POST("/a", app.aHdr.CreateA)
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run()
 }

@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"gorm.io/driver/sqlite"
+
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
 )
@@ -10,7 +10,6 @@ import (
 type ARepositoryImpl struct {
 	db *gorm.DB
 }
-
 
 func (a *ARepositoryImpl) FindMany(ctx context.Context) ([]domain.A, error) {
 	var data []domain.A
@@ -27,12 +26,7 @@ func (a *ARepositoryImpl) Create(ctx context.Context, data domain.A) error {
 var _ domain.ARepository = &ARepositoryImpl{}
 
 // TODO: di database
-func NewARepository() domain.ARepository {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-	db.AutoMigrate(&domain.A{})
+func NewARepository(db *gorm.DB) domain.ARepository {
 	return &ARepositoryImpl{
 		db,
 	}

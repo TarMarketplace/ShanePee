@@ -19,7 +19,11 @@ import (
 // Injectors from wire.go:
 
 func InitializeApp() (App, error) {
-	aRepository := repository.NewARepository()
+	db, err := repository.NewDB()
+	if err != nil {
+		return App{}, err
+	}
+	aRepository := repository.NewARepository(db)
 	aService := service.NewAService(aRepository)
 	aHandler := handler.NewAHandler(aService)
 	app := NewApp(aHandler)

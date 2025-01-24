@@ -8,7 +8,8 @@ all: api
 
 api: $(SRCS) docs/docs.go
 	$(WIRE) ./cmd
-	$(GO) build -o api cmd/main.go
+	mkdir -p out
+	$(GO) build -o out ./...
 
 docs/docs.go: $(HANDLERS)
 	$(SWAG) init -d ./cmd --pdl 2

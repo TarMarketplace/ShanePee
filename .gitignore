@@ -1,2 +1,2 @@
-api/api
+api/out/*
 api/test.db

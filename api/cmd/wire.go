@@ -15,6 +15,7 @@ func InitializeApp() (App, error) {
 		handler.NewAHandler,
 		service.NewAService,
 		repository.NewARepository,
+		repository.NewDB,
 		NewApp,
 	)
 	return App{}, nil

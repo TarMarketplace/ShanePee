@@ -1,4 +1,4 @@
-name: Vitest
+name: Linter and style checker
 
 on:
   pull_request:
@@ -18,15 +18,12 @@ permissions:
   id-token: write
 
 jobs:
-  test:
+  lint-and-style-check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20]
     steps:
-      - name: Go to client directory
-        run: cd client
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -43,6 +40,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: client
 
-      - name: Test
-        run: pnpm run test
+      - name: Lint
+        run: pnpm run lint
+        working-directory: client
+
+      - name: Style check
+        run: pnpm run style-check
+        working-directory: client

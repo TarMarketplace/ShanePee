@@ -1,4 +1,4 @@
-name: Linter and style checker
+name: golangci-lint
 
 on:
   pull_request:

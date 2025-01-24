@@ -8,8 +8,8 @@ import (
 )
 
 type Config struct {
-	Debug         bool   `mapstructure:"DEBUG"`
-	ServerUrl     string `mapstructure:"SERVER_URL"`
+	Debug     bool   `mapstructure:"DEBUG"`
+	ServerUrl string `mapstructure:"SERVER_URL"`
 }
 
 func BindEnvs(iface interface{}, parts ...string) {
@@ -44,4 +44,3 @@ func LoadConfig() (*Config, error) {
 
 	return &cfg, nil
 }
-

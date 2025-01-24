@@ -9,6 +9,7 @@
 - [swag](https://github.com/swaggo/swag)
 - make (should come with build tools XCode/git bash)
 - [Docker](https://docs.docker.com/engine/install/) (optional)
+- [Wire](https://github.com/google/wire)
 
 ## Artchitecture
 `apperror/` contains `AppError` interface. This is method allow application error to convert into HTTP error response.

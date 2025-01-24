@@ -25,7 +25,6 @@ func (a *ARepositoryImpl) Create(ctx context.Context, data domain.A) error {
 
 var _ domain.ARepository = &ARepositoryImpl{}
 
-// TODO: di database
 func NewARepository(db *gorm.DB) domain.ARepository {
 	return &ARepositoryImpl{
 		db,

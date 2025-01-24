@@ -1,7 +1,7 @@
 package domain
 
 type A struct {
-	ID       string `json:"id" gorm:"primaryKey"`
+	ID       int64  `json:"id" gorm:"primaryKey"`
 	LongData string `json:"long_data"`
 }
 
@@ -12,8 +12,7 @@ type ACreateBody struct {
 
 func CreateAFromBody(body ACreateBody) A {
 	return A{
-		// TODO: ID generation
-		ID:       "1",
+		ID:       GenID(),
 		LongData: body.LongData,
 	}
 }

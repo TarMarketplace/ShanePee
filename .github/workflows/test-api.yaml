@@ -8,7 +8,7 @@ on:
       - "reopened"
       - "synchronize"
     paths:
-      - "aoi/**"
+      - "api/**"
     branches:
       - "main"
 

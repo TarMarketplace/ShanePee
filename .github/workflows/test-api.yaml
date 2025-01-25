@@ -35,7 +35,7 @@ jobs:
         working-directory: api
 
       - name: Install swag
-        run: go install github.com/swaggo/swag@1.16.4
+        run: go install github.com/swaggo/swag@v1.16.4
 
       - name: Build
         run: make

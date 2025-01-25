@@ -37,6 +37,9 @@ jobs:
       - name: Install swag
         run: go install github.com/swaggo/swag/cmd/swag@v1.16.4
 
+      - name: Install wire
+        run: go install github.com/google/wire/cmd/wire@v0.6.0
+
       - name: Build
         run: make
         working-directory: api

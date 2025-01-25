@@ -1,0 +1,46 @@
+name: API Test
+
+on:
+  pull_request:
+    types:
+      - "opened"
+      - "edited"
+      - "reopened"
+      - "synchronize"
+    paths:
+      - "api/**"
+    branches:
+      - "main"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.3'
+          cache-dependency-path: api/go.sum
+
+      - name: Install dependencies
+        run: go get .
+        working-directory: api
+
+      - name: Build
+        run: make
+        working-directory: api
+
+      - name: Test with the Go CLI
+        run: go test
+        working-directory: api

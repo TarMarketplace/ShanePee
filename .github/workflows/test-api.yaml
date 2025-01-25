@@ -45,5 +45,5 @@ jobs:
         working-directory: api
 
       - name: Test with the Go CLI
-        run: go test
+        run: go test -v ./...
         working-directory: api

@@ -1,4 +1,4 @@
-name: golangci-lint
+name: API Lint
 
 on:
   pull_request:
@@ -18,7 +18,7 @@ permissions:
   id-token: write
 
 jobs:
-  lint-and-style-check:
+  Lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:

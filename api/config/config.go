@@ -26,7 +26,7 @@ func BindEnvs(iface interface{}, parts ...string) {
 		case reflect.Struct:
 			BindEnvs(v.Interface(), append(parts, tv)...)
 		default:
-			viper.BindEnv(strings.Join(append(parts, tv), "."))
+			_ = viper.BindEnv(strings.Join(append(parts, tv), "."))
 		}
 	}
 }

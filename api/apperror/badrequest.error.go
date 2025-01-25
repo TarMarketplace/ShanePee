@@ -9,11 +9,11 @@ type BadRequestError struct {
 var _ AppError = BadRequestError{}
 
 func (i BadRequestError) Code() int {
-	return http.StatusInternalServerError
+	return http.StatusBadRequest
 }
 
 func (i BadRequestError) Message() string {
-	return "Internal server error"
+	return i.errmsg
 }
 
 func (i BadRequestError) Cause() any {

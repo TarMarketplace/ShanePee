@@ -17,7 +17,9 @@ import (
 
 // @host	localhost:8080
 func main() {
-	godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
 	app, err := InitializeApp()
 	if err != nil {
 		log.Fatal(err)

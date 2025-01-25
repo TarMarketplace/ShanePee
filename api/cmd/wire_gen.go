@@ -7,6 +7,7 @@
 package main
 
 import (
+	"shanepee.com/api/config"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/service"
@@ -19,13 +20,17 @@ import (
 // Injectors from wire.go:
 
 func InitializeApp() (App, error) {
-	db, err := repository.NewDB()
+	configConfig, err := config.LoadConfig()
+	if err != nil {
+		return App{}, err
+	}
+	db, err := repository.NewDB(configConfig)
 	if err != nil {
 		return App{}, err
 	}
 	aRepository := repository.NewARepository(db)
 	aService := service.NewAService(aRepository)
 	aHandler := handler.NewAHandler(aService)
-	app := NewApp(aHandler)
+	app := NewApp(aHandler, configConfig)
 	return app, nil
 }

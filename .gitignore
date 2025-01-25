@@ -1,2 +1,3 @@
 api/out/*
 api/test.db
+api/.env

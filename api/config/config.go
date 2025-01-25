@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Debug     bool   `mapstructure:"DEBUG"`
-	ServerUrl string `mapstructure:"SERVER_URL"`
+	Debug        string `mapstructure:"DEBUG"`
+	ServerUrl    string `mapstructure:"SERVER_URL"`
+	DatabaseFile string `mapstructure:"DATABASE_FILE"`
 }
 
 func BindEnvs(iface interface{}, parts ...string) {
@@ -31,7 +32,7 @@ func BindEnvs(iface interface{}, parts ...string) {
 	}
 }
 
-func LoadConfig() (*Config, error) {
+func LoadConfig() (Config, error) {
 	var cfg Config
 
 	viper.SetEnvPrefix("APP")
@@ -39,8 +40,8 @@ func LoadConfig() (*Config, error) {
 
 	err := viper.Unmarshal(&cfg)
 	if err != nil {
-		return &cfg, err
+		return cfg, err
 	}
 
-	return &cfg, nil
+	return cfg, nil
 }

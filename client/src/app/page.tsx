@@ -3,7 +3,7 @@ import { Button } from '@/components/button'
 export default function Home() {
   return (
     <main>
-      <h1>Hello World!</h1>
+      <h1>Hello ShanPee!</h1>
       <Button />
     </main>
   )

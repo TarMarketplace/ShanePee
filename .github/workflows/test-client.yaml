@@ -1,4 +1,4 @@
-name: Linter and style checker
+name: Vitest
 
 on:
   pull_request:
@@ -18,7 +18,7 @@ permissions:
   id-token: write
 
 jobs:
-  lint-and-style-check:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,12 +37,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
+          cache-dependency-path: 'client/pnpm-lock.yaml'
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: client
 
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Style check
-        run: pnpm run style-check
+      - name: Test
+        run: pnpm run test
+        working-directory: client

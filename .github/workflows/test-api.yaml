@@ -1,0 +1,49 @@
+name: API Test
+
+on:
+  pull_request:
+    types:
+      - "opened"
+      - "edited"
+      - "reopened"
+      - "synchronize"
+    paths:
+      - "api/**"
+    branches:
+      - "main"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.3'
+          cache-dependency-path: api/go.sum
+
+      - name: Install dependencies
+        run: go mod download
+        working-directory: api
+
+      - name: Install swag
+        run: go install github.com/swaggo/swag/cmd/swag@v1.16.4
+
+      - name: Install wire
+        run: go install github.com/google/wire/cmd/wire@v0.6.0
+
+      - name: Build
+        run: make
+        working-directory: api
+
+      - name: Test with the Go CLI
+        run: go test -v ./...
+        working-directory: api

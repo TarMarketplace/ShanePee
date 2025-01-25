@@ -25,5 +25,7 @@ func main() {
 	r.GET("/a", app.aHdr.GetA)
 	r.POST("/a", app.aHdr.CreateA)
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.Run()
+	if err = r.Run(); err != nil {
+		log.Fatal(err)
+	}
 }

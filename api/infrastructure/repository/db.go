@@ -11,6 +11,8 @@ func NewDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	db.AutoMigrate(&domain.A{})
+	if err = db.AutoMigrate(&domain.A{}); err != nil {
+		return nil, err
+	}
 	return db, nil
 }

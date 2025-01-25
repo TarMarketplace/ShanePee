@@ -29,7 +29,6 @@
 ## TODO
 - only enable swagger on non-debug
 - proper logger
-- ID Generation
 - API Versioning
 - Input validation
 - DB File config

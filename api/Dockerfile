@@ -2,6 +2,8 @@ FROM golang:1.23.3 AS builder
 
 WORKDIR /build
 
+RUN go install github.com/swaggo/swag@1.16.4
+
 COPY go.mod go.sum ./
 
 RUN go mod download

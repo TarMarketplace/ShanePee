@@ -65,7 +65,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: "{{defaultContext}}:api"
-          file: api/Dockerfile
           push: true
           tags: ${{ steps.tags.outputs.tags }}
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache

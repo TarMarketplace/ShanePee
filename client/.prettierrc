@@ -11,12 +11,17 @@
   "arrowParens": "always",
   "importOrder": [
     "^@/components(.*)$",
+    "^@/providers(.*)$",
     "^@/lib(.*)$",
+    "^@/types(.*)$",
     "^@/styles(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
+  "tailwindFunctions": ["clsx", "cn", "cva"],
+  "tailwindPreserveWhitespace": false,
+  "tailwindStylesheet": "./tailwind.config.js",
   "plugins": [
     "@trivago/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss"

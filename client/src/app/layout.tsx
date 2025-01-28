@@ -1,11 +1,20 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Prompt } from 'next/font/google'
+
+import { Footer } from '@/components/footer'
+import { Navbar } from '@/components/navbar'
+
+import { UserProvider } from '@/providers/user-provider'
 
 import { cn } from '@/lib/utils'
 
 import '@/styles/globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const prompt = Prompt({
+  subsets: ['latin', 'thai'],
+  variable: '--font-prompt',
+  weight: ['400', '600'],
+})
 
 // TODO: Add your own metadata
 export const metadata: Metadata = {
@@ -21,9 +30,13 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={cn('min-h-screen font-inter antialiased', inter.variable)}
+        className={cn('min-h-dvh font-prompt antialiased', prompt.variable)}
       >
-        {children}
+        <UserProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   )

@@ -14,7 +14,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 })
 
-export default [
+const eslintConfig = [
   {
     ignores: [],
   },
@@ -40,3 +40,5 @@ export default [
     rules: {},
   },
 ]
+
+export default eslintConfig

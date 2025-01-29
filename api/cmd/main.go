@@ -24,16 +24,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// TODO: api versioning and prefix
 	if app.cfg.Debug != "1" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.Default()
-	r.GET("/a", app.aHdr.GetA)
-	r.POST("/a", app.aHdr.CreateA)
+	v1 := r.Group("v1")
+	v1.GET("/a", app.aHdr.GetA)
+	v1.POST("/a", app.aHdr.CreateA)
 
 	if app.cfg.Debug == "1" {
-		r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
 	if err = r.Run(); err != nil {

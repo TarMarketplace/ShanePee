@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/a": {
+        "/v1/a": {
             "get": {
                 "description": "get A",
                 "produces": [
@@ -85,7 +85,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "long_data": {
                     "type": "string"

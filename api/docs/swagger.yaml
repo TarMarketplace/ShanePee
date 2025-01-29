@@ -2,7 +2,7 @@ definitions:
   domain.A:
     properties:
       id:
-        type: string
+        type: integer
       long_data:
         type: string
     type: object
@@ -23,7 +23,7 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
-  /a:
+  /v1/a:
     get:
       description: get A
       produces:

@@ -8,7 +8,7 @@
     },
     "host": "localhost:8080",
     "paths": {
-        "/a": {
+        "/v1/a": {
             "get": {
                 "description": "get A",
                 "produces": [
@@ -78,7 +78,7 @@
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "long_data": {
                     "type": "string"

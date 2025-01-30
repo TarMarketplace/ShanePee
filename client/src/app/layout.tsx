@@ -2,13 +2,14 @@ import type { Metadata } from 'next'
 import { Prompt } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
-import { Navbar } from '@/components/navbar'
 
 import { UserProvider } from '@/providers/user-provider'
 
 import { cn } from '@/lib/utils'
 
 import '@/styles/globals.css'
+
+import { NavbarContainer } from './_containers/navbar-container'
 
 const prompt = Prompt({
   subsets: ['latin', 'thai'],
@@ -33,7 +34,7 @@ export default function RootLayout({
         className={cn('min-h-dvh font-prompt antialiased', prompt.variable)}
       >
         <UserProvider>
-          <Navbar />
+          <NavbarContainer />
           {children}
           <Footer />
         </UserProvider>

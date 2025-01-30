@@ -49,16 +49,35 @@ const textVariants = cva('font-prompt', {
 
 export interface TextProps
   extends React.HTMLAttributes<HTMLParagraphElement>,
-    VariantProps<typeof textVariants> {}
+    VariantProps<typeof textVariants> {
+  as?: React.ElementType
+}
 
 const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
-  ({ className, variant, ...props }, ref) => {
-    let Component: React.ElementType = 'p'
+  ({ className, as, variant, ...props }, ref) => {
+    let Component: React.ElementType = as ?? 'p'
 
-    if (variant?.startsWith('heading')) {
-      Component = 'h1'
-    } else {
-      Component = 'p'
+    if (!as) {
+      switch (variant) {
+        case 'heading-5xl':
+          Component = 'h1'
+          break
+        case 'heading-4xl':
+          Component = 'h2'
+          break
+        case 'heading-3xl':
+          Component = 'h3'
+          break
+        case 'heading-2xl':
+          Component = 'h4'
+          break
+        case 'heading-xl':
+          Component = 'h5'
+          break
+        case 'heading-lg':
+          Component = 'h6'
+          break
+      }
     }
 
     return (

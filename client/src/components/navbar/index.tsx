@@ -1,36 +1,30 @@
-'use client'
-
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 
 import { Text } from '@/components/text'
 
-import { useUser } from '@/providers/user-provider'
+import { User } from '@/types/user'
 
 import { UserMenu } from './user-menu'
 
-const Navbar = () => {
-  const router = useRouter()
-  const { user, setUser } = useUser()
-  const [search, setSearch] = useState('')
+interface NavbarProps {
+  user: User | null
+  onLogin: () => void
+  onLogout: () => void
+  searchValue: string
+  onChangeSearchValue: (value: string) => void
+  onSearch: () => void
+}
 
-  const handleLogin = () => {
-    setUser({ id: '1', name: 'lnwJoZaSodaSing+' })
-  }
-
-  const handleLogout = () => {
-    setUser(null)
-  }
-
-  const handleSearch = () => {
-    // TODO: Implement search
-    console.log(search)
-    router.push(`/search?query=${search}`)
-  }
-
+const Navbar = ({
+  user,
+  onLogin,
+  onLogout,
+  searchValue,
+  onChangeSearchValue,
+  onSearch,
+}: NavbarProps) => {
   return (
     <nav className='sticky z-50 flex w-full items-center justify-between bg-primary-gradient px-3 py-2 text-white'>
       <div className='flex w-full max-w-2xl items-center gap-[1.125rem]'>
@@ -46,12 +40,12 @@ const Navbar = () => {
           <input
             className='w-full rounded-l-lg px-3 py-2 text-black'
             placeholder='Art toys...'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchValue}
+            onChange={(e) => onChangeSearchValue(e.target.value)}
           />
           <button
             className='rounded-r-lg bg-secondary-500 p-1.5'
-            onClick={handleSearch}
+            onClick={onSearch}
           >
             <Icon icon='mdi:magnify' className='size-8 text-black' />
           </button>
@@ -60,11 +54,11 @@ const Navbar = () => {
       {user ? (
         <div className='flex items-center gap-[1.125rem]'>
           <Icon icon='tdesign:cart-filled' className='size-7' />
-          <UserMenu user={user} onLogout={handleLogout} />
+          <UserMenu user={user} onLogout={onLogout} />
         </div>
       ) : (
         <div className='flex items-center divide-x divide-white text-nowrap'>
-          <button className='px-3' onClick={handleLogin}>
+          <button className='px-3' onClick={onLogin}>
             <Text variant='md-semibold'>เข้าสู่ระบบ</Text>
           </button>
           <button className='px-3'>

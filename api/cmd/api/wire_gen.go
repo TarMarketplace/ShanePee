@@ -13,10 +13,6 @@ import (
 	"shanepee.com/api/service"
 )
 
-import (
-	_ "shanepee.com/api/docs"
-)
-
 // Injectors from wire.go:
 
 func InitializeApp() (App, error) {
@@ -31,6 +27,9 @@ func InitializeApp() (App, error) {
 	aRepository := repository.NewARepository(db)
 	aService := service.NewAService(aRepository)
 	aHandler := handler.NewAHandler(aService)
-	app := NewApp(aHandler, configConfig)
+	authRepository := repository.NewAuthRepository(db)
+	authService := service.NewAuthService(authRepository)
+	authHandler := handler.NewAuthHandler(authService)
+	app := NewApp(aHandler, authHandler, configConfig)
 	return app, nil
 }

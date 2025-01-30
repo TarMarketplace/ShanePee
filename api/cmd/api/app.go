@@ -7,12 +7,14 @@ import (
 
 type App struct {
 	aHdr handler.AHandler
+	authHdr handler.AuthHandler
 	cfg  config.Config
 }
 
-func NewApp(aHdr handler.AHandler, cfg config.Config) App {
+func NewApp(aHdr handler.AHandler, authHdr handler.AuthHandler, cfg config.Config) App {
 	return App{
 		aHdr,
+		authHdr,
 		cfg,
 	}
 }

@@ -11,6 +11,18 @@ definitions:
       long_data:
         type: string
     type: object
+  domain.User:
+    properties:
+      email:
+        type: string
+    type: object
+  domain.UserCreateBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   handler.ErrorResponse:
     properties:
       message:
@@ -63,6 +75,30 @@ paths:
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: create A
+      tags:
+      - a
+  /v1/auth/register:
+    post:
+      description: Register
+      parameters:
+      - description: user create body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserCreateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Register User
       tags:
       - a
 swagger: "2.0"

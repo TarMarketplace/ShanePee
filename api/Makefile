@@ -3,6 +3,7 @@ include Makefile.inc
 SRCS          := $(shell find . -type f -name '*.go')
 
 HANDLERS      := $(shell find infrastructure/handler -type f -name '*.handler.go')
+DOMAINS       := $(shell find domain -type f -name '*.go')
 
 SWAG_FLAGS    := --pdl 2
 
@@ -15,13 +16,13 @@ api: $(SRCS) docs/docs.go
 	mkdir -p out
 	$(GO) build -o out ./...
 
-docs/docs.go: $(HANDLERS)
+docs/docs.go: $(HANDLERS) $(DOMAINS)
 	$(SWAG) init -d ./cmd/api $(SWAG_FLAGS)
 
-docs/swagger.json: $(HANDLERS)
+docs/swagger.json: $(HANDLERS) $(DOMAINS)
 	$(SWAG) init -d ./cmd/api $(SWAG_FLAGS)
 
-docs/swagger.yaml: $(HANDLERS)
+docs/swagger.yaml: $(HANDLERS) $(DOMAINS)
 	$(SWAG) init -d ./cmd/api $(SWAG_FLAGS)
 
 fmt:

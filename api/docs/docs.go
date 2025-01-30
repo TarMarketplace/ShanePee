@@ -78,6 +78,43 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/auth/register": {
+            "post": {
+                "description": "Register",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "a"
+                ],
+                "summary": "Register User",
+                "parameters": [
+                    {
+                        "description": "user create body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.UserCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -96,6 +133,25 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "long_data": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UserCreateBody": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }

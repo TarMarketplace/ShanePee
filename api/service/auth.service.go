@@ -29,11 +29,12 @@ func (a *authServiceImpl) Register(ctx context.Context, username string, passwor
 	// TODO: salt
 	// TODO: validate password
 	hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+	hashStr := string(hash)
 	if err != nil {
 		// TODO: properly handle this error
 		return nil, apperror.ErrInternal(err)
 	}
-	user := domain.NewUser(username, hash)
+	user := domain.NewUser(username, hashStr)
 	a.authRepo.CreateUser(ctx, user)
 
 	return user, nil

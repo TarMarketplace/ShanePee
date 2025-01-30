@@ -2,7 +2,7 @@ package domain
 
 type User struct {
 	Email        string `json:"email"`
-	PasswordHash []byte `json:"-" swaggerignore:"true"`
+	PasswordHash string `json:"-" swaggerignore:"true"`
 }
 
 type UserCreateBody struct {
@@ -10,7 +10,7 @@ type UserCreateBody struct {
 	Password string `json:"password"`
 }
 
-func NewUser(email string, passwordHash []byte) *User {
+func NewUser(email string, passwordHash string) *User {
 	return &User{
 		email,
 		passwordHash,

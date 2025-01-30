@@ -100,5 +100,5 @@ paths:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: Register User
       tags:
-      - a
+      - Authentication
 swagger: "2.0"

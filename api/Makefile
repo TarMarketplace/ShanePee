@@ -9,12 +9,14 @@ SWAG_FLAGS    := --pdl 2
 
 export GOROOT := $(shell go env GOROOT)
 
-all: api
+all: out/api
 
-api: $(SRCS) docs/docs.go
-	$(WIRE) ./cmd/api
+out/api: docs/docs.go cmd/api/wire_gen.go $(SRCS)
 	mkdir -p out
 	$(GO) build -o out ./...
+
+cmd/api/wire_gen.go: cmd/api/wire.go cmd/api/app.go
+	$(WIRE) ./cmd/api
 
 docs/docs.go: $(HANDLERS) $(DOMAINS)
 	$(SWAG) init -d ./cmd/api $(SWAG_FLAGS)
@@ -30,5 +32,5 @@ fmt:
 	$(SWAG) fmt
 
 clean:
-	rm -rf out/* docs/docs.go docs/swagger.json docs/swagger.yaml
+	rm -rf out/* docs/docs.go docs/swagger.json docs/swagger.yaml cmd/api/wire_gen.go
 

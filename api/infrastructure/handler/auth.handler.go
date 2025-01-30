@@ -19,14 +19,14 @@ func NewAuthHandler(authSvc service.AuthService) AuthHandler {
 	}
 }
 
-// @Summary		Register User
-// @Description	Register
-// @Tags			Authentication
-// @Produce		json
-// @Param body body domain.UserCreateBody true "user create body"
-// @Success		200	{object}	domain.User
-// @Failure		400	{object}	ErrorResponse
-// @Router			/v1/auth/register [post]
+//	@Summary		Register User
+//	@Description	Register
+//	@Tags			Authentication
+//	@Produce		json
+//	@Param			body	body		domain.UserCreateBody	true	"user create body"
+//	@Success		200		{object}	domain.User
+//	@Failure		400		{object}	ErrorResponse
+//	@Router			/v1/auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
   var body domain.UserCreateBody
   // TODO: validate body

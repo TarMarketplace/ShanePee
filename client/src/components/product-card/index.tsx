@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import { Text } from '@/components/text'
 
-import { Product } from '@/types/product'
+import type { Product } from '@/types/product'
 
 import { Badge } from '../badge'
 

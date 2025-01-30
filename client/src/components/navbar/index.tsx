@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { Text } from '@/components/text'
 
-import { User } from '@/types/user'
+import type { User } from '@/types/user'
 
 import { UserMenu } from './user-menu'
 
@@ -52,10 +52,7 @@ const Navbar = ({
         </div>
       </div>
       {user ? (
-        <div className='flex items-center gap-[1.125rem]'>
-          <Icon icon='tdesign:cart-filled' className='size-7' />
-          <UserMenu user={user} onLogout={onLogout} />
-        </div>
+        <UserMenu user={user} onLogout={onLogout} />
       ) : (
         <div className='flex items-center divide-x divide-white text-nowrap'>
           <button className='px-3' onClick={onLogin}>

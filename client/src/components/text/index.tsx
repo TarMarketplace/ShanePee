@@ -55,29 +55,31 @@ export interface TextProps
 
 const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
   ({ className, as, variant, ...props }, ref) => {
-    let Component: React.ElementType = as ?? 'p'
+    let Component: React.ElementType = 'p'
 
-    if (!as) {
-      switch (variant) {
-        case 'heading-5xl':
-          Component = 'h1'
-          break
-        case 'heading-4xl':
-          Component = 'h2'
-          break
-        case 'heading-3xl':
-          Component = 'h3'
-          break
-        case 'heading-2xl':
-          Component = 'h4'
-          break
-        case 'heading-xl':
-          Component = 'h5'
-          break
-        case 'heading-lg':
-          Component = 'h6'
-          break
-      }
+    switch (variant) {
+      case 'heading-5xl':
+        Component = 'h1'
+        break
+      case 'heading-4xl':
+        Component = 'h2'
+        break
+      case 'heading-3xl':
+        Component = 'h3'
+        break
+      case 'heading-2xl':
+        Component = 'h4'
+        break
+      case 'heading-xl':
+        Component = 'h5'
+        break
+      case 'heading-lg':
+        Component = 'h6'
+        break
+    }
+
+    if (as) {
+      Component = as
     }
 
     return (

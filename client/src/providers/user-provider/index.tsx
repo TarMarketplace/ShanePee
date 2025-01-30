@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from 'react'
 
-import { type User } from '@/types/user'
+import type { User } from '@/types/user'
 
 export interface UserData {
   user: User | null

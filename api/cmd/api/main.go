@@ -11,7 +11,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "shanepee.com/api/docs"
+	"shanepee.com/api/docs"
 )
 
 //	@title			Shanepee API
@@ -34,12 +34,16 @@ func main() {
 	if app.cfg.Debug != "1" {
 		gin.SetMode(gin.ReleaseMode)
 	}
+  docs.SwaggerInfo.Host = app.cfg.ServerUrl
 
 	r := gin.Default()
   r.Use(cors.Default())
+
 	v1 := r.Group("v1")
+
 	v1.GET("/a", app.aHdr.GetA)
 	v1.POST("/a", app.aHdr.CreateA)
+
 	v1.POST("/auth/register", app.authHdr.Register)
 
 	if app.cfg.Debug == "1" {

@@ -1,6 +1,7 @@
 package domain
 
 type User struct {
+	ID           int64  `json:"id" gorm:"primaryKey"`
 	Email        string `json:"email"`
 	PasswordHash string `json:"-" swaggerignore:"true"`
 }
@@ -12,7 +13,8 @@ type UserCreateBody struct {
 
 func NewUser(email string, passwordHash string) *User {
 	return &User{
-		email,
-		passwordHash,
+		ID:           GenID(),
+		Email:        email,
+		PasswordHash: passwordHash,
 	}
 }

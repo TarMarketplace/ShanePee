@@ -135,6 +135,9 @@
             "properties": {
                 "email": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },

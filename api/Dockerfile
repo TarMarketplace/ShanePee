@@ -15,6 +15,6 @@ RUN make
 
 FROM debian:bookworm-slim
 
-COPY --from=builder /build/out/cmd /usr/local/bin/api
+COPY --from=builder /build/out/api /usr/local/bin/api
 
 ENTRYPOINT [ "api" ]

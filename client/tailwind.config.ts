@@ -1,3 +1,4 @@
+import withMT from '@material-tailwind/react/utils/withMT'
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 import { fontFamily } from 'tailwindcss/defaultTheme'
@@ -157,4 +158,4 @@ const config: Config = {
   },
   plugins: [tailwindcssAnimate],
 }
-export default config
+export default withMT(config)

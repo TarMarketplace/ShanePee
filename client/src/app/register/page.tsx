@@ -293,7 +293,7 @@ function Register2({ userData, handleInputChange, nextSection }) {
       />
 
       <ButtonCapsule type='submit' className='mt-4 bg-primary-500 text-white'>
-        ถัดไป
+        สมัครใช้งาน
       </ButtonCapsule>
     </form>
   )

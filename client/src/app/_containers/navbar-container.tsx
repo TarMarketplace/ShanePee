@@ -13,7 +13,8 @@ const NavbarContainer = () => {
   const [search, setSearch] = useState('')
 
   const handleLogin = () => {
-    setUser({ id: '1', name: 'lnwJoZaSodaSing+' })
+    router.push('/login')
+    // setUser({ id: '1', name: 'lnwJoZaSodaSing+' })
   }
 
   const handleLogout = () => {

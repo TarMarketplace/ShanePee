@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
 
-import { ButtonCapsule } from '@/components/button-capsule'
+import { Button } from '@/components/button'
 import { ProductCard } from '@/components/product-card'
 import { Text } from '@/components/text'
 
@@ -43,7 +43,7 @@ export default function Home() {
             />
           ))}
         </div>
-        <ButtonCapsule>View More</ButtonCapsule>
+        <Button>View More</Button>
       </section>
     </main>
   )

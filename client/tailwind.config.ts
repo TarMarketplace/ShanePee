@@ -135,6 +135,10 @@ const config: Config = {
       },
     },
     extend: {
+      boxShadow: {
+        sm: '0px 7px 29px 0px rgba(100, 100, 111, 0.20)',
+        md: '0px 6px 12px 0px rgba(0, 0, 0, 0.16)',
+      },
       fontFamily: {
         prompt: ['var(--font-prompt)', ...fontFamily.sans],
       },

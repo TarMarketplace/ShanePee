@@ -15,8 +15,11 @@ func InitializeApp() (App, error) {
 	wire.Build(
 		handler.NewAHandler,
 		service.NewAService,
+		service.NewUserService,
 		repository.NewARepository,
+		repository.NewUserRepository,
 		handler.NewAuthHandler,
+		handler.NewUserHandler,
 		service.NewAuthService,
 		repository.NewAuthRepository,
 		repository.NewDB,

@@ -1,9 +1,29 @@
 package domain
 
 type User struct {
-	ID           int64  `json:"id" gorm:"primaryKey"`
-	Email        string `json:"email"`
-	PasswordHash string `json:"-" swaggerignore:"true"`
+	ID            int64         `json:"id" gorm:"primaryKey"`
+	Email         string        `json:"email"`
+	PasswordHash  string        `json:"-" swaggerignore:"true"`
+	FirstName     string        `json:"first_name"`
+	LastName      string        `json:"last_name"`
+	Gender        string        `json:"gender"`
+	Tel           string        `json:"tel"`
+	Address       Address       `json:"address"`
+	PaymentMethod PaymentMethod `json:"payment_method"`
+}
+
+type Address struct {
+	HouseNo  string `json:"house_no"`
+	District string `json:"district"`
+	Province string `json:"province"`
+	Postcode string `json:"postcode"`
+}
+
+type PaymentMethod struct {
+	CardNumber string `json:"card_number"`
+	ExpireDate string `json:"expire_date"`
+	CVV        string `json:"cvv"`
+	CardOwner  string `json:"card_owner"`
 }
 
 type UserCreateBody struct {

@@ -30,6 +30,9 @@ func InitializeApp() (App, error) {
 	authRepository := repository.NewAuthRepository(db)
 	authService := service.NewAuthService(authRepository)
 	authHandler := handler.NewAuthHandler(authService)
-	app := NewApp(aHandler, authHandler, configConfig)
+	userRepository := repository.NewUserRepository(db)
+	userService := service.NewUserService(userRepository)
+	userHandler := handler.NewUserHandler(userService)
+	app := NewApp(aHandler, authHandler, userHandler, configConfig)
 	return app, nil
 }

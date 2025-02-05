@@ -1,6 +1,8 @@
 package domain
 
-import "context"
+import (
+	"context"
+)
 
 type AuthRepository interface {
 	CreateUser(ctx context.Context, user *User) error

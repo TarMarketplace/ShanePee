@@ -54,9 +54,9 @@ func (h *AHandler) GetAById(c *gin.Context) {
 		return
 	}
 
-	data, err2 := h.aSvc.FindOneA(c, id)
-	if err2 != nil {
-		handleError(c, err2)
+	data, appError := h.aSvc.FindOneA(c, id)
+	if appError != nil {
+		handleError(c, appError)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -114,9 +114,9 @@ func (h *AHandler) UpdateA(c *gin.Context) {
 		return
 	}
 
-	err2 := h.aSvc.UpdateA(c, id, body)
-	if err2 != nil {
-		handleError(c, err2)
+	appError := h.aSvc.UpdateA(c, id, body)
+	if appError != nil {
+		handleError(c, appError)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -141,9 +141,9 @@ func (h *AHandler) DeleteA(c *gin.Context) {
 		return
 	}
 
-	err2 := h.aSvc.DeleteA(c, id)
-	if err2 != nil {
-		handleError(c, err2)
+	appError := h.aSvc.DeleteA(c, id)
+	if appError != nil {
+		handleError(c, appError)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{

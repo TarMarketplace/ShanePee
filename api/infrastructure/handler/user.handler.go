@@ -53,9 +53,9 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		return
 	}
 
-	data, err2 := h.userSvc.GetUser(c, id)
-	if err2 != nil {
-		handleError(c, err2)
+	data, appError := h.userSvc.GetUser(c, id)
+	if appError != nil {
+		handleError(c, appError)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -87,9 +87,9 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	err2 := h.userSvc.UpdateUser(c, id, body)
-	if err2 != nil {
-		handleError(c, err2)
+	appError := h.userSvc.UpdateUser(c, id, body)
+	if appError != nil {
+		handleError(c, appError)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{

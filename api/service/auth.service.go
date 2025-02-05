@@ -35,7 +35,11 @@ func (a *authServiceImpl) Register(ctx context.Context, username string, passwor
 		return nil, apperror.ErrInternal(err)
 	}
 	user := domain.NewUser(username, hashStr)
-	a.authRepo.CreateUser(ctx, user)
+	err = a.authRepo.CreateUser(ctx, user)
+	if err != nil {
+		// TODO: properly handle this error
+		return nil, apperror.ErrInternal(err)
+	}
 
 	return user, nil
 }

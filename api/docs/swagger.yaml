@@ -5,10 +5,14 @@ definitions:
         type: integer
       long_data:
         type: string
+      short_data:
+        type: string
     type: object
   domain.ACreateBody:
     properties:
       long_data:
+        type: string
+      short_data:
         type: string
     type: object
   domain.Address:
@@ -73,7 +77,7 @@ info:
 paths:
   /v1/a:
     get:
-      description: get A
+      description: get all As
       produces:
       - application/json
       responses:
@@ -85,7 +89,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
-      summary: get A
+      summary: get As
       tags:
       - A
     post:
@@ -143,7 +147,7 @@ paths:
       tags:
       - A
     get:
-      description: get A
+      description: get A by id
       parameters:
       - description: ID
         in: path
@@ -171,7 +175,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: update A
+      description: update A by id
       parameters:
       - description: ID
         in: path
@@ -227,4 +231,85 @@ paths:
       summary: Register User
       tags:
       - Authentication
+  /v1/user:
+    get:
+      description: get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: get users
+      tags:
+      - User
+  /v1/user/:id:
+    get:
+      description: get user by id
+      parameters:
+      - description: id of user to be fetched
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: get user
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: update user by id
+      parameters:
+      - description: id of user to be updated
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: body of user to be updated
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: update user
+      tags:
+      - User
 swagger: "2.0"

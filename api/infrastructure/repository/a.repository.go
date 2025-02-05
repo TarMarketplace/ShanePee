@@ -31,12 +31,11 @@ func (a *ARepositoryImpl) Create(ctx context.Context, data domain.A) error {
 	return a.db.Create(&data).Error
 }
 
-func (a *ARepositoryImpl) Update(ctx context.Context, id int64, body map[string]interface{}) (*domain.A, error) {
-	var data domain.A
-	if err := a.db.Model(&data).Where("id = ?", id).Updates(body).Error; err != nil {
-		return nil, err
+func (a *ARepositoryImpl) Update(ctx context.Context, id int64, body map[string]interface{}) error {
+	if err := a.db.Model(domain.A{}).Where("id = ?", id).Updates(body).Error; err != nil {
+		return err
 	}
-	return &data, nil
+	return nil
 }
 
 func (a *ARepositoryImpl) Delete(ctx context.Context, id int64) error {

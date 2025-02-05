@@ -11,7 +11,7 @@ type AService interface {
 	FindManyA(ctx context.Context) ([]domain.A, apperror.AppError)
 	FindOneA(ctx context.Context, id int64) (*domain.A, apperror.AppError)
 	CreateA(ctx context.Context, body domain.ACreateBody) (*domain.A, apperror.AppError)
-	UpdateA(ctx context.Context, id int64, body map[string]interface{}) (*domain.A, apperror.AppError)
+	UpdateA(ctx context.Context, id int64, body map[string]interface{}) apperror.AppError
 	DeleteA(ctx context.Context, id int64) apperror.AppError
 }
 
@@ -52,12 +52,12 @@ func (svc *aServiceImpl) CreateA(ctx context.Context, body domain.ACreateBody) (
 	return &a, nil
 }
 
-func (svc *aServiceImpl) UpdateA(ctx context.Context, id int64, body map[string]interface{}) (*domain.A, apperror.AppError) {
-	data, err := svc.aRepo.Update(ctx, id, body)
+func (svc *aServiceImpl) UpdateA(ctx context.Context, id int64, body map[string]interface{}) apperror.AppError {
+	err := svc.aRepo.Update(ctx, id, body)
 	if err != nil {
-		return nil, apperror.ErrInternal(err)
+		return apperror.ErrInternal(err)
 	}
-	return data, nil
+	return nil
 }
 
 func (svc *aServiceImpl) DeleteA(ctx context.Context, id int64) apperror.AppError {

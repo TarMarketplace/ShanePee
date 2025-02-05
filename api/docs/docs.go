@@ -17,14 +17,14 @@ const docTemplate = `{
     "paths": {
         "/v1/a": {
             "get": {
-                "description": "get A",
+                "description": "get all As",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "A"
                 ],
-                "summary": "get A",
+                "summary": "get As",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -81,7 +81,7 @@ const docTemplate = `{
         },
         "/v1/a/:id": {
             "get": {
-                "description": "get A",
+                "description": "get A by id",
                 "produces": [
                     "application/json"
                 ],
@@ -162,7 +162,7 @@ const docTemplate = `{
                 }
             },
             "patch": {
-                "description": "update A",
+                "description": "update A by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -250,6 +250,128 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/user": {
+            "get": {
+                "description": "get all users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/:id": {
+            "get": {
+                "description": "get user by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of user to be fetched",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "update user by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "update user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of user to be updated",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body of user to be updated",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -261,6 +383,9 @@ const docTemplate = `{
                 },
                 "long_data": {
                     "type": "string"
+                },
+                "short_data": {
+                    "type": "string"
                 }
             }
         },
@@ -268,6 +393,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "long_data": {
+                    "type": "string"
+                },
+                "short_data": {
                     "type": "string"
                 }
             }

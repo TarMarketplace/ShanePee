@@ -8,8 +8,8 @@ type User struct {
 	LastName      *string       `json:"last_name"`
 	Gender        *string       `json:"gender"`
 	Tel           *string       `json:"tel"`
-	Address       Address       `gorm:"embedded" json:"address"`
-	PaymentMethod PaymentMethod `gorm:"embedded" json:"payment_method"`
+	Address       Address       `gorm:"embedded;embeddedPrefix:address_" json:"address"`
+	PaymentMethod PaymentMethod `gorm:"embedded;embeddedPrefix:payment_" json:"payment_method"`
 }
 
 type Address struct {

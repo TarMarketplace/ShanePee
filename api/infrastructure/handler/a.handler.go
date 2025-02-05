@@ -20,8 +20,8 @@ func NewAHandler(aSvc service.AService) AHandler {
 	}
 }
 
-// @Summary		get A
-// @Description	get A
+// @Summary		get As
+// @Description	get all As
 // @Tags		A
 // @Produce		json
 // @Success		200	{object}	domain.A
@@ -39,7 +39,7 @@ func (h *AHandler) GetA(c *gin.Context) {
 }
 
 // @Summary		get A
-// @Description	get A
+// @Description	get A by id
 // @Tags		A
 // @Produce		json
 // @Param		id		path		int64	true	"ID"
@@ -91,7 +91,7 @@ func (h *AHandler) CreateA(c *gin.Context) {
 }
 
 // @Summary		update A
-// @Description	update A
+// @Description	update A by id
 // @Tags		A
 // @Accept		json
 // @Produce		json
@@ -114,13 +114,13 @@ func (h *AHandler) UpdateA(c *gin.Context) {
 		return
 	}
 
-	data, err2 := h.aSvc.UpdateA(c, id, body)
+	err2 := h.aSvc.UpdateA(c, id, body)
 	if err2 != nil {
 		handleError(c, err2)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": data,
+		"message": "Updated successfully",
 	})
 }
 
@@ -147,6 +147,6 @@ func (h *AHandler) DeleteA(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Deleted",
+		"message": "Deleted successfully",
 	})
 }

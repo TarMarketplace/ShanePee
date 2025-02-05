@@ -19,9 +19,9 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 	}
 }
 
-// @Summary		Get Users
+// @Summary		get users
 // @Description	get all users
-// @Tags		user
+// @Tags		User
 // @Produce		json
 // @Success		200	{object}	[]domain.User
 // @Failure		400	{object}	ErrorResponse
@@ -37,13 +37,14 @@ func (h *UserHandler) GetUsers(c *gin.Context) {
 	})
 }
 
-// @Summary		Get User
+// @Summary		get user
 // @Description	get user by id
-// @Tags		user
+// @Tags		User
 // @Produce		json
-// @Param		id				param			int64	true	"id of user to be fetched"
+// @Param		id				path			int64	true	"id of user to be fetched"
 // @Success		200	{object}	domain.User
 // @Failure		400	{object}	ErrorResponse
+// @Failure		404	{object}	ErrorResponse
 // @Router		/v1/user/:id [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -62,15 +63,16 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	})
 }
 
-// @Summary		Update User
+// @Summary		update user
 // @Description	update user by id
-// @Tags		user
+// @Tags		User
 // @Accept		json
 // @Produce		json
-// @Param		id		param		int64					true	"id of user to be updated"
+// @Param		id		path		int64					true	"id of user to be updated"
 // @Param		body	body		map[string]interface{}	true	"body of user to be updated"
 // @Success		200		{object}	domain.User
 // @Failure		400		{object}	ErrorResponse
+// @Failure		404		{object}	ErrorResponse
 // @Router		/v1/user/:id [patch]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -90,5 +92,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		handleError(c, err2)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "user updated"})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Updated successfully",
+	})
 }

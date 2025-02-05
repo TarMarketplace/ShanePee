@@ -11,12 +11,46 @@ definitions:
       long_data:
         type: string
     type: object
+  domain.Address:
+    properties:
+      district:
+        type: string
+      house_no:
+        type: string
+      postcode:
+        type: string
+      province:
+        type: string
+    type: object
+  domain.PaymentMethod:
+    properties:
+      card_number:
+        type: string
+      card_owner:
+        type: string
+      cvv:
+        type: string
+      expire_date:
+        type: string
+    type: object
   domain.User:
     properties:
+      address:
+        $ref: '#/definitions/domain.Address'
       email:
+        type: string
+      first_name:
+        type: string
+      gender:
         type: string
       id:
         type: integer
+      last_name:
+        type: string
+      payment_method:
+        $ref: '#/definitions/domain.PaymentMethod'
+      tel:
+        type: string
     type: object
   domain.UserCreateBody:
     properties:
@@ -53,7 +87,7 @@ paths:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: get A
       tags:
-      - a
+      - A
     post:
       consumes:
       - application/json
@@ -78,7 +112,97 @@ paths:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: create A
       tags:
-      - a
+      - A
+  /v1/a/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete A
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: delete A
+      tags:
+      - A
+    get:
+      description: get A
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.A'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: get A
+      tags:
+      - A
+    patch:
+      consumes:
+      - application/json
+      description: update A
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: A body
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.A'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: update A
+      tags:
+      - A
   /v1/auth/register:
     post:
       description: Register

@@ -11,12 +11,46 @@ definitions:
       long_data:
         type: string
     type: object
+  domain.Address:
+    properties:
+      district:
+        type: string
+      house_no:
+        type: string
+      postcode:
+        type: string
+      province:
+        type: string
+    type: object
+  domain.PaymentMethod:
+    properties:
+      card_number:
+        type: string
+      card_owner:
+        type: string
+      cvv:
+        type: string
+      expire_date:
+        type: string
+    type: object
   domain.User:
     properties:
+      address:
+        $ref: '#/definitions/domain.Address'
       email:
+        type: string
+      first_name:
+        type: string
+      gender:
         type: string
       id:
         type: integer
+      last_name:
+        type: string
+      paymentMethod:
+        $ref: '#/definitions/domain.PaymentMethod'
+      tel:
+        type: string
     type: object
   domain.UserCreateBody:
     properties:

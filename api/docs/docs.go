@@ -260,8 +260,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "long_data": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             }
         },
@@ -269,8 +268,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "long_data": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             }
         },
@@ -278,20 +276,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "district": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "house_no": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "postcode": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "province": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             }
         },
@@ -299,20 +293,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "card_number": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "card_owner": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "cvv": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "expire_date": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             }
         },
@@ -326,26 +316,22 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "first_name": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "gender": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "last_name": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
                 },
                 "tel": {
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             }
         },

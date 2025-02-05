@@ -5,43 +5,33 @@ definitions:
         type: integer
       long_data:
         type: string
-        x-nullable: true
     type: object
   domain.ACreateBody:
     properties:
       long_data:
         type: string
-        x-nullable: true
     type: object
   domain.Address:
     properties:
       district:
         type: string
-        x-nullable: true
       house_no:
         type: string
-        x-nullable: true
       postcode:
         type: string
-        x-nullable: true
       province:
         type: string
-        x-nullable: true
     type: object
   domain.PaymentMethod:
     properties:
       card_number:
         type: string
-        x-nullable: true
       card_owner:
         type: string
-        x-nullable: true
       cvv:
         type: string
-        x-nullable: true
       expire_date:
         type: string
-        x-nullable: true
     type: object
   domain.User:
     properties:
@@ -51,20 +41,16 @@ definitions:
         type: string
       first_name:
         type: string
-        x-nullable: true
       gender:
         type: string
-        x-nullable: true
       id:
         type: integer
       last_name:
         type: string
-        x-nullable: true
       payment_method:
         $ref: '#/definitions/domain.PaymentMethod'
       tel:
         type: string
-        x-nullable: true
     type: object
   domain.UserCreateBody:
     properties:

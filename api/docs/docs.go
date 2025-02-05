@@ -52,7 +52,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/user/:id": {
+        "/v1/user": {
             "patch": {
                 "description": "update user by id",
                 "consumes": [
@@ -66,13 +66,6 @@ const docTemplate = `{
                 ],
                 "summary": "Update User",
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "id of user to be updated",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "body of user to be updated",
                         "name": "body",

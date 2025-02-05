@@ -83,17 +83,12 @@ paths:
       summary: Register User
       tags:
       - Authentication
-  /v1/user/:id:
+  /v1/user:
     patch:
       consumes:
       - application/json
       description: update user by id
       parameters:
-      - description: id of user to be updated
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: body of user to be updated
         in: body
         name: body

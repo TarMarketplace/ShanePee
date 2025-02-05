@@ -2,21 +2,41 @@
 
 import { Input } from '@material-tailwind/react'
 
-const InputField = (props) => {
+interface InputFieldProps {
+  type?: string
+  size?: 'sm' | 'md' | 'lg'
+  label?: string
+  name?: string
+  value?: string | number
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  error?: string
+}
+
+const InputField = ({
+  type = 'text',
+  size,
+  label,
+  name,
+  value,
+  onChange,
+  error,
+}: InputFieldProps) => {
   return (
     <div className='h-14'>
       <div className='bg-white'>
         <Input
-          type={props.type ? props.type : 'text'}
-          size={props.size}
-          label={props.label}
-          name={props.name}
-          value={props.value}
-          onChange={props.onChange}
-          error={props.error}
+          type={type}
+          size={size}
+          label={label}
+          name={name}
+          value={value}
+          onChange={onChange}
+          error={!!error}
         />
       </div>
-      {props.error && <p className='text-sm text-red-500'>{props.error}</p>}
+      {error && typeof error === 'string' && (
+        <p className='text-sm text-red-500'>{error}</p>
+      )}
     </div>
   )
 }

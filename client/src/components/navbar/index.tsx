@@ -59,9 +59,9 @@ const Navbar = ({
             <Text variant='md-semibold'>เข้าสู่ระบบ</Text>
           </button>
           <button className='px-3'>
-            <a href='/register'>
+            <Link href='/register'>
               <Text variant='md-semibold'>สมัครใช้งาน</Text>
-            </a>
+            </Link>
           </button>
         </div>
       )}

@@ -93,6 +93,6 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Updated successfully",
+		"message": "OK",
 	})
 }

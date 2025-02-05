@@ -120,7 +120,7 @@ func (h *AHandler) UpdateA(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Updated successfully",
+		"message": "OK",
 	})
 }
 
@@ -147,6 +147,6 @@ func (h *AHandler) DeleteA(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Deleted successfully",
+		"message": "OK",
 	})
 }

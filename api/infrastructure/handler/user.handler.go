@@ -19,50 +19,6 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 	}
 }
 
-// @Summary		get users
-// @Description	get all users
-// @Tags		User
-// @Produce		json
-// @Success		200	{object}	[]domain.User
-// @Failure		400	{object}	ErrorResponse
-// @Router		/v1/user [get]
-func (h *UserHandler) GetUsers(c *gin.Context) {
-	data, err := h.userSvc.GetUsers(c)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
-}
-
-// @Summary		get user
-// @Description	get user by id
-// @Tags		User
-// @Produce		json
-// @Param		id				path			int64	true	"id of user to be fetched"
-// @Success		200	{object}	domain.User
-// @Failure		400	{object}	ErrorResponse
-// @Failure		404	{object}	ErrorResponse
-// @Router		/v1/user/:id [get]
-func (h *UserHandler) GetUser(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid id"))
-		return
-	}
-
-	data, appError := h.userSvc.GetUser(c, id)
-	if appError != nil {
-		handleError(c, appError)
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
-}
-
 // @Summary		update user
 // @Description	update user by id
 // @Tags		User

@@ -21,7 +21,6 @@ func InitializeApp() (App, error) {
 		handler.NewAuthHandler,
 		handler.NewUserHandler,
 		service.NewAuthService,
-		repository.NewAuthRepository,
 		repository.NewDB,
 		config.LoadConfig,
 		NewApp,

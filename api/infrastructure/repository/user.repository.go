@@ -11,18 +11,9 @@ type userRepositoryImpl struct {
 	db *gorm.DB
 }
 
-// GetUsers implements domain.UserRepository.
-func (u *userRepositoryImpl) GetUsers(ctx context.Context) ([]domain.User, error) {
-	var users []domain.User
-	err := u.db.Find(&users).Error
-	return users, err
-}
-
-// GetUser implements domain.UserRepository.
-func (u *userRepositoryImpl) GetUser(ctx context.Context, id int64) (*domain.User, error) {
-	var user domain.User
-	err := u.db.First(&user, id).Error
-	return &user, err
+// CreateUser implements domain.UserRepository.
+func (a *userRepositoryImpl) CreateUser(ctx context.Context, user *domain.User) error {
+	return a.db.Create(user).Error
 }
 
 // UpdateUser implements domain.UserRepository.

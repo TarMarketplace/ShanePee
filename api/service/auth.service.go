@@ -12,14 +12,14 @@ type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError)
 }
 
-func NewAuthService(authRepo domain.AuthRepository) AuthService {
+func NewAuthService(userRepo domain.UserRepository) AuthService {
 	return &authServiceImpl{
-		authRepo,
+		userRepo,
 	}
 }
 
 type authServiceImpl struct {
-	authRepo domain.AuthRepository
+	userRepo domain.UserRepository
 }
 
 var _ AuthService = &authServiceImpl{}
@@ -35,7 +35,7 @@ func (a *authServiceImpl) Register(ctx context.Context, username string, passwor
 		return nil, apperror.ErrInternal(err)
 	}
 	user := domain.NewUser(username, hashStr)
-	err = a.authRepo.CreateUser(ctx, user)
+	err = a.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		// TODO: properly handle this error
 		return nil, apperror.ErrInternal(err)

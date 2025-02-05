@@ -49,8 +49,6 @@ func main() {
 
 	v1.POST("/auth/register", app.authHdr.Register)
 
-	v1.GET("/user", app.userHdr.GetUsers)
-	v1.GET("/user/:id", app.userHdr.GetUser)
 	v1.PATCH("/user/:id", app.userHdr.UpdateUser)
 
 	if app.cfg.Debug == "1" {

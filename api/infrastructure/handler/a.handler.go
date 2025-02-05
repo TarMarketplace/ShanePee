@@ -22,7 +22,7 @@ func NewAHandler(aSvc service.AService) AHandler {
 
 // @Summary		get A
 // @Description	get A
-// @Tags		a
+// @Tags		A
 // @Produce		json
 // @Success		200	{object}	domain.A
 // @Failure		400	{object}	ErrorResponse
@@ -40,11 +40,12 @@ func (h *AHandler) GetA(c *gin.Context) {
 
 // @Summary		get A
 // @Description	get A
-// @Tags		a
+// @Tags		A
 // @Produce		json
 // @Param		id		path		int64	true	"ID"
 // @Success		200		{object}	domain.A
 // @Failure		400		{object}	ErrorResponse
+// @Failure		404		{object}	ErrorResponse
 // @Router		/v1/a/:id [get]
 func (h *AHandler) GetAById(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Params.ByName("id"), 10, 64)
@@ -65,7 +66,7 @@ func (h *AHandler) GetAById(c *gin.Context) {
 
 // @Summary		create A
 // @Description	create A
-// @Tags		a
+// @Tags		A
 // @Accept		json
 // @Produce		json
 // @Param		body	body		domain.ACreateBody	true	"A body"
@@ -91,14 +92,15 @@ func (h *AHandler) CreateA(c *gin.Context) {
 
 // @Summary		update A
 // @Description	update A
-// @Tags		a
+// @Tags		A
 // @Accept		json
 // @Produce		json
 // @Param		id		path		int64					true	"ID"
 // @Param		body	body		map[string]interface{}	true	"A body"
 // @Success		200		{object}	domain.A
 // @Failure		400		{object}	ErrorResponse
-// @Router		/v1/a [patch]
+// @Failure		404		{object}	ErrorResponse
+// @Router		/v1/a/:id [patch]
 func (h *AHandler) UpdateA(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Params.ByName("id"), 10, 64)
 	if err != nil {
@@ -124,13 +126,14 @@ func (h *AHandler) UpdateA(c *gin.Context) {
 
 // @Summary		delete A
 // @Description	delete A
-// @Tags		a
+// @Tags		A
 // @Accept		json
 // @Produce		json
 // @Param		id		path		int64	true	"ID"
 // @Success		200		{object}	string
 // @Failure		400		{object}	ErrorResponse
-// @Router		/v1/a [delete]
+// @Failure		404		{object}	ErrorResponse
+// @Router		/v1/a/:id [delete]
 func (h *AHandler) DeleteA(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Params.ByName("id"), 10, 64)
 	if err != nil {

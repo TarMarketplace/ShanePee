@@ -22,7 +22,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "a"
+                    "A"
                 ],
                 "summary": "get A",
                 "responses": {
@@ -49,7 +49,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "a"
+                    "A"
                 ],
                 "summary": "create A",
                 "parameters": [
@@ -72,6 +72,141 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/a/:id": {
+            "get": {
+                "description": "get A",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "A"
+                ],
+                "summary": "get A",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.A"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete A",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "A"
+                ],
+                "summary": "delete A",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "update A",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "A"
+                ],
+                "summary": "update A",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "A body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.A"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/handler.ErrorResponse"
                         }
@@ -125,7 +260,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "long_data": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -133,7 +269,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "long_data": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -141,16 +278,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "district": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "house_no": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "postcode": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "province": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -158,16 +299,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "card_number": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "card_owner": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "cvv": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "expire_date": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -181,22 +326,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "first_name": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "gender": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "id": {
                     "type": "integer"
                 },
                 "last_name": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
                 },
                 "tel": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },

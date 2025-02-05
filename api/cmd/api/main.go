@@ -43,7 +43,7 @@ func main() {
 
 	v1.POST("/auth/register", app.authHdr.Register)
 
-	v1.PATCH("/user/:id", app.userHdr.UpdateUser)
+	v1.PATCH("/user", app.userHdr.UpdateUser)
 
 	if app.cfg.Debug == "1" {
 		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

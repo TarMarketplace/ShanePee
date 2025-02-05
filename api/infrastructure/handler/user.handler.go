@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"shanepee.com/api/apperror"
@@ -31,11 +30,8 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 // @Failure		404		{object}	ErrorResponse
 // @Router		/v1/user/:id [patch]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid id"))
-		return
-	}
+	var id int64
+	// TODO: get id from cookie
 
 	var body map[string]interface{}
 	if err := c.ShouldBind(&body); err != nil {

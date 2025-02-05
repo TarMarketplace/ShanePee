@@ -23,12 +23,11 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 // @Tags		User
 // @Accept		json
 // @Produce		json
-// @Param		id		path		int64					true	"id of user to be updated"
 // @Param		body	body		map[string]interface{}	true	"body of user to be updated"
 // @Success		200		{object}	domain.User
 // @Failure		400		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse
-// @Router		/v1/user/:id [patch]
+// @Router		/v1/user [patch]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	var id int64
 	// TODO: get id from cookie

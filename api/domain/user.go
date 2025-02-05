@@ -1,15 +1,15 @@
 package domain
 
 type User struct {
-	ID            int64          `json:"id" gorm:"primaryKey"`
-	Email         string         `json:"email"`
-	PasswordHash  string         `json:"-" swaggerignore:"true"`
-	FirstName     *string        `json:"first_name"`
-	LastName      *string        `json:"last_name"`
-	Gender        *string        `json:"gender"`
-	Tel           *string        `json:"tel"`
-	Address       *Address       `gorm:"embedded" json:"address"`
-	PaymentMethod *PaymentMethod `gorm:"embedded" json:"payment_method"`
+	ID            int64         `json:"id" gorm:"primaryKey"`
+	Email         string        `json:"email"`
+	PasswordHash  string        `json:"-" swaggerignore:"true"`
+	FirstName     *string       `json:"first_name"`
+	LastName      *string       `json:"last_name"`
+	Gender        *string       `json:"gender"`
+	Tel           *string       `json:"tel"`
+	Address       Address       `gorm:"embedded" json:"address"`
+	PaymentMethod PaymentMethod `gorm:"embedded" json:"payment_method"`
 }
 
 type Address struct {

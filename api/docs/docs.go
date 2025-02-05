@@ -192,7 +192,7 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
-                "paymentMethod": {
+                "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
                 },
                 "tel": {

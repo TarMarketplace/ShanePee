@@ -41,12 +41,6 @@ func main() {
 
 	v1 := r.Group("v1")
 
-	v1.GET("/a", app.aHdr.GetA)
-	v1.GET("/a/:id", app.aHdr.GetAById)
-	v1.POST("/a", app.aHdr.CreateA)
-	v1.PATCH("/a/:id", app.aHdr.UpdateA)
-	v1.DELETE("/a/:id", app.aHdr.DeleteA)
-
 	v1.POST("/auth/register", app.authHdr.Register)
 
 	v1.PATCH("/user/:id", app.userHdr.UpdateUser)

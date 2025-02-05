@@ -19,7 +19,7 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 	}
 }
 
-// @Summary		update user
+// @Summary		Update User
 // @Description	update user by id
 // @Tags		User
 // @Accept		json

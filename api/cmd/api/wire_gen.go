@@ -24,12 +24,11 @@ func InitializeApp() (App, error) {
 	if err != nil {
 		return App{}, err
 	}
-	aRepository := repository.NewARepository(db)
-	aService := service.NewAService(aRepository)
-	aHandler := handler.NewAHandler(aService)
-	authRepository := repository.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepository)
+	userRepository := repository.NewUserRepository(db)
+	authService := service.NewAuthService(userRepository)
 	authHandler := handler.NewAuthHandler(authService)
-	app := NewApp(aHandler, authHandler, configConfig)
+	userService := service.NewUserService(userRepository)
+	userHandler := handler.NewUserHandler(userService)
+	app := NewApp(authHandler, userHandler, configConfig)
 	return app, nil
 }

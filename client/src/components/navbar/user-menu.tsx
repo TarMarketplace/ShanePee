@@ -8,7 +8,7 @@ import {
 } from '@/components/dropdown-menu'
 import { Text } from '@/components/text'
 
-import type { User } from '@/types/user'
+import type { User } from '@/types/users'
 
 interface UserMenuProps {
   user: User

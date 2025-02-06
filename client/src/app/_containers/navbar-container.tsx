@@ -12,10 +12,6 @@ const NavbarContainer = () => {
   const { user, setUser } = useUser()
   const [search, setSearch] = useState('')
 
-  const handleLogin = () => {
-    setUser({ id: '1', name: 'lnwJoZaSodaSing+' })
-  }
-
   const handleLogout = () => {
     setUser(null)
   }
@@ -29,7 +25,6 @@ const NavbarContainer = () => {
   return (
     <Navbar
       user={user}
-      onLogin={handleLogin}
       onLogout={handleLogout}
       searchValue={search}
       onChangeSearchValue={setSearch}

@@ -98,7 +98,7 @@
     --secondary-foreground: var(--white);
     --muted: var(--grey-200);
     --muted-foreground: var(--grey-500);
-    --accent: var(--secondary-500);
+    --accent: var(--primary-500);
     --accent-foreground: var(--white);
     --destructive: var(--error-500);
     --destructive-foreground: var(--white);
@@ -120,7 +120,7 @@
     --secondary-foreground: var(--white);
     --muted: var(--grey-800);
     --muted-foreground: var(--grey-500);
-    --accent: var(--secondary-500);
+    --accent: var(--primary-500);
     --accent-foreground: var(--white);
     --destructive: var(--error-500);
     --destructive-foreground: var(--white);

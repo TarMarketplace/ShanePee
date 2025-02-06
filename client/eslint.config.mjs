@@ -16,7 +16,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   {
-    ignores: [],
+    ignores: ['node_modules/**/*', '.next/**/*', 'storybook-static/**/*'],
   },
   ...fixupConfigRules(
     compat.extends(

@@ -17,7 +17,6 @@ const meta = {
   },
   args: {
     user: null,
-    onLogin: fn(),
     onLogout: fn(),
     onSearch: fn(),
     onChangeSearchValue: fn(),
@@ -32,7 +31,6 @@ const Template = () => {
   const [user, setUser] = useState<User | null>(null)
   const [searchValue, setSearchValue] = useState('')
 
-  const handleLogin = () => setUser({ id: '1', name: 'จอมน้อย' })
   const handleLogout = () => setUser(null)
   const handleSearch = () => console.log(searchValue)
   const handleChangeSearchValue = (value: string) => setSearchValue(value)
@@ -40,7 +38,6 @@ const Template = () => {
   return (
     <Navbar
       user={user}
-      onLogin={handleLogin}
       onLogout={handleLogout}
       searchValue={searchValue}
       onChangeSearchValue={handleChangeSearchValue}

@@ -10,7 +10,6 @@ import { UserMenu } from './user-menu'
 
 interface NavbarProps {
   user: User | null
-  onLogin: () => void
   onLogout: () => void
   searchValue: string
   onChangeSearchValue: (value: string) => void
@@ -19,7 +18,6 @@ interface NavbarProps {
 
 const Navbar = ({
   user,
-  onLogin,
   onLogout,
   searchValue,
   onChangeSearchValue,
@@ -56,14 +54,12 @@ const Navbar = ({
           <UserMenu user={user} onLogout={onLogout} />
         ) : (
           <div className='flex items-center divide-x divide-white text-nowrap'>
-            <button className='px-3' onClick={onLogin}>
+            <Link href='/login' className='px-3'>
               <Text variant='md-semibold'>เข้าสู่ระบบ</Text>
-            </button>
-            <button className='px-3'>
-              <Link href='/register'>
-                <Text variant='md-semibold'>สมัครใช้งาน</Text>
-              </Link>
-            </button>
+            </Link>
+            <Link href='/login?mode=register' className='px-3'>
+              <Text variant='md-semibold'>สมัครใช้งาน</Text>
+            </Link>
           </div>
         )}
       </nav>

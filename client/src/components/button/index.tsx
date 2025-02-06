@@ -3,11 +3,15 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-const buttonCapsuleVariants = cva(
+const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base font-semibold transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
+        filled: 'rounded-sm',
+        capsule: 'rounded-full',
+      },
+      colorVariant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         gradient:
           'bg-primary-gradient text-primary-foreground hover:opacity-90',
@@ -17,27 +21,31 @@ const buttonCapsuleVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'capsule',
+      colorVariant: 'default',
       size: 'default',
     },
   }
 )
 
-export interface ButtonCapsuleProps
+export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonCapsuleVariants> {}
+    VariantProps<typeof buttonVariants> {}
 
-const ButtonCapsule = React.forwardRef<HTMLButtonElement, ButtonCapsuleProps>(
-  ({ className, variant, size, ...props }, ref) => {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, colorVariant, variant, size, ...props }, ref) => {
     return (
       <button
-        className={cn(buttonCapsuleVariants({ variant, size }), className)}
+        className={cn(
+          buttonVariants({ variant, colorVariant, size }),
+          className
+        )}
         ref={ref}
         {...props}
       />
     )
   }
 )
-ButtonCapsule.displayName = 'ButtonCapsule'
+Button.displayName = 'Button'
 
-export { ButtonCapsule, buttonCapsuleVariants }
+export { Button, buttonVariants }

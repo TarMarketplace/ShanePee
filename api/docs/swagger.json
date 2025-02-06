@@ -8,70 +8,6 @@
     },
     "host": "localhost:8080",
     "paths": {
-        "/v1/a": {
-            "get": {
-                "description": "get A",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "a"
-                ],
-                "summary": "get A",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.A"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create A",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "a"
-                ],
-                "summary": "create A",
-                "parameters": [
-                    {
-                        "description": "A body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.ACreateBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.A"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/auth/register": {
             "post": {
                 "description": "Register",
@@ -108,24 +44,86 @@
                     }
                 }
             }
+        },
+        "/v1/user": {
+            "patch": {
+                "description": "update user by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User",
+                "parameters": [
+                    {
+                        "description": "body of user to be updated",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "domain.A": {
+        "domain.Address": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
+                "district": {
+                    "type": "string"
                 },
-                "long_data": {
+                "house_no": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
+                },
+                "province": {
                     "type": "string"
                 }
             }
         },
-        "domain.ACreateBody": {
+        "domain.PaymentMethod": {
             "type": "object",
             "properties": {
-                "long_data": {
+                "card_number": {
+                    "type": "string"
+                },
+                "card_owner": {
+                    "type": "string"
+                },
+                "cvv": {
+                    "type": "string"
+                },
+                "expire_date": {
                     "type": "string"
                 }
             }
@@ -133,11 +131,29 @@
         "domain.User": {
             "type": "object",
             "properties": {
+                "address": {
+                    "$ref": "#/definitions/domain.Address"
+                },
                 "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "payment_method": {
+                    "$ref": "#/definitions/domain.PaymentMethod"
+                },
+                "tel": {
+                    "type": "string"
                 }
             }
         },

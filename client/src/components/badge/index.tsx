@@ -6,7 +6,7 @@ import { Text } from '@/components/text'
 import { cn } from '@/lib/utils'
 
 const badgeVariants = cva(
-  'inline-flex items-center rounded-sm px-1 py-0.5 text-white',
+  'inline-flex items-center rounded-sm px-1 py-0.5 text-white shadow-sm',
   {
     variants: {
       variant: {

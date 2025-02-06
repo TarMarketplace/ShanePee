@@ -17,27 +17,27 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   argTypes: {
     variant: {
+      options: [
+        'heading-5xl',
+        'heading-4xl',
+        'heading-3xl',
+        'heading-2xl',
+        'heading-xl',
+        'heading-lg',
+        'heading-md',
+        'heading-sm',
+        'heading-xs',
+        'lg-regular',
+        'lg-semibold',
+        'md-regular',
+        'md-semibold',
+        'sm-regular',
+        'sm-semibold',
+        'xs-regular',
+        'xs-semibold',
+      ],
       control: {
         type: 'select',
-        options: [
-          'heading-5xl',
-          'heading-4xl',
-          'heading-3xl',
-          'heading-2xl',
-          'heading-xl',
-          'heading-lg',
-          'heading-md',
-          'heading-sm',
-          'heading-xs',
-          'lg-regular',
-          'lg-semibold',
-          'md-regular',
-          'md-semibold',
-          'sm-regular',
-          'sm-semibold',
-          'xs-regular',
-          'xs-semibold',
-        ],
       },
     },
   },
@@ -58,7 +58,6 @@ export const Showcase: Story = {
             font size: 4.5rem(72px)
             <br /> font weight: 600
             <br /> line height: 5rem(80px)
-            <br /> letter spacing: -0.0625em(-1px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -67,8 +66,6 @@ export const Showcase: Story = {
             font size: 3rem(48px)
             <br /> font weight: 600
             <br /> line height: 3.5rem(56px)
-            <br />
-            letter spacing: -0.0625em(-1px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -77,7 +74,6 @@ export const Showcase: Story = {
             font size: 2.25rem(36px)
             <br /> font weight: 600
             <br /> line height: 2.5rem(40px)
-            <br /> letter spacing: -0.0625em(-1px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -86,7 +82,6 @@ export const Showcase: Story = {
             font size: 1.875rem(30px)
             <br /> font weight: 600
             <br /> line height: 2.25rem(36px)
-            <br /> letter spacing: -0.0625em(-1px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -95,7 +90,6 @@ export const Showcase: Story = {
             font size: 1.5rem(24px)
             <br /> font weight: 600
             <br /> line height: 1.75rem(28px)
-            <br /> letter spacing: -0.0625em(-1px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -104,7 +98,6 @@ export const Showcase: Story = {
             font size: 1.25rem(20px)
             <br /> font weight: 600
             <br /> line height: 1.25rem(20px)
-            <br /> letter spacing: -0.0625em(-1px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -113,8 +106,6 @@ export const Showcase: Story = {
             font size: 1rem(16px)
             <br /> font weight: 600
             <br /> line height: 1rem(16px)
-            <br />
-            letter spacing: -0.03125em(-0.5px)
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -123,7 +114,6 @@ export const Showcase: Story = {
             font size: 0.875rem(14px)
             <br /> font weight: 600
             <br /> line height: 0.875rem(14px)
-            <br /> letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -132,7 +122,6 @@ export const Showcase: Story = {
             font size: 0.75rem(12px)
             <br /> font weight: 600
             <br /> line height: 0.75rem(12px)
-            <br /> letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -141,7 +130,6 @@ export const Showcase: Story = {
             font size: 1.125rem(18px)
             <br /> font weight: 400
             <br /> line height: 1.25rem(20px)
-            <br /> letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -150,7 +138,6 @@ export const Showcase: Story = {
             font size: 1.125rem(18px)
             <br /> font weight: 600
             <br /> line height: 1.25rem(20px)
-            <br /> letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -159,8 +146,6 @@ export const Showcase: Story = {
             font size: 1rem(16px)
             <br /> font weight: 400
             <br /> line height: 1rem(16px)
-            <br />
-            letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -169,8 +154,6 @@ export const Showcase: Story = {
             font size: 1rem(16px)
             <br /> font weight: 600
             <br /> line height: 1rem(16px)
-            <br />
-            letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -179,7 +162,6 @@ export const Showcase: Story = {
             font size: 0.875rem(14px)
             <br /> font weight: 400
             <br /> line height: 0.875rem(14px)
-            <br /> letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -188,7 +170,6 @@ export const Showcase: Story = {
             font size: 0.875rem(14px)
             <br /> font weight: 600
             <br /> line height: 0.875rem(14px)
-            <br /> letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -197,8 +178,6 @@ export const Showcase: Story = {
             font size: 0.75rem(12px)
             <br /> font weight: 400
             <br /> line height: 1rem(16px)
-            <br />
-            letter spacing: normal
           </Text>
         </div>
         <div className='flex flex-col gap-1'>
@@ -207,8 +186,6 @@ export const Showcase: Story = {
             font size: 0.75rem(12px)
             <br /> font weight: 600
             <br /> line height: 1rem(16px)
-            <br />
-            letter spacing: normal
           </Text>
         </div>
       </div>

@@ -1,22 +1,44 @@
 definitions:
-  domain.A:
+  domain.Address:
     properties:
-      id:
-        type: integer
-      long_data:
+      district:
+        type: string
+      house_no:
+        type: string
+      postcode:
+        type: string
+      province:
         type: string
     type: object
-  domain.ACreateBody:
+  domain.PaymentMethod:
     properties:
-      long_data:
+      card_number:
+        type: string
+      card_owner:
+        type: string
+      cvv:
+        type: string
+      expire_date:
         type: string
     type: object
   domain.User:
     properties:
+      address:
+        $ref: '#/definitions/domain.Address'
       email:
+        type: string
+      first_name:
+        type: string
+      gender:
         type: string
       id:
         type: integer
+      last_name:
+        type: string
+      payment_method:
+        $ref: '#/definitions/domain.PaymentMethod'
+      tel:
+        type: string
     type: object
   domain.UserCreateBody:
     properties:
@@ -37,48 +59,6 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
-  /v1/a:
-    get:
-      description: get A
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.A'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.ErrorResponse'
-      summary: get A
-      tags:
-      - a
-    post:
-      consumes:
-      - application/json
-      description: create A
-      parameters:
-      - description: A body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/domain.ACreateBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.A'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.ErrorResponse'
-      summary: create A
-      tags:
-      - a
   /v1/auth/register:
     post:
       description: Register
@@ -103,4 +83,35 @@ paths:
       summary: Register User
       tags:
       - Authentication
+  /v1/user:
+    patch:
+      consumes:
+      - application/json
+      description: update user by id
+      parameters:
+      - description: body of user to be updated
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Update User
+      tags:
+      - User
 swagger: "2.0"

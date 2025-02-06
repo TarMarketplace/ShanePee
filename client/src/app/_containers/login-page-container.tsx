@@ -29,9 +29,9 @@ const LoginPageContainer = () => {
   }
 
   return (
-    <div className='flex justify-center gap-24 rounded-xl bg-white px-24 py-12'>
+    <div className='flex w-full justify-center gap-12 rounded-xl bg-white shadow-lg md:max-w-[1080px] md:p-12 lg:gap-24 lg:px-24'>
       <AuthPageBanner />
-      <div className='flex w-96 flex-col gap-6 rounded-xl border p-6 shadow-sm'>
+      <div className='flex w-full flex-col gap-6 rounded-xl border p-6 shadow-sm'>
         <h2 className='text-2xl font-bold'>เข้าสู่ระบบ</h2>
         <LoginCredential
           userData={userData}

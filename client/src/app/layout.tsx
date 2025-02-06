@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <UserProvider>
           <NavbarContainer />
-          {children}
+          <main className='min-h-[calc(100dvh-60px-236px)]'>{children}</main>
           <Footer />
         </UserProvider>
       </body>

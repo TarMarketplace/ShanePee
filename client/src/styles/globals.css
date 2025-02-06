@@ -103,7 +103,7 @@
     --destructive: var(--error-500);
     --destructive-foreground: var(--white);
     --border: var(--grey-200);
-    --input: var(--grey-200);
+    --input: var(--grey-500);
     --ring: var(--grey-200);
     --radius: 0.5rem;
   }

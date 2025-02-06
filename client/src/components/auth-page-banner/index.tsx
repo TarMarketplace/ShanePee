@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-function AuthPageBanner() {
+function AuthBanner() {
   return (
     <div className='hidden w-full flex-col items-center justify-center p-4 md:flex'>
       <Image src='/logo.png' alt='logo' width={360} height={134} />
@@ -11,4 +11,4 @@ function AuthPageBanner() {
   )
 }
 
-export default AuthPageBanner
+export { AuthBanner }

@@ -19,36 +19,52 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </div>
       <div className='flex h-3/5 w-full flex-col justify-between p-3'>
         <div className='flex flex-col gap-2'>
-          <Text variant='md-semibold'>{product.name}</Text>
+          <Text variant='sm-semibold' desktopVariant='md-semibold'>
+            {product.name}
+          </Text>
           {product.discount ? (
             <div className='flex flex-col'>
               <div className='flex items-center gap-2'>
-                <Text variant='md-regular' className='italic text-primary'>
+                <Text
+                  variant='sm-regular'
+                  desktopVariant='md-regular'
+                  className='italic text-primary'
+                >
                   ฿{product.price - product.discount}
                 </Text>
                 <Badge variant='error'>
                   {((product.discount * 100) / product.price).toFixed(0)}%
                 </Badge>
               </div>
-              <Text variant='sm-regular' className='line-through'>
+              <Text
+                variant='xs-regular'
+                desktopVariant='sm-regular'
+                className='line-through'
+              >
                 ฿{product.price}
               </Text>
             </div>
           ) : (
-            <Text variant='md-regular'>฿{product.price}</Text>
+            <Text variant='sm-regular' desktopVariant='md-regular'>
+              ฿{product.price}
+            </Text>
           )}
         </div>
         <div className='flex items-center gap-4'>
           <div className='flex items-center'>
             <Icon
               icon='material-symbols:star-rounded'
-              className='size-6 text-warning'
+              className='size-5 text-warning md:size-6'
             />
-            <Text variant='sm-regular'>{product.rating.toFixed(1)}</Text>
+            <Text variant='xs-regular' desktopVariant='sm-regular'>
+              {product.rating.toFixed(1)}
+            </Text>
           </div>
           <div className='flex items-center text-grey-500'>
-            <Icon icon='typcn:location' className='size-5' />
-            <Text variant='sm-regular'>{product.location}</Text>
+            <Icon icon='typcn:location' className='size-4 md:size-5' />
+            <Text variant='xs-regular' desktopVariant='sm-regular'>
+              {product.location}
+            </Text>
           </div>
         </div>
       </div>

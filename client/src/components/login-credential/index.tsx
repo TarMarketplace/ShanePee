@@ -72,7 +72,7 @@ function LoginCredential({
         error={errors.password}
       />
 
-      <ButtonCapsule type='submit' className='mt-4 bg-primary-500 text-white'>
+      <ButtonCapsule type='submit' className='bg-primary-500 text-white'>
         เข้าสู่ระบบ
       </ButtonCapsule>
     </form>

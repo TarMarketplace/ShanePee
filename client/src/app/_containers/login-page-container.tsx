@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { ChangeEvent, useState } from 'react'
 
 import AuthPageBanner from '@/components/auth-page-banner'
@@ -33,11 +34,19 @@ const LoginPageContainer = () => {
       <AuthPageBanner />
       <div className='flex w-full flex-col gap-6 rounded-xl border p-6 shadow-sm'>
         <h2 className='text-2xl font-bold'>เข้าสู่ระบบ</h2>
-        <LoginCredential
-          userData={userData}
-          handleInputChange={handleInputChange}
-          nextSection={nextSection}
-        />
+        <div className='flex flex-col gap-2'>
+          <LoginCredential
+            userData={userData}
+            handleInputChange={handleInputChange}
+            nextSection={nextSection}
+          />
+          <Link
+            className='text-end text-xs text-primary-500 hover:underline'
+            href='/resetPassword'
+          >
+            ลืมรหัสผ่าน?
+          </Link>
+        </div>
         <Text className='text-center text-sm text-grey-500'>
           เพิ่งเคยใช้งานครั้งแรกหรือไม่?{' '}
           <a href='/register' className='text-primary-500 hover:underline'>

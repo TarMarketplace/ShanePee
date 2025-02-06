@@ -1,3 +1,4 @@
+import { formatPhoneNumber } from '@/utils/phone-formatter'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/button'
@@ -83,7 +84,17 @@ export function RegisterStep1Form({ onSubmit, form }: RegisterStep1FormProps) {
               <FormItem>
                 <FormLabel>เบอร์โทรศัพท์</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='0xx-xxx-xxxx' type='tel' />
+                  <Input
+                    placeholder='0xx-xxx-xxxx'
+                    type='tel'
+                    onChange={(e) => {
+                      const phone = e.target.value
+                        .replaceAll('-', '')
+                        .slice(0, 10)
+                      field.onChange(phone)
+                    }}
+                    value={formatPhoneNumber(field.value)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

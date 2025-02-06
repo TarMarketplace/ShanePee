@@ -1,8 +1,8 @@
 'use client'
 
-import Image from 'next/image'
 import { ChangeEvent, useState } from 'react'
 
+import AuthPageBanner from '@/components/auth-page-banner'
 import LoginCredential from '@/components/login-credential'
 import { Text } from '@/components/text'
 
@@ -29,21 +29,16 @@ const LoginPageContainer = () => {
   }
 
   return (
-    <div className='flex justify-center gap-8 rounded-xl bg-white px-24 py-12'>
-      <Image
-        src='https://placehold.co/360x120.png'
-        alt='logo'
-        width={360}
-        height={120}
-      />
-      <div className='flex w-96 flex-col gap-6 rounded-xl border bg-grey-50 p-8 shadow-sm'>
-        <h2 className='text-center text-2xl font-bold'>เข้าสู่ระบบ</h2>
+    <div className='flex justify-center gap-24 rounded-xl bg-white px-24 py-12'>
+      <AuthPageBanner />
+      <div className='flex w-96 flex-col gap-6 rounded-xl border p-6 shadow-sm'>
+        <h2 className='text-2xl font-bold'>เข้าสู่ระบบ</h2>
         <LoginCredential
           userData={userData}
           handleInputChange={handleInputChange}
           nextSection={nextSection}
         />
-        <Text className='text-center text-sm'>
+        <Text className='text-center text-sm text-grey-500'>
           เพิ่งเคยใช้งานครั้งแรกหรือไม่?{' '}
           <a href='/register' className='text-primary-500 hover:underline'>
             สมัครใช้งาน

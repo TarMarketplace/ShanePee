@@ -1,9 +1,9 @@
 'use client'
 
 import { formatPhoneNumber } from '@/utils/FormatPhoneNumber'
-import Image from 'next/image'
 import { ChangeEvent, useState } from 'react'
 
+import AuthPageBanner from '@/components/auth-page-banner'
 import RegisterCredential from '@/components/register-credential'
 import RegisterDetail from '@/components/register-detail'
 import { Text } from '@/components/text'
@@ -51,15 +51,10 @@ const RegisterPageContainer = () => {
   }
 
   return (
-    <div className='flex justify-center gap-8 rounded-xl bg-white px-24 py-12'>
-      <Image
-        src='https://placehold.co/360x120.png'
-        alt='logo'
-        width={360}
-        height={120}
-      />
-      <div className='flex w-96 flex-col gap-6 rounded-xl border bg-grey-50 p-8 shadow-sm'>
-        <h2 className='text-center text-2xl font-bold'>สมัครใช้งาน</h2>
+    <div className='flex justify-center gap-24 rounded-xl bg-white px-24 py-12'>
+      <AuthPageBanner />
+      <div className='flex w-96 flex-col gap-6 rounded-xl border p-6 shadow-sm'>
+        <h2 className='text-2xl font-bold'>สมัครใช้งาน</h2>
         {section == 0 ? (
           <RegisterDetail
             userData={userData}
@@ -75,7 +70,7 @@ const RegisterPageContainer = () => {
             nextSection={nextSection}
           />
         )}
-        <Text className='text-center text-sm'>
+        <Text className='text-center text-xs text-grey-500'>
           เคยสมัครใช้งานแล้วหรือไม่?{' '}
           <a href='/login' className='text-primary-500 hover:underline'>
             เข้าสู่ระบบ

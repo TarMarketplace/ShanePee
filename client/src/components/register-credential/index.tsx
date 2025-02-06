@@ -1,5 +1,3 @@
-'use client'
-
 import { ChangeEvent, FormEvent, useState } from 'react'
 
 import { ErrorRegister, UserRegisterDetail } from '@/types/user-register'

@@ -1,5 +1,3 @@
-'use client'
-
 import { Option, Select } from '@material-tailwind/react'
 import { ChangeEvent, FormEvent, useState } from 'react'
 
@@ -125,8 +123,8 @@ function RegisterDetail({
         )}
       </div>
 
-      <ButtonCapsule type='submit' className='mt-4 bg-primary-500 text-white'>
-        ถัดไป
+      <ButtonCapsule type='submit' className='bg-primary-500 text-white'>
+        ต่อไป
       </ButtonCapsule>
     </form>
   )

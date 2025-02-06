@@ -33,6 +33,12 @@ const RegisterPageContainer = () => {
     }
   }
 
+  const prevSection = () => {
+    if (section == 1) {
+      setSection(0)
+    }
+  }
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     const formattedValue = name === 'phone' ? formatPhoneNumber(value) : value
@@ -68,6 +74,7 @@ const RegisterPageContainer = () => {
             handleInputChange={handleInputChange}
             handleSelectChange={handleSelectChange}
             nextSection={nextSection}
+            prevSection={prevSection}
           />
         )}
         <Text className='text-center text-xs text-grey-500'>

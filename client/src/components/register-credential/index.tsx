@@ -4,18 +4,21 @@ import { ErrorRegister, UserRegisterDetail } from '@/types/user-register'
 
 import { ButtonCapsule } from '../button-capsule'
 import { InputField } from '../input-field'
+import { Text } from '../text'
 
 interface RegisterCredentialProps {
   userData: UserRegisterDetail
   handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void
   handleSelectChange: (value: string) => void
   nextSection: () => void
+  prevSection: () => void
 }
 
 function RegisterCredential({
   userData,
   handleInputChange,
   nextSection,
+  prevSection,
 }: RegisterCredentialProps) {
   const [errors, setErrors] = useState({
     name: '',
@@ -104,6 +107,12 @@ function RegisterCredential({
       <ButtonCapsule type='submit' className='mt-4 bg-primary-500 text-white'>
         สมัครใช้งาน
       </ButtonCapsule>
+      <Text
+        className='cursor-pointer text-center text-grey-500'
+        onClick={prevSection}
+      >
+        ย้อนกลับ
+      </Text>
     </form>
   )
 }

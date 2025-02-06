@@ -1,3 +1,4 @@
 api/.env
 api/out/*
 api/test.db
+.DS_Store

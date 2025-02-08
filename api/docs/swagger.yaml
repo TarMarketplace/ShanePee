@@ -52,6 +52,13 @@ definitions:
       message:
         type: string
     type: object
+  handler.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -59,6 +66,45 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
+  /v1/auth/login:
+    post:
+      description: Login
+      parameters:
+      - description: login input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Login User
+      tags:
+      - Authentication
+  /v1/auth/logout:
+    post:
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Logout User
+      tags:
+      - Authentication
   /v1/auth/register:
     post:
       description: Register
@@ -105,6 +151,10 @@ paths:
             $ref: '#/definitions/domain.User'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
         "404":

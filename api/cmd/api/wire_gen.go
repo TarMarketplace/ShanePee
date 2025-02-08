@@ -10,6 +10,7 @@ import (
 	"shanepee.com/api/config"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/infrastructure/repository"
+	"shanepee.com/api/infrastructure/session"
 	"shanepee.com/api/service"
 )
 
@@ -26,9 +27,11 @@ func InitializeApp() (App, error) {
 	}
 	userRepository := repository.NewUserRepository(db)
 	authService := service.NewAuthService(userRepository)
-	authHandler := handler.NewAuthHandler(authService)
+	options := session.NewOptions(configConfig)
+	authHandler := handler.NewAuthHandler(authService, options)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
-	app := NewApp(authHandler, userHandler, configConfig)
+	store := session.NewStore(configConfig, options, db)
+	app := NewApp(authHandler, userHandler, configConfig, store)
 	return app, nil
 }

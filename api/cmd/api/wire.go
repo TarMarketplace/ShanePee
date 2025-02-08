@@ -8,6 +8,7 @@ import (
 	"shanepee.com/api/config"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/infrastructure/repository"
+	"shanepee.com/api/infrastructure/session"
 	"shanepee.com/api/service"
 )
 
@@ -21,6 +22,8 @@ func InitializeApp() (App, error) {
 		repository.NewDB,
 		config.LoadConfig,
 		NewApp,
+		session.NewStore,
+		session.NewOptions,
 	)
 	return App{}, nil
 }

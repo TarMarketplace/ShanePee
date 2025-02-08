@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 
 	"github.com/gin-contrib/cors"
@@ -38,10 +39,13 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.Default())
+	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
 
 	v1 := r.Group("v1")
 
 	v1.POST("/auth/register", app.authHdr.Register)
+	v1.POST("/auth/login", app.authHdr.Login)
+	v1.POST("/auth/logout", app.authHdr.Logout)
 
 	v1.PATCH("/user", app.userHdr.UpdateUser)
 

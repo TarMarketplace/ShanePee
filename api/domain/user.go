@@ -2,7 +2,7 @@ package domain
 
 type User struct {
 	ID            int64         `json:"id" gorm:"primaryKey"`
-	Email         string        `json:"email"`
+	Email         string        `json:"email" gorm:"unique;not null"`
 	PasswordHash  string        `json:"-" swaggerignore:"true"`
 	FirstName     *string       `json:"first_name"`
 	LastName      *string       `json:"last_name"`

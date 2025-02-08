@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"golang.org/x/crypto/bcrypt"
 	"shanepee.com/api/apperror"
@@ -10,6 +11,7 @@ import (
 
 type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError)
+	Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError)
 }
 
 func NewAuthService(userRepo domain.UserRepository) AuthService {
@@ -41,5 +43,25 @@ func (a *authServiceImpl) Register(ctx context.Context, username string, passwor
 		return nil, apperror.ErrInternal(err)
 	}
 
+	return user, nil
+}
+
+func (a *authServiceImpl) Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError) {
+	user, err := a.userRepo.FindUserByEmail(ctx, email)
+	if err != nil {
+		if errors.Is(err, domain.ErrUserNotFound) {
+			return nil, apperror.ErrUnauthorized("Invalid email or password")
+		}
+		return nil, apperror.ErrInternal(err)
+	}
+
+	passwordByte := []byte(password)
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), passwordByte)
+	if err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return nil, apperror.ErrUnauthorized("Invalid email or password")
+		}
+		return nil, apperror.ErrInternal(err)
+	}
 	return user, nil
 }

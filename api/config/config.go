@@ -3,14 +3,24 @@ package config
 import (
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Debug        string `mapstructure:"DEBUG"`
-	ServerUrl    string `mapstructure:"SERVER_URL"`
-	DatabaseFile string `mapstructure:"DATABASE_FILE"`
+	Debug        string  `mapstructure:"DEBUG"`
+	ServerUrl    string  `mapstructure:"SERVER_URL"`
+	DatabaseFile string  `mapstructure:"DATABASE_FILE"`
+	Session      Session `mapstructure:"SESSION"`
+}
+
+type Session struct {
+	CookieDomain string        `mapstructure:"COOKIE_DOMAIN"`
+	CookieMaxAge time.Duration `mapstructure:"COOKIE_MAX_AGE"`
+	CookieName   string        `mapstructure:"COOKIE_NAME"`
+	CookieSecure bool          `mapstructure:"COOKIE_SECURE"`
+	Key          string        `mapstructure:"KEY"`
 }
 
 func BindEnvs(iface interface{}, parts ...string) {

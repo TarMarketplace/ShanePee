@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 
 	"github.com/gin-contrib/cors"
@@ -35,13 +38,18 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	docs.SwaggerInfo.Host = app.cfg.ServerUrl
+	x, _ := json.MarshalIndent(app.cfg, "", " ")
+	fmt.Println(string(x))
 
 	r := gin.Default()
 	r.Use(cors.Default())
+	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
 
 	v1 := r.Group("v1")
 
 	v1.POST("/auth/register", app.authHdr.Register)
+	v1.POST("/auth/login", app.authHdr.Login)
+	v1.POST("/auth/logout", app.authHdr.Logout)
 
 	v1.PATCH("/user", app.userHdr.UpdateUser)
 
@@ -49,7 +57,7 @@ func main() {
 		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	if err = r.Run(); err != nil {
+	if err = r.Run("0.0.0.0:8080"); err != nil {
 		log.Fatal(err)
 	}
 }

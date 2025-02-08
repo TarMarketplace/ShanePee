@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"shanepee.com/api/apperror"
 	"shanepee.com/api/domain"
-	"shanepee.com/api/infrastructure/session"
 	"shanepee.com/api/service"
 )
 
@@ -15,10 +14,10 @@ const userIdSessionKey string = "user_id"
 
 type AuthHandler struct {
 	authSvc            service.AuthService
-	defaultSessionOpts session.DefaultOptions
+	defaultSessionOpts sessions.Options
 }
 
-func NewAuthHandler(authSvc service.AuthService, defaultSessionOpts session.DefaultOptions) AuthHandler {
+func NewAuthHandler(authSvc service.AuthService, defaultSessionOpts sessions.Options) AuthHandler {
 	return AuthHandler{
 		authSvc,
 		defaultSessionOpts,
@@ -99,7 +98,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) Logout(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
-	newSessionOpts := h.defaultSessionOpts.Options
+	newSessionOpts := h.defaultSessionOpts
 	newSessionOpts.MaxAge = -1
 	session.Options(newSessionOpts)
 	if err := session.Save(); err != nil {

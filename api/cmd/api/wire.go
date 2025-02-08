@@ -23,7 +23,7 @@ func InitializeApp() (App, error) {
 		config.LoadConfig,
 		NewApp,
 		session.NewStore,
-		session.NewDefaultOptions,
+		session.NewOptions,
 	)
 	return App{}, nil
 }

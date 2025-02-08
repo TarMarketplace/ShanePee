@@ -7,13 +7,9 @@ import (
 	"shanepee.com/api/config"
 )
 
-// DefaultOptions is a wrapper for storing a gin session options with default values.
-type DefaultOptions struct {
-	sessions.Options
-}
-
-func NewDefaultOptions(cfg config.Config) DefaultOptions {
-	defaultOpts := sessions.Options{
+// NewOptions is a function for creating a gin session options with default values from config.
+func NewOptions(cfg config.Config) sessions.Options {
+	return sessions.Options{
 		Path:     "/",
 		Domain:   cfg.Session.CookieDomain,
 		MaxAge:   int(cfg.Session.CookieMaxAge.Seconds()),
@@ -21,5 +17,4 @@ func NewDefaultOptions(cfg config.Config) DefaultOptions {
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	}
-	return DefaultOptions{defaultOpts}
 }

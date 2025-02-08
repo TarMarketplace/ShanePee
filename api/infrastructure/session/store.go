@@ -7,8 +7,8 @@ import (
 	"shanepee.com/api/config"
 )
 
-func NewStore(cfg config.Config, defaultOptions DefaultOptions, db *gorm.DB) sessions.Store {
+func NewStore(cfg config.Config, defaultOptions sessions.Options, db *gorm.DB) sessions.Store {
 	store := gormsessions.NewStore(db, true, []byte(cfg.Session.Key))
-	store.Options(defaultOptions.Options)
+	store.Options(defaultOptions)
 	return store
 }

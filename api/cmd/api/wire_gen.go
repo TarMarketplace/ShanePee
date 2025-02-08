@@ -27,11 +27,11 @@ func InitializeApp() (App, error) {
 	}
 	userRepository := repository.NewUserRepository(db)
 	authService := service.NewAuthService(userRepository)
-	defaultOptions := session.NewDefaultOptions(configConfig)
-	authHandler := handler.NewAuthHandler(authService, defaultOptions)
+	options := session.NewOptions(configConfig)
+	authHandler := handler.NewAuthHandler(authService, options)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
-	store := session.NewStore(configConfig, defaultOptions, db)
+	store := session.NewStore(configConfig, options, db)
 	app := NewApp(authHandler, userHandler, configConfig, store)
 	return app, nil
 }

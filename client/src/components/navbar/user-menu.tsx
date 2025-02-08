@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react'
+import Link from 'next/link'
 
 import {
   DropdownMenu,
@@ -17,13 +18,23 @@ interface UserMenuProps {
 
 export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
   return (
-    <div className='flex items-center gap-[1.125rem]'>
-      <Icon icon='tdesign:cart-filled' className='size-7' />
+    <div className='ml-4 flex items-center gap-[1.125rem]'>
+      <Link href='/cart'>
+        <Icon icon='tdesign:cart-filled' className='size-7' />
+      </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className='flex items-center gap-1 text-nowrap'>
-            <Text variant='md-semibold'>สวัสดี, {user.name}</Text>
-            <Icon icon='teenyicons:down-solid' className='size-3' />
+          <button>
+            <div className='hidden items-center gap-1 text-nowrap md:flex'>
+              <Text variant='md-semibold'>สวัสดี, {user.name} </Text>
+              <Icon icon='teenyicons:down-solid' className='size-3' />
+            </div>
+            <div className='block md:hidden'>
+              <Icon
+                icon='akar-icons:three-line-horizontal'
+                className='size-8'
+              />
+            </div>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='divide-y divide-grey-200'>

@@ -91,10 +91,6 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.ErrorResponse'
       summary: Login User
       tags:
       - Authentication
@@ -106,10 +102,6 @@ paths:
       responses:
         "200":
           description: OK
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.ErrorResponse'
       summary: Logout User
       tags:
       - Authentication

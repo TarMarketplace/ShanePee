@@ -66,7 +66,6 @@ type LoginInput struct {
 // @Success		200		{object}	domain.User
 // @Failure		400		{object}	ErrorResponse
 // @Failure		401		{object}	ErrorResponse
-// @Failure		500		{object}	ErrorResponse
 // @Router			/v1/auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var body LoginInput
@@ -93,7 +92,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Tags			Authentication
 // @Produce		json
 // @Success		200
-// @Failure		500	{object}	ErrorResponse
 // @Router			/v1/auth/logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
 	session := sessions.Default(c)

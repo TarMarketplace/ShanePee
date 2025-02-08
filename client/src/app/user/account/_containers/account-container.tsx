@@ -53,14 +53,14 @@ export function AccountContainer() {
   ]
 
   return (
-    <div className='flex w-full rounded-xl border'>
-      <div className='flex w-auto min-w-[300px] flex-col gap-2 whitespace-nowrap border-r p-6'>
+    <div className='flex w-full flex-col rounded-xl md:flex-row md:border'>
+      <div className='flex w-full overflow-x-auto whitespace-nowrap pb-2 md:w-auto md:min-w-[300px] md:flex-col md:gap-2 md:border-r md:p-6'>
         {modeList.map(({ label, value, icon }) => (
           <button
             key={value}
-            className={`inline-flex h-10 items-center justify-start gap-2 rounded-sm px-3 py-2 ${
+            className={`inline-flex h-10 items-center justify-start gap-2 px-3 py-2 md:rounded-sm ${
               mode === value
-                ? 'bg-primary text-white'
+                ? 'border-b-2 border-b-primary text-primary md:border-none md:bg-primary md:text-white'
                 : 'text-black hover:bg-grey-50'
             }`}
             onClick={() => handleSwitchMode(value)}

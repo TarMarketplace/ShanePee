@@ -26,8 +26,8 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className='flex w-full flex-col gap-8'
       >
-        <div className='grid w-full grid-cols-3 gap-4'>
-          <div className='col-span-3'>
+        <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-3'>
+          <div className='col-span-1 md:col-span-3'>
             <FormField
               control={form.control}
               name='details'

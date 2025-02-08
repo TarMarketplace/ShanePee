@@ -37,8 +37,8 @@ export function PasswordContainer() {
   }
 
   return (
-    <div className='m-6 flex w-full flex-col gap-8'>
-      <div className='flex items-center gap-2'>
+    <div className='my-6 flex flex-col gap-8 md:m-6 md:w-full'>
+      <div className='hidden items-center gap-2 md:flex'>
         <Icon icon='solar:key-bold' className='size-10' />
         <Text variant='heading-lg'>เปลี่ยนรหัสผ่าน</Text>
       </div>

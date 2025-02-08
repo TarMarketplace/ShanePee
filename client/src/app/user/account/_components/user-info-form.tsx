@@ -40,7 +40,7 @@ export function UserInfoForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className='flex w-full flex-col gap-8'
       >
-        <div className='flex gap-4'>
+        <div className='flex flex-col items-center gap-4 md:flex-row'>
           <div className='w-32'>
             <Image
               src='https://placehold.co/128x128.png'
@@ -55,8 +55,8 @@ export function UserInfoForm({
               <Text variant='sm-semibold'>เปลี่ยนรูป</Text>
             </button>
           </div>
-          <div className='grid w-full grid-cols-6 gap-4'>
-            <div className='col-span-6'>
+          <div className='grid w-full grid-cols-2 gap-4 md:grid-cols-6'>
+            <div className='col-span-2 md:col-span-6'>
               <FormField
                 control={form.control}
                 name='username'
@@ -71,7 +71,7 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-2'>
+            <div className='col-span-1 md:col-span-2'>
               <FormField
                 control={form.control}
                 name='name'
@@ -86,7 +86,7 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-2'>
+            <div className='col-span-1 md:col-span-2'>
               <FormField
                 control={form.control}
                 name='surname'
@@ -128,7 +128,7 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-3'>
+            <div className='col-span-2 md:col-span-3'>
               <FormField
                 control={form.control}
                 name='email'
@@ -147,7 +147,7 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-3'>
+            <div className='col-span-2 md:col-span-3'>
               <FormField
                 control={form.control}
                 name='phone'

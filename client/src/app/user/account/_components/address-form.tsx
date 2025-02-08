@@ -86,7 +86,6 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
                     <Input
                       {...field}
                       placeholder='กรุณากรอกรหัสไปรษณีย์'
-                      type='number'
                       onChange={(e) => {
                         const value = e.target.value.slice(0, 5)
                         field.onChange(value)

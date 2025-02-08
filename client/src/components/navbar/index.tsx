@@ -27,13 +27,8 @@ const Navbar = ({
     <header className='sticky top-0 z-50 flex w-full items-center justify-center bg-primary-gradient'>
       <nav className='flex w-full max-w-screen-xl items-center justify-between px-3 py-2 text-white'>
         <div className='flex w-full max-w-2xl items-center gap-[1.125rem]'>
-          <Link href='/'>
-            <Image
-              src='https://placehold.co/150x40.png'
-              alt=''
-              width={150}
-              height={40}
-            />
+          <Link href='/' className='hidden md:block'>
+            <Image src='/logo.png' alt='' width={160} height={80} />
           </Link>
           <div className='flex w-full'>
             <input

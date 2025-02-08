@@ -34,7 +34,11 @@ export function PasswordForm({ onSubmit, form }: PasswordFormProps) {
                 <FormItem>
                   <FormLabel>รหัสผ่านเดิม</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='กรุณากรอกรหัสผ่านเดิม' />
+                    <Input
+                      {...field}
+                      placeholder='กรุณากรอกรหัสผ่านเดิม'
+                      type='password'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -49,7 +53,11 @@ export function PasswordForm({ onSubmit, form }: PasswordFormProps) {
                 <FormItem>
                   <FormLabel>รหัสผ่านใหม่</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='กรุณากรอกรหัสผ่านใหม่' />
+                    <Input
+                      {...field}
+                      placeholder='กรุณากรอกรหัสผ่านใหม่'
+                      type='password'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -67,6 +75,7 @@ export function PasswordForm({ onSubmit, form }: PasswordFormProps) {
                     <Input
                       {...field}
                       placeholder='กรุณากรอกรหัสผ่านใหม่อีกครั้ง'
+                      type='password'
                     />
                   </FormControl>
                   <FormMessage />

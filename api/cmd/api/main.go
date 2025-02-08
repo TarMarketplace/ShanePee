@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
@@ -38,8 +36,6 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	docs.SwaggerInfo.Host = app.cfg.ServerUrl
-	x, _ := json.MarshalIndent(app.cfg, "", " ")
-	fmt.Println(string(x))
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -57,7 +53,7 @@ func main() {
 		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	if err = r.Run("0.0.0.0:8080"); err != nil {
+	if err = r.Run(); err != nil {
 		log.Fatal(err)
 	}
 }

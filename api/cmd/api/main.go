@@ -39,7 +39,7 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.Default())
-	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
+	r.Use(sessions.Sessions(app.cfg.SessionConfig.CookieName, app.sessionStore))
 
 	v1 := r.Group("v1")
 

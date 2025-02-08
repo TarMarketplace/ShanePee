@@ -9,13 +9,13 @@ import (
 )
 
 type Config struct {
-	Debug        string  `mapstructure:"DEBUG"`
-	ServerUrl    string  `mapstructure:"SERVER_URL"`
-	DatabaseFile string  `mapstructure:"DATABASE_FILE"`
-	Session      Session `mapstructure:"SESSION"`
+	Debug         string        `mapstructure:"DEBUG"`
+	ServerUrl     string        `mapstructure:"SERVER_URL"`
+	DatabaseFile  string        `mapstructure:"DATABASE_FILE"`
+	SessionConfig SessionConfig `mapstructure:"SESSION"`
 }
 
-type Session struct {
+type SessionConfig struct {
 	CookieDomain string        `mapstructure:"COOKIE_DOMAIN"`
 	CookieMaxAge time.Duration `mapstructure:"COOKIE_MAX_AGE"`
 	CookieName   string        `mapstructure:"COOKIE_NAME"`
@@ -46,6 +46,7 @@ func LoadConfig() (Config, error) {
 	var cfg Config
 
 	viper.SetEnvPrefix("APP")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	BindEnvs(cfg)
 
 	err := viper.Unmarshal(&cfg)

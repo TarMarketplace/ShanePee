@@ -11,9 +11,9 @@ import (
 func NewOptions(cfg config.Config) sessions.Options {
 	return sessions.Options{
 		Path:     "/",
-		Domain:   cfg.SessionConfig.CookieDomain,
-		MaxAge:   int(cfg.SessionConfig.CookieMaxAge.Seconds()),
-		Secure:   cfg.SessionConfig.CookieSecure,
+		Domain:   cfg.Session.CookieDomain,
+		MaxAge:   int(cfg.Session.CookieMaxAge.Seconds()),
+		Secure:   cfg.Session.CookieSecure,
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	}

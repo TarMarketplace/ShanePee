@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	Debug         string        `mapstructure:"DEBUG"`
-	ServerUrl     string        `mapstructure:"SERVER_URL"`
-	DatabaseFile  string        `mapstructure:"DATABASE_FILE"`
-	SessionConfig SessionConfig `mapstructure:"SESSION"`
+	Debug        string        `mapstructure:"DEBUG"`
+	ServerUrl    string        `mapstructure:"SERVER_URL"`
+	DatabaseFile string        `mapstructure:"DATABASE_FILE"`
+	Session      SessionConfig `mapstructure:"SESSION"`
 }
 
 type SessionConfig struct {

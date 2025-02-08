@@ -8,7 +8,7 @@ import (
 )
 
 func NewStore(cfg config.Config, defaultOptions sessions.Options, db *gorm.DB) sessions.Store {
-	store := gormsessions.NewStore(db, true, []byte(cfg.SessionConfig.Key))
+	store := gormsessions.NewStore(db, true, []byte(cfg.Session.Key))
 	store.Options(defaultOptions)
 	return store
 }

@@ -30,7 +30,7 @@ type PasswordChangeRequest struct {
 	ID        int64  `gorm:"primaryKey"`
 	UserID    int64  `gorm:"not null"`
 	TokenHash string `gorm:"not null"`
-	User      User   `gorm:"foreignKey:UserID;OnDelete:SET NULL"`
+	User      User   `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 func NewPasswordChangeRequest(tokenHash string, userID int64) *PasswordChangeRequest {

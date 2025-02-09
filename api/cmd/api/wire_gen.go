@@ -27,7 +27,7 @@ func InitializeApp() (App, error) {
 		return App{}, err
 	}
 	userRepository := repository.NewUserRepository(db)
-	emailSender, err := email.NewSenderFromConfig(configConfig)
+	emailSender, err := email.NewEmailSender(configConfig)
 	if err != nil {
 		return App{}, err
 	}

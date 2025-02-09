@@ -55,29 +55,3 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		"message": "OK",
 	})
 }
-
-// @Summary		Get current authenticated user
-// @Description	Get authenticated user from the session
-// @Tags			User
-// @Produce		json
-// @Success		200	{object}	domain.User
-// @Failure		401	{object}	ErrorResponse
-// @Failure		404	{object}	ErrorResponse
-// @Router			/v1/me [get]
-func (h *UserHandler) GetMe(c *gin.Context) {
-	var userId int64
-	session := sessions.Default(c)
-	id := session.Get(userIdSessionKey)
-	if id == nil {
-		handleError(c, apperror.ErrUnauthorized("Authentication required"))
-		return
-	}
-	userId = id.(int64)
-
-	data, err := h.userSvc.GetUserByID(c, userId)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-	c.JSON(http.StatusOK, data)
-}

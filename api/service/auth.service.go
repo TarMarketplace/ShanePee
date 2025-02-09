@@ -16,6 +16,7 @@ type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError)
 	Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError)
 	RequestPasswordChange(ctx context.Context, email string) apperror.AppError
+	GetUserByID(ctx context.Context, id int64) (*domain.User, apperror.AppError)
 	ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) apperror.AppError
 }
 
@@ -140,4 +141,15 @@ func (a *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, t
 		return apperror.ErrInternal(err)
 	}
 	return nil
+}
+
+func (svc *authServiceImpl) GetUserByID(ctx context.Context, id int64) (*domain.User, apperror.AppError) {
+	user, err := svc.userRepo.FindUserByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, domain.ErrUserNotFound) {
+			return nil, apperror.ErrNotFound("user not found")
+		}
+		return nil, apperror.ErrInternal(err)
+	}
+	return user, nil
 }

@@ -14,7 +14,7 @@ const (
 	SendgridProvider Provider = "sendgrid"
 )
 
-func NewSenderFromConfig(cfg config.Config) (service.EmailSender, error) {
+func NewEmailSender(cfg config.Config) (service.EmailSender, error) {
 	switch Provider(cfg.Email.Provider) {
 	case DebugProvider:
 		return NewDebug(cfg), nil

@@ -48,9 +48,9 @@ func main() {
 	v1.POST("/auth/logout", app.authHdr.Logout)
 	v1.POST("/auth/password-change-requests", app.authHdr.CreatePasswordChangeRequests)
 	v1.POST("/auth/change-password", app.authHdr.ChangePassword)
+	v1.GET("/auth/me", app.authHdr.GetMe)
 
 	v1.PATCH("/user", app.userHdr.UpdateUser)
-	v1.GET("/me", app.userHdr.GetMe)
 
 	if app.cfg.Debug == "1" {
 		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

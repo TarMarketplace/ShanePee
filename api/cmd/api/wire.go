@@ -25,7 +25,7 @@ func InitializeApp() (App, error) {
 		NewApp,
 		session.NewStore,
 		session.NewOptions,
-		email.NewSenderFromConfig,
+		email.NewEmailSender,
 	)
 	return App{}, nil
 }

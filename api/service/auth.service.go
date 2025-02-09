@@ -16,6 +16,7 @@ type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError)
 	Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError)
 	RequestPasswordChange(ctx context.Context, email string) apperror.AppError
+	ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) apperror.AppError
 }
 
 type EmailSender interface {
@@ -103,6 +104,39 @@ func (a *authServiceImpl) RequestPasswordChange(ctx context.Context, email strin
 	}
 
 	if err := a.emailSender.SendChangePasswordEmail(ctx, user.Email, token, passwordChangeRequest.ID); err != nil {
+		return apperror.ErrInternal(err)
+	}
+	return nil
+}
+
+func (a *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) apperror.AppError {
+	passwordChangeRequest, err := a.userRepo.FindPasswordChangeRequestWithUserByID(ctx, requestID)
+	if err != nil {
+		if errors.Is(err, domain.ErrPasswordChangeRequestNotFound) {
+			return apperror.ErrUnauthorized("Invalid token or request id")
+		}
+		return apperror.ErrInternal(err)
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(passwordChangeRequest.TokenHash), []byte(token)); err != nil {
+		if errors.Is(err, domain.ErrPasswordChangeRequestNotFound) {
+			return apperror.ErrUnauthorized("Invalid token or request id")
+		}
+		return apperror.ErrInternal(err)
+	}
+
+	passwordByte := []byte(newPassword)
+	hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+	hashStr := string(hash)
+	if err != nil {
+		return apperror.ErrInternal(err)
+	}
+
+	if err := a.userRepo.UpdateUserPasswordHash(ctx, passwordChangeRequest.UserID, hashStr); err != nil {
+		return apperror.ErrInternal(err)
+	}
+
+	if err := a.userRepo.DeletePasswordChangeRequestByID(ctx, passwordChangeRequest.ID); err != nil {
 		return apperror.ErrInternal(err)
 	}
 	return nil

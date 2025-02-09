@@ -55,11 +55,20 @@ func (u *userRepositoryImpl) FindPasswordChangeRequestWithUserByID(ctx context.C
 	var passwordChangeRequest domain.PasswordChangeRequest
 	if err := u.db.Joins("User").Take(&passwordChangeRequest, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, domain.ErrUserNotFound
+			return nil, domain.ErrPasswordChangeRequestNotFound
 		}
 		return nil, err
 	}
 	return &passwordChangeRequest, nil
+}
+
+func (u *userRepositoryImpl) UpdateUserPasswordHash(ctx context.Context, id int64, passwordHash string) error {
+	user := &domain.User{ID: id}
+	return u.db.Model(user).Updates(domain.User{PasswordHash: passwordHash}).Error
+}
+
+func (u *userRepositoryImpl) DeletePasswordChangeRequestByID(ctx context.Context, id int64) error {
+	return u.db.Delete(&domain.PasswordChangeRequest{}, id).Error
 }
 
 var _ domain.UserRepository = &userRepositoryImpl{}

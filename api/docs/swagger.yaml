@@ -47,6 +47,15 @@ definitions:
       password:
         type: string
     type: object
+  handler.ChangePasswordInput:
+    properties:
+      new_password:
+        type: string
+      request_id:
+        type: integer
+      token:
+        type: string
+    type: object
   handler.ErrorResponse:
     properties:
       message:
@@ -71,6 +80,26 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
+  /v1/auth/change-password:
+    post:
+      description: Change password of a user using token and request id
+      parameters:
+      - description: input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ChangePasswordInput'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Change password
+      tags:
+      - Authentication
   /v1/auth/login:
     post:
       description: Login

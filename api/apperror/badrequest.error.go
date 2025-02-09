@@ -24,8 +24,8 @@ func (i BadRequestError) ShouldLog() bool {
 	return false
 }
 
-func ErrBadRequest(errmsg string) InternalError {
-	return InternalError{
+func ErrBadRequest(errmsg string) BadRequestError {
+	return BadRequestError{
 		errmsg,
 	}
 }

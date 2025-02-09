@@ -128,3 +128,29 @@ func (h *AuthHandler) CreatePasswordChangeRequests(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 }
+
+type ChangePasswordInput struct {
+	RequestID   int64  `json:"request_id"`
+	Token       string `json:"token"`
+	NewPassword string `json:"new_password"`
+}
+
+// @Summary Change password
+// @Description	Change password of a user using token and request id
+// @Tags			Authentication
+// @Param			body	body		ChangePasswordInput true	"input"
+// @Success		200
+// @Failure		401		{object}	ErrorResponse
+// @Router			/v1/auth/change-password [post]
+func (h *AuthHandler) ChangePassword(c *gin.Context) {
+	var body ChangePasswordInput
+	if err := c.ShouldBind(&body); err != nil {
+		handleError(c, apperror.ErrBadRequest("Invalid body"))
+		return
+	}
+	if err := h.authSvc.ChangePassword(c, body.RequestID, body.Token, body.NewPassword); err != nil {
+		handleError(c, err)
+		return
+	}
+	c.Status(http.StatusOK)
+}

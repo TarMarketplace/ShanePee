@@ -1,4 +1,4 @@
-import { formatPhoneNumber } from '@/utils/phone-formatter'
+import { formatPhoneNumber } from '@/utils/input-formatter'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/button'

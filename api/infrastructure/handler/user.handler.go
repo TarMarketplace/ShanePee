@@ -25,7 +25,7 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 // @Accept			json
 // @Produce		json
 // @Param			body	body		map[string]interface{}	true	"body of user to be updated"
-// @Success		200		{object}	domain.User
+// @Success		200		{object}	string
 // @Failure		400		{object}	ErrorResponse
 // @Failure		401		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse

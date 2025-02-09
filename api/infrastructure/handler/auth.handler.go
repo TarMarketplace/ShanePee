@@ -105,3 +105,78 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 }
+
+type RequestPasswordChangeInput struct {
+	Email string `json:"email"`
+}
+
+// @Summary		Request a password reset
+// @Description	Initiates a password reset process by sending an email with reset instructions
+// @Tags			Authentication
+// @Param			body	body	RequestPasswordChangeInput	true	"input"
+// @Success		200
+// @Router			/v1/auth/password-change-requests [post]
+func (h *AuthHandler) CreatePasswordChangeRequests(c *gin.Context) {
+	var body RequestPasswordChangeInput
+	if err := c.ShouldBind(&body); err != nil {
+		handleError(c, apperror.ErrBadRequest("Invalid body"))
+		return
+	}
+	if err := h.authSvc.RequestPasswordChange(c, body.Email); err != nil {
+		handleError(c, err)
+		return
+	}
+	c.Status(http.StatusOK)
+}
+
+type ChangePasswordInput struct {
+	RequestID   int64  `json:"request_id"`
+	Token       string `json:"token"`
+	NewPassword string `json:"new_password"`
+}
+
+// @Summary		Change password
+// @Description	Change password of a user using token and request id
+// @Tags			Authentication
+// @Param			body	body	ChangePasswordInput	true	"input"
+// @Success		200
+// @Failure		401	{object}	ErrorResponse
+// @Router			/v1/auth/change-password [post]
+func (h *AuthHandler) ChangePassword(c *gin.Context) {
+	var body ChangePasswordInput
+	if err := c.ShouldBind(&body); err != nil {
+		handleError(c, apperror.ErrBadRequest("Invalid body"))
+		return
+	}
+	if err := h.authSvc.ChangePassword(c, body.RequestID, body.Token, body.NewPassword); err != nil {
+		handleError(c, err)
+		return
+	}
+	c.Status(http.StatusOK)
+}
+
+// @Summary		Get current authenticated user
+// @Description	Get authenticated user from the session
+// @Tags			Authentication
+// @Produce		json
+// @Success		200	{object}	domain.User
+// @Failure		401	{object}	ErrorResponse
+// @Failure		404	{object}	ErrorResponse
+// @Router			/v1/auth/me [get]
+func (h *AuthHandler) GetMe(c *gin.Context) {
+	var userId int64
+	session := sessions.Default(c)
+	id := session.Get(userIdSessionKey)
+	if id == nil {
+		handleError(c, apperror.ErrUnauthorized("Authentication required"))
+		return
+	}
+	userId = id.(int64)
+
+	data, err := h.authSvc.GetUserByID(c, userId)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+	c.JSON(http.StatusOK, data)
+}

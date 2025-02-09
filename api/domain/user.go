@@ -26,6 +26,21 @@ type PaymentMethod struct {
 	CardOwner  *string `json:"card_owner"`
 }
 
+type PasswordChangeRequest struct {
+	ID        int64  `gorm:"primaryKey"`
+	UserID    int64  `gorm:"not null"`
+	TokenHash string `gorm:"not null"`
+	User      User   `gorm:"foreignKey:UserID;OnDelete:SET NULL"`
+}
+
+func NewPasswordChangeRequest(tokenHash string, userID int64) *PasswordChangeRequest {
+	return &PasswordChangeRequest{
+		ID:        GenID(),
+		UserID:    userID,
+		TokenHash: tokenHash,
+	}
+}
+
 type UserCreateBody struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`

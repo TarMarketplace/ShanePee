@@ -2,7 +2,10 @@ package service
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
+
+	"crypto/rand"
 
 	"golang.org/x/crypto/bcrypt"
 	"shanepee.com/api/apperror"
@@ -12,16 +15,23 @@ import (
 type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError)
 	Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError)
+	RequestPasswordChange(ctx context.Context, email string) apperror.AppError
 }
 
-func NewAuthService(userRepo domain.UserRepository) AuthService {
+type EmailSender interface {
+	SendChangePasswordEmail(ctx context.Context, to string, token string, requestID int64) error
+}
+
+func NewAuthService(userRepo domain.UserRepository, emailSender EmailSender) AuthService {
 	return &authServiceImpl{
 		userRepo,
+		emailSender,
 	}
 }
 
 type authServiceImpl struct {
-	userRepo domain.UserRepository
+	userRepo    domain.UserRepository
+	emailSender EmailSender
 }
 
 var _ AuthService = &authServiceImpl{}
@@ -64,4 +74,36 @@ func (a *authServiceImpl) Login(ctx context.Context, email string, password stri
 		return nil, apperror.ErrInternal(err)
 	}
 	return user, nil
+}
+
+func (a *authServiceImpl) RequestPasswordChange(ctx context.Context, email string) apperror.AppError {
+	user, err := a.userRepo.FindUserByEmail(ctx, email)
+	if err != nil {
+		if errors.Is(err, domain.ErrUserNotFound) {
+			// This avoids exposing whether an email/user exists in the system.
+			return nil
+		}
+		return apperror.ErrInternal(err)
+	}
+
+	randomBytes := make([]byte, 32)
+	if _, err := rand.Read(randomBytes); err != nil {
+		return apperror.ErrInternal(err)
+	}
+	token := base64.URLEncoding.EncodeToString(randomBytes)
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
+	if err != nil {
+		return apperror.ErrInternal(err)
+	}
+	tokenHash := string(hash)
+	passwordChangeRequest := domain.NewPasswordChangeRequest(tokenHash, user.ID)
+	if err := a.userRepo.CreatePasswordChangeRequest(ctx, passwordChangeRequest); err != nil {
+		return apperror.ErrInternal(err)
+	}
+
+	if err := a.emailSender.SendChangePasswordEmail(ctx, user.Email, token, passwordChangeRequest.ID); err != nil {
+		return apperror.ErrInternal(err)
+	}
+	return nil
 }

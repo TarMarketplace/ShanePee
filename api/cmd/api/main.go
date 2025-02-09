@@ -46,6 +46,7 @@ func main() {
 	v1.POST("/auth/register", app.authHdr.Register)
 	v1.POST("/auth/login", app.authHdr.Login)
 	v1.POST("/auth/logout", app.authHdr.Logout)
+	v1.POST("/auth/password-change-requests", app.authHdr.CreatePasswordChangeRequests)
 
 	v1.PATCH("/user", app.userHdr.UpdateUser)
 

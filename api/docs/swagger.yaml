@@ -59,6 +59,11 @@ definitions:
       password:
         type: string
     type: object
+  handler.RequestPasswordChangeInput:
+    properties:
+      email:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -103,6 +108,23 @@ paths:
         "200":
           description: OK
       summary: Logout User
+      tags:
+      - Authentication
+  /v1/auth/password-change-requests:
+    post:
+      description: Initiates a password reset process by sending an email with reset
+        instructions
+      parameters:
+      - description: input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RequestPasswordChangeInput'
+      responses:
+        "200":
+          description: OK
+      summary: Request a password reset
       tags:
       - Authentication
   /v1/auth/register:

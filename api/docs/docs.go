@@ -75,6 +75,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/auth/password-change-requests": {
+            "post": {
+                "description": "Initiates a password reset process by sending an email with reset instructions",
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Request a password reset",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.RequestPasswordChangeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/v1/auth/register": {
             "post": {
                 "description": "Register",
@@ -256,6 +281,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.RequestPasswordChangeInput": {
+            "type": "object",
+            "properties": {
+                "email": {
                     "type": "string"
                 }
             }

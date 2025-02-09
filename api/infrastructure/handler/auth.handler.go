@@ -105,3 +105,26 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 }
+
+type RequestPasswordChangeInput struct {
+	Email string `json:"email"`
+}
+
+// @Summary Request a password reset
+// @Description	Initiates a password reset process by sending an email with reset instructions
+// @Tags			Authentication
+// @Param			body	body		RequestPasswordChangeInput true	"input"
+// @Success		200
+// @Router			/v1/auth/password-change-requests [post]
+func (h *AuthHandler) CreatePasswordChangeRequests(c *gin.Context) {
+	var body RequestPasswordChangeInput
+	if err := c.ShouldBind(&body); err != nil {
+		handleError(c, apperror.ErrBadRequest("Invalid body"))
+		return
+	}
+	if err := h.authSvc.RequestPasswordChange(c, body.Email); err != nil {
+		handleError(c, err)
+		return
+	}
+	c.Status(http.StatusOK)
+}

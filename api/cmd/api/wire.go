@@ -6,6 +6,7 @@ package main
 import (
 	"github.com/google/wire"
 	"shanepee.com/api/config"
+	"shanepee.com/api/infrastructure/email"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
@@ -24,6 +25,7 @@ func InitializeApp() (App, error) {
 		NewApp,
 		session.NewStore,
 		session.NewOptions,
+		email.NewSenderFromConfig,
 	)
 	return App{}, nil
 }

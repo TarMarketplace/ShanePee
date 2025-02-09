@@ -36,6 +36,32 @@ func (u *userRepositoryImpl) FindUserByEmail(ctx context.Context, email string) 
 	return &user, nil
 }
 
+func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domain.User, error) {
+	var user domain.User
+	if err := u.db.Take(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, domain.ErrUserNotFound
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (u *userRepositoryImpl) CreatePasswordChangeRequest(ctx context.Context, passwordChangeRequest *domain.PasswordChangeRequest) error {
+	return u.db.Create(passwordChangeRequest).Error
+}
+
+func (u *userRepositoryImpl) FindPasswordChangeRequestWithUserByID(ctx context.Context, id int64) (*domain.PasswordChangeRequest, error) {
+	var passwordChangeRequest domain.PasswordChangeRequest
+	if err := u.db.Joins("User").Take(&passwordChangeRequest, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, domain.ErrUserNotFound
+		}
+		return nil, err
+	}
+	return &passwordChangeRequest, nil
+}
+
 var _ domain.UserRepository = &userRepositoryImpl{}
 
 func NewUserRepository(db *gorm.DB) domain.UserRepository {

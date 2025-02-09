@@ -8,6 +8,7 @@ package main
 
 import (
 	"shanepee.com/api/config"
+	"shanepee.com/api/infrastructure/email"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
@@ -26,7 +27,11 @@ func InitializeApp() (App, error) {
 		return App{}, err
 	}
 	userRepository := repository.NewUserRepository(db)
-	authService := service.NewAuthService(userRepository)
+	emailSender, err := email.NewSenderFromConfig(configConfig)
+	if err != nil {
+		return App{}, err
+	}
+	authService := service.NewAuthService(userRepository, emailSender)
 	options := session.NewOptions(configConfig)
 	authHandler := handler.NewAuthHandler(authService, options)
 	userService := service.NewUserService(userRepository)

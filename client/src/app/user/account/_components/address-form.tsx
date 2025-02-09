@@ -100,7 +100,7 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
           </div>
         </div>
         <div className='flex justify-end'>
-          <Button variant='filled' type='submit' className=''>
+          <Button variant='filled' type='submit'>
             บันทึก
           </Button>
         </div>

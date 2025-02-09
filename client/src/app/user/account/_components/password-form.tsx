@@ -85,7 +85,7 @@ export function PasswordForm({ onSubmit, form }: PasswordFormProps) {
           </div>
         </div>
         <div className='flex justify-end'>
-          <Button variant='filled' type='submit' className=''>
+          <Button variant='filled' type='submit'>
             บันทึก
           </Button>
         </div>

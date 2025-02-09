@@ -180,6 +180,27 @@ paths:
       summary: Register User
       tags:
       - Authentication
+  /v1/me:
+    get:
+      description: Get authenticated user from the session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get current authenticated user
+      tags:
+      - User
   /v1/user:
     patch:
       consumes:

@@ -22,7 +22,7 @@ func NewArtToyHandler(artToySvc service.ArtToyService) ArtToyHandler {
 // @Tags			Art toy
 // @Accept			json
 // @Produce		json
-// @Success		200		{object}	ArrayResponse{data=[]domain.ArtToy}
+// @Success		200		{object}	domain.ArrayResponse{data=[]domain.ArtToy}
 // @Failure		400		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse
 // @Router			/v1/art-toy [get]

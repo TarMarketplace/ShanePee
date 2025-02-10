@@ -10,6 +10,10 @@ definitions:
       province:
         type: string
     type: object
+  domain.ArrayResponse:
+    properties:
+      data: {}
+    type: object
   domain.ArtToy:
     properties:
       availability:
@@ -101,16 +105,21 @@ paths:
     get:
       consumes:
       - application/json
-      description: get all art toys
+      description: Get all art toys
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/domain.ArtToy'
-            type: array
+            allOf:
+            - $ref: '#/definitions/domain.ArrayResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.ArtToy'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -121,7 +130,7 @@ paths:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: Get Art Toys
       tags:
-      - Art Toy
+      - Art toy
   /v1/auth/change-password:
     post:
       description: Change password of a user using token and request id

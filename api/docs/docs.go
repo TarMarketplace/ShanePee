@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/v1/art-toy": {
             "get": {
-                "description": "get all art toys",
+                "description": "Get all art toys",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,17 +25,29 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Art Toy"
+                    "Art toy"
                 ],
                 "summary": "Get Art Toys",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.ArtToy"
-                            }
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.ArrayResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.ArtToy"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -308,6 +320,12 @@ const docTemplate = `{
                 "province": {
                     "type": "string"
                 }
+            }
+        },
+        "domain.ArrayResponse": {
+            "type": "object",
+            "properties": {
+                "data": {}
             }
         },
         "domain.ArtToy": {

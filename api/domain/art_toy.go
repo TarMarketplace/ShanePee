@@ -10,6 +10,21 @@ type ArtToy struct {
 	// TODO: add more fields about review, rating, etc.
 }
 
+type ArtToyCreateBody struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Photo       *string `json:"photo"`
+}
+
+type ArtToyUpdateBody struct {
+	Name         *string  `json:"name"`
+	Description  *string  `json:"description"`
+	Price        *float64 `json:"price"`
+	Photo        *string  `json:"photo"`
+	Availability *bool    `json:"availability"`
+}
+
 func NewArtToy(name string, description string, price float64, photo *string) *ArtToy {
 	return &ArtToy{
 		ID:           GenID(),

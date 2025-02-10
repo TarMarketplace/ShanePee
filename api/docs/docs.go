@@ -371,6 +371,12 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.ArrayResponse": {
+            "type": "object",
+            "properties": {
+                "data": {}
+            }
+        },
         "domain.ArtToy": {
             "type": "object",
             "properties": {

@@ -1,0 +1,330 @@
+definitions:
+  domain.Address:
+    properties:
+      district:
+        type: string
+      house_no:
+        type: string
+      postcode:
+        type: string
+      province:
+        type: string
+    type: object
+  domain.ArtToyCreateBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
+  domain.ArtToyUpdateBody:
+    properties:
+      availability:
+        type: boolean
+      description:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
+  domain.PaymentMethod:
+    properties:
+      card_number:
+        type: string
+      card_owner:
+        type: string
+      cvv:
+        type: string
+      expire_date:
+        type: string
+    type: object
+  domain.User:
+    properties:
+      address:
+        $ref: '#/definitions/domain.Address'
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      payment_method:
+        $ref: '#/definitions/domain.PaymentMethod'
+      tel:
+        type: string
+    type: object
+  domain.UserCreateBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  handler.ChangePasswordInput:
+    properties:
+      new_password:
+        type: string
+      request_id:
+        type: integer
+      token:
+        type: string
+    type: object
+  handler.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  handler.RequestPasswordChangeInput:
+    properties:
+      email:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Shanepee API
+  title: Shanepee API
+  version: "0.0"
+paths:
+  /v1/art-toy:
+    post:
+      consumes:
+      - application/json
+      description: create a new ArtToy
+      parameters:
+      - description: body of ArtToy to be created
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ArtToyCreateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create ArtToy
+      tags:
+      - ArtToy
+  /v1/art-toy/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing ArtToy by ID
+      parameters:
+      - description: ID of the ArtToy to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated ArtToy data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ArtToyUpdateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Update ArtToy
+      tags:
+      - ArtToy
+  /v1/auth/change-password:
+    post:
+      description: Change password of a user using token and request id
+      parameters:
+      - description: input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ChangePasswordInput'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Change password
+      tags:
+      - Authentication
+  /v1/auth/login:
+    post:
+      description: Login
+      parameters:
+      - description: login input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Login User
+      tags:
+      - Authentication
+  /v1/auth/logout:
+    post:
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Logout User
+      tags:
+      - Authentication
+  /v1/auth/me:
+    get:
+      description: Get authenticated user from the session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get current authenticated user
+      tags:
+      - Authentication
+  /v1/auth/password-change-requests:
+    post:
+      description: Initiates a password reset process by sending an email with reset
+        instructions
+      parameters:
+      - description: input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RequestPasswordChangeInput'
+      responses:
+        "200":
+          description: OK
+      summary: Request a password reset
+      tags:
+      - Authentication
+  /v1/auth/register:
+    post:
+      description: Register
+      parameters:
+      - description: user create body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserCreateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Register User
+      tags:
+      - Authentication
+  /v1/user:
+    patch:
+      consumes:
+      - application/json
+      description: update user by id
+      parameters:
+      - description: body of user to be updated
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Update User
+      tags:
+      - User
+swagger: "2.0"

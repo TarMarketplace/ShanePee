@@ -24,6 +24,7 @@ func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
 
 var _ ArtToyService = &artToyServiceImpl{}
 
+<<<<<<< HEAD
 func (svc *artToyServiceImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError {
 	err := svc.artToyRepo.CreateArtToy(ctx, artToy)
 	if err != nil {
@@ -56,6 +57,10 @@ func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, update
 
 func (svc *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
 	artToys, err := svc.artToyRepo.FindArtToys(ctx)
+=======
+func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
+	artToys, err := s.artToyRepo.FindArtToys(ctx)
+>>>>>>> 26863eb (fix: change from svc to s)
 	if err != nil {
 		return nil, apperror.ErrInternal(err)
 	}

@@ -10,6 +10,27 @@ definitions:
       province:
         type: string
     type: object
+  domain.ArrayResponse:
+    properties:
+      data: {}
+    type: object
+  domain.ArtToy:
+    properties:
+      availability:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      owner_id:
+        type: integer
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
   domain.PaymentMethod:
     properties:
       card_number:
@@ -80,6 +101,36 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
+  /v1/art-toy:
+    get:
+      consumes:
+      - application/json
+      description: Get all art toys
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.ArrayResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.ArtToy'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Art Toys
+      tags:
+      - Art toy
   /v1/auth/change-password:
     post:
       description: Change password of a user using token and request id
@@ -220,7 +271,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.User'
+            type: string
         "400":
           description: Bad Request
           schema:

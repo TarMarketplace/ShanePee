@@ -7,7 +7,7 @@ RUN go install github.com/swaggo/swag/cmd/swag@v1.16.4 \
 
 COPY go.mod go.sum ./
 
-RUN --mount=type=cache,target=/go/pkg/mod go mod download
+RUN go mod download
 
 COPY . ./
 

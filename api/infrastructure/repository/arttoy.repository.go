@@ -30,6 +30,14 @@ func (r *artToyRepositoryImpl) UpdateArtToy(ctx context.Context, id int64, artTo
 	return nil
 }
 
+func (a *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {
+	var artToys []*domain.ArtToy
+	if err := a.db.Find(&artToys).Error; err != nil {
+		return nil, err
+	}
+	return artToys, nil
+}
+
 func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 	return &artToyRepositoryImpl{
 		db: db,

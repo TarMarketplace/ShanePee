@@ -11,6 +11,7 @@ import (
 type ArtToyService interface {
 	CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError
 	UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody) apperror.AppError
+	GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError)
 }
 
 type artToyServiceImpl struct {
@@ -51,4 +52,12 @@ func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, update
 		return apperror.ErrInternal(err)
 	}
 	return nil
+}
+
+func (svc *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
+	artToys, err := svc.artToyRepo.FindArtToys(ctx)
+	if err != nil {
+		return nil, apperror.ErrInternal(err)
+	}
+	return artToys, nil
 }

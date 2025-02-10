@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
@@ -47,10 +46,8 @@ func (a *artToyRepositoryImpl) FindArtToyById(ctx context.Context, id int64) (*d
 		}
 		return nil, err
 	}
-	return &artToy, nil
+	return nil
 }
-
-var _ domain.ArtToyRepository = &artToyRepositoryImpl{}
 
 func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 	return &artToyRepositoryImpl{

@@ -96,30 +96,40 @@ func (h *ArtToyHandler) GetArtToys(c *gin.Context) {
 		handleError(c, appError)
 		return
 	}
-	c.JSON(http.StatusOK, data)
+
+	c.JSON(http.StatusOK, artToy)
 }
 
-// @Summary		Get Art Toy by ID
-// @Description Get art toy by id
+// @Summary		Update Art toy
+// @Description	Update an existing art toy by ID
 // @Tags			Art toy
 // @Accept			json
 // @Produce		json
-// @Param			id	path	int	true	"id of art toy to be retrieved"
-// @Success		200		{object}	domain.ArtToy
+// @Param			id		path		int64					true	"ID of the art toy to update"
+// @Param			body	body		domain.ArtToyUpdateBody	true	"Updated art toy data"
+// @Success		200		{object}	map[string]string
 // @Failure		400		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse
-// @Router			/v1/art-toy/{id} [get]
-func (h *ArtToyHandler) GetArtToyById(c *gin.Context) {
-	artToyId, err := strconv.ParseInt(c.Param("id"), 10, 64)
+// @Router			/v1/arttoy/{id} [put]
+func (h *ArtToyHandler) UpdateArtToy(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid art toy id"))
+		handleError(c, apperror.ErrBadRequest("Invalid ID"))
 		return
 	}
 
-	data, appError := h.artToySvc.GetArtToyById(c, artToyId)
+	var updateBody domain.ArtToyUpdateBody
+	if err := c.ShouldBindJSON(&updateBody); err != nil {
+		handleError(c, apperror.ErrBadRequest("Invalid request body"))
+		return
+	}
+
+	appError := h.artToySvc.UpdateArtToy(c, id, &updateBody)
 	if appError != nil {
 		handleError(c, appError)
 		return
 	}
-	c.JSON(http.StatusOK, data)
+
+	c.JSON(http.StatusOK, updateBody)
 }

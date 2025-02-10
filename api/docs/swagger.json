@@ -15,7 +15,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "ArtToy"
+                    "Art toy"
                 ],
                 "summary": "Create Art toy",
                 "parameters": [
@@ -61,7 +61,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "ArtToy"
+                    "Art toy"
                 ],
                 "summary": "Update Art toy",
                 "parameters": [
@@ -364,6 +364,32 @@
                 }
             }
         },
+        "domain.ArtToy": {
+            "type": "object",
+            "properties": {
+                "availability": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
         "domain.ArtToyCreateBody": {
             "type": "object",
             "properties": {
@@ -372,6 +398,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
                 },
                 "photo": {
                     "type": "string"

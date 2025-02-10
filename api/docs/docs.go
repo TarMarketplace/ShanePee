@@ -22,7 +22,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ArtToy"
+                    "Art toy"
                 ],
                 "summary": "Create Art toy",
                 "parameters": [
@@ -68,7 +68,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ArtToy"
+                    "Art toy"
                 ],
                 "summary": "Update Art toy",
                 "parameters": [
@@ -371,6 +371,32 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.ArtToy": {
+            "type": "object",
+            "properties": {
+                "availability": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
         "domain.ArtToyCreateBody": {
             "type": "object",
             "properties": {
@@ -379,6 +405,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
                 },
                 "photo": {
                     "type": "string"

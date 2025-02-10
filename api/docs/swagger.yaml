@@ -50,36 +50,6 @@ definitions:
         type: boolean
       description:
         type: string
-      id:
-        type: integer
-      name:
-        type: string
-      owner_id:
-        type: integer
-      photo:
-        type: string
-      price:
-        type: number
-    type: object
-  domain.ArtToyCreateBody:
-    properties:
-      description:
-        type: string
-      name:
-        type: string
-      owner_id:
-        type: integer
-      photo:
-        type: string
-      price:
-        type: number
-    type: object
-  domain.ArtToyUpdateBody:
-    properties:
-      availability:
-        type: boolean
-      description:
-        type: string
       name:
         type: string
       photo:

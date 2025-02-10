@@ -520,52 +520,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "owner_id": {
-                    "type": "integer"
-                },
-                "photo": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                }
-            }
-        },
-        "domain.ArtToyCreateBody": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "owner_id": {
-                    "type": "integer"
-                },
-                "photo": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                }
-            }
-        },
-        "domain.ArtToyUpdateBody": {
-            "type": "object",
-            "properties": {
-                "availability": {
-                    "type": "boolean"
-                },
-                "description": {
-                    "type": "string"
-                },
                 "name": {
                     "type": "string"
                 },

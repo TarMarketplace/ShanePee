@@ -10,11 +10,18 @@ definitions:
       province:
         type: string
     type: object
-  domain.ArrayResponse:
+  domain.ArtToyCreateBody:
     properties:
-      data: {}
+      description:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+      price:
+        type: number
     type: object
-  domain.ArtToy:
+  domain.ArtToyUpdateBody:
     properties:
       availability:
         type: boolean
@@ -193,7 +200,7 @@ paths:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: Update Art toy
       tags:
-      - Art toy
+      - ArtToy
   /v1/auth/change-password:
     post:
       description: Change password of a user using token and request id

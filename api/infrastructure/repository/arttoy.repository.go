@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
@@ -30,6 +31,7 @@ func (r *artToyRepositoryImpl) UpdateArtToy(ctx context.Context, id int64, artTo
 	return nil
 }
 
+
 func (a *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
 	if err := a.db.Find(&artToys).Error; err != nil {
@@ -46,8 +48,9 @@ func (a *artToyRepositoryImpl) FindArtToyById(ctx context.Context, id int64) (*d
 		}
 		return nil, err
 	}
-	return nil
+	return &artToy, nil
 }
+
 
 func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 	return &artToyRepositoryImpl{

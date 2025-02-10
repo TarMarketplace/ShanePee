@@ -32,7 +32,5 @@ func (h *ArtToyHandler) GetArtToys(c *gin.Context) {
 		handleError(c, appError)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
+	c.JSON(http.StatusOK, data)
 }

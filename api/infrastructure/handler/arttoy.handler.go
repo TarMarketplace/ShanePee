@@ -100,7 +100,7 @@ func (h *ArtToyHandler) GetArtToys(c *gin.Context) {
 }
 
 // @Summary		Get Art Toy by ID
-// @Description	Get art toy by id
+// @Description Get art toy by id
 // @Tags			Art toy
 // @Accept			json
 // @Produce		json
@@ -108,7 +108,7 @@ func (h *ArtToyHandler) GetArtToys(c *gin.Context) {
 // @Success		200		{object}	domain.ArtToy
 // @Failure		400		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse
-// @Router			/v1/art-toy [get]
+// @Router			/v1/art-toy/{id} [get]
 func (h *ArtToyHandler) GetArtToyById(c *gin.Context) {
 	artToyId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -121,7 +121,5 @@ func (h *ArtToyHandler) GetArtToyById(c *gin.Context) {
 		handleError(c, appError)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
+	c.JSON(http.StatusOK, data)
 }

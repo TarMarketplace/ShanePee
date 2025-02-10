@@ -82,11 +82,11 @@ func (h *ArtToyHandler) UpdateArtToy(c *gin.Context) {
 }
 
 // @Summary		Get Art Toys
-// @Description	get all art toys
-// @Tags			Art Toy
+// @Description	Get all art toys
+// @Tags			Art toy
 // @Accept			json
 // @Produce		json
-// @Success		200		{object}	[]domain.ArtToy
+// @Success		200		{object}	ArrayResponse{data=[]domain.ArtToy}
 // @Failure		400		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse
 // @Router			/v1/art-toy [get]

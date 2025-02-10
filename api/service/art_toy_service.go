@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"shanepee.com/api/apperror"
 	"shanepee.com/api/domain"
@@ -51,6 +52,9 @@ func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, update
 
 	err := svc.artToyRepo.UpdateArtToy(ctx, id, artToyData)
 	if err != nil {
+		if errors.Is(err, domain.ErrArtToyNotFound) {
+			return apperror.ErrNotFound("ArtToy not found")
+		}
 		return apperror.ErrInternal(err)
 	}
 	return nil

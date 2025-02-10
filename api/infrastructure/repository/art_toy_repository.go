@@ -16,6 +16,13 @@ func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.
 }
 
 func (r *artToyRepositoryImpl) UpdateArtToy(ctx context.Context, id int64, artToy map[string]interface{}) error {
+	var count int64
+	if err := r.db.Model(&domain.ArtToy{}).Where("id = ?", id).Count(&count).Error; err != nil {
+		return err
+	}
+	if count == 0 {
+		return domain.ErrArtToyNotFound
+	}
 	if err := r.db.Model(&domain.ArtToy{}).Where("id = ?", id).Updates(artToy).Error; err != nil {
 		return err
 	}

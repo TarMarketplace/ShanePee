@@ -21,16 +21,16 @@ func NewArtToyHandler(artToySvc service.ArtToyService) ArtToyHandler {
 	}
 }
 
-//	@Summary		Create ArtToy
-//	@Description	create a new ArtToy
-//	@Tags			ArtToy
-//	@Accept			json
-//	@Produce		json
-//	@Param			body	body		domain.ArtToyCreateBody	true	"body of ArtToy to be created"
-//	@Success		200		{object}	string
-//	@Failure		400		{object}	ErrorResponse
-//	@Failure		404		{object}	ErrorResponse
-//	@Router			/v1/art-toy [post]
+// @Summary		Create ArtToy
+// @Description	create a new ArtToy
+// @Tags			ArtToy
+// @Accept			json
+// @Produce		json
+// @Param			body	body		domain.ArtToyCreateBody	true	"body of ArtToy to be created"
+// @Success		200		{object}	string
+// @Failure		400		{object}	ErrorResponse
+// @Failure		404		{object}	ErrorResponse
+// @Router			/v1/art-toy [post]
 func (h *ArtToyHandler) CreateArtToy(c *gin.Context) {
 	var body domain.ArtToyCreateBody
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -51,17 +51,17 @@ func (h *ArtToyHandler) CreateArtToy(c *gin.Context) {
 	})
 }
 
-//	@Summary		Update ArtToy
-//	@Description	Update an existing ArtToy by ID
-//	@Tags			ArtToy
-//	@Accept			json
-//	@Produce		json
-//	@Param			id		path		int64					true	"ID of the ArtToy to update"
-//	@Param			body	body		domain.ArtToyUpdateBody	true	"Updated ArtToy data"
-//	@Success		200		{object}	map[string]string
-//	@Failure		400		{object}	ErrorResponse
-//	@Failure		404		{object}	ErrorResponse
-//	@Router			/v1/art-toy/{id} [patch]
+// @Summary		Update ArtToy
+// @Description	Update an existing ArtToy by ID
+// @Tags			ArtToy
+// @Accept			json
+// @Produce		json
+// @Param			id		path		int64					true	"ID of the ArtToy to update"
+// @Param			body	body		domain.ArtToyUpdateBody	true	"Updated ArtToy data"
+// @Success		200		{object}	map[string]string
+// @Failure		400		{object}	ErrorResponse
+// @Failure		404		{object}	ErrorResponse
+// @Router			/v1/art-toy/{id} [patch]
 func (h *ArtToyHandler) UpdateArtToy(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)

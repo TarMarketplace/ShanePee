@@ -1,13 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
 
+import { useUser } from '@/providers/user-provider'
+
 import { LoginForm } from '../_components/login-form'
 
 const loginFormSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
+  email: z.string().email('Invalid email'),
   password: z.string().min(1, 'Password is required'),
 })
 
@@ -22,16 +26,35 @@ export function LoginContainer({
   onForgotPassword,
   onSwitchMode,
 }: LoginContainerProps) {
+  const router = useRouter()
+  const { setUser } = useUser()
+
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   })
 
-  const onSubmit: SubmitHandler<LoginFormSchema> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<LoginFormSchema> = async (data) => {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (res.ok) {
+      toast.success('Successfully logged in')
+      const resData = await res.json()
+
+      setUser({ ...resData })
+      router.push('/')
+    } else {
+      toast.error('Something went wrong')
+    }
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { Navbar } from '@/components/navbar'
 
@@ -14,6 +15,18 @@ const NavbarContainer = () => {
 
   const handleLogout = () => {
     setUser(null)
+    fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(() => {
+        toast.success('Successfully logged out')
+      })
+      .catch(() => {
+        toast.error('Something went wrong')
+      })
   }
 
   const handleSearch = () => {

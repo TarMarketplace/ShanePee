@@ -28,10 +28,10 @@ export function LoginForm({ onSubmit, form }: LoginFormProps) {
         <div className='flex w-full flex-col gap-7'>
           <FormField
             control={form.control}
-            name='username'
+            name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>ชื่อผู้ใช้งาน</FormLabel>
+                <FormLabel>อีเมล</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder='example@gmail.com' />
                 </FormControl>

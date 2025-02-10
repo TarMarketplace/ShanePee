@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Prompt } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
+import { Toaster } from '@/components/toast'
 
 import { UserProvider } from '@/providers/user-provider'
 
@@ -37,6 +38,7 @@ export default function RootLayout({
           <NavbarContainer />
           <main className='min-h-[calc(100dvh-60px-236px)]'>{children}</main>
           <Footer />
+          <Toaster richColors />
         </UserProvider>
       </body>
     </html>

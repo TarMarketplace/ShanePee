@@ -28,12 +28,12 @@ export function RegisterStep2Form({ onSubmit, form }: RegisterStep2FormProps) {
         <div className='flex w-full flex-col gap-7'>
           <FormField
             control={form.control}
-            name='username'
+            name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>ชื่อผู้ใช้งาน</FormLabel>
+                <FormLabel>อีเมล</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='กรุณากรอกชื่อผู้ใช้งาน' />
+                  <Input {...field} placeholder='กรุณากรอกอีเมล' />
                 </FormControl>
                 <FormMessage />
               </FormItem>

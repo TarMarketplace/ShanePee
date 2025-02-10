@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
@@ -27,7 +28,7 @@ const registerStep1FormSchema = z.object({
 
 const registerStep2FormSchema = z
   .object({
-    username: z.string().min(1, 'Username is required'),
+    email: z.string().email('Invalid email'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z
       .string()
@@ -57,7 +58,7 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
   const step2Form = useForm<RegisterStep2FormSchema>({
     resolver: zodResolver(registerStep2FormSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
       confirmPassword: '',
     },
@@ -68,8 +69,23 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
     setStep(2)
   }
 
-  const onSubmitStep2: SubmitHandler<RegisterStep2FormSchema> = (data) => {
-    console.log(data)
+  const onSubmitStep2: SubmitHandler<RegisterStep2FormSchema> = async (
+    data
+  ) => {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (res.ok) {
+      onSwitchMode()
+      toast.success('Successfully registered')
+    } else {
+      toast.error('Something went wrong')
+    }
   }
 
   const renderFormByStep = () => {

@@ -12,7 +12,7 @@ func NewDB(cfg config.Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = db.AutoMigrate(&domain.User{}, &domain.PasswordChangeRequest{}); err != nil {
+	if err = db.AutoMigrate(&domain.User{}, &domain.ArtToy{}, &domain.PasswordChangeRequest{}); err != nil {
 		return nil, err
 	}
 	return db, nil

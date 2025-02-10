@@ -10,6 +10,51 @@ definitions:
       province:
         type: string
     type: object
+  domain.ArtToy:
+    properties:
+      availability:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      owner_id:
+        type: integer
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
+  domain.ArtToyCreateBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: integer
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
+  domain.ArtToyUpdateBody:
+    properties:
+      availability:
+        type: boolean
+      description:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: integer
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
   domain.PaymentMethod:
     properties:
       card_number:
@@ -80,6 +125,71 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
+  /v1/arttoy:
+    post:
+      description: Create a new art toy record
+      parameters:
+      - description: body of Art toy to be created
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ArtToyCreateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ArtToy'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create Art toy
+      tags:
+      - Art toy
+  /v1/arttoy/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing art toy by ID
+      parameters:
+      - description: ID of the art toy to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated art toy data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ArtToyUpdateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Update Art toy
+      tags:
+      - Art toy
   /v1/auth/change-password:
     post:
       description: Change password of a user using token and request id
@@ -220,7 +330,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.User'
+            type: string
         "400":
           description: Bad Request
           schema:

@@ -36,7 +36,10 @@ func InitializeApp() (App, error) {
 	authHandler := handler.NewAuthHandler(authService, options)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
+	artToyRepository := repository.NewArtToyRepository(db)
+	artToyService := service.NewArtToyService(artToyRepository)
+	artToyHandler := handler.NewArtToyHandler(artToyService)
 	store := session.NewStore(configConfig, options, db)
-	app := NewApp(authHandler, userHandler, configConfig, store)
+	app := NewApp(authHandler, userHandler, artToyHandler, configConfig, store)
 	return app, nil
 }

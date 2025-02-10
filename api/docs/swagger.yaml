@@ -10,6 +10,10 @@ definitions:
       province:
         type: string
     type: object
+  domain.ArrayResponse:
+    properties:
+      data: {}
+    type: object
   domain.ArtToy:
     properties:
       availability:
@@ -78,8 +82,6 @@ definitions:
         type: string
       name:
         type: string
-      owner_id:
-        type: integer
       photo:
         type: string
       price:
@@ -155,11 +157,70 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
+  /v1/art-toy:
+    get:
+      consumes:
+      - application/json
+      description: Get all art toys
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.ArrayResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.ArtToy'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Art Toys
+      tags:
+      - Art toy
+  /v1/art-toy/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get art toy by id
+      parameters:
+      - description: id of art toy to be retrieved
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ArtToy'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Art Toy by ID
+      tags:
+      - Art toy
   /v1/arttoy:
     post:
       description: Create a new art toy record
       parameters:
-      - description: body of Art toy to be created
+      - description: Body of Art toy to be created
         in: body
         name: body
         required: true
@@ -174,10 +235,6 @@ paths:
             $ref: '#/definitions/domain.ArtToy'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.ErrorResponse'
-        "500":
-          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: Create Art toy

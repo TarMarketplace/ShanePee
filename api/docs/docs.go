@@ -15,6 +15,100 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/art-toy": {
+            "get": {
+                "description": "Get all art toys",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Art toy"
+                ],
+                "summary": "Get Art Toys",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.ArrayResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.ArtToy"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/art-toy/{id}": {
+            "get": {
+                "description": "Get art toy by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Art toy"
+                ],
+                "summary": "Get Art Toy by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of art toy to be retrieved",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ArtToy"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/arttoy": {
             "post": {
                 "description": "Create a new art toy record",
@@ -27,7 +121,7 @@ const docTemplate = `{
                 "summary": "Create Art toy",
                 "parameters": [
                     {
-                        "description": "body of Art toy to be created",
+                        "description": "Body of Art toy to be created",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -45,12 +139,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/handler.ErrorResponse"
                         }
@@ -371,6 +459,12 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.ArrayResponse": {
+            "type": "object",
+            "properties": {
+                "data": {}
+            }
+        },
         "domain.ArtToy": {
             "type": "object",
             "properties": {
@@ -474,9 +568,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                },
-                "owner_id": {
-                    "type": "integer"
                 },
                 "photo": {
                     "type": "string"

@@ -10,7 +10,7 @@ import (
 
 type ArtToyService interface {
 	CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError
-	UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody) apperror.AppError
+	UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody, ownerID int64) apperror.AppError
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError)
 	GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, apperror.AppError)
 }
@@ -25,63 +25,29 @@ func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
 
 var _ ArtToyService = &artToyServiceImpl{}
 
-<<<<<<< HEAD
-func (svc *artToyServiceImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError {
-	err := svc.artToyRepo.CreateArtToy(ctx, artToy)
+func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError {
+	err := s.artToyRepo.CreateArtToy(ctx, artToy)
 	if err != nil {
 		return apperror.ErrInternal(err)
 	}
 	return nil
 }
-
-func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody) apperror.AppError {
+func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody, ownerID int64) apperror.AppError {
 	artToyData := map[string]interface{}{
 		"name":         updateBody.Name,
 		"description":  updateBody.Description,
 		"price":        updateBody.Price,
 		"availability": updateBody.Availability,
-		"owner_id":     updateBody.OwnerId,
+		"owner_id":     ownerID,
 	}
-	if updateBody.Photo != nil {
+
+	if updateBody.Photo == nil {
+		artToyData["photo"] = nil
+	} else {
 		artToyData["photo"] = *updateBody.Photo
 	}
 
-func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
-	return &artToyServiceImpl{artToyRepo: artToyRepo}
-}
-
-	err := svc.artToyRepo.UpdateArtToy(ctx, id, artToyData)
-	if err != nil {
-		if errors.Is(err, domain.ErrArtToyNotFound) {
-			return apperror.ErrNotFound("Art toy not found")
-		}
-		return apperror.ErrInternal(err)
-	}
-	return nil
-}
-
-func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
-	artToys, err := s.artToyRepo.FindArtToys(ctx)
->>>>>>> 26863eb (fix: change from svc to s)
-	if err != nil {
-		return apperror.ErrInternal(err)
-	}
-	return nil
-}
-
-func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody) apperror.AppError {
-	artToyData := map[string]interface{}{
-		"name":         updateBody.Name,
-		"description":  updateBody.Description,
-		"price":        updateBody.Price,
-		"availability": updateBody.Availability,
-		"owner_id":     updateBody.OwnerId,
-	}
-	if updateBody.Photo != nil {
-		artToyData["photo"] = *updateBody.Photo
-	}
-
-	err := svc.artToyRepo.UpdateArtToy(ctx, id, artToyData)
+	err := s.artToyRepo.UpdateArtToy(ctx, id, artToyData)
 	if err != nil {
 		if errors.Is(err, domain.ErrArtToyNotFound) {
 			return apperror.ErrNotFound("Art toy not found")

@@ -25,7 +25,6 @@ type ArtToyUpdateBody struct {
 	Price        float64 `json:"price"`
 	Photo        *string `json:"photo"`
 	Availability bool    `json:"availability"`
-	OwnerId      int64   `json:"owner_id"`
 }
 
 func NewArtToy(name string, description string, price float64, photo *string, ownerId int64) *ArtToy {

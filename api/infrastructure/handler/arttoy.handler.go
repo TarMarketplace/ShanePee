@@ -5,6 +5,7 @@ import (
 
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"shanepee.com/api/apperror"
 	"shanepee.com/api/domain"
@@ -25,10 +26,9 @@ func NewArtToyHandler(artToySvc service.ArtToyService) ArtToyHandler {
 // @Description  Create a new art toy record
 // @Tags         Art toy
 // @Produce      json
-// @Param        body  body  domain.ArtToyCreateBody  true  "body of Art toy to be created"
+// @Param        body  body  domain.ArtToyCreateBody  true  "Body of Art toy to be created"
 // @Success      200   {object}  domain.ArtToy
 // @Failure      400   {object}  ErrorResponse
-// @Failure      500   {object}  ErrorResponse
 // @Router       /v1/arttoy [post]
 func (h *ArtToyHandler) CreateArtToy(c *gin.Context) {
 	var body domain.ArtToyCreateBody
@@ -36,14 +36,12 @@ func (h *ArtToyHandler) CreateArtToy(c *gin.Context) {
 		handleError(c, apperror.ErrBadRequest("Invalid body"))
 		return
 	}
-
 	artToy := domain.NewArtToy(body.Name, body.Description, body.Price, body.Photo, body.OwnerId)
 	err := h.artToySvc.CreateArtToy(c, artToy)
 	if err != nil {
 		handleError(c, err)
 		return
 	}
-
 	c.JSON(http.StatusOK, artToy)
 }
 
@@ -72,7 +70,14 @@ func (h *ArtToyHandler) UpdateArtToy(c *gin.Context) {
 		return
 	}
 
-	appError := h.artToySvc.UpdateArtToy(c, id, &updateBody)
+	session := sessions.Default(c)
+	ownerID := session.Get(userIdSessionKey)
+	if ownerID == nil {
+		handleError(c, apperror.ErrUnauthorized("Authentication required"))
+		return
+	}
+
+	appError := h.artToySvc.UpdateArtToy(c, id, &updateBody, ownerID.(int64))
 	if appError != nil {
 		handleError(c, appError)
 		return

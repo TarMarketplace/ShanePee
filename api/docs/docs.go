@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/v1/art-toy": {
             "get": {
-                "description": "Get all art toys",
+                "description": "Get art toy by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,27 +27,21 @@ const docTemplate = `{
                 "tags": [
                     "Art toy"
                 ],
-                "summary": "Get Art Toys",
+                "summary": "Get Art Toy by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of art toy to be retrieved",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/domain.ArrayResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/domain.ArtToy"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/domain.ArtToy"
                         }
                     },
                     "400": {

@@ -105,21 +105,20 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get all art toys
+      description: Get art toy by id
+      parameters:
+      - description: id of art toy to be retrieved
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/domain.ArrayResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/domain.ArtToy'
-                  type: array
-              type: object
+            $ref: '#/definitions/domain.ArtToy'
         "400":
           description: Bad Request
           schema:
@@ -128,7 +127,7 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
-      summary: Get Art Toys
+      summary: Get Art Toy by ID
       tags:
       - Art toy
   /v1/auth/change-password:

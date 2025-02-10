@@ -15,14 +15,16 @@ type ArtToyCreateBody struct {
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
 	Photo       *string `json:"photo"`
+	OwnerId     int64   `json:"owner_id"`
 }
 
 type ArtToyUpdateBody struct {
-	Name         *string  `json:"name"`
-	Description  *string  `json:"description"`
-	Price        *float64 `json:"price"`
-	Photo        *string  `json:"photo"`
-	Availability *bool    `json:"availability"`
+	Name         string  `json:"name"`
+	Description  string  `json:"description"`
+	Price        float64 `json:"price"`
+	Photo        *string `json:"photo"`
+	Availability bool    `json:"availability"`
+	OwnerId      int64   `json:"owner_id"`
 }
 
 func NewArtToy(name string, description string, price float64, photo *string) *ArtToy {

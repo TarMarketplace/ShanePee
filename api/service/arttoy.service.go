@@ -32,28 +32,21 @@ func (svc *artToyServiceImpl) CreateArtToy(ctx context.Context, artToy *domain.A
 }
 
 func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody) apperror.AppError {
-	artToyData := map[string]interface{}{}
-
-	if updateBody.Name != nil {
-		artToyData["name"] = *updateBody.Name
-	}
-	if updateBody.Description != nil {
-		artToyData["description"] = *updateBody.Description
-	}
-	if updateBody.Price != nil {
-		artToyData["price"] = *updateBody.Price
+	artToyData := map[string]interface{}{
+		"name":         updateBody.Name,
+		"description":  updateBody.Description,
+		"price":        updateBody.Price,
+		"availability": updateBody.Availability,
+		"owner_id":     updateBody.OwnerId,
 	}
 	if updateBody.Photo != nil {
 		artToyData["photo"] = *updateBody.Photo
-	}
-	if updateBody.Availability != nil {
-		artToyData["availability"] = *updateBody.Availability
 	}
 
 	err := svc.artToyRepo.UpdateArtToy(ctx, id, artToyData)
 	if err != nil {
 		if errors.Is(err, domain.ErrArtToyNotFound) {
-			return apperror.ErrNotFound("ArtToy not found")
+			return apperror.ErrNotFound("Art toy not found")
 		}
 		return apperror.ErrInternal(err)
 	}

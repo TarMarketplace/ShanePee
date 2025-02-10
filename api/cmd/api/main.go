@@ -52,8 +52,8 @@ func main() {
 
 	v1.PATCH("/user", app.userHdr.UpdateUser)
 
-	v1.POST("/art-toy", app.artToyHdr.CreateArtToy)
-	v1.PATCH("/art-toy/:id", app.artToyHdr.UpdateArtToy)
+	v1.POST("/arttoy", app.artToyHdr.CreateArtToy)
+	v1.PUT("/arttoy/:id", app.artToyHdr.UpdateArtToy)
 
 	if app.cfg.Debug == "1" {
 		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

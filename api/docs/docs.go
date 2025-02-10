@@ -15,22 +15,19 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/art-toy": {
+        "/v1/arttoy": {
             "post": {
-                "description": "create a new ArtToy",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Create a new art toy record",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "ArtToy"
+                    "Art toy"
                 ],
-                "summary": "Create ArtToy",
+                "summary": "Create Art toy",
                 "parameters": [
                     {
-                        "description": "body of ArtToy to be created",
+                        "description": "body of Art toy to be created",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -43,7 +40,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/domain.ArtToy"
                         }
                     },
                     "400": {
@@ -52,8 +49,8 @@ const docTemplate = `{
                             "$ref": "#/definitions/handler.ErrorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/handler.ErrorResponse"
                         }
@@ -61,9 +58,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/art-toy/{id}": {
-            "patch": {
-                "description": "Update an existing ArtToy by ID",
+        "/v1/arttoy/{id}": {
+            "put": {
+                "description": "Update an existing art toy by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -71,19 +68,19 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ArtToy"
+                    "Art toy"
                 ],
-                "summary": "Update ArtToy",
+                "summary": "Update Art toy",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of the ArtToy to update",
+                        "description": "ID of the art toy to update",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Updated ArtToy data",
+                        "description": "Updated art toy data",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -374,6 +371,32 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.ArtToy": {
+            "type": "object",
+            "properties": {
+                "availability": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
         "domain.ArtToyCreateBody": {
             "type": "object",
             "properties": {
@@ -382,6 +405,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
                 },
                 "photo": {
                     "type": "string"
@@ -402,6 +428,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
                 },
                 "photo": {
                     "type": "string"

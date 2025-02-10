@@ -10,12 +10,31 @@ definitions:
       province:
         type: string
     type: object
+  domain.ArtToy:
+    properties:
+      availability:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      owner_id:
+        type: integer
+      photo:
+        type: string
+      price:
+        type: number
+    type: object
   domain.ArtToyCreateBody:
     properties:
       description:
         type: string
       name:
         type: string
+      owner_id:
+        type: integer
       photo:
         type: string
       price:
@@ -29,6 +48,8 @@ definitions:
         type: string
       name:
         type: string
+      owner_id:
+        type: integer
       photo:
         type: string
       price:
@@ -104,13 +125,11 @@ info:
   title: Shanepee API
   version: "0.0"
 paths:
-  /v1/art-toy:
+  /v1/arttoy:
     post:
-      consumes:
-      - application/json
-      description: create a new ArtToy
+      description: Create a new art toy record
       parameters:
-      - description: body of ArtToy to be created
+      - description: body of Art toy to be created
         in: body
         name: body
         required: true
@@ -122,30 +141,30 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/domain.ArtToy'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
-      summary: Create ArtToy
+      summary: Create Art toy
       tags:
-      - ArtToy
-  /v1/art-toy/{id}:
-    patch:
+      - Art toy
+  /v1/arttoy/{id}:
+    put:
       consumes:
       - application/json
-      description: Update an existing ArtToy by ID
+      description: Update an existing art toy by ID
       parameters:
-      - description: ID of the ArtToy to update
+      - description: ID of the art toy to update
         in: path
         name: id
         required: true
         type: integer
-      - description: Updated ArtToy data
+      - description: Updated art toy data
         in: body
         name: body
         required: true
@@ -168,9 +187,9 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
-      summary: Update ArtToy
+      summary: Update Art toy
       tags:
-      - ArtToy
+      - Art toy
   /v1/auth/change-password:
     post:
       description: Change password of a user using token and request id

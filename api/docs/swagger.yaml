@@ -131,6 +131,35 @@ paths:
       summary: Get Art Toys
       tags:
       - Art toy
+  /v1/art-toy/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get art toy by id
+      parameters:
+      - description: id of art toy to be retrieved
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ArtToy'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Art Toy by ID
+      tags:
+      - Art toy
   /v1/auth/change-password:
     post:
       description: Change password of a user using token and request id

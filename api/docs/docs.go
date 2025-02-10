@@ -65,6 +65,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/art-toy/{id}": {
+            "get": {
+                "description": "Get art toy by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Art toy"
+                ],
+                "summary": "Get Art Toy by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of art toy to be retrieved",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ArtToy"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/auth/change-password": {
             "post": {
                 "description": "Change password of a user using token and request id",

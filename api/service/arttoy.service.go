@@ -12,6 +12,7 @@ type ArtToyService interface {
 	CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError
 	UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody) apperror.AppError
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError)
+	GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, apperror.AppError)
 }
 
 type artToyServiceImpl struct {
@@ -55,9 +56,6 @@ func (svc *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, update
 	return nil
 }
 
-func (svc *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
-	artToys, err := svc.artToyRepo.FindArtToys(ctx)
-=======
 func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
 	artToys, err := s.artToyRepo.FindArtToys(ctx)
 >>>>>>> 26863eb (fix: change from svc to s)
@@ -65,4 +63,15 @@ func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, a
 		return nil, apperror.ErrInternal(err)
 	}
 	return artToys, nil
+}
+
+func (s *artToyServiceImpl) GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, apperror.AppError) {
+	artToy, err := s.artToyRepo.FindArtToyById(ctx, id)
+	if err != nil {
+		if errors.Is(err, domain.ErrArtToyNotFound) {
+			return nil, apperror.ErrNotFound("art toy not found")
+		}
+		return nil, apperror.ErrInternal(err)
+	}
+	return artToy, nil
 }

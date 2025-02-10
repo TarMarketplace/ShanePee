@@ -38,7 +38,7 @@ type authServiceImpl struct {
 
 var _ AuthService = &authServiceImpl{}
 
-func (a *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError) {
+func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError) {
 	passwordByte := []byte(password)
 	// TODO: salt
 	// TODO: validate password
@@ -49,7 +49,7 @@ func (a *authServiceImpl) Register(ctx context.Context, username string, passwor
 		return nil, apperror.ErrInternal(err)
 	}
 	user := domain.NewUser(username, hashStr)
-	err = a.userRepo.CreateUser(ctx, user)
+	err = s.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		// TODO: properly handle this error
 		return nil, apperror.ErrInternal(err)
@@ -58,8 +58,8 @@ func (a *authServiceImpl) Register(ctx context.Context, username string, passwor
 	return user, nil
 }
 
-func (a *authServiceImpl) Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError) {
-	user, err := a.userRepo.FindUserByEmail(ctx, email)
+func (s *authServiceImpl) Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError) {
+	user, err := s.userRepo.FindUserByEmail(ctx, email)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
 			return nil, apperror.ErrUnauthorized("Invalid email or password")
@@ -78,8 +78,8 @@ func (a *authServiceImpl) Login(ctx context.Context, email string, password stri
 	return user, nil
 }
 
-func (a *authServiceImpl) RequestPasswordChange(ctx context.Context, email string) apperror.AppError {
-	user, err := a.userRepo.FindUserByEmail(ctx, email)
+func (s *authServiceImpl) RequestPasswordChange(ctx context.Context, email string) apperror.AppError {
+	user, err := s.userRepo.FindUserByEmail(ctx, email)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
 			// This avoids exposing whether an email/user exists in the system.
@@ -100,18 +100,18 @@ func (a *authServiceImpl) RequestPasswordChange(ctx context.Context, email strin
 	}
 	tokenHash := string(hash)
 	passwordChangeRequest := domain.NewPasswordChangeRequest(tokenHash, user.ID)
-	if err := a.userRepo.CreatePasswordChangeRequest(ctx, passwordChangeRequest); err != nil {
+	if err := s.userRepo.CreatePasswordChangeRequest(ctx, passwordChangeRequest); err != nil {
 		return apperror.ErrInternal(err)
 	}
 
-	if err := a.emailSender.SendChangePasswordEmail(ctx, user.Email, token, passwordChangeRequest.ID); err != nil {
+	if err := s.emailSender.SendChangePasswordEmail(ctx, user.Email, token, passwordChangeRequest.ID); err != nil {
 		return apperror.ErrInternal(err)
 	}
 	return nil
 }
 
-func (a *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) apperror.AppError {
-	passwordChangeRequest, err := a.userRepo.FindPasswordChangeRequestWithUserByID(ctx, requestID)
+func (s *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) apperror.AppError {
+	passwordChangeRequest, err := s.userRepo.FindPasswordChangeRequestWithUserByID(ctx, requestID)
 	if err != nil {
 		if errors.Is(err, domain.ErrPasswordChangeRequestNotFound) {
 			return apperror.ErrUnauthorized("Invalid token or request id")
@@ -133,18 +133,18 @@ func (a *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, t
 		return apperror.ErrInternal(err)
 	}
 
-	if err := a.userRepo.UpdateUserPasswordHash(ctx, passwordChangeRequest.UserID, hashStr); err != nil {
+	if err := s.userRepo.UpdateUserPasswordHash(ctx, passwordChangeRequest.UserID, hashStr); err != nil {
 		return apperror.ErrInternal(err)
 	}
 
-	if err := a.userRepo.DeletePasswordChangeRequestByID(ctx, passwordChangeRequest.ID); err != nil {
+	if err := s.userRepo.DeletePasswordChangeRequestByID(ctx, passwordChangeRequest.ID); err != nil {
 		return apperror.ErrInternal(err)
 	}
 	return nil
 }
 
-func (svc *authServiceImpl) GetUserByID(ctx context.Context, id int64) (*domain.User, apperror.AppError) {
-	user, err := svc.userRepo.FindUserByID(ctx, id)
+func (s *authServiceImpl) GetUserByID(ctx context.Context, id int64) (*domain.User, apperror.AppError) {
+	user, err := s.userRepo.FindUserByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
 			return nil, apperror.ErrNotFound("user not found")

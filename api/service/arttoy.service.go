@@ -23,8 +23,8 @@ type artToyServiceImpl struct {
 
 var _ ArtToyService = &artToyServiceImpl{}
 
-func (svc *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
-	artToys, err := svc.artToyRepo.FindArtToys(ctx)
+func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {
+	artToys, err := s.artToyRepo.FindArtToys(ctx)
 	if err != nil {
 		return nil, apperror.ErrInternal(err)
 	}

@@ -52,8 +52,10 @@ func (a *artToyRepositoryImpl) FindArtToyById(ctx context.Context, id int64) (*d
 }
 
 
+var _ domain.ArtToyRepository = &artToyRepositoryImpl{}
+
 func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 	return &artToyRepositoryImpl{
-		db: db,
+		db,
 	}
 }

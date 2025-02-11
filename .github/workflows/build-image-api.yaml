@@ -48,18 +48,22 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           SHA: ${{ github.sha }}
           REF: ${{ github.ref }}
+          HEAD_REF: ${{ github.head_ref }}
         id: tags
         run: |
           RESULT="$IMAGE_NAME:$SHA"
 
-          case "$REF" in
-          refs/tags/v*)
-              RESULT="${RESULT},$IMAGE_NAME:${REF#refs/tags/v}"
-          ;;
-          refs/heads/main)
-              RESULT="${RESULT},$IMAGE_NAME:latest"
-          ;;
-          esac
+          # Push event
+          if [ -z "${HEAD_REF}" ]; then
+              case "$REF" in
+              refs/tags/v*)
+                  RESULT="${RESULT},$IMAGE_NAME:${REF#refs/tags/v}"
+              ;;
+              refs/heads/main)
+                  RESULT="${RESULT},$IMAGE_NAME:latest"
+              ;;
+              esac
+          else
 
           echo "tags = $RESULT"
           echo "tags=$RESULT" >> "$GITHUB_OUTPUT"

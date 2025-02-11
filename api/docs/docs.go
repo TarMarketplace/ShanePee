@@ -63,6 +63,41 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Create a new art toy record",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Art toy"
+                ],
+                "summary": "Create Art toy",
+                "parameters": [
+                    {
+                        "description": "body of Art toy to be created",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.ArtToyCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ArtToy"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/v1/art-toy/{id}": {
@@ -107,46 +142,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/v1/arttoy": {
-            "post": {
-                "description": "Create a new art toy record",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Art toy"
-                ],
-                "summary": "Create Art toy",
-                "parameters": [
-                    {
-                        "description": "Body of Art toy to be created",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.ArtToyCreateBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.ArtToy"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/arttoy/{id}": {
+            },
             "put": {
                 "description": "Update an existing art toy by ID",
                 "consumes": [
@@ -162,13 +158,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of the art toy to update",
+                        "description": "io of the art toy to update",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Updated art toy data",
+                        "description": "updated art toy data",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -386,7 +382,7 @@ const docTemplate = `{
         },
         "/v1/user": {
             "patch": {
-                "description": "update user by id",
+                "description": "Update user by id",
                 "consumes": [
                     "application/json"
                 ],

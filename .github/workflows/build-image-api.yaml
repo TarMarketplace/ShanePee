@@ -63,7 +63,7 @@ jobs:
                   RESULT="${RESULT},$IMAGE_NAME:latest"
               ;;
               esac
-          else
+          fi
 
           echo "tags = $RESULT"
           echo "tags=$RESULT" >> "$GITHUB_OUTPUT"

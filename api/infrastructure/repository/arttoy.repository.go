@@ -51,6 +51,11 @@ func (a *artToyRepositoryImpl) FindArtToyById(ctx context.Context, id int64) (*d
 	return &artToy, nil
 }
 
+<<<<<<< HEAD
+=======
+
+var _ domain.ArtToyRepository = &artToyRepositoryImpl{}
+>>>>>>> parent of 64762c1 (Revert "Merge pull request #17 from TarMarketplace/wwichada26/tar-29-be-api-for-create-art-toys")
 
 func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 	return &artToyRepositoryImpl{

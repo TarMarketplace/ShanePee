@@ -16,9 +16,12 @@ import (
 func InitializeApp() (App, error) {
 	wire.Build(
 		service.NewUserService,
+		service.NewArtToyService,
 		repository.NewUserRepository,
+		repository.NewArtToyRepository,
 		handler.NewAuthHandler,
 		handler.NewUserHandler,
+		handler.NewArtToyHandler,
 		service.NewAuthService,
 		repository.NewDB,
 		config.LoadConfig,

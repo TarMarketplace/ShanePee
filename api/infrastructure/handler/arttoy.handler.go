@@ -52,7 +52,7 @@ func (h *ArtToyHandler) CreateArtToy(c *gin.Context) {
 // @Produce		json
 // @Param			id		path		int64					true	"ID of the art toy to update"
 // @Param			body	body		domain.ArtToyUpdateBody	true	"Updated art toy data"
-// @Success		200		{object}	map[string]string
+// @Success		200		{object}	domain.ArtToy
 // @Failure		400		{object}	ErrorResponse
 // @Failure		404		{object}	ErrorResponse
 // @Router			/v1/arttoy/{id} [put]
@@ -77,13 +77,13 @@ func (h *ArtToyHandler) UpdateArtToy(c *gin.Context) {
 		return
 	}
 
-	appError := h.artToySvc.UpdateArtToy(c, id, &updateBody, ownerID.(int64))
+	updatedArtToy, appError := h.artToySvc.UpdateArtToy(c, id, &updateBody, ownerID.(int64))
 	if appError != nil {
 		handleError(c, appError)
 		return
 	}
 
-	c.JSON(http.StatusOK, updateBody)
+	c.JSON(http.StatusOK, updatedArtToy)
 }
 
 // @Summary		Get Art Toys

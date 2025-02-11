@@ -233,9 +233,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/domain.ArtToy'
         "400":
           description: Bad Request
           schema:

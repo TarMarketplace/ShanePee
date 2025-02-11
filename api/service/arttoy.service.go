@@ -10,7 +10,7 @@ import (
 
 type ArtToyService interface {
 	CreateArtToy(ctx context.Context, artToy *domain.ArtToy) apperror.AppError
-	UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody, ownerID int64) apperror.AppError
+	UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody, ownerID int64) (*domain.ArtToy, apperror.AppError)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError)
 	GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, apperror.AppError)
 }
@@ -32,7 +32,8 @@ func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, artToy *domain.Art
 	}
 	return nil
 }
-func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody, ownerID int64) apperror.AppError {
+
+func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody *domain.ArtToyUpdateBody, ownerID int64) (*domain.ArtToy, apperror.AppError) {
 	artToyData := map[string]interface{}{
 		"name":         updateBody.Name,
 		"description":  updateBody.Description,
@@ -50,11 +51,16 @@ func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBo
 	err := s.artToyRepo.UpdateArtToy(ctx, id, artToyData)
 	if err != nil {
 		if errors.Is(err, domain.ErrArtToyNotFound) {
-			return apperror.ErrNotFound("Art toy not found")
+			return nil, apperror.ErrNotFound("Art toy not found")
 		}
-		return apperror.ErrInternal(err)
+		return nil, apperror.ErrInternal(err)
 	}
-	return nil
+	updatedArtToy, err := s.artToyRepo.FindArtToyById(ctx, id)
+	if err != nil {
+		return nil, apperror.ErrInternal(err)
+	}
+
+	return updatedArtToy, nil
 }
 
 func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, apperror.AppError) {

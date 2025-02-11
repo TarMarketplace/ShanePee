@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-contrib/sessions"
@@ -40,6 +41,10 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
+
+	r.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
+	})
 
 	v1 := r.Group("v1")
 

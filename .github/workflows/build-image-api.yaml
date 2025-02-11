@@ -50,11 +50,14 @@ jobs:
           REF: ${{ github.ref }}
         id: tags
         run: |
-          RESULT="$IMAGE_NAME:latest,$IMAGE_NAME:$SHA"
+          RESULT="$IMAGE_NAME:$SHA"
 
           case "$REF" in
           refs/tags/v*)
               RESULT="${RESULT},$IMAGE_NAME:${REF#refs/tags/v}"
+          ;;
+          refs/heads/main)
+              RESULT="${RESULT},$IMAGE_NAME:latest"
           ;;
           esac
 

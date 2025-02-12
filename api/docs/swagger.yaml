@@ -157,6 +157,29 @@ paths:
       summary: Get Art Toys
       tags:
       - Art toy
+    post:
+      description: Create a new art toy record
+      parameters:
+      - description: body of Art toy to be created
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ArtToyCreateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ArtToy'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create Art toy
+      tags:
+      - Art toy
   /v1/art-toy/{id}:
     get:
       consumes:
@@ -186,42 +209,17 @@ paths:
       summary: Get Art Toy by ID
       tags:
       - Art toy
-  /v1/arttoy:
-    post:
-      description: Create a new art toy record
-      parameters:
-      - description: Body of Art toy to be created
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/domain.ArtToyCreateBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.ArtToy'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.ErrorResponse'
-      summary: Create Art toy
-      tags:
-      - Art toy
-  /v1/arttoy/{id}:
     put:
       consumes:
       - application/json
       description: Update an existing art toy by ID
       parameters:
-      - description: ID of the art toy to update
+      - description: io of the art toy to update
         in: path
         name: id
         required: true
         type: integer
-      - description: Updated art toy data
+      - description: updated art toy data
         in: body
         name: body
         required: true
@@ -370,7 +368,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: update user by id
+      description: Update user by id
       parameters:
       - description: body of user to be updated
         in: body

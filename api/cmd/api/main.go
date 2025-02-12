@@ -48,17 +48,19 @@ func main() {
 
 	v1 := r.Group("v1")
 
-	v1.POST("/auth/register", app.authHdr.Register)
+	v1.POST("/auth/change-password", app.authHdr.ChangePassword)
 	v1.POST("/auth/login", app.authHdr.Login)
 	v1.POST("/auth/logout", app.authHdr.Logout)
-	v1.POST("/auth/password-change-requests", app.authHdr.CreatePasswordChangeRequests)
-	v1.POST("/auth/change-password", app.authHdr.ChangePassword)
 	v1.GET("/auth/me", app.authHdr.GetMe)
+	v1.POST("/auth/register", app.authHdr.Register)
+	v1.POST("/auth/password-change-requests", app.authHdr.CreatePasswordChangeRequests)
 
 	v1.PATCH("/user", app.userHdr.UpdateUser)
 
-	v1.POST("/arttoy", app.artToyHdr.CreateArtToy)
-	v1.PUT("/arttoy/:id", app.artToyHdr.UpdateArtToy)
+	v1.GET("/art-toy", app.artToyHdr.GetArtToys)
+	v1.POST("/art-toy", app.artToyHdr.CreateArtToy)
+	v1.GET("/art-toy/:id", app.artToyHdr.GetArtToyById)
+	v1.PUT("/art-toy/:id", app.artToyHdr.UpdateArtToy)
 
 	if app.cfg.Debug == "1" {
 		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

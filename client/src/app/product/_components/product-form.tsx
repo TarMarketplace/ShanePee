@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import type { SubmitHandler, UseFormReturn } from 'react-hook-form'
 
@@ -28,6 +29,7 @@ type ProductFormProps = {
 
 export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
   const [isShowingButton, setIsShowingButton] = useState(false)
+  const router = useRouter()
 
   const image = form.watch('image')
 
@@ -59,10 +61,10 @@ export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
             control={form.control}
             name='image'
             render={({ field }) => (
-              <FormItem>
+              <FormItem className='w-full'>
                 <FormLabel
                   isInput={false}
-                  className='relative flex aspect-[1.6/1] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg border-2 border-grey-300 sm:w-[640px]'
+                  className='relative flex aspect-[1.6/1] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg border-2 border-grey-300'
                 >
                   {previewUrl && (
                     <Image
@@ -103,7 +105,7 @@ export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
             )}
           />
 
-          <div className='flex w-full flex-col gap-3 sm:h-full sm:w-[614px]'>
+          <div className='flex w-full flex-col gap-3'>
             <FormField
               name='name'
               control={form.control}
@@ -163,7 +165,11 @@ export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
 
         <div className='mt-auto flex items-center justify-end gap-4'>
           {isEditing && (
-            <button type='button' className='font-bold text-grey-500 underline'>
+            <button
+              type='button'
+              className='font-bold text-grey-500 underline'
+              onClick={() => router.back()}
+            >
               ยกเลิก
             </button>
           )}

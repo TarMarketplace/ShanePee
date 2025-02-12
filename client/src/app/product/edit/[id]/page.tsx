@@ -3,7 +3,12 @@ import { env } from 'process'
 import { ProductFormContainer } from '../../_containers/product-form-container'
 
 const getProduct = async (id: string) => {
-  const response = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/arttoy/${id}`)
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_BASE_API_URL}/art-toy/${id}`,
+    {
+      cache: 'no-cache',
+    }
+  )
 
   if (response.ok) {
     const data = await response.json()
@@ -23,6 +28,14 @@ export default async function EditProductPage({
   if (!product) return <p>Product not found.</p>
 
   return (
-    <ProductFormContainer defaultValues={product} id={parseInt(params.id)} />
+    <ProductFormContainer
+      defaultValues={{
+        name: product.name,
+        description: product.description,
+        price: product.price,
+      }}
+      defaultImage={product.photo}
+      id={parseInt(params.id)}
+    />
   )
 }

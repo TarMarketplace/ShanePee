@@ -1,7 +1,12 @@
 import { env } from 'process'
 
 const getProduct = async (id: string) => {
-  const response = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/arttoy/${id}`)
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_BASE_API_URL}/art-toy/${id}`,
+    {
+      cache: 'no-cache',
+    }
+  )
 
   if (response.ok) {
     const data = await response.json()

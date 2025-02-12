@@ -1,6 +1,8 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -8,6 +10,7 @@ import { z } from 'zod'
 import { useUser } from '@/providers/user-provider'
 
 import { env } from '@/env'
+import { imageLoader } from '@/utils/image-loader'
 
 import { ProductForm } from '../_components/product-form'
 
@@ -24,24 +27,44 @@ export type ProductFormSchema = z.infer<typeof productFormSchema>
 
 interface ProductContainerProps {
   id?: number
-  defaultValues?: ProductFormSchema
+  defaultValues?: Omit<ProductFormSchema, 'image'>
+  defaultImage?: string
 }
 
 export function ProductFormContainer({
   id,
   defaultValues,
+  defaultImage,
 }: ProductContainerProps) {
   const { user } = useUser()
+  const router = useRouter()
 
   const form = useForm<ProductFormSchema>({
     resolver: zodResolver(productFormSchema),
-    defaultValues: defaultValues ?? {
-      name: '',
-      description: '',
-      price: 0,
-      image: new File([], ''),
-    },
+    defaultValues: defaultValues
+      ? {
+          ...defaultValues,
+          image: new File([], ''),
+        }
+      : {
+          name: '',
+          description: '',
+          price: 0,
+          image: new File([], ''),
+        },
   })
+
+  useEffect(() => {
+    if (!defaultImage) return
+
+    const fetchProductImage = async (imageString: string) => {
+      form.setValue('image', await imageLoader(imageString))
+    }
+
+    fetchProductImage(defaultImage)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultImage])
 
   const onSubmit: SubmitHandler<ProductFormSchema> = async (data) => {
     if (!user) {
@@ -55,12 +78,13 @@ export function ProductFormContainer({
       const imageAsBase64 = reader.result as string
 
       const response = await fetch(
-        `${env.NEXT_PUBLIC_BASE_API_URL}/arttoy` + (id ? `/${id}` : ''),
+        `${env.NEXT_PUBLIC_BASE_API_URL}/art-toy` + (id ? `/${id}` : ''),
         {
           method: id ? 'PUT' : 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify({
             name: data.name,
             description: data.description,
@@ -73,7 +97,14 @@ export function ProductFormContainer({
 
       if (response.ok) {
         toast.success('Product created successfully')
-        form.reset()
+        form.reset({
+          name: '',
+          description: '',
+          price: 0,
+          image: new File([], ''),
+        })
+
+        router.push(`/product/${id ? id : (await response.json()).id}`)
       } else {
         toast.error('Failed to create product')
       }

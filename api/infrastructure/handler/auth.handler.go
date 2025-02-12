@@ -24,14 +24,14 @@ func NewAuthHandler(authSvc service.AuthService, defaultSessionOpts sessions.Opt
 	}
 }
 
-// @Summary		Register User
-// @Description	Register
-// @Tags			Authentication
-// @Produce		json
-// @Param			body	body		domain.UserCreateBody	true	"user create body"
-// @Success		200		{object}	domain.User
-// @Failure		400		{object}	ErrorResponse
-// @Router			/v1/auth/register [post]
+// @Summary     Register User
+// @Description Register
+// @Tags        Authentication
+// @Produce     json
+// @Param       body body     domain.UserCreateBody true "user create body"
+// @Success     200  {object} domain.User
+// @Failure     400  {object} ErrorResponse
+// @Router      /v1/auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
 	var body domain.UserCreateBody
 	// TODO: validate body
@@ -58,15 +58,15 @@ type LoginInput struct {
 	Password string `json:"password"`
 }
 
-// @Summary		Login User
-// @Description	Login
-// @Tags			Authentication
-// @Produce		json
-// @Param			body	body		LoginInput	true	"login input"
-// @Success		200		{object}	domain.User
-// @Failure		400		{object}	ErrorResponse
-// @Failure		401		{object}	ErrorResponse
-// @Router			/v1/auth/login [post]
+// @Summary     Login User
+// @Description Login
+// @Tags        Authentication
+// @Produce     json
+// @Param       body body     LoginInput true "login input"
+// @Success     200  {object} domain.User
+// @Failure     400  {object} ErrorResponse
+// @Failure     401  {object} ErrorResponse
+// @Router      /v1/auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var body LoginInput
 	if err := c.ShouldBind(&body); err != nil {
@@ -87,12 +87,12 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
-// @Summary		Logout User
-// @Description	Logout
-// @Tags			Authentication
-// @Produce		json
-// @Success		200
-// @Router			/v1/auth/logout [post]
+// @Summary     Logout User
+// @Description Logout
+// @Tags        Authentication
+// @Produce     json
+// @Success     204
+// @Router      /v1/auth/logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
@@ -103,19 +103,19 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 		handleError(c, apperror.ErrInternal(err))
 		return
 	}
-	c.Status(http.StatusOK)
+	c.Status(http.StatusNoContent)
 }
 
 type RequestPasswordChangeInput struct {
 	Email string `json:"email"`
 }
 
-// @Summary		Request a password reset
-// @Description	Initiates a password reset process by sending an email with reset instructions
-// @Tags			Authentication
-// @Param			body	body	RequestPasswordChangeInput	true	"input"
-// @Success		200
-// @Router			/v1/auth/password-change-requests [post]
+// @Summary     Request a password reset
+// @Description Initiates a password reset process by sending an email with reset instructions
+// @Tags        Authentication
+// @Param       body body RequestPasswordChangeInput true "input"
+// @Success     204
+// @Router      /v1/auth/password-change-requests [post]
 func (h *AuthHandler) CreatePasswordChangeRequests(c *gin.Context) {
 	var body RequestPasswordChangeInput
 	if err := c.ShouldBind(&body); err != nil {
@@ -126,7 +126,7 @@ func (h *AuthHandler) CreatePasswordChangeRequests(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	c.Status(http.StatusOK)
+	c.Status(http.StatusNoContent)
 }
 
 type ChangePasswordInput struct {
@@ -135,13 +135,13 @@ type ChangePasswordInput struct {
 	NewPassword string `json:"new_password"`
 }
 
-// @Summary		Change password
-// @Description	Change password of a user using token and request id
-// @Tags			Authentication
-// @Param			body	body	ChangePasswordInput	true	"input"
-// @Success		200
-// @Failure		401	{object}	ErrorResponse
-// @Router			/v1/auth/change-password [post]
+// @Summary     Change password
+// @Description Change password of a user using token and request id
+// @Tags        Authentication
+// @Param       body body ChangePasswordInput true "input"
+// @Success     204
+// @Failure     401 {object} ErrorResponse
+// @Router      /v1/auth/change-password [post]
 func (h *AuthHandler) ChangePassword(c *gin.Context) {
 	var body ChangePasswordInput
 	if err := c.ShouldBind(&body); err != nil {
@@ -152,17 +152,17 @@ func (h *AuthHandler) ChangePassword(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	c.Status(http.StatusOK)
+	c.Status(http.StatusNoContent)
 }
 
-// @Summary		Get current authenticated user
-// @Description	Get authenticated user from the session
-// @Tags			Authentication
-// @Produce		json
-// @Success		200	{object}	domain.User
-// @Failure		401	{object}	ErrorResponse
-// @Failure		404	{object}	ErrorResponse
-// @Router			/v1/auth/me [get]
+// @Summary     Get current authenticated user
+// @Description Get authenticated user from the session
+// @Tags        Authentication
+// @Produce     json
+// @Success     200 {object} domain.User
+// @Failure     401 {object} ErrorResponse
+// @Failure     404 {object} ErrorResponse
+// @Router      /v1/auth/me [get]
 func (h *AuthHandler) GetMe(c *gin.Context) {
 	var userId int64
 	session := sessions.Default(c)

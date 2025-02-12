@@ -6,7 +6,7 @@
 
 ## Prerequisites
 - [Golang 1.23](https://go.dev/dl/)
-- [swag](https://github.com/swaggo/swag)
+- [swag v1.8.4](https://github.com/swaggo/swag) (v1.8.11 has some problem https://stackoverflow.com/questions/76582283/swag-init-generates-nothing-but-general-api-information)
 - make (should come with build tools XCode/git bash)
 - [Docker](https://docs.docker.com/engine/install/) (optional)
 - [Wire](https://github.com/google/wire)

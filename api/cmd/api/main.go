@@ -16,11 +16,11 @@ import (
 	"shanepee.com/api/docs"
 )
 
-//	@title			Shanepee API
-//	@version		0.0
-//	@description	Shanepee API
-
-// @host	localhost:8080
+// @title       Shanepee API
+// @version     0.0
+// @description Shanepee API
+//
+// @host        localhost:8080
 func main() {
 	if err := godotenv.Load(); err != nil {
 		if _, ok := err.(*os.PathError); ok {

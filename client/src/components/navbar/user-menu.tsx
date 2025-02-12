@@ -26,7 +26,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
         <DropdownMenuTrigger asChild>
           <button>
             <div className='hidden items-center gap-1 text-nowrap md:flex'>
-              <Text variant='md-semibold'>สวัสดี, {user.name} </Text>
+              <Text variant='md-semibold'>สวัสดี, {user.first_name} </Text>
               <Icon icon='teenyicons:down-solid' className='size-3' />
             </div>
             <div className='block md:hidden'>

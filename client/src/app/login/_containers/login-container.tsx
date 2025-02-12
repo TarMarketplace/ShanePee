@@ -8,6 +8,8 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
+import { env } from '@/env'
+
 import { LoginForm } from '../_components/login-form'
 
 const loginFormSchema = z.object({
@@ -26,8 +28,8 @@ export function LoginContainer({
   onForgotPassword,
   onSwitchMode,
 }: LoginContainerProps) {
-  const router = useRouter()
   const { setUser } = useUser()
+  const router = useRouter()
 
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -38,23 +40,34 @@ export function LoginContainer({
   })
 
   const onSubmit: SubmitHandler<LoginFormSchema> = async (data) => {
-    const res = await fetch('/api/auth/login', {
+    const response = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      credentials: 'include',
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      }),
     })
 
-    if (res.ok) {
-      toast.success('Successfully logged in')
-      const resData = await res.json()
-
-      setUser({ ...resData })
-      router.push('/')
-    } else {
-      toast.error('Something went wrong')
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+      return
     }
+
+    const user = await response.json()
+
+    if (!user) {
+      toast.error('Something went wrong')
+      return
+    }
+
+    setUser(user)
+    toast.success('Logged in successfully')
+    router.push('/')
   }
 
   return (

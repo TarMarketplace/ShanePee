@@ -1,15 +1,25 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 
 import { ForgotPasswordContainer } from './forgot-password-container'
 import { LoginContainer } from './login-container'
 import { RegisterContainer } from './register-container'
 
 export function AuthContainer() {
+  const searchParams = useSearchParams()
+
   const [mode, setMode] = useState<'login' | 'register' | 'forgot-password'>(
     'login'
   )
+
+  useEffect(() => {
+    const defaultMode = searchParams.get('mode') as typeof mode
+    if (defaultMode) {
+      setMode(defaultMode)
+    }
+  }, [searchParams])
 
   const handleForgotPassword = () => {
     setMode('forgot-password')

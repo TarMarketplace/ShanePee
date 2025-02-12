@@ -49,7 +49,7 @@ const Navbar = ({
           <UserMenu user={user} onLogout={onLogout} />
         ) : (
           <div className='flex items-center divide-x divide-white text-nowrap'>
-            <Link href='/login' className='px-3'>
+            <Link href='/login?mode=login' className='px-3'>
               <Text variant='md-semibold'>เข้าสู่ระบบ</Text>
             </Link>
             <Link href='/login?mode=register' className='px-3'>

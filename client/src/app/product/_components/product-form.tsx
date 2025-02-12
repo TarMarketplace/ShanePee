@@ -1,75 +1,177 @@
-// 'use client'
+import { Icon } from '@iconify/react'
+import Image from 'next/image'
+import { useMemo, useState } from 'react'
+import type { SubmitHandler, UseFormReturn } from 'react-hook-form'
 
-// import { useState } from 'react'
-// import { useForm } from 'react-hook-form'
-// import { Icon } from '@iconify/react'
-// import { Button } from '@/components/button'
+import { Button } from '@/components/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/form'
+import { Input } from '@/components/input'
+import { Text } from '@/components/text'
+import { Textarea } from '@/components/textarea'
 
-// type ProductFormData = {
-//   name: string
-//   description: string
-//   price: number
-//   image?: string
-// }
+import { cn } from '@/lib/utils'
 
-// type ProductFormProps = {
-//   defaultValues?: ProductFormData
-//   onSubmit: (data: ProductFormData) => void
-// }
+import { type ProductFormSchema } from '../_containers/product-form-container'
 
-// export default function ProductForm({ defaultValues, onSubmit }: ProductFormProps) {
-//   const { register, handleSubmit } = useForm({ defaultValues })
-//   const [imagePreview, setImagePreview] = useState(defaultValues?.image || '')
+type ProductFormProps = {
+  form: UseFormReturn<ProductFormSchema>
+  onSubmit: SubmitHandler<ProductFormSchema>
+  isEditing: boolean
+}
 
-//   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0]
-//     if (file) {
-//       const imageUrl = URL.createObjectURL(file)
-//       setImagePreview(imageUrl)
-//     }
-//   }
+export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
+  const [isShowingButton, setIsShowingButton] = useState(false)
 
-//   return (
-//     <form
-//       onSubmit={handleSubmit(onSubmit)}
-//       className="flex flex-col gap-[10px] p-[6px] w-full max-w-[900px] mx-auto"
-//     >
-//       <div className="flex items-start gap-[2px]">
-//       <Icon icon={defaultValues ? "bxs:edit" : "mdi:plus"} width={24} height={24} />
-//         <h2 className="text-2xl font-semibold">{defaultValues ? 'แก้ไขสินค้า' : 'วางจำหน่าย Art Toy ใหม่'}</h2>
-//       </div>
+  const image = form.watch('image')
 
-//       <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full px-[5px] sm:px-0">
-//         <label className="relative w-full sm:w-[640px] aspect-[1.6/1] border-2 border-gray-300 rounded-lg flex items-center justify-center overflow-hidden cursor-pointer">
-//           {imagePreview ? (
-//             <img src={imagePreview} alt="Product" className="w-full h-full object-cover rounded-lg" />
-//           ) : (
-//             <div className="absolute inset-0 flex justify-center items-center transition">
-//               <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
-//               <Button variant="filled" type="button">
-//                 เลือกรูป
-//               </Button>
-//             </div>
-//           )}
-//         </label>
+  const previewUrl = useMemo(() => {
+    if (image.size > 0) {
+      return URL.createObjectURL(image)
+    }
+  }, [image])
 
-//         <div className="flex flex-col gap-2 w-full sm:w-[614px] sm:h-full">
-//           <input {...register('name')} type="text" placeholder="ชื่อสินค้า" className="border p-2 rounded-md w-full h-[40px]" required />
-//           <textarea {...register('description')} placeholder="รายละเอียด" className="border p-2 rounded-md w-full h-[160px] py-2" required />
-//           <input {...register('price')} type="number" placeholder="ราคา" className="border p-2 rounded-md w-full h-[40px]" required />
-//         </div>
-//       </div>
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='mx-auto flex w-full max-w-screen-lg flex-col gap-2.5 p-1.5'
+      >
+        <div className='flex items-center gap-0.5'>
+          <Icon
+            icon={isEditing ? 'bxs:edit' : 'mdi:plus'}
+            width={32}
+            height={32}
+          />
+          <Text variant='heading-lg'>
+            {isEditing ? 'แก้ไขสินค้า' : 'วางจำหน่าย Art Toy ใหม่'}
+          </Text>
+        </div>
 
-//       <div className="flex items-center justify-end gap-4 mt-auto">
-//         {defaultValues && (
-//           <button type="button" className="font-bold underline text-grey-500">
-//             ยกเลิก
-//           </button>
-//         )}
-//         <Button variant="filled" type="submit">
-//           {defaultValues ? 'แก้ไข' : 'วางจำหน่าย'}
-//         </Button>
-//       </div>
-//     </form>
-//   )
-// }
+        <div className='flex w-full flex-col justify-center gap-4 px-1 sm:flex-row sm:px-0'>
+          <FormField
+            control={form.control}
+            name='image'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  isInput={false}
+                  className='relative flex aspect-[1.6/1] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg border-2 border-grey-300 sm:w-[640px]'
+                >
+                  {previewUrl && (
+                    <Image
+                      src={previewUrl}
+                      alt=''
+                      fill
+                      className='size-full object-cover'
+                      onMouseEnter={() => setIsShowingButton(true)}
+                      onMouseLeave={() => setIsShowingButton(false)}
+                    />
+                  )}
+                  <Button
+                    variant='filled'
+                    type='button'
+                    className={cn(
+                      'pointer-events-none z-50 opacity-0',
+                      (!previewUrl || isShowingButton) && 'opacity-100'
+                    )}
+                  >
+                    {previewUrl ? 'เปลี่ยนรูป' : 'เลือกรูป'}
+                  </Button>
+                </FormLabel>
+                <FormControl>
+                  <input
+                    type='file'
+                    className='hidden'
+                    accept='image/*'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        field.onChange(file)
+                      }
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className='flex w-full flex-col gap-3 sm:h-full sm:w-[614px]'>
+            <FormField
+              name='name'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ชื่อสินค้า</FormLabel>
+                  <FormControl>
+                    <Input {...field} type='text' placeholder='ชื่อสินค้า' />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name='description'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>รายละเอียด</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder='รายละเอียด' />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name='price'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ราคา</FormLabel>
+                  <Text variant='md-regular' className='absolute left-3 top-2'>
+                    ฿
+                  </Text>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          field.onChange(parseInt(e.target.value))
+                        } else {
+                          field.onChange('')
+                        }
+                      }}
+                      type='number'
+                      placeholder='ราคา'
+                      className='pl-7'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className='mt-auto flex items-center justify-end gap-4'>
+          {isEditing && (
+            <button type='button' className='font-bold text-grey-500 underline'>
+              ยกเลิก
+            </button>
+          )}
+          <Button variant='filled' type='submit'>
+            {isEditing ? 'แก้ไข' : 'วางจำหน่าย'}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  )
+}

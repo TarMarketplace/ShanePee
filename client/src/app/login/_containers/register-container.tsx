@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'

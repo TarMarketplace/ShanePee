@@ -87,10 +87,15 @@ const FormItem = React.forwardRef<
 })
 FormItem.displayName = 'FormItem'
 
+export interface FormLabelProps
+  extends React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {
+  isInput?: boolean
+}
+
 const FormLabel = React.forwardRef<
   React.ComponentRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+  FormLabelProps
+>(({ className, isInput = true, ...props }, ref) => {
   const { error, formItemId } = useFormField()
 
   return (
@@ -98,7 +103,8 @@ const FormLabel = React.forwardRef<
       ref={ref}
       className={cn(
         error && 'text-destructive',
-        'absolute left-4 top-0 -translate-y-1/2 bg-white px-2 text-[0.75rem] peer-focus-visible:text-primary-500',
+        isInput &&
+          'absolute left-4 top-0 -translate-y-1/2 bg-white px-2 text-[0.75rem] peer-focus-visible:text-primary-500',
         className
       )}
       htmlFor={formItemId}

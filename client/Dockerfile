@@ -33,6 +33,8 @@ COPY . .
 
 RUN npm i -g pnpm
 
+ENV NEXT_PUBLIC_BASE_API_URL ${NEXT_PUBLIC_BASE_API_URL}
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \

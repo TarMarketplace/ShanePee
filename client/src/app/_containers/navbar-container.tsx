@@ -8,25 +8,31 @@ import { Navbar } from '@/components/navbar'
 
 import { useUser } from '@/providers/user-provider'
 
+import { env } from '@/env'
+
 const NavbarContainer = () => {
   const router = useRouter()
   const { user, setUser } = useUser()
   const [search, setSearch] = useState('')
 
-  const handleLogout = () => {
-    setUser(null)
-    fetch('/api/auth/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(() => {
-        toast.success('Successfully logged out')
-      })
-      .catch(() => {
-        toast.error('Something went wrong')
-      })
+  const handleLogout = async () => {
+    const response = await fetch(
+      `${env.NEXT_PUBLIC_BASE_API_URL}/auth/logout`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      }
+    )
+
+    if (response.ok) {
+      setUser(null)
+      toast.success('Logged out successfully.')
+    } else {
+      toast.error('Something went wrong.')
+    }
   }
 
   const handleSearch = () => {

@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -5,6 +7,8 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
+
+import { env } from '@/env'
 
 import { RegisterStep1Form } from '../_components/register-step-1-form'
 import { RegisterStep2Form } from '../_components/register-step-2-form'
@@ -72,17 +76,20 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
   const onSubmitStep2: SubmitHandler<RegisterStep2FormSchema> = async (
     data
   ) => {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      }),
     })
 
     if (res.ok) {
       onSwitchMode()
-      toast.success('Successfully registered')
+      toast.success('Registered successfully, please login to continue')
     } else {
       toast.error('Something went wrong')
     }

@@ -22,8 +22,24 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     user: {
-      id: '1',
-      name: 'จอมน้อย',
+      id: 1,
+      email: 'jomnoiz@example.com',
+      first_name: 'จอมน้อย',
+      last_name: null,
+      gender: null,
+      tel: null,
+      address: {
+        house_no: null,
+        district: null,
+        province: null,
+        postcode: null,
+      },
+      payment_method: {
+        card_number: null,
+        card_owner: null,
+        cvv: null,
+        expire_date: null,
+      },
     },
   },
   render: ({ user, onLogout }) => (

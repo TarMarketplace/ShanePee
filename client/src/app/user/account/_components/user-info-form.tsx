@@ -1,4 +1,3 @@
-import { formatPhoneNumber } from '@/utils/input-formatter'
 import Image from 'next/image'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
@@ -20,6 +19,8 @@ import {
   SelectValue,
 } from '@/components/select'
 import { Text } from '@/components/text'
+
+import { formatPhoneNumber } from '@/utils/input-formatter'
 
 import { type UserInfoFormSchema } from '../_containers/user-info-container'
 

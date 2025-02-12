@@ -1,4 +1,3 @@
-import { formatPhoneNumber } from '@/utils/input-formatter'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/button'
@@ -18,6 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select'
+
+import { formatPhoneNumber } from '@/utils/input-formatter'
 
 import { type RegisterStep1FormSchema } from '../_containers/register-container'
 

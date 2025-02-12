@@ -1,8 +1,3 @@
-import {
-  formatCVV,
-  formatCardNumber,
-  formatExpirationDate,
-} from '@/utils/input-formatter'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/button'
@@ -15,6 +10,12 @@ import {
   FormMessage,
 } from '@/components/form'
 import { Input } from '@/components/input'
+
+import {
+  formatCVV,
+  formatCardNumber,
+  formatExpirationDate,
+} from '@/utils/input-formatter'
 
 import { type PaymentFormSchema } from '../_containers/payment-container'
 

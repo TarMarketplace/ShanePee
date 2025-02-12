@@ -15,6 +15,7 @@
     "^@/lib(.*)$",
     "^@/types(.*)$",
     "^@/styles(.*)$",
+    "^@/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,

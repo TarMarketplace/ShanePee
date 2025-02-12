@@ -1,4 +1,3 @@
-import { formatPostalCode } from '@/utils/input-formatter'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/button'
@@ -11,6 +10,8 @@ import {
   FormMessage,
 } from '@/components/form'
 import { Input } from '@/components/input'
+
+import { formatPostalCode } from '@/utils/input-formatter'
 
 import { type AddressFormSchema } from '../_containers/address-container'
 

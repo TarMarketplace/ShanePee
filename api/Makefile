@@ -5,7 +5,7 @@ SRCS          := $(shell find . -type f -name '*.go')
 HANDLERS      := $(shell find infrastructure/handler -type f -name '*.handler.go')
 DOMAINS       := $(shell find domain -type f -name '*.go')
 
-SWAG_FLAGS    := --pdl 2
+SWAG_FLAGS    := --parseDependency -g main.go
 
 export GOROOT := $(shell go env GOROOT)
 

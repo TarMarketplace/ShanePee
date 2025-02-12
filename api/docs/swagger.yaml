@@ -37,8 +37,6 @@ definitions:
         type: string
       name:
         type: string
-      owner_id:
-        type: integer
       photo:
         type: string
       price:
@@ -92,6 +90,21 @@ definitions:
       email:
         type: string
       password:
+        type: string
+    type: object
+  domain.UserUpdateBody:
+    properties:
+      address:
+        $ref: '#/definitions/domain.Address'
+      first_name:
+        type: string
+      gender:
+        type: string
+      last_name:
+        type: string
+      payment_method:
+        $ref: '#/definitions/domain.PaymentMethod'
+      tel:
         type: string
     type: object
   handler.ChangePasswordInput:
@@ -177,6 +190,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
       summary: Create Art toy
       tags:
       - Art toy
@@ -254,8 +271,8 @@ paths:
         schema:
           $ref: '#/definitions/handler.ChangePasswordInput'
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
         "401":
           description: Unauthorized
           schema:
@@ -297,8 +314,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
       summary: Logout User
       tags:
       - Authentication
@@ -335,8 +352,8 @@ paths:
         schema:
           $ref: '#/definitions/handler.RequestPasswordChangeInput'
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
       summary: Request a password reset
       tags:
       - Authentication
@@ -375,15 +392,12 @@ paths:
         name: body
         required: true
         schema:
-          additionalProperties: true
-          type: object
+          $ref: '#/definitions/domain.UserUpdateBody'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            type: string
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema:

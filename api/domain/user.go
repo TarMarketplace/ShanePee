@@ -46,6 +46,15 @@ type UserCreateBody struct {
 	Password string `json:"password"`
 }
 
+type UserUpdateBody struct {
+	FirstName     *string        `json:"first_name"`
+	LastName      *string        `json:"last_name"`
+	Gender        *string        `json:"gender"`
+	Tel           *string        `json:"tel"`
+	Address       *Address       `gorm:"embedded" json:"address"`
+	PaymentMethod *PaymentMethod `gorm:"embedded" json:"payment_method"`
+}
+
 func NewUser(email string, passwordHash string) *User {
 	return &User{
 		ID:           GenID(),

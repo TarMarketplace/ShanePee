@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"shanepee.com/api/apperror"
+	"shanepee.com/api/domain"
 	"shanepee.com/api/service"
 )
 
@@ -19,17 +20,17 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 	}
 }
 
-// @Summary		Update User
-// @Description	Update user by id
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Param			body	body		map[string]interface{}	true	"body of user to be updated"
-// @Success		200		{object}	string
-// @Failure		400		{object}	ErrorResponse
-// @Failure		401		{object}	ErrorResponse
-// @Failure		404		{object}	ErrorResponse
-// @Router			/v1/user [patch]
+// @Summary     Update User
+// @Description Update user by id
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       body body domain.UserUpdateBody true "body of user to be updated"
+// @Success     204
+// @Failure     400 {object} ErrorResponse
+// @Failure     401 {object} ErrorResponse
+// @Failure     404 {object} ErrorResponse
+// @Router      /v1/user [patch]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	var userId int64
 	session := sessions.Default(c)
@@ -40,7 +41,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 	}
 	userId = id.(int64)
 
-	var body map[string]interface{}
+	var body domain.UserUpdateBody
 	if err := c.ShouldBind(&body); err != nil {
 		handleError(c, apperror.ErrBadRequest("Invalid body"))
 		return
@@ -51,7 +52,5 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		handleError(c, appError)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "OK",
-	})
+	c.Status(http.StatusNoContent)
 }

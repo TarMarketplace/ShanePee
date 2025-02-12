@@ -16,7 +16,6 @@ type ArtToyCreateBody struct {
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
 	Photo       *string `json:"photo"`
-	OwnerId     int64   `json:"owner_id"`
 }
 
 type ArtToyUpdateBody struct {

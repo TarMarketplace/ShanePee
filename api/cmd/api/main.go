@@ -39,7 +39,10 @@ func main() {
 	docs.SwaggerInfo.Host = app.cfg.ServerUrl
 
 	r := gin.Default()
-	r.Use(cors.Default())
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = app.cfg.CorsAllowOrigins
+	corsConfig.AllowCredentials = true
+	r.Use(cors.New(corsConfig))
 	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
 
 	r.GET("/", func(c *gin.Context) {

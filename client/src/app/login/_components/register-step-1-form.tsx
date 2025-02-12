@@ -63,23 +63,6 @@ export function RegisterStep1Form({ onSubmit, form }: RegisterStep1FormProps) {
           />
           <FormField
             control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>อีเมล</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder='example@gmail.com'
-                    type='email'
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name='phone'
             render={({ field }) => (
               <FormItem>

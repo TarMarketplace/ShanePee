@@ -20,7 +20,6 @@ interface RegisterContainerProps {
 const registerStep1FormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   surname: z.string().min(1, 'Surname is required'),
-  email: z.string().email('Invalid email'),
   phone: z
     .string()
     .min(10, 'Phone number is required')
@@ -54,7 +53,6 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
     defaultValues: {
       name: '',
       surname: '',
-      email: '',
       phone: '',
       gender: undefined,
     },
@@ -68,9 +66,29 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
     },
   })
 
-  const onSubmitStep1: SubmitHandler<RegisterStep1FormSchema> = (data) => {
-    console.log(data)
+  const onSubmitStep1: SubmitHandler<RegisterStep1FormSchema> = () => {
     setStep(2)
+  }
+
+  const handleUpdateUserDetails = async (data: RegisterStep1FormSchema) => {
+    const res = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/user`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        first_name: data.name,
+        last_name: data.surname,
+        gender: data.gender,
+        tel: data.phone,
+      }),
+    })
+
+    if (!res.ok) {
+      toast.error('Cannot update user details, please try again')
+      return
+    }
   }
 
   const onSubmitStep2: SubmitHandler<RegisterStep2FormSchema> = async (
@@ -81,6 +99,7 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         email: data.email,
         password: data.password,
@@ -88,8 +107,8 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
     })
 
     if (res.ok) {
-      onSwitchMode()
-      toast.success('Registered successfully, please login to continue')
+      toast.success('Registered successfully')
+      await handleUpdateUserDetails(step1Form.getValues())
     } else {
       toast.error('Something went wrong')
     }

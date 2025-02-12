@@ -71,8 +71,6 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
-          build-args: |
-            NEXT_PUBLIC_BASE_API_URL=${{ vars.NEXT_PUBLIC_BASE_API_URL }}
           context: "{{defaultContext}}:api"
           push: true
           tags: ${{ steps.tags.outputs.tags }}

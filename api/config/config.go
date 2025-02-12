@@ -15,6 +15,7 @@ type Config struct {
 	Session                        SessionConfig `mapstructure:"SESSION"`
 	ChangePasswordFrontendEndpoint string        `mapstructure:"CHANGE_PASSWORD_FRONTEND_ENDPOINT"`
 	Email                          EmailConfig   `mapstructure:"EMAIL"`
+	CorsAllowOrigins               []string      `mapstructure:"CORS_ALLOW_ORIGINS"`
 }
 
 type SessionConfig struct {

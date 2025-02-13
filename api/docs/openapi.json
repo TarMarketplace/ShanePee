@@ -946,7 +946,7 @@
       }
     },
     "/v1/auth/me": {
-      "post": {
+      "get": {
         "description": "Get authenticated user from the session",
         "operationId": "me",
         "responses": {

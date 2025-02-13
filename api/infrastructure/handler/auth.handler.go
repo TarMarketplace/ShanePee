@@ -161,7 +161,7 @@ type GetMeOutput struct {
 func (h *AuthHandler) RegisterGetMe(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "me",
-		Method:      http.MethodPost,
+		Method:      http.MethodGet,
 		Path:        "/v1/auth/me",
 		Tags:        []string{"Authentication"},
 		Summary:     "Get current authenticated user",

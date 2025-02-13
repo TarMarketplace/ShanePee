@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
 	"log"
 	"net/http"
 	"os"
+	"path"
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humagin"
@@ -14,6 +17,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/joho/godotenv"
 )
+
+var cmd = flag.String("command", "server", "command to run")
+var openApiOutDir = flag.String("output", "./docs", "output openapi file")
 
 func main() {
 	if err := godotenv.Load(); err != nil {
@@ -65,7 +71,36 @@ func main() {
 	app.artToyHdr.RegisterGetArtToyById(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
 
-	if err = r.Run(); err != nil {
-		log.Fatal(err)
+	flag.Parse()
+
+	if cmd == nil {
+		log.Fatal("Missing command")
+	} else if *cmd == "server" {
+		if err = r.Run(); err != nil {
+			log.Fatal(err)
+		}
+	} else if *cmd == "openapi" {
+		jsonData, err := api.OpenAPI().MarshalJSON()
+		if err != nil {
+			log.Fatal(err)
+		}
+		var remarshal any
+		json.Unmarshal(jsonData, &remarshal)
+		prettied, err := json.MarshalIndent(remarshal, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		if openApiOutDir == nil {
+			log.Fatal("no output directory provide")
+		}
+		outDir := *openApiOutDir
+		oaiJsonPath := path.Join(outDir, "openapi.json")
+		jsonDocs, err := os.Create(oaiJsonPath)
+		if openApiOutDir == nil {
+			log.Fatal("unable to create json docs file")
+		}
+		defer jsonDocs.Close()
+
+		jsonDocs.Write(prettied)
 	}
 }

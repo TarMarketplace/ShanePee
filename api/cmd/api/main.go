@@ -43,7 +43,12 @@ func main() {
 		c.String(http.StatusOK, "OK")
 	})
 
+	AddSwagger(r)
+	AddSpotlight(r)
+	AddScalar(r)
+
 	humaConfig := huma.DefaultConfig("Shanepee API", "0.0.0")
+	humaConfig.DocsPath = ""
 	api := humagin.New(r, humaConfig)
 
 	app.authHdr.RegisterChangePassword(api)

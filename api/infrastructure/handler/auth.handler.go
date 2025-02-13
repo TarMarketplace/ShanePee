@@ -101,7 +101,7 @@ func (h *AuthHandler) RegisterLogout(api huma.API) {
 		Tags:        []string{"Authentication"},
 		Summary:     "Logout User",
 		Description: "Logout",
-	}, func(ctx context.Context, i *LoginInput) (*struct{}, error) {
+	}, func(ctx context.Context, i *struct{}) (*struct{}, error) {
 		session := GetSession(ctx)
 		session.Clear()
 		newSessionOpts := h.defaultSessionOpts

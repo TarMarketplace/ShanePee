@@ -36,10 +36,19 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
                 <FormItem>
                   <FormLabel>บ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
-                    />
+                    <div>
+                      <Input
+                        {...field}
+                        className='hidden md:block'
+                        placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
+                      />
+                      <textarea
+                        {...field}
+                        className='peer flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-primary-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:hidden'
+                        rows={3}
+                        placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -49,7 +58,7 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
           <div className='col-span-1'>
             <FormField
               control={form.control}
-              name='distric'
+              name='district'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>เขต/อำเภอ</FormLabel>

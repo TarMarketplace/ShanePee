@@ -67,7 +67,7 @@ export function PaymentForm({ onSubmit, form }: PaymentFormProps) {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder='xx/xx'
+                      placeholder='MM/YY'
                       onChange={(e) => {
                         const value = e.target.value.slice(0, 5)
                         field.onChange(value)
@@ -90,7 +90,7 @@ export function PaymentForm({ onSubmit, form }: PaymentFormProps) {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder='xxx'
+                      placeholder='CVV'
                       onChange={(e) => {
                         const value = e.target.value
                           .replaceAll(' ', '')

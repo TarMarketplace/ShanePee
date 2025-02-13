@@ -21,3 +21,6 @@ fmt:
 
 clean:
 	rm -rf out/* cmd/api/wire_gen.go
+
+docs: all
+	./out/api -command=openapi

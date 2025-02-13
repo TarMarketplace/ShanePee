@@ -39,7 +39,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		handleError(c, apperror.ErrBadRequest("Invalid body"))
 		return
 	}
-	data, err := h.authSvc.Register(c, body.Email, body.Password, body.Photo)
+	data, err := h.authSvc.Register(c, body.Email, body.Password)
 	if err != nil {
 		handleError(c, err)
 		return

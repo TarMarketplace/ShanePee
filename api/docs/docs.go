@@ -565,6 +565,9 @@ const docTemplate = `{
                 "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
                 },
+                "photo": {
+                    "type": "string"
+                },
                 "tel": {
                     "type": "string"
                 }
@@ -598,6 +601,9 @@ const docTemplate = `{
                 },
                 "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
+                },
+                "photo": {
+                    "type": "string"
                 },
                 "tel": {
                     "type": "string"

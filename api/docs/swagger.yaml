@@ -82,6 +82,8 @@ definitions:
         type: string
       payment_method:
         $ref: '#/definitions/domain.PaymentMethod'
+      photo:
+        type: string
       tel:
         type: string
     type: object
@@ -104,6 +106,8 @@ definitions:
         type: string
       payment_method:
         $ref: '#/definitions/domain.PaymentMethod'
+      photo:
+        type: string
       tel:
         type: string
     type: object

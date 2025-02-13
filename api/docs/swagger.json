@@ -557,6 +557,9 @@
                 "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
                 },
+                "photo": {
+                    "type": "string"
+                },
                 "tel": {
                     "type": "string"
                 }
@@ -590,6 +593,9 @@
                 },
                 "payment_method": {
                     "$ref": "#/definitions/domain.PaymentMethod"
+                },
+                "photo": {
+                    "type": "string"
                 },
                 "tel": {
                     "type": "string"

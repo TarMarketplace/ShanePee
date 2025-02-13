@@ -9,6 +9,7 @@ import (
 	"github.com/danielgtaylor/huma/v2/adapters/humagin"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"shanepee.com/api/infrastructure/handler"
 
 	"github.com/gin-contrib/cors"
 	"github.com/joho/godotenv"
@@ -36,6 +37,7 @@ func main() {
 	corsConfig.AllowCredentials = true
 	r.Use(cors.New(corsConfig))
 	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
+	r.Use(handler.GetUserSession())
 
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")

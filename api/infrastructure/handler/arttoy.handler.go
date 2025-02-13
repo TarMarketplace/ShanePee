@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/gin-contrib/sessions"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/dto"
 	"shanepee.com/api/service"
@@ -35,14 +34,11 @@ func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 		Summary:     "Create Art toy",
 		Description: "Create a new art toy record",
 	}, func(ctx context.Context, i *CreateArtToyInput) (*domain.ArtToy, error) {
-		session := ctx.Value(defaultSessionKey).(sessions.Session)
-		var userId int64
-		id := session.Get(userIdSessionKey)
-		if id == nil {
-			return nil, huma.Error401Unauthorized("Authentication required")
+		userId := GetUserID(ctx)
+		if userId == nil {
+			return nil, ErrAuthenticationRequired
 		}
-		userId = id.(int64)
-		artToy := domain.NewArtToy(i.Body.Name, i.Body.Description, i.Body.Price, i.Body.Photo, userId)
+		artToy := domain.NewArtToy(i.Body.Name, i.Body.Description, i.Body.Price, i.Body.Photo, *userId)
 		err := h.artToySvc.CreateArtToy(ctx, artToy)
 		if err != nil {
 			return nil, ErrIntervalServerError
@@ -65,13 +61,12 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		Summary:     "Update Art toy",
 		Description: "Update an existing art toy by ID",
 	}, func(ctx context.Context, i *UpdateArtToyInput) (*domain.ArtToy, error) {
-		session := ctx.Value(defaultSessionKey).(sessions.Session)
-		ownerID := session.Get(userIdSessionKey)
-		if ownerID == nil {
-			return nil, huma.Error401Unauthorized("Authentication required")
+		userId := GetUserID(ctx)
+		if userId == nil {
+			return nil, ErrAuthenticationRequired
 		}
 
-		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), ownerID.(int64))
+		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), *userId)
 		if err != nil {
 			// TODO: find what can cause error
 			return nil, ErrIntervalServerError

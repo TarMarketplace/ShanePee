@@ -46,6 +46,13 @@ func (h *AuthHandler) RegisterRegister(api huma.API) {
 		if err != nil {
 			return nil, ErrIntervalServerError
 		}
+
+		session := GetSession(ctx)
+		session.Set(userIdSessionKey, data.ID)
+		if err := session.Save(); err != nil {
+			return nil, ErrIntervalServerError
+		}
+
 		return &RegisterOutput{
 			Body: data,
 		}, nil
@@ -73,6 +80,13 @@ func (h *AuthHandler) RegisterLogin(api huma.API) {
 		if err != nil {
 			return nil, ErrForbidden
 		}
+
+		session := GetSession(ctx)
+		session.Set(userIdSessionKey, data.ID)
+		if err := session.Save(); err != nil {
+			return nil, ErrIntervalServerError
+		}
+
 		return &LoginOutput{
 			Body: data,
 		}, nil
@@ -88,7 +102,7 @@ func (h *AuthHandler) RegisterLogout(api huma.API) {
 		Summary:     "Logout User",
 		Description: "Logout",
 	}, func(ctx context.Context, i *LoginInput) (*struct{}, error) {
-		session := ctx.Value(defaultSessionKey).(sessions.Session)
+		session := GetSession(ctx)
 		session.Clear()
 		newSessionOpts := h.defaultSessionOpts
 		newSessionOpts.MaxAge = -1
@@ -155,15 +169,12 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 		Summary:     "Get current authenticated user",
 		Description: "Get authenticated user from the session",
 	}, func(ctx context.Context, i *struct{}) (*GetMeOutput, error) {
-		var userId int64
-		session := ctx.Value(defaultSessionKey).(sessions.Session)
-		id := session.Get(userIdSessionKey)
-		if id == nil {
+		userId := GetUserID(ctx)
+		if userId == nil {
 			return nil, ErrAuthenticationRequired
 		}
-		userId = id.(int64)
 
-		data, err := h.authSvc.GetUserByID(ctx, userId)
+		data, err := h.authSvc.GetUserByID(ctx, *userId)
 		if err != nil {
 			return nil, ErrIntervalServerError
 		}

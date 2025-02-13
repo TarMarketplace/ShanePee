@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/gin-contrib/sessions"
 	"shanepee.com/api/dto"
 	"shanepee.com/api/service"
 )
@@ -33,16 +32,13 @@ func (h *UserHandler) UpdateUser(api huma.API) {
 		Summary:     "Update User",
 		Description: "Update user by id",
 	}, func(ctx context.Context, i *UpdateUserInput) (*struct{}, error) {
-		var userId int64
-		session := ctx.Value(defaultSessionKey).(sessions.Session)
-		id := session.Get(userIdSessionKey)
-		if id == nil {
+		userId := GetUserID(ctx)
+		if userId == nil {
 			return nil, ErrAuthenticationRequired
 		}
-		userId = id.(int64)
 
 		updateBody := i.Body.IntoMap()
-		err := h.userSvc.UpdateUser(ctx, userId, updateBody)
+		err := h.userSvc.UpdateUser(ctx, *userId, updateBody)
 		if err != nil {
 			return nil, ErrIntervalServerError
 		}

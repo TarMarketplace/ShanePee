@@ -115,9 +115,7 @@ func (h *AuthHandler) RegisterLogout(api huma.API) {
 }
 
 type CreateRequestPasswordChangeInput struct {
-	Body struct {
-		Email string `json:"email"`
-	}
+	Body dto.RequestPasswordChangeBody
 }
 
 func (h *AuthHandler) RegisterCreatePasswordChangeRequests(api huma.API) {

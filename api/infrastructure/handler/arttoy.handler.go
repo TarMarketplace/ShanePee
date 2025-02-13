@@ -25,6 +25,10 @@ type CreateArtToyInput struct {
 	Body dto.ArtToyCreateBody
 }
 
+type CreateArtToyOutput struct {
+	Body *domain.ArtToy
+}
+
 func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "create-art-toy",
@@ -33,7 +37,7 @@ func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Create Art toy",
 		Description: "Create a new art toy record",
-	}, func(ctx context.Context, i *CreateArtToyInput) (*domain.ArtToy, error) {
+	}, func(ctx context.Context, i *CreateArtToyInput) (*CreateArtToyOutput, error) {
 		userId := GetUserID(ctx)
 		if userId == nil {
 			return nil, ErrAuthenticationRequired
@@ -43,13 +47,19 @@ func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 		if err != nil {
 			return nil, ErrIntervalServerError
 		}
-		return artToy, nil
+		return &CreateArtToyOutput{
+			Body: artToy,
+		}, nil
 	})
 }
 
 type UpdateArtToyInput struct {
 	ID   int64 `path:"id"`
 	Body dto.ArtToyUpdateBody
+}
+
+type UpdateArtToyOutput struct {
+	Body *domain.ArtToy
 }
 
 func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
@@ -60,7 +70,7 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Update Art toy",
 		Description: "Update an existing art toy by ID",
-	}, func(ctx context.Context, i *UpdateArtToyInput) (*domain.ArtToy, error) {
+	}, func(ctx context.Context, i *UpdateArtToyInput) (*UpdateArtToyOutput, error) {
 		userId := GetUserID(ctx)
 		if userId == nil {
 			return nil, ErrAuthenticationRequired
@@ -72,7 +82,9 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 			return nil, ErrIntervalServerError
 		}
 
-		return updatedArtToy, nil
+		return &UpdateArtToyOutput{
+			Body: updatedArtToy,
+		}, nil
 	})
 }
 
@@ -105,6 +117,10 @@ type GetArtToyByIdInput struct {
 	Id int `path:"id"`
 }
 
+type GetArtToyByIdOutput struct {
+	Body *domain.ArtToy
+}
+
 func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "get-art-toy-by-id",
@@ -113,11 +129,13 @@ func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Get Art Toy by ID",
 		Description: "Get art toy by id",
-	}, func(ctx context.Context, i *GetArtToyByIdInput) (*domain.ArtToy, error) {
+	}, func(ctx context.Context, i *GetArtToyByIdInput) (*GetArtToyByIdOutput, error) {
 		data, err := h.artToySvc.GetArtToyById(ctx, int64(i.Id))
 		if errors.Is(err, domain.ErrArtToyNotFound) {
 			return nil, huma.Error404NotFound(err.Error())
 		}
-		return data, nil
+		return &GetArtToyByIdOutput{
+			Body: data,
+		}, nil
 	})
 }

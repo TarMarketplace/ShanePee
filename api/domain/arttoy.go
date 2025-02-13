@@ -5,7 +5,7 @@ type ArtToy struct {
 	Name         string  `json:"name" gorm:"not null"`
 	Description  string  `json:"description" gorm:"not null"`
 	Price        float64 `json:"price" gorm:"not null"`
-	Photo        *string `json:"photo"`
+	Photo        *string `json:"photo" nullable:"true" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
 	Availability bool    `json:"availability" gorm:"not null"`
 	OwnerId      int64   `json:"owner_id" gorm:"not null"`
 	// TODO: add more fields about review, rating, etc.

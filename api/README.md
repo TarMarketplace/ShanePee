@@ -6,7 +6,6 @@
 
 ## Prerequisites
 - [Golang 1.23](https://go.dev/dl/)
-- [swag v1.8.4](https://github.com/swaggo/swag) (v1.8.11 has some problem https://stackoverflow.com/questions/76582283/swag-init-generates-nothing-but-general-api-information)
 - make (should come with build tools XCode/git bash)
 - [Docker](https://docs.docker.com/engine/install/) (optional)
 - [Wire](https://github.com/google/wire)
@@ -18,7 +17,7 @@
 
 `config/` contains application config loader.
 
-`docs/` generated openAPI documentation from `swag`.
+`docs/` generated openAPI documentation from `make docs`.
 
 `domain/` pure data model. Since this is pure business logic, there should be no implementation detail (database, HTTP) on this layer. Currently, for ease of implementation, simple struct tag can be used here.
 
@@ -28,6 +27,5 @@
 
 ## TODO
 - proper logger
-- API Versioning
 - Input validation
 - DB File config

@@ -8,7 +8,7 @@ DOMAINS       := $(shell find domain -type f -name '*.go')
 
 export GOROOT := $(shell go env GOROOT)
 
-all: out/api docs
+all: out/api
 
 out/api: cmd/api/wire_gen.go $(SRCS)
 	mkdir -p out

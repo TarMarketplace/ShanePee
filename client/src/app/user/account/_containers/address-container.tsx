@@ -1,15 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
+
+import { useUser } from '@/providers/user-provider'
+
+import { env } from '@/env'
 
 import { AddressForm } from '../_components/address-form'
 
 const addressFormSchema = z.object({
   details: z.string().min(1, 'Details address is required'),
-  distric: z.string().min(1, 'Distric is required'),
+  district: z.string().min(1, 'Distric is required'),
   province: z.string().min(1, 'Province is required'),
   postalCode: z
     .string()
@@ -20,18 +27,55 @@ const addressFormSchema = z.object({
 export type AddressFormSchema = z.infer<typeof addressFormSchema>
 
 export function AddressContainer() {
+  const { user, fetchUser } = useUser()
+  const router = useRouter()
+
   const form = useForm<AddressFormSchema>({
     resolver: zodResolver(addressFormSchema),
     defaultValues: {
       details: '',
-      distric: '',
+      district: '',
       province: '',
       postalCode: '',
     },
   })
 
-  const onSubmit: SubmitHandler<AddressFormSchema> = (data) => {
-    console.log(data)
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        details: user.address.house_no ?? '',
+        district: user.address.district ?? '',
+        province: user.address.province ?? '',
+        postalCode: user.address.postcode ?? '',
+      })
+    }
+  }, [user, form])
+
+  const onSubmit: SubmitHandler<AddressFormSchema> = async (data) => {
+    const res = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/user`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        address: {
+          house_no: data.details,
+          district: data.district,
+          province: data.province,
+          postcode: data.postalCode,
+        },
+      }),
+    })
+
+    if (res.ok) {
+      toast.success('Updated successfully')
+      fetchUser()
+    } else if (res.status == 401) {
+      router.push('/login')
+    } else {
+      toast.error('Something went wrong')
+    }
   }
 
   return (

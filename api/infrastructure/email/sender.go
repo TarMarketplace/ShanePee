@@ -1,7 +1,7 @@
 package email
 
 import (
-	"errors"
+	"log"
 
 	"shanepee.com/api/config"
 	"shanepee.com/api/service"
@@ -14,13 +14,14 @@ const (
 	SendgridProvider Provider = "sendgrid"
 )
 
-func NewEmailSender(cfg config.Config) (service.EmailSender, error) {
+func NewEmailSender(cfg config.Config) service.EmailSender {
 	switch Provider(cfg.Email.Provider) {
 	case DebugProvider:
-		return NewDebug(cfg), nil
+		return NewDebug(cfg)
 	case SendgridProvider:
-		return NewSendgrid(cfg), nil
+		return NewSendgrid(cfg)
 	default:
-		return nil, errors.New("Invalid email provider")
+		log.Print("Not found email config, using debug provider")
+		return NewDebug(cfg)
 	}
 }

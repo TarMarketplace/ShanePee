@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN make
+RUN make out/api
 
 FROM debian:bookworm-slim
 

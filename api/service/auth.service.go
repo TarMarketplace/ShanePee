@@ -13,7 +13,7 @@ import (
 )
 
 type AuthService interface {
-	Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError)
+	Register(ctx context.Context, username string, password string, photo *string) (*domain.User, apperror.AppError)
 	Login(ctx context.Context, email string, password string) (*domain.User, apperror.AppError)
 	RequestPasswordChange(ctx context.Context, email string) apperror.AppError
 	GetUserByID(ctx context.Context, id int64) (*domain.User, apperror.AppError)
@@ -38,7 +38,7 @@ type authServiceImpl struct {
 
 var _ AuthService = &authServiceImpl{}
 
-func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, apperror.AppError) {
+func (s *authServiceImpl) Register(ctx context.Context, username string, password string, photo *string) (*domain.User, apperror.AppError) {
 	passwordByte := []byte(password)
 	// TODO: salt
 	// TODO: validate password
@@ -48,7 +48,7 @@ func (s *authServiceImpl) Register(ctx context.Context, username string, passwor
 		// TODO: properly handle this error
 		return nil, apperror.ErrInternal(err)
 	}
-	user := domain.NewUser(username, hashStr)
+	user := domain.NewUser(username, hashStr, photo)
 	err = s.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		// TODO: properly handle this error

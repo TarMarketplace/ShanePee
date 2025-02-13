@@ -7,6 +7,7 @@ type User struct {
 	FirstName     *string       `json:"first_name"`
 	LastName      *string       `json:"last_name"`
 	Gender        *string       `json:"gender"`
+	Photo         *string       `json:"photo"`
 	Tel           *string       `json:"tel"`
 	Address       Address       `gorm:"embedded" json:"address"`
 	PaymentMethod PaymentMethod `gorm:"embedded" json:"payment_method"`
@@ -42,8 +43,9 @@ func NewPasswordChangeRequest(tokenHash string, userID int64) *PasswordChangeReq
 }
 
 type UserCreateBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string  `json:"email"`
+	Password string  `json:"password"`
+	Photo    *string `json:"photo"`
 }
 
 type UserUpdateBody struct {
@@ -55,10 +57,11 @@ type UserUpdateBody struct {
 	PaymentMethod *PaymentMethod `gorm:"embedded" json:"payment_method"`
 }
 
-func NewUser(email string, passwordHash string) *User {
+func NewUser(email string, passwordHash string, photo *string) *User {
 	return &User{
 		ID:           GenID(),
 		Email:        email,
 		PasswordHash: passwordHash,
+		Photo:        photo,
 	}
 }

@@ -85,7 +85,10 @@ func main() {
 			log.Fatal(err)
 		}
 		var remarshal any
-		json.Unmarshal(jsonData, &remarshal)
+		err = json.Unmarshal(jsonData, &remarshal)
+		if err != nil {
+			log.Fatal(err)
+		}
 		prettied, err := json.MarshalIndent(remarshal, "", "  ")
 		if err != nil {
 			log.Fatal(err)
@@ -96,11 +99,17 @@ func main() {
 		outDir := *openApiOutDir
 		oaiJsonPath := path.Join(outDir, "openapi.json")
 		jsonDocs, err := os.Create(oaiJsonPath)
+		if err != nil {
+			log.Fatal(err)
+		}
 		if openApiOutDir == nil {
 			log.Fatal("unable to create json docs file")
 		}
 		defer jsonDocs.Close()
 
-		jsonDocs.Write(prettied)
+		_, err = jsonDocs.Write(prettied)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

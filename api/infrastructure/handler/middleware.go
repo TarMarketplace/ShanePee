@@ -7,8 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ContextKey string
+
 const (
-	ContextSessionKey = "__session"
+	ContextSessionKey ContextKey = "__session"
 )
 
 // Huma abstract over api framework so, it not easy to get

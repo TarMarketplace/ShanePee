@@ -1,12 +1,12 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/danielgtaylor/huma/v2"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"shanepee.com/api/apperror"
-	"shanepee.com/api/domain"
+	"shanepee.com/api/dto"
 	"shanepee.com/api/service"
 )
 
@@ -20,37 +20,32 @@ func NewUserHandler(userSvc service.UserService) UserHandler {
 	}
 }
 
-// @Summary     Update User
-// @Description Update user by id
-// @Tags        User
-// @Accept      json
-// @Produce     json
-// @Param       body body domain.UserUpdateBody true "body of user to be updated"
-// @Success     204
-// @Failure     400 {object} ErrorResponse
-// @Failure     401 {object} ErrorResponse
-// @Failure     404 {object} ErrorResponse
-// @Router      /v1/user [patch]
-func (h *UserHandler) UpdateUser(c *gin.Context) {
-	var userId int64
-	session := sessions.Default(c)
-	id := session.Get(userIdSessionKey)
-	if id == nil {
-		handleError(c, apperror.ErrUnauthorized("Authentication required"))
-		return
-	}
-	userId = id.(int64)
+type UpdateUserInput struct {
+	Body dto.UserUpdateBody
+}
 
-	var body domain.UserUpdateBody
-	if err := c.ShouldBind(&body); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid body"))
-		return
-	}
+func (h *UserHandler) UpdateUser(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "update-user",
+		Method:      http.MethodPatch,
+		Path:        "/v1/user",
+		Tags:        []string{"User"},
+		Summary:     "Update User",
+		Description: "Update user by id",
+	}, func(ctx context.Context, i *UpdateUserInput) (*struct{}, error) {
+		var userId int64
+		session := ctx.Value(defaultSessionKey).(sessions.Session)
+		id := session.Get(userIdSessionKey)
+		if id == nil {
+			return nil, ErrAuthenticationRequired
+		}
+		userId = id.(int64)
 
-	appError := h.userSvc.UpdateUser(c, userId, body)
-	if appError != nil {
-		handleError(c, appError)
-		return
-	}
-	c.Status(http.StatusNoContent)
+		updateBody := i.Body.IntoMap()
+		err := h.userSvc.UpdateUser(ctx, userId, updateBody)
+		if err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return nil, nil
+	})
 }

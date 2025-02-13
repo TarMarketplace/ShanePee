@@ -1,12 +1,13 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/danielgtaylor/huma/v2"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"shanepee.com/api/apperror"
 	"shanepee.com/api/domain"
+	"shanepee.com/api/dto"
 	"shanepee.com/api/service"
 )
 
@@ -24,159 +25,150 @@ func NewAuthHandler(authSvc service.AuthService, defaultSessionOpts sessions.Opt
 	}
 }
 
-// @Summary     Register User
-// @Description Register
-// @Tags        Authentication
-// @Produce     json
-// @Param       body body     domain.UserCreateBody true "user create body"
-// @Success     200  {object} domain.User
-// @Failure     400  {object} ErrorResponse
-// @Router      /v1/auth/register [post]
-func (h *AuthHandler) Register(c *gin.Context) {
-	var body domain.UserCreateBody
-	// TODO: validate body
-	if err := c.ShouldBind(&body); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid body"))
-		return
-	}
-	data, err := h.authSvc.Register(c, body.Email, body.Password)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-	session := sessions.Default(c)
-	session.Set(userIdSessionKey, data.ID)
-	if err := session.Save(); err != nil {
-		handleError(c, apperror.ErrInternal(err))
-		return
-	}
-	c.JSON(http.StatusOK, data)
+type RegisterInput struct {
+	Body dto.RegisterBody
+}
+
+type RegisterOutput struct {
+	Body *domain.User
+}
+
+func (h *AuthHandler) RegisterRegister(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "register",
+		Method:      http.MethodPost,
+		Path:        "/v1/auth/register",
+		Tags:        []string{"Authentication"},
+		Summary:     "Register User",
+		Description: "Register",
+	}, func(ctx context.Context, i *RegisterInput) (*RegisterOutput, error) {
+		data, err := h.authSvc.Register(ctx, i.Body.Email, i.Body.Password)
+		if err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return &RegisterOutput{
+			Body: data,
+		}, nil
+	})
 }
 
 type LoginInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Body dto.LoginBody
 }
 
-// @Summary     Login User
-// @Description Login
-// @Tags        Authentication
-// @Produce     json
-// @Param       body body     LoginInput true "login input"
-// @Success     200  {object} domain.User
-// @Failure     400  {object} ErrorResponse
-// @Failure     401  {object} ErrorResponse
-// @Router      /v1/auth/login [post]
-func (h *AuthHandler) Login(c *gin.Context) {
-	var body LoginInput
-	if err := c.ShouldBind(&body); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid body"))
-		return
-	}
-	data, err := h.authSvc.Login(c, body.Email, body.Password)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-	session := sessions.Default(c)
-	session.Set(userIdSessionKey, data.ID)
-	if err := session.Save(); err != nil {
-		handleError(c, apperror.ErrInternal(err))
-		return
-	}
-	c.JSON(http.StatusOK, data)
+type LoginOutput struct {
+	Body *domain.User
 }
 
-// @Summary     Logout User
-// @Description Logout
-// @Tags        Authentication
-// @Produce     json
-// @Success     204
-// @Router      /v1/auth/logout [post]
-func (h *AuthHandler) Logout(c *gin.Context) {
-	session := sessions.Default(c)
-	session.Clear()
-	newSessionOpts := h.defaultSessionOpts
-	newSessionOpts.MaxAge = -1
-	session.Options(newSessionOpts)
-	if err := session.Save(); err != nil {
-		handleError(c, apperror.ErrInternal(err))
-		return
-	}
-	c.Status(http.StatusNoContent)
+func (h *AuthHandler) RegisterLogin(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "login",
+		Method:      http.MethodPost,
+		Path:        "/v1/auth/login",
+		Tags:        []string{"Authentication"},
+		Summary:     "Login User",
+		Description: "Login",
+	}, func(ctx context.Context, i *LoginInput) (*LoginOutput, error) {
+		data, err := h.authSvc.Login(ctx, i.Body.Email, i.Body.Password)
+		if err != nil {
+			return nil, ErrForbidden
+		}
+		return &LoginOutput{
+			Body: data,
+		}, nil
+	})
 }
 
-type RequestPasswordChangeInput struct {
-	Email string `json:"email"`
+func (h *AuthHandler) RegisterLogout(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "logout",
+		Method:      http.MethodPost,
+		Path:        "/v1/auth/logout",
+		Tags:        []string{"Authentication"},
+		Summary:     "Logout User",
+		Description: "Logout",
+	}, func(ctx context.Context, i *LoginInput) (*struct{}, error) {
+		session := ctx.Value(defaultSessionKey).(sessions.Session)
+		session.Clear()
+		newSessionOpts := h.defaultSessionOpts
+		newSessionOpts.MaxAge = -1
+		session.Options(newSessionOpts)
+		if err := session.Save(); err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return nil, nil
+	})
 }
 
-// @Summary     Request a password reset
-// @Description Initiates a password reset process by sending an email with reset instructions
-// @Tags        Authentication
-// @Param       body body RequestPasswordChangeInput true "input"
-// @Success     204
-// @Router      /v1/auth/password-change-requests [post]
-func (h *AuthHandler) CreatePasswordChangeRequests(c *gin.Context) {
-	var body RequestPasswordChangeInput
-	if err := c.ShouldBind(&body); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid body"))
-		return
+type CreateRequestPasswordChangeInput struct {
+	Body struct {
+		Email string `json:"email"`
 	}
-	if err := h.authSvc.RequestPasswordChange(c, body.Email); err != nil {
-		handleError(c, err)
-		return
-	}
-	c.Status(http.StatusNoContent)
+}
+
+func (h *AuthHandler) RegisterCreatePasswordChangeRequests(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "password-change-requests",
+		Method:      http.MethodPost,
+		Path:        "/v1/auth/password-change-requests",
+		Tags:        []string{"Authentication"},
+		Summary:     "Request a password reset",
+		Description: "Initiates a password reset process by sending an email with reset instructions",
+	}, func(ctx context.Context, i *CreateRequestPasswordChangeInput) (*struct{}, error) {
+		if err := h.authSvc.RequestPasswordChange(ctx, i.Body.Email); err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return nil, nil
+	})
 }
 
 type ChangePasswordInput struct {
-	RequestID   int64  `json:"request_id"`
-	Token       string `json:"token"`
-	NewPassword string `json:"new_password"`
+	Body dto.ChangePasswordBody
 }
 
-// @Summary     Change password
-// @Description Change password of a user using token and request id
-// @Tags        Authentication
-// @Param       body body ChangePasswordInput true "input"
-// @Success     204
-// @Failure     401 {object} ErrorResponse
-// @Router      /v1/auth/change-password [post]
-func (h *AuthHandler) ChangePassword(c *gin.Context) {
-	var body ChangePasswordInput
-	if err := c.ShouldBind(&body); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid body"))
-		return
-	}
-	if err := h.authSvc.ChangePassword(c, body.RequestID, body.Token, body.NewPassword); err != nil {
-		handleError(c, err)
-		return
-	}
-	c.Status(http.StatusNoContent)
+func (h *AuthHandler) RegisterChangePassword(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "change-password",
+		Method:      http.MethodPost,
+		Path:        "/v1/auth/change-password",
+		Tags:        []string{"Authentication"},
+		Summary:     "Change password",
+		Description: "Change password of a user using token and request id",
+	}, func(ctx context.Context, i *ChangePasswordInput) (*struct{}, error) {
+		if err := h.authSvc.ChangePassword(ctx, i.Body.RequestID, i.Body.Token, i.Body.NewPassword); err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return nil, nil
+	})
 }
 
-// @Summary     Get current authenticated user
-// @Description Get authenticated user from the session
-// @Tags        Authentication
-// @Produce     json
-// @Success     200 {object} domain.User
-// @Failure     401 {object} ErrorResponse
-// @Failure     404 {object} ErrorResponse
-// @Router      /v1/auth/me [get]
-func (h *AuthHandler) GetMe(c *gin.Context) {
-	var userId int64
-	session := sessions.Default(c)
-	id := session.Get(userIdSessionKey)
-	if id == nil {
-		handleError(c, apperror.ErrUnauthorized("Authentication required"))
-		return
-	}
-	userId = id.(int64)
+type GetMeOutput struct {
+	Body *domain.User
+}
 
-	data, err := h.authSvc.GetUserByID(c, userId)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-	c.JSON(http.StatusOK, data)
+func (h *AuthHandler) RegisterGetMe(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "me",
+		Method:      http.MethodPost,
+		Path:        "/v1/auth/me",
+		Tags:        []string{"Authentication"},
+		Summary:     "Get current authenticated user",
+		Description: "Get authenticated user from the session",
+	}, func(ctx context.Context, i *struct{}) (*GetMeOutput, error) {
+		var userId int64
+		session := ctx.Value(defaultSessionKey).(sessions.Session)
+		id := session.Get(userIdSessionKey)
+		if id == nil {
+			return nil, ErrAuthenticationRequired
+		}
+		userId = id.(int64)
+
+		data, err := h.authSvc.GetUserByID(ctx, userId)
+		if err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return &GetMeOutput{
+			Body: data,
+		}, nil
+	})
 }

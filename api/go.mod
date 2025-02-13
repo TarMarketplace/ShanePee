@@ -3,6 +3,7 @@ module shanepee.com/api
 go 1.23.3
 
 require (
+	github.com/danielgtaylor/huma/v2 v2.28.0
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-contrib/sessions v1.0.2
 	github.com/gin-gonic/gin v1.10.0

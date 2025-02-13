@@ -1,14 +1,14 @@
 package handler
 
 import (
+	"context"
+	"errors"
 	"net/http"
 
-	"strconv"
-
+	"github.com/danielgtaylor/huma/v2"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"shanepee.com/api/apperror"
 	"shanepee.com/api/domain"
+	"shanepee.com/api/dto"
 	"shanepee.com/api/service"
 )
 
@@ -22,119 +22,107 @@ func NewArtToyHandler(artToySvc service.ArtToyService) ArtToyHandler {
 	}
 }
 
-// @Summary     Create Art toy
-// @Description Create a new art toy record
-// @Tags        Art toy
-// @Produce     json
-// @Param       body body     domain.ArtToyCreateBody true "body of Art toy to be created"
-// @Success     200  {object} domain.ArtToy
-// @Failure     401  {object} ErrorResponse
-// @Failure     400  {object} ErrorResponse
-// @Router      /v1/art-toy [post]
-func (h *ArtToyHandler) CreateArtToy(c *gin.Context) {
-	var body domain.ArtToyCreateBody
-	if err := c.ShouldBind(&body); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid body"))
-		return
-	}
-	var userId int64
-	session := sessions.Default(c)
-	id := session.Get(userIdSessionKey)
-	if id == nil {
-		handleError(c, apperror.ErrUnauthorized("Authentication required"))
-		return
-	}
-	userId = id.(int64)
-	artToy := domain.NewArtToy(body.Name, body.Description, body.Price, body.Photo, userId)
-	err := h.artToySvc.CreateArtToy(c, artToy)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-	c.JSON(http.StatusOK, artToy)
+type CreateArtToyInput struct {
+	Body dto.ArtToyCreateBody
 }
 
-// @Summary     Update Art toy
-// @Description Update an existing art toy by ID
-// @Tags        Art toy
-// @Accept      json
-// @Produce     json
-// @Param       id   path     int64                   true "io of the art toy to update"
-// @Param       body body     domain.ArtToyUpdateBody true "updated art toy data"
-// @Success     200  {object} domain.ArtToy
-// @Failure     400  {object} ErrorResponse
-// @Failure     404  {object} ErrorResponse
-// @Router      /v1/art-toy/{id} [put]
-func (h *ArtToyHandler) UpdateArtToy(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
-	if err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid ID"))
-		return
-	}
-
-	var updateBody domain.ArtToyUpdateBody
-	if err := c.ShouldBindJSON(&updateBody); err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid request body"))
-		return
-	}
-
-	session := sessions.Default(c)
-	ownerID := session.Get(userIdSessionKey)
-	if ownerID == nil {
-		handleError(c, apperror.ErrUnauthorized("Authentication required"))
-		return
-	}
-
-	updatedArtToy, appError := h.artToySvc.UpdateArtToy(c, id, &updateBody, ownerID.(int64))
-	if appError != nil {
-		handleError(c, appError)
-		return
-	}
-
-	c.JSON(http.StatusOK, updatedArtToy)
-}
-
-// @Summary     Get Art Toys
-// @Description Get all art toys
-// @Tags        Art toy
-// @Accept      json
-// @Produce     json
-// @Success     200 {object} domain.ArrayResponse{data=[]domain.ArtToy}
-// @Failure     400 {object} ErrorResponse
-// @Failure     404 {object} ErrorResponse
-// @Router      /v1/art-toy [get]
-func (h *ArtToyHandler) GetArtToys(c *gin.Context) {
-	data, appError := h.artToySvc.GetArtToys(c)
-	if appError != nil {
-		handleError(c, appError)
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
+func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "create-art-toy",
+		Method:      http.MethodPost,
+		Path:        "/v1/art-toy",
+		Tags:        []string{"Art toy"},
+		Summary:     "Create Art toy",
+		Description: "Create a new art toy record",
+	}, func(ctx context.Context, i *CreateArtToyInput) (*domain.ArtToy, error) {
+		session := ctx.Value(defaultSessionKey).(sessions.Session)
+		var userId int64
+		id := session.Get(userIdSessionKey)
+		if id == nil {
+			return nil, huma.Error401Unauthorized("Authentication required")
+		}
+		userId = id.(int64)
+		artToy := domain.NewArtToy(i.Body.Name, i.Body.Description, i.Body.Price, i.Body.Photo, userId)
+		err := h.artToySvc.CreateArtToy(ctx, artToy)
+		if err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return artToy, nil
 	})
 }
 
-// @Summary     Get Art Toy by ID
-// @Description Get art toy by id
-// @Tags        Art toy
-// @Accept      json
-// @Produce     json
-// @Param       id  path     int true "id of art toy to be retrieved"
-// @Success     200 {object} domain.ArtToy
-// @Failure     400 {object} ErrorResponse
-// @Failure     404 {object} ErrorResponse
-// @Router      /v1/art-toy/{id} [get]
-func (h *ArtToyHandler) GetArtToyById(c *gin.Context) {
-	artToyId, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		handleError(c, apperror.ErrBadRequest("Invalid art toy id"))
-		return
-	}
-	data, appError := h.artToySvc.GetArtToyById(c, artToyId)
-	if appError != nil {
-		handleError(c, appError)
-		return
-	}
-	c.JSON(http.StatusOK, data)
+type UpdateArtToyInput struct {
+	ID   int64 `path:"id"`
+	Body dto.ArtToyUpdateBody
+}
+
+func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "update-art-toy",
+		Method:      http.MethodPut,
+		Path:        "/v1/art-toy/{id}",
+		Tags:        []string{"Art toy"},
+		Summary:     "Update Art toy",
+		Description: "Update an existing art toy by ID",
+	}, func(ctx context.Context, i *UpdateArtToyInput) (*domain.ArtToy, error) {
+		session := ctx.Value(defaultSessionKey).(sessions.Session)
+		ownerID := session.Get(userIdSessionKey)
+		if ownerID == nil {
+			return nil, huma.Error401Unauthorized("Authentication required")
+		}
+
+		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), ownerID.(int64))
+		if err != nil {
+			// TODO: find what can cause error
+			return nil, ErrIntervalServerError
+		}
+
+		return updatedArtToy, nil
+	})
+}
+
+type GetArtToysOutput struct {
+	Body dto.ArrayResponse[domain.ArtToy]
+}
+
+func (h *ArtToyHandler) RegisterGetArtToys(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "get-art-toys",
+		Method:      http.MethodGet,
+		Path:        "/v1/art-toy",
+		Tags:        []string{"Art toy"},
+		Summary:     "Get Art Toys",
+		Description: "Get art toys",
+	}, func(ctx context.Context, i *struct{}) (*GetArtToysOutput, error) {
+		data, err := h.artToySvc.GetArtToys(ctx)
+		if err != nil {
+			return nil, ErrIntervalServerError
+		}
+		return &GetArtToysOutput{
+			Body: dto.ArrayResponse[domain.ArtToy]{
+				Data: data,
+			},
+		}, nil
+	})
+}
+
+type GetArtToyByIdInput struct {
+	Id int `path:"id"`
+}
+
+func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "get-art-toy-by-id",
+		Method:      http.MethodGet,
+		Path:        "/v1/art-toy/{id}",
+		Tags:        []string{"Art toy"},
+		Summary:     "Get Art Toy by ID",
+		Description: "Get art toy by id",
+	}, func(ctx context.Context, i *GetArtToyByIdInput) (*domain.ArtToy, error) {
+		data, err := h.artToySvc.GetArtToyById(ctx, int64(i.Id))
+		if errors.Is(err, domain.ErrArtToyNotFound) {
+			return nil, huma.Error404NotFound(err.Error())
+		}
+		return data, nil
+	})
 }

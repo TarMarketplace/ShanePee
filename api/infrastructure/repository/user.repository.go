@@ -16,7 +16,7 @@ func (a *userRepositoryImpl) CreateUser(ctx context.Context, user *domain.User) 
 	return a.db.Create(user).Error
 }
 
-func (u *userRepositoryImpl) UpdateUser(ctx context.Context, id int64, user domain.UserUpdateBody) error {
+func (u *userRepositoryImpl) UpdateUser(ctx context.Context, id int64, user map[string]any) error {
 	if err := u.db.Model(domain.User{}).Where("id = ?", id).Updates(user).Error; err != nil {
 		return err
 	}

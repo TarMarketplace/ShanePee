@@ -9,7 +9,9 @@ package main
 import (
 	"shanepee.com/api/config"
 	"shanepee.com/api/infrastructure/email"
-	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/infrastructure/handler/arttoy"
+	"shanepee.com/api/infrastructure/handler/auth"
+	"shanepee.com/api/infrastructure/handler/user"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
 	"shanepee.com/api/service"
@@ -30,12 +32,12 @@ func InitializeApp() (App, error) {
 	emailSender := email.NewEmailSender(configConfig)
 	authService := service.NewAuthService(userRepository, emailSender)
 	options := session.NewOptions(configConfig)
-	authHandler := handler.NewAuthHandler(authService, options)
+	authHandler := auth.NewHandler(authService, options)
 	userService := service.NewUserService(userRepository)
-	userHandler := handler.NewUserHandler(userService)
+	userHandler := user.NewHandler(userService)
 	artToyRepository := repository.NewArtToyRepository(db)
 	artToyService := service.NewArtToyService(artToyRepository)
-	artToyHandler := handler.NewArtToyHandler(artToyService)
+	artToyHandler := arttoy.NewHandler(artToyService)
 	store := session.NewStore(configConfig, options, db)
 	app := NewApp(authHandler, userHandler, artToyHandler, configConfig, store)
 	return app, nil

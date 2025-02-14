@@ -7,3 +7,7 @@ var (
 	ErrForbidden              = huma.Error403Forbidden("Forbidden")
 	ErrIntervalServerError    = huma.Error500InternalServerError("Internal server error")
 )
+
+type ArrayResponse[T any] struct {
+	Data []*T `json:"data"`
+}

@@ -3,18 +3,20 @@ package main
 import (
 	"github.com/gin-contrib/sessions"
 	"shanepee.com/api/config"
-	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/infrastructure/handler/arttoy"
+	"shanepee.com/api/infrastructure/handler/auth"
+	"shanepee.com/api/infrastructure/handler/user"
 )
 
 type App struct {
-	authHdr      handler.AuthHandler
-	userHdr      handler.UserHandler
-	artToyHdr    handler.ArtToyHandler
+	authHdr      auth.AuthHandler
+	userHdr      user.UserHandler
+	artToyHdr    arttoy.ArtToyHandler
 	cfg          config.Config
 	sessionStore sessions.Store
 }
 
-func NewApp(authHdr handler.AuthHandler, userHdr handler.UserHandler, artToyHdr handler.ArtToyHandler, cfg config.Config, sessionStore sessions.Store) App {
+func NewApp(authHdr auth.AuthHandler, userHdr user.UserHandler, artToyHdr arttoy.ArtToyHandler, cfg config.Config, sessionStore sessions.Store) App {
 	return App{
 		authHdr,
 		userHdr,

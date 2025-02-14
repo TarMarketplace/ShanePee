@@ -7,7 +7,9 @@ import (
 	"github.com/google/wire"
 	"shanepee.com/api/config"
 	"shanepee.com/api/infrastructure/email"
-	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/infrastructure/handler/arttoy"
+	"shanepee.com/api/infrastructure/handler/auth"
+	"shanepee.com/api/infrastructure/handler/user"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
 	"shanepee.com/api/service"
@@ -19,9 +21,9 @@ func InitializeApp() (App, error) {
 		service.NewArtToyService,
 		repository.NewUserRepository,
 		repository.NewArtToyRepository,
-		handler.NewAuthHandler,
-		handler.NewUserHandler,
-		handler.NewArtToyHandler,
+		auth.NewHandler,
+		user.NewHandler,
+		arttoy.NewHandler,
 		service.NewAuthService,
 		repository.NewDB,
 		config.LoadConfig,

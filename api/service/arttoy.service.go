@@ -18,7 +18,9 @@ type artToyServiceImpl struct {
 }
 
 func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
-	return &artToyServiceImpl{artToyRepo: artToyRepo}
+	return &artToyServiceImpl{
+		artToyRepo,
+	}
 }
 
 var _ ArtToyService = &artToyServiceImpl{}

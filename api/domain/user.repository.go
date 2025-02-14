@@ -2,11 +2,7 @@ package domain
 
 import (
 	"context"
-	"errors"
 )
-
-var ErrUserNotFound error = errors.New("user not found")
-var ErrPasswordChangeRequestNotFound error = errors.New("password change request not found")
 
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *User) error

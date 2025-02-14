@@ -2,10 +2,12 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type ChangePasswordBody struct {
@@ -28,6 +30,9 @@ func (h *AuthHandler) RegisterChangePassword(api huma.API) {
 		Description: "Change password of a user using token and request id",
 	}, func(ctx context.Context, i *ChangePasswordInput) (*struct{}, error) {
 		if err := h.authSvc.ChangePassword(ctx, i.Body.RequestID, i.Body.Token, i.Body.NewPassword); err != nil {
+			if errors.Is(err, service.ErrInvalidToken) {
+				return nil, handler.ErrInvalidToken
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -28,7 +29,9 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 		}
 
 		data, err := h.authSvc.GetUserByID(ctx, *userId)
-		if err != nil {
+		if errors.Is(err, domain.ErrUserNotFound) {
+			return nil, handler.ErrUserNotFound
+		} else if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetMeOutput{

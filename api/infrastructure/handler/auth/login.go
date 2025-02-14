@@ -2,11 +2,13 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type LoginBody struct {
@@ -33,7 +35,10 @@ func (h *AuthHandler) RegisterLogin(api huma.API) {
 	}, func(ctx context.Context, i *LoginInput) (*LoginOutput, error) {
 		data, err := h.authSvc.Login(ctx, i.Body.Email, i.Body.Password)
 		if err != nil {
-			return nil, handler.ErrForbidden
+			if errors.Is(err, service.ErrIncorrectCredential) {
+				return nil, handler.ErrIncorrectCredential
+			}
+			return nil, handler.ErrIntervalServerError
 		}
 
 		session := handler.GetSession(ctx)

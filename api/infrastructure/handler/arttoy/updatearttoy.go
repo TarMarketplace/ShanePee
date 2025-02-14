@@ -2,6 +2,7 @@ package arttoy
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -41,8 +42,9 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		}
 
 		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), *userId)
-		if err != nil {
-			// TODO: find what can cause error
+		if errors.Is(err, domain.ErrArtToyNotFound) {
+			return nil, handler.ErrArtToyNotFound
+		} else if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}
 

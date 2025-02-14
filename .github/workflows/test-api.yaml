@@ -66,6 +66,8 @@ jobs:
 
       - name: Build
         run: make docs
+        env:
+          APP_CORS_ALLOW_ORIGINS: http://localhost
         working-directory: api
 
       - name: Check openapi is up to date

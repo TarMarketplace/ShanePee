@@ -13,6 +13,7 @@ import { env } from '@/env'
 import { imageLoader } from '@/utils/image-loader'
 
 import { ProductForm } from '../_components/product-form'
+import { updateArtToy } from '@/generated/api'
 
 const productFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -28,7 +29,7 @@ export type ProductFormSchema = z.infer<typeof productFormSchema>
 interface ProductContainerProps {
   id?: number
   defaultValues?: Omit<ProductFormSchema, 'image'>
-  defaultImage?: string
+  defaultImage?: string | null
 }
 
 export function ProductFormContainer({

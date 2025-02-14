@@ -4,3 +4,5 @@ pnpm-lock.yaml
 .prettierignore
 .npmrc
 .nvmrc
+
+src/generated/**/*

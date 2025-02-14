@@ -78,7 +78,7 @@ export function ProductFormContainer({
       const imageAsBase64 = reader.result as string
 
       const response = await fetch(
-        `${env.NEXT_PUBLIC_BASE_API_URL}/art-toy` + (id ? `/${id}` : ''),
+        `${env.NEXT_PUBLIC_BASE_API_URL}/v1/art-toy` + (id ? `/${id}` : ''),
         {
           method: id ? 'PUT' : 'POST',
           headers: {

@@ -1,7 +1,8 @@
 import { env } from '@/env'
-import { client } from '@/generated/api/client.gen'
+import type { CreateClientConfig } from '@/generated/api/client.gen'
 
-client.setConfig({
+export const createClientConfig: CreateClientConfig = (config) => ({
+  ...config,
   baseUrl: env.NEXT_PUBLIC_BASE_API_URL,
   credentials: 'include',
 })

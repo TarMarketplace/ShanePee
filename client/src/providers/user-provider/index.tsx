@@ -21,7 +21,7 @@ function UserProvider({ children }: { children?: React.ReactNode }) {
     const fetchUser = async () => {
       try {
         const response = await fetch(
-          `${env.NEXT_PUBLIC_BASE_API_URL}/auth/me`,
+          `${env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/me`,
           {
             headers: {
               'Content-Type': 'application/json',

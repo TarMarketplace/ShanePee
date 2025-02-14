@@ -2,7 +2,7 @@ include Makefile.inc
 
 SRCS          := $(shell find . -type f -name '*.go')
 
-HANDLERS      := $(shell find infrastructure/handler -type f -name '*.handler.go')
+HANDLERS      := $(shell find infrastructure/handler -type f -name 'handler.go')
 EMAIL         := $(shell find infrastructure/email -type f -name '*.go')
 DOMAINS       := $(shell find domain -type f -name '*.go')
 

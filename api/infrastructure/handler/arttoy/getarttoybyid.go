@@ -8,6 +8,7 @@ import (
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type GetArtToyByIdInput struct {
@@ -28,9 +29,11 @@ func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
 		Description: "Get art toy by id",
 	}, func(ctx context.Context, i *GetArtToyByIdInput) (*GetArtToyByIdOutput, error) {
 		data, err := h.artToySvc.GetArtToyById(ctx, int64(i.Id))
-		if errors.Is(err, domain.ErrArtToyNotFound) {
-			return nil, handler.ErrArtToyNotFound
-		} else if err != nil {
+
+		if err != nil {
+			if errors.Is(err, service.ErrArtToyNotFound) {
+				return nil, handler.ErrArtToyNotFound
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetArtToyByIdOutput{

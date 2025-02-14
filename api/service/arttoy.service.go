@@ -6,6 +6,10 @@ import (
 	"shanepee.com/api/domain"
 )
 
+var (
+	ErrArtToyNotFound error = domain.ErrArtToyNotFound
+)
+
 type ArtToyService interface {
 	CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerId int64) (*domain.ArtToy, error)
 	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)

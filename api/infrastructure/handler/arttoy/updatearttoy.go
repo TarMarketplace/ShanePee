@@ -8,6 +8,7 @@ import (
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type ArtToyUpdateBody struct {
@@ -42,9 +43,10 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		}
 
 		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), *userId)
-		if errors.Is(err, domain.ErrArtToyNotFound) {
-			return nil, handler.ErrArtToyNotFound
-		} else if err != nil {
+		if err != nil {
+			if errors.Is(err, service.ErrArtToyNotFound) {
+				return nil, handler.ErrArtToyNotFound
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 

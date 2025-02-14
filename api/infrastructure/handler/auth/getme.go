@@ -29,9 +29,10 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 		}
 
 		data, err := h.authSvc.GetUserByID(ctx, *userId)
-		if errors.Is(err, domain.ErrUserNotFound) {
-			return nil, handler.ErrUserNotFound
-		} else if err != nil {
+		if err != nil {
+			if errors.Is(err, domain.ErrUserNotFound) {
+				return nil, handler.ErrUserNotFound
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetMeOutput{

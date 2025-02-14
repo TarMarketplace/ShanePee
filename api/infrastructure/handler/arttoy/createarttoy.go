@@ -37,8 +37,7 @@ func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 		if userId == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		artToy := domain.NewArtToy(i.Body.Name, i.Body.Description, i.Body.Price, i.Body.Photo, *userId)
-		err := h.artToySvc.CreateArtToy(ctx, artToy)
+		artToy, err := h.artToySvc.CreateArtToy(ctx, i.Body.Name, i.Body.Description, i.Body.Price, i.Body.Photo, *userId)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

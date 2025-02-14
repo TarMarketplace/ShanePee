@@ -7,7 +7,7 @@ import (
 )
 
 type ArtToyService interface {
-	CreateArtToy(ctx context.Context, artToy *domain.ArtToy) error
+	CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerId int64) (*domain.ArtToy, error)
 	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
 	GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, error)
@@ -25,12 +25,13 @@ func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
 
 var _ ArtToyService = &artToyServiceImpl{}
 
-func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) error {
+func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerId int64) (*domain.ArtToy, error) {
+	artToy := domain.NewArtToy(name, description, price, photo, ownerId)
 	err := s.artToyRepo.CreateArtToy(ctx, artToy)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return artToy, nil
 }
 
 func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error) {

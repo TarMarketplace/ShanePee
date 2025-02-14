@@ -21,6 +21,10 @@ function UserProvider({ children }: { children?: React.ReactNode }) {
     const fetchUser = async () => {
       try {
         const { response, data } = await me()
+        if (!data) {
+          toast.error('Something went wrong')
+          return
+        }
         if (response.ok) {
           setUser(data)
         }

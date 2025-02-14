@@ -10,7 +10,7 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
-import { env } from '@/env'
+import { login } from '@/generated/api'
 
 import { LoginForm } from '../_components/login-form'
 
@@ -42,25 +42,21 @@ export function LoginContainer({
   })
 
   const onSubmit: SubmitHandler<LoginFormSchema> = async (data) => {
-    const response = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
+    const {
+      data: user,
+      response,
+      error,
+    } = await login({
+      body: {
         email: data.email,
         password: data.password,
-      }),
+      },
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
+      toast.error(error?.detail)
       return
     }
-
-    const user = await response.json()
 
     if (!user) {
       toast.error('Something went wrong')

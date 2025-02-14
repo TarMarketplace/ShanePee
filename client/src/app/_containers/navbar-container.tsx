@@ -8,7 +8,7 @@ import { Navbar } from '@/components/navbar'
 
 import { useUser } from '@/providers/user-provider'
 
-import { env } from '@/env'
+import { logout } from '@/generated/api'
 
 const NavbarContainer = () => {
   const router = useRouter()
@@ -16,16 +16,7 @@ const NavbarContainer = () => {
   const [search, setSearch] = useState('')
 
   const handleLogout = async () => {
-    const response = await fetch(
-      `${env.NEXT_PUBLIC_BASE_API_URL}/auth/logout`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }
-    )
+    const { response } = await logout()
 
     if (response.ok) {
       setUser(null)

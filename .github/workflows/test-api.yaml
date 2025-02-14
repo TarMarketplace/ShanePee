@@ -34,9 +34,6 @@ jobs:
         run: go mod download
         working-directory: api
 
-      - name: Install swag
-        run: go install github.com/swaggo/swag/cmd/swag@v1.16.4
-
       - name: Install wire
         run: go install github.com/google/wire/cmd/wire@v0.6.0
 
@@ -47,3 +44,29 @@ jobs:
       - name: Test with the Go CLI
         run: go test -v ./...
         working-directory: api
+
+  test-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.3'
+          cache-dependency-path: api/go.sum
+
+      - name: Install dependencies
+        run: go mod download
+        working-directory: api
+
+      - name: Install wire
+        run: go install github.com/google/wire/cmd/wire@v0.6.0
+
+      - name: Build
+        run: make docs
+        working-directory: api
+
+      - name: Check openapi is up to date
+        run: git diff --exit-code -- api/docs/openapi.json

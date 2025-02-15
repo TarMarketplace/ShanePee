@@ -13,13 +13,16 @@
     "test": "vitest --no-watch",
     "watch": "vitest",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "openapi-ts": "openapi-ts"
   },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=8.0.0"
   },
   "dependencies": {
+    "@hey-api/client-fetch": "^0.8.1",
+    "@hey-api/client-next": "^0.2.1",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-dropdown-menu": "^2.1.5",
     "@radix-ui/react-label": "^2.1.2",
@@ -47,6 +50,7 @@
     "@eslint/compat": "^1.2.5",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@hey-api/openapi-ts": "^0.64.4",
     "@iconify/react": "^5.2.0",
     "@storybook/addon-essentials": "^8.5.2",
     "@storybook/addon-interactions": "^8.5.2",

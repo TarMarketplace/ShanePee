@@ -1,15 +1,14 @@
-import { env } from 'process'
+import { getArtToyById } from '@/generated/api'
 
 const getProduct = async (id: string) => {
-  const response = await fetch(
-    `${env.NEXT_PUBLIC_BASE_API_URL}/art-toy/${id}`,
-    {
-      cache: 'no-cache',
-    }
-  )
+  const { data, response } = await getArtToyById({
+    path: {
+      id: parseInt(id),
+    },
+    cache: 'no-cache',
+  })
 
   if (response.ok) {
-    const data = await response.json()
     return data
   } else {
     return null

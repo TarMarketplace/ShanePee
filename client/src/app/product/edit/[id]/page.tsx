@@ -1,17 +1,15 @@
-import { env } from 'process'
+import { getArtToyById } from '@/generated/api'
 
 import { ProductFormContainer } from '../../_containers/product-form-container'
 
 const getProduct = async (id: string) => {
-  const response = await fetch(
-    `${env.NEXT_PUBLIC_BASE_API_URL}/art-toy/${id}`,
-    {
-      cache: 'no-cache',
-    }
-  )
+  const { response, data } = await getArtToyById({
+    path: {
+      id: parseInt(id),
+    },
+  })
 
   if (response.ok) {
-    const data = await response.json()
     return data
   } else {
     return null

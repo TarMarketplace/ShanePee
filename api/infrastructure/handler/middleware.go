@@ -11,7 +11,7 @@ type ContextKey string
 
 const (
 	ContextSessionKey ContextKey = "__session"
-	UserIdSessionKey  ContextKey = "user_id"
+	UserIdSessionKey  string     = "user_id"
 )
 
 // Huma abstract over api framework so, it not easy to get

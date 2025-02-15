@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 
 import type { User } from '@/types/users'
 
-import { env } from '@/env'
+import { me } from '@/generated/api'
 
 export interface UserData {
   user: User | null
@@ -20,18 +20,12 @@ function UserProvider({ children }: { children?: React.ReactNode }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          `${env.NEXT_PUBLIC_BASE_API_URL}/auth/me`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          }
-        )
-
+        const { response, data } = await me()
+        if (!data) {
+          toast.error('Something went wrong')
+          return
+        }
         if (response.ok) {
-          const data = await response.json()
           setUser(data)
         }
       } catch {

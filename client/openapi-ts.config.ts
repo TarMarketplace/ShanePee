@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     {
       name: '@hey-api/client-next',
-      runtimeConfigPath: './src/lib/apiClient.ts',
+      runtimeConfigPath: './src/lib/api-client.ts',
     },
   ],
 })

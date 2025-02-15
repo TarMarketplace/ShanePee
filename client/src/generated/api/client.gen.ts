@@ -2,7 +2,7 @@
 
 import type { ClientOptions } from './types.gen';
 import { type Config, type ClientOptions as DefaultClientOptions, createClient, createConfig } from '@hey-api/client-next';
-import { createClientConfig } from '../../lib/apiClient';
+import { createClientConfig } from '../../lib/api-client';
 
 /**
  * The `createClientConfig()` function will be called on client initialization

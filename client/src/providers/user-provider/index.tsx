@@ -10,6 +10,7 @@ import { me } from '@/generated/api'
 export interface UserData {
   user: User | null
   setUser: (user: User | null) => void
+  fetchUser: () => void
 }
 
 const UserContext = createContext<UserData | undefined>(undefined)
@@ -17,22 +18,22 @@ const UserContext = createContext<UserData | undefined>(undefined)
 function UserProvider({ children }: { children?: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { response, data } = await me()
-        if (!data) {
-          toast.error('Something went wrong')
-          return
-        }
-        if (response.ok) {
-          setUser(data)
-        }
-      } catch {
+  const fetchUser = async () => {
+    try {
+      const { response, data } = await me()
+      if (!data) {
         toast.error('Something went wrong')
+        return
       }
+      if (response.ok) {
+        setUser(data)
+      }
+    } catch {
+      toast.error('Something went wrong')
     }
+  }
 
+  useEffect(() => {
     fetchUser()
   }, [])
 
@@ -41,6 +42,7 @@ function UserProvider({ children }: { children?: React.ReactNode }) {
       value={{
         user,
         setUser,
+        fetchUser,
       }}
     >
       {children}

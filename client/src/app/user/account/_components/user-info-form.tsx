@@ -57,7 +57,7 @@ export function UserInfoForm({
             </button>
           </div>
           <div className='grid w-full grid-cols-2 gap-4 md:grid-cols-6'>
-            <div className='col-span-2 md:col-span-6'>
+            {/* <div className='col-span-2 md:col-span-6'>
               <FormField
                 control={form.control}
                 name='username'
@@ -71,8 +71,28 @@ export function UserInfoForm({
                   </FormItem>
                 )}
               />
+            </div> */}
+            <div className='col-span-2 md:col-span-6'>
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>อีเมล</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder='example@gmail.com'
+                        type='email'
+                        readOnly
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <div className='col-span-1 md:col-span-2'>
+            <div className='col-span-1 md:col-span-3'>
               <FormField
                 control={form.control}
                 name='name'
@@ -87,7 +107,7 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-1 md:col-span-2'>
+            <div className='col-span-1 md:col-span-3'>
               <FormField
                 control={form.control}
                 name='surname'
@@ -96,52 +116,6 @@ export function UserInfoForm({
                     <FormLabel>นามสกุล</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder='กรุณากรอกนามสกุล' />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className='col-span-2'>
-              <FormField
-                control={form.control}
-                name='gender'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>เพศ</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='กรุณาเลือก' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value='MALE'>ชาย</SelectItem>
-                        <SelectItem value='FEMALE'>หญิง</SelectItem>
-                        <SelectItem value='OTHER'>ไม่ระบุ</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className='col-span-2 md:col-span-3'>
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>อีเมล</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder='example@gmail.com'
-                        type='email'
-                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -168,6 +142,30 @@ export function UserInfoForm({
                         value={formatPhoneNumber(field.value)}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className='col-span-3'>
+              <FormField
+                control={form.control}
+                name='gender'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>เพศ</FormLabel>
+                    <Select onValueChange={field.onChange} {...field}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='กรุณาเลือก' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value='MALE'>ชาย</SelectItem>
+                        <SelectItem value='FEMALE'>หญิง</SelectItem>
+                        <SelectItem value='OTHER'>ไม่ระบุ</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

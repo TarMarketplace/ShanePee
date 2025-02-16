@@ -9,7 +9,7 @@ interface SidebarProps {
   onLogout: () => void
 }
 
-export default function Sidebar({ isOpen, setIsOpen, onLogout }: SidebarProps) {
+export function Sidebar({ isOpen, setIsOpen, onLogout }: SidebarProps) {
   const handleBackdropClick = () => {
     setIsOpen(false)
   }

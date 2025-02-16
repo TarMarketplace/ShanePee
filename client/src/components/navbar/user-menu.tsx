@@ -12,7 +12,7 @@ import { Text } from '@/components/text'
 
 import type { User } from '@/types/users'
 
-import Sidebar from '../side-menu'
+import { Sidebar } from '../side-menu'
 
 interface UserMenuProps {
   user: User | null

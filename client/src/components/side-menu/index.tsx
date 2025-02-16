@@ -1,6 +1,6 @@
 'use client'
 
-import { Icon } from '@iconify/react';
+import { Icon } from '@iconify/react'
 import Link from 'next/link'
 
 interface SidebarProps {
@@ -28,7 +28,7 @@ export function Sidebar({ isOpen, setIsOpen, onLogout }: SidebarProps) {
       )}
 
       <div
-        className={`fixed right-0 top-0 z-50 h-full w-64 bg-white shadow-lg transition-transform duration-300${isOpen ? 'translate-x-0' : 'translate-x-full'} md:static md:translate-x-0`}
+        className={`fixed right-0 top-0 z-50 h-full w-64 bg-white shadow-lg transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'} md:static md:translate-x-0`}
       >
         <Icon
           icon='material-symbols:close-rounded'

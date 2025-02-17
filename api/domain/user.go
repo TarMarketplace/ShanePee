@@ -10,7 +10,7 @@ type User struct {
 	Tel           *string       `json:"tel" example:"0988888888"`
 	Address       Address       `gorm:"embedded" json:"address"`
 	PaymentMethod PaymentMethod `gorm:"embedded" json:"payment_method"`
-	Photo         *string       `json:"photo"`
+	Photo         *string       `json:"photo" nullable:"true" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
 }
 
 type Address struct {

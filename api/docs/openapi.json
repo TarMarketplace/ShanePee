@@ -595,6 +595,15 @@
               "string",
               "null"
             ]
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "required": [
@@ -605,7 +614,8 @@
           "gender",
           "tel",
           "address",
-          "payment_method"
+          "payment_method",
+          "photo"
         ],
         "type": "object"
       },
@@ -653,6 +663,12 @@
           "tel": {
             "examples": [
               "0988888888"
+            ],
+            "type": "string"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
             ],
             "type": "string"
           }

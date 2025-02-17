@@ -1,26 +1,26 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
 	"log"
 	"net/http"
 	"os"
+	"path"
 
+	"github.com/danielgtaylor/huma/v2"
+	"github.com/danielgtaylor/huma/v2/adapters/humagin"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"shanepee.com/api/infrastructure/handler"
 
 	"github.com/gin-contrib/cors"
 	"github.com/joho/godotenv"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-
-	"shanepee.com/api/docs"
 )
 
-// @title       Shanepee API
-// @version     0.0
-// @description Shanepee API
-//
-// @host        localhost:8080
+var cmd = flag.String("command", "server", "command to run")
+var openApiOutDir = flag.String("output", "./docs", "output openapi file")
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		if _, ok := err.(*os.PathError); ok {
@@ -36,7 +36,6 @@ func main() {
 	if app.cfg.Debug != "1" {
 		gin.SetMode(gin.ReleaseMode)
 	}
-	docs.SwaggerInfo.Host = app.cfg.ServerUrl
 
 	r := gin.Default()
 	corsConfig := cors.DefaultConfig()
@@ -44,32 +43,73 @@ func main() {
 	corsConfig.AllowCredentials = true
 	r.Use(cors.New(corsConfig))
 	r.Use(sessions.Sessions(app.cfg.Session.CookieName, app.sessionStore))
+	r.Use(handler.GetUserSession())
 
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")
 	})
 
-	v1 := r.Group("v1")
+	AddSwagger(r)
+	AddSpotlight(r)
+	AddScalar(r)
 
-	v1.POST("/auth/change-password", app.authHdr.ChangePassword)
-	v1.POST("/auth/login", app.authHdr.Login)
-	v1.POST("/auth/logout", app.authHdr.Logout)
-	v1.GET("/auth/me", app.authHdr.GetMe)
-	v1.POST("/auth/register", app.authHdr.Register)
-	v1.POST("/auth/password-change-requests", app.authHdr.CreatePasswordChangeRequests)
+	humaConfig := huma.DefaultConfig("Shanepee API", "0.0.0")
+	humaConfig.DocsPath = ""
+	api := humagin.New(r, humaConfig)
 
-	v1.PATCH("/user", app.userHdr.UpdateUser)
+	app.authHdr.RegisterChangePassword(api)
+	app.authHdr.RegisterLogin(api)
+	app.authHdr.RegisterLogout(api)
+	app.authHdr.RegisterGetMe(api)
+	app.authHdr.RegisterRegister(api)
+	app.authHdr.RegisterCreatePasswordChangeRequests(api)
 
-	v1.GET("/art-toy", app.artToyHdr.GetArtToys)
-	v1.POST("/art-toy", app.artToyHdr.CreateArtToy)
-	v1.GET("/art-toy/:id", app.artToyHdr.GetArtToyById)
-	v1.PUT("/art-toy/:id", app.artToyHdr.UpdateArtToy)
+	app.userHdr.UpdateUser(api)
 
-	if app.cfg.Debug == "1" {
-		v1.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
+	app.artToyHdr.RegisterGetArtToys(api)
+	app.artToyHdr.RegisterCreateArtToy(api)
+	app.artToyHdr.RegisterGetArtToyById(api)
+	app.artToyHdr.RegisterUpdateArtToy(api)
 
-	if err = r.Run(); err != nil {
-		log.Fatal(err)
+	flag.Parse()
+
+	if cmd == nil {
+		log.Fatal("Missing command")
+	} else if *cmd == "server" {
+		if err = r.Run(); err != nil {
+			log.Fatal(err)
+		}
+	} else if *cmd == "openapi" {
+		jsonData, err := api.OpenAPI().MarshalJSON()
+		if err != nil {
+			log.Fatal(err)
+		}
+		var remarshal any
+		err = json.Unmarshal(jsonData, &remarshal)
+		if err != nil {
+			log.Fatal(err)
+		}
+		prettied, err := json.MarshalIndent(remarshal, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		if openApiOutDir == nil {
+			log.Fatal("no output directory provide")
+		}
+		outDir := *openApiOutDir
+		oaiJsonPath := path.Join(outDir, "openapi.json")
+		jsonDocs, err := os.Create(oaiJsonPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if openApiOutDir == nil {
+			log.Fatal("unable to create json docs file")
+		}
+		defer jsonDocs.Close()
+
+		_, err = jsonDocs.Write(prettied)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

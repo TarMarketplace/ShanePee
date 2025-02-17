@@ -8,7 +8,7 @@ import { z } from 'zod'
 
 import { Text } from '@/components/text'
 
-import { env } from '@/env'
+import { register, updateUser } from '@/generated/api'
 
 import { RegisterStep1Form } from '../_components/register-step-1-form'
 import { RegisterStep2Form } from '../_components/register-step-2-form'
@@ -71,21 +71,16 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
   }
 
   const handleUpdateUserDetails = async (data: RegisterStep1FormSchema) => {
-    const res = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/user`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
+    const { response } = await updateUser({
+      body: {
         first_name: data.name,
         last_name: data.surname,
         gender: data.gender,
         tel: data.phone,
-      }),
+      },
     })
 
-    if (!res.ok) {
+    if (!response.ok) {
       toast.error('Cannot update user details, please try again')
       return
     }
@@ -94,19 +89,14 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
   const onSubmitStep2: SubmitHandler<RegisterStep2FormSchema> = async (
     data
   ) => {
-    const res = await fetch(`${env.NEXT_PUBLIC_BASE_API_URL}/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
+    const { response } = await register({
+      body: {
         email: data.email,
         password: data.password,
-      }),
+      },
     })
 
-    if (res.ok) {
+    if (response.ok) {
       toast.success('Registered successfully')
       await handleUpdateUserDetails(step1Form.getValues())
     } else {

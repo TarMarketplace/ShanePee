@@ -1,0 +1,1083 @@
+{
+  "components": {
+    "schemas": {
+      "Address": {
+        "additionalProperties": false,
+        "properties": {
+          "district": {
+            "examples": [
+              "Pathumwan"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "house_no": {
+            "examples": [
+              "254"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postcode": {
+            "examples": [
+              "10330"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "province": {
+            "examples": [
+              "Bangkok"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "house_no",
+          "district",
+          "province",
+          "postcode"
+        ],
+        "type": "object"
+      },
+      "ArrayResponseArtToy": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseArtToy.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ArtToy"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "ArtToy": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArtToy.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "availability": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner_id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "photo",
+          "availability",
+          "owner_id"
+        ],
+        "type": "object"
+      },
+      "ArtToyCreateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArtToyCreateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "description": {
+            "examples": [
+              "Delicious fish"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "examples": [
+              "Tuna"
+            ],
+            "type": "string"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "examples": [
+              55.55
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "price"
+        ],
+        "type": "object"
+      },
+      "ArtToyUpdateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArtToyUpdateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "availability": {
+            "examples": [
+              false
+            ],
+            "type": "boolean"
+          },
+          "description": {
+            "examples": [
+              "Delicious fish"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "examples": [
+              "Tuna"
+            ],
+            "type": "string"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "price": {
+            "examples": [
+              55.55
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "ChangePasswordBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ChangePasswordBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "new_password": {
+            "type": "string"
+          },
+          "request_id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "token",
+          "new_password"
+        ],
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "location": {
+            "description": "Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'",
+            "type": "string"
+          },
+          "message": {
+            "description": "Error message text",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value at the given location"
+          }
+        },
+        "type": "object"
+      },
+      "ErrorModel": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ErrorModel.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "detail": {
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "examples": [
+              "Property foo is required but is missing."
+            ],
+            "type": "string"
+          },
+          "errors": {
+            "description": "Optional list of individual error details",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "instance": {
+            "description": "A URI reference that identifies the specific occurrence of the problem.",
+            "examples": [
+              "https://example.com/error-log/abc123"
+            ],
+            "format": "uri",
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status code",
+            "examples": [
+              400
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "title": {
+            "description": "A short, human-readable summary of the problem type. This value should not change between occurrences of the error.",
+            "examples": [
+              "Bad Request"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "default": "about:blank",
+            "description": "A URI reference to human-readable documentation for the error.",
+            "examples": [
+              "https://example.com/errors/example"
+            ],
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "LoginBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/LoginBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "email": {
+            "examples": [
+              "johndoe@example.com"
+            ],
+            "type": "string"
+          },
+          "password": {
+            "examples": [
+              "VerySecurePassword"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object"
+      },
+      "PartialAddress": {
+        "additionalProperties": false,
+        "properties": {
+          "district": {
+            "examples": [
+              "Pathumwan"
+            ],
+            "type": "string"
+          },
+          "house_no": {
+            "examples": [
+              "254"
+            ],
+            "type": "string"
+          },
+          "postcode": {
+            "examples": [
+              "10330"
+            ],
+            "type": "string"
+          },
+          "province": {
+            "examples": [
+              "Bangkok"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PartialPaymentMethod": {
+        "additionalProperties": false,
+        "properties": {
+          "card_number": {
+            "examples": [
+              "4242424242424242"
+            ],
+            "type": "string"
+          },
+          "card_owner": {
+            "examples": [
+              "Freddy Mercury"
+            ],
+            "type": "string"
+          },
+          "cvv": {
+            "examples": [
+              "132"
+            ],
+            "type": "string"
+          },
+          "expire_date": {
+            "examples": [
+              "02/27"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PaymentMethod": {
+        "additionalProperties": false,
+        "properties": {
+          "card_number": {
+            "examples": [
+              "4242424242424242"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "card_owner": {
+            "examples": [
+              "Freddy Mercury"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cvv": {
+            "examples": [
+              "132"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expire_date": {
+            "examples": [
+              "02/27"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "card_number",
+          "expire_date",
+          "cvv",
+          "card_owner"
+        ],
+        "type": "object"
+      },
+      "RegisterBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/RegisterBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "email": {
+            "examples": [
+              "johndoe@example.com"
+            ],
+            "type": "string"
+          },
+          "password": {
+            "examples": [
+              "VerySecurePassword"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object"
+      },
+      "RequestPasswordChangeBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/RequestPasswordChangeBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "email": {
+            "examples": [
+              "johndoe@example.com"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "type": "object"
+      },
+      "User": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/User.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "email": {
+            "examples": [
+              "johndoe@example.com"
+            ],
+            "type": "string"
+          },
+          "first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "gender": {
+            "examples": [
+              "MALE"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "last_name": {
+            "examples": [
+              "Doe"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "payment_method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "tel": {
+            "examples": [
+              "0988888888"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "first_name",
+          "last_name",
+          "gender",
+          "tel",
+          "address",
+          "payment_method"
+        ],
+        "type": "object"
+      },
+      "UserUpdateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/UserUpdateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PartialAddress"
+          },
+          "first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": "string"
+          },
+          "gender": {
+            "enum": [
+              "MALE",
+              "FEMALE",
+              "OTHER"
+            ],
+            "examples": [
+              "MALE"
+            ],
+            "type": "string"
+          },
+          "last_name": {
+            "examples": [
+              "Doe"
+            ],
+            "type": "string"
+          },
+          "payment_method": {
+            "$ref": "#/components/schemas/PartialPaymentMethod"
+          },
+          "tel": {
+            "examples": [
+              "0988888888"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Shanepee API",
+    "version": "0.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/v1/art-toy": {
+      "get": {
+        "description": "Get art toys",
+        "operationId": "get-art-toys",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Art Toys",
+        "tags": [
+          "Art toy"
+        ]
+      },
+      "post": {
+        "description": "Create a new art toy record",
+        "operationId": "create-art-toy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtToyCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Create Art toy",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
+    "/v1/art-toy/{id}": {
+      "get": {
+        "description": "Get art toy by id",
+        "operationId": "get-art-toy-by-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Art Toy by ID",
+        "tags": [
+          "Art toy"
+        ]
+      },
+      "put": {
+        "description": "Update an existing art toy by ID",
+        "operationId": "update-art-toy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtToyUpdateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update Art toy",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
+    "/v1/auth/change-password": {
+      "post": {
+        "description": "Change password of a user using token and request id",
+        "operationId": "change-password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Change password",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "description": "Login",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Login User",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "description": "Logout",
+        "operationId": "logout",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Logout User",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/auth/me": {
+      "get": {
+        "description": "Get authenticated user from the session",
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get current authenticated user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/auth/password-change-requests": {
+      "post": {
+        "description": "Initiates a password reset process by sending an email with reset instructions",
+        "operationId": "password-change-requests",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestPasswordChangeBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Request a password reset",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "description": "Register",
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Register User",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/user": {
+      "patch": {
+        "description": "Update user by id",
+        "operationId": "update-user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update User",
+        "tags": [
+          "User"
+        ]
+      }
+    }
+  }
+}

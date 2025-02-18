@@ -78,7 +78,8 @@ jobs:
         working-directory: api
 
       - name: Check openapi is up to date
+        working-directory: api
         env:
-          OLD_DOCS_PATH: ${{ steps.old-docs.OLD_DOCS_PATH }}
+          OLD_DOCS_PATH: ${{ steps.old-docs.outputs.OLD_DOCS_PATH }}
         run: |
-          diff <(jq -S . "$OLD_DOCS_PATH") <(jq -S . docs/openapi.json)
+          diff <(jq -S . "$OLD_DOCS_PATH") <(jq -S . docs/openapi.json) && echo "Document file is updated."

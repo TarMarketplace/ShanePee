@@ -17,6 +17,7 @@ type AuthService interface {
 	RequestPasswordReset(ctx context.Context, email string) error
 	GetUserByID(ctx context.Context, id int64) (*domain.User, error)
 	ResetPassword(ctx context.Context, requestID int64, token string, newPassword string) error
+	ChangePassword(ctx context.Context, userID int64, oldPassword string, newPassword string) error
 }
 
 type EmailSender interface {
@@ -41,6 +42,7 @@ var (
 	ErrIncorrectCredential error = errors.New("Invalid email or password")
 	ErrInvalidToken        error = errors.New("Invalid token or request id")
 	ErrUserNotFound        error = domain.ErrUserNotFound
+	ErrInvalidOldPassword  error = errors.New("Invalid old password")
 )
 
 func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, error) {
@@ -159,4 +161,31 @@ func (s *authServiceImpl) GetUserByID(ctx context.Context, id int64) (*domain.Us
 		return nil, err
 	}
 	return user, nil
+}
+
+func (s *authServiceImpl) ChangePassword(ctx context.Context, userID int64, oldPassword string, newPassword string) error {
+	user, err := s.userRepo.FindUserByID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(oldPassword)); err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return ErrInvalidOldPassword
+		}
+		return err
+	}
+
+	passwordByte := []byte(newPassword)
+	hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+	hashStr := string(hash)
+	if err != nil {
+		return err
+	}
+
+	if err := s.userRepo.UpdateUserPasswordHash(ctx, userID, hashStr); err != nil {
+		return err
+	}
+
+	return nil
 }

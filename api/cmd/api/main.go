@@ -57,6 +57,7 @@ func main() {
 	humaConfig.DocsPath = ""
 	api := humagin.New(r, humaConfig)
 
+	app.authHdr.RegisterChangePassword(api)
 	app.authHdr.RegisterCreatePasswordResetRequests(api)
 	app.authHdr.RegisterLogin(api)
 	app.authHdr.RegisterLogout(api)

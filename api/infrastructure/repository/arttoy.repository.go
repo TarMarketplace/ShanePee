@@ -39,7 +39,7 @@ func (a *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtTo
 	return artToys, nil
 }
 
-func (a *artToyRepositoryImpl) FindArtToyById(ctx context.Context, id int64) (*domain.ArtToy, error) {
+func (a *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error) {
 	var artToy domain.ArtToy
 	if err := a.db.Where("id = ?", id).Take(&artToy).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

@@ -37,12 +37,12 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		Summary:     "Update Art toy",
 		Description: "Update an existing art toy by ID",
 	}, func(ctx context.Context, i *UpdateArtToyInput) (*UpdateArtToyOutput, error) {
-		userId := handler.GetUserID(ctx)
-		if userId == nil {
+		userID := handler.GetUserID(ctx)
+		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), *userId)
+		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound

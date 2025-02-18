@@ -24,12 +24,12 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 		Summary:     "Get current authenticated user",
 		Description: "Get authenticated user from the session",
 	}, func(ctx context.Context, i *struct{}) (*GetMeOutput, error) {
-		userId := handler.GetUserID(ctx)
-		if userId == nil {
+		userID := handler.GetUserID(ctx)
+		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		data, err := h.authSvc.GetUserByID(ctx, *userId)
+		data, err := h.authSvc.GetUserByID(ctx, *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrUserNotFound) {
 				return nil, handler.ErrUserNotFound

@@ -11,7 +11,7 @@ type ContextKey string
 
 const (
 	ContextSessionKey ContextKey = "__session"
-	UserIdSessionKey  string     = "user_id"
+	UserIDSessionKey  string     = "user_id"
 )
 
 // Huma abstract over api framework so, it not easy to get
@@ -46,10 +46,10 @@ func GetUserID(ctx context.Context) *int64 {
 	if session == nil {
 		return nil
 	}
-	id := session.Get(UserIdSessionKey)
+	id := session.Get(UserIDSessionKey)
 	if id == nil {
 		return nil
 	}
-	userId := id.(int64)
-	return &userId
+	userID := id.(int64)
+	return &userID
 }

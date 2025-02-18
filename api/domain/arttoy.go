@@ -7,11 +7,11 @@ type ArtToy struct {
 	Price        float64 `json:"price" gorm:"not null"`
 	Photo        *string `json:"photo" nullable:"true" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
 	Availability bool    `json:"availability" gorm:"not null"`
-	OwnerId      int64   `json:"owner_id" gorm:"not null"`
+	OwnerID      int64   `json:"owner_id" gorm:"not null"`
 	// TODO: add more fields about review, rating, etc.
 }
 
-func NewArtToy(name string, description string, price float64, photo *string, ownerId int64) *ArtToy {
+func NewArtToy(name string, description string, price float64, photo *string, ownerID int64) *ArtToy {
 	return &ArtToy{
 		ID:           GenID(),
 		Name:         name,
@@ -19,6 +19,6 @@ func NewArtToy(name string, description string, price float64, photo *string, ow
 		Price:        price,
 		Photo:        photo,
 		Availability: true,
-		OwnerId:      ownerId,
+		OwnerID:      ownerID,
 	}
 }

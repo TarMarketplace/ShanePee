@@ -587,18 +587,18 @@
           "payment_method": {
             "$ref": "#/components/schemas/PaymentMethod"
           },
-          "tel": {
+          "photo": {
             "examples": [
-              "0988888888"
+              "data:image/png;base64,mfkirjIDSFIj324if..."
             ],
             "type": [
               "string",
               "null"
             ]
           },
-          "photo": {
+          "tel": {
             "examples": [
-              "data:image/png;base64,mfkirjIDSFIj324if..."
+              "0988888888"
             ],
             "type": [
               "string",
@@ -660,15 +660,15 @@
           "payment_method": {
             "$ref": "#/components/schemas/PartialPaymentMethod"
           },
-          "tel": {
-            "examples": [
-              "0988888888"
-            ],
-            "type": "string"
-          },
           "photo": {
             "examples": [
               "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "tel": {
+            "examples": [
+              "0988888888"
             ],
             "type": "string"
           }

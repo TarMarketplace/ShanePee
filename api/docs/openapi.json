@@ -618,6 +618,15 @@
           "payment_method": {
             "$ref": "#/components/schemas/PaymentMethod"
           },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "tel": {
             "examples": [
               "0988888888"
@@ -636,7 +645,8 @@
           "gender",
           "tel",
           "address",
-          "payment_method"
+          "payment_method",
+          "photo"
         ],
         "type": "object"
       },
@@ -680,6 +690,12 @@
           },
           "payment_method": {
             "$ref": "#/components/schemas/PartialPaymentMethod"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
           },
           "tel": {
             "examples": [

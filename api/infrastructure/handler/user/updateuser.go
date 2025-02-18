@@ -26,6 +26,7 @@ type UserUpdateBody struct {
 	Tel           *string               `json:"tel,omitempty" example:"0988888888"`
 	Address       *PartialAddress       `json:"address,omitempty"`
 	PaymentMethod *PartialPaymentMethod `json:"payment_method,omitempty"`
+	Photo         *string               `json:"photo,omitempty" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
 }
 
 type PartialAddress struct {
@@ -99,6 +100,9 @@ func (b *UserUpdateBody) IntoMap() map[string]any {
 		if b.PaymentMethod.CardOwner != nil {
 			result["card_owner"] = b.PaymentMethod.CardOwner
 		}
+	}
+	if b.Photo != nil {
+		result["photo"] = b.Photo
 	}
 	return result
 }

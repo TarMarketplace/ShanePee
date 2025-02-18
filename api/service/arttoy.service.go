@@ -11,10 +11,10 @@ var (
 )
 
 type ArtToyService interface {
-	CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerId int64) (*domain.ArtToy, error)
+	CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error)
 	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
-	GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, error)
+	GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
 }
 
 type artToyServiceImpl struct {
@@ -29,8 +29,8 @@ func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
 
 var _ ArtToyService = &artToyServiceImpl{}
 
-func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerId int64) (*domain.ArtToy, error) {
-	artToy := domain.NewArtToy(name, description, price, photo, ownerId)
+func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error) {
+	artToy := domain.NewArtToy(name, description, price, photo, ownerID)
 	err := s.artToyRepo.CreateArtToy(ctx, artToy)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBo
 	if err != nil {
 		return nil, err
 	}
-	updatedArtToy, err := s.artToyRepo.FindArtToyById(ctx, id)
+	updatedArtToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +59,8 @@ func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, e
 	return artToys, nil
 }
 
-func (s *artToyServiceImpl) GetArtToyById(ctx context.Context, id int64) (*domain.ArtToy, error) {
-	artToy, err := s.artToyRepo.FindArtToyById(ctx, id)
+func (s *artToyServiceImpl) GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error) {
+	artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}

@@ -23,6 +23,8 @@ fmt:
 clean:
 	rm -rf out/* cmd/api/wire_gen.go docs
 
-docs: out/api
+docs: docs/openapi.json
+
+docs/openapi.json: out/api
 	mkdir -p docs
 	./out/api -command=openapi

@@ -13,7 +13,6 @@ const (
 
 type Order struct {
 	ID              int64       `json:"id" gorm:"primaryKey" example:"97"`
-	ArtToys         []int64     `json:"art_toys" gorm:"type:integer[]"` // array of art toy IDs
 	TrackingNumber  *string     `json:"tracking_number" example:"TH1234567890"`
 	DeliveryService *string     `json:"delivery_service" example:"Kerry Express"`
 	SellerId        int64       `json:"seller_id" gorm:"not null" example:"97"`
@@ -22,12 +21,25 @@ type Order struct {
 	CreatedAt       time.Time   `json:"created_at" gorm:"autoCreateTime" example:"2021-08-01T00:00:00Z"`
 }
 
+type OrderItem struct {
+	ID       int64 `json:"id" gorm:"primaryKey" example:"97"`
+	ArtToyId int64 `json:"art_toy_id" gorm:"not null" example:"97"`
+	OrderId  int64 `json:"order_id" gorm:"not null" example:"97"`
+}
+
 func NewOrder(artToys []int64, sellerId int64, buyerId int64) *Order {
 	return &Order{
 		ID:       GenID(),
-		ArtToys:  artToys,
 		SellerId: sellerId,
 		BuyerId:  buyerId,
-		Status:   "pending",
+		Status:   Pending,
+	}
+}
+
+func NewOrderItem(artToyId int64, orderId int64) *OrderItem {
+	return &OrderItem{
+		ID:       GenID(),
+		ArtToyId: artToyId,
+		OrderId:  orderId,
 	}
 }

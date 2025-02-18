@@ -8,6 +8,7 @@ import (
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type GetMeOutput struct {
@@ -30,7 +31,7 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 
 		data, err := h.authSvc.GetUserByID(ctx, *userId)
 		if err != nil {
-			if errors.Is(err, domain.ErrUserNotFound) {
+			if errors.Is(err, service.ErrUserNotFound) {
 				return nil, handler.ErrUserNotFound
 			}
 			return nil, handler.ErrIntervalServerError

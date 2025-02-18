@@ -58,11 +58,12 @@ func main() {
 	api := humagin.New(r, humaConfig)
 
 	app.authHdr.RegisterChangePassword(api)
+	app.authHdr.RegisterCreatePasswordResetRequests(api)
 	app.authHdr.RegisterLogin(api)
 	app.authHdr.RegisterLogout(api)
 	app.authHdr.RegisterGetMe(api)
 	app.authHdr.RegisterRegister(api)
-	app.authHdr.RegisterCreatePasswordChangeRequests(api)
+	app.authHdr.RegisterResetPassword(api)
 
 	app.userHdr.UpdateUser(api)
 

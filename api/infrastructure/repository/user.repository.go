@@ -45,19 +45,19 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 	return &user, nil
 }
 
-func (u *userRepositoryImpl) CreatePasswordChangeRequest(ctx context.Context, passwordChangeRequest *domain.PasswordChangeRequest) error {
-	return u.db.Create(passwordChangeRequest).Error
+func (u *userRepositoryImpl) CreatePasswordResetRequest(ctx context.Context, passwordResetRequest *domain.PasswordResetRequest) error {
+	return u.db.Create(passwordResetRequest).Error
 }
 
-func (u *userRepositoryImpl) FindPasswordChangeRequestWithUserByID(ctx context.Context, id int64) (*domain.PasswordChangeRequest, error) {
-	var passwordChangeRequest domain.PasswordChangeRequest
-	if err := u.db.Joins("User").Take(&passwordChangeRequest, id).Error; err != nil {
+func (u *userRepositoryImpl) FindPasswordResetRequestWithUserByID(ctx context.Context, id int64) (*domain.PasswordResetRequest, error) {
+	var passwordResetRequest domain.PasswordResetRequest
+	if err := u.db.Joins("User").Take(&passwordResetRequest, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, domain.ErrPasswordChangeRequestNotFound
+			return nil, domain.ErrPasswordResetRequestNotFound
 		}
 		return nil, err
 	}
-	return &passwordChangeRequest, nil
+	return &passwordResetRequest, nil
 }
 
 func (u *userRepositoryImpl) UpdateUserPasswordHash(ctx context.Context, id int64, passwordHash string) error {
@@ -65,8 +65,8 @@ func (u *userRepositoryImpl) UpdateUserPasswordHash(ctx context.Context, id int6
 	return u.db.Model(user).Updates(domain.User{PasswordHash: passwordHash}).Error
 }
 
-func (u *userRepositoryImpl) DeletePasswordChangeRequestByID(ctx context.Context, id int64) error {
-	return u.db.Delete(&domain.PasswordChangeRequest{}, id).Error
+func (u *userRepositoryImpl) DeletePasswordResetRequestByID(ctx context.Context, id int64) error {
+	return u.db.Delete(&domain.PasswordResetRequest{}, id).Error
 }
 
 var _ domain.UserRepository = &userRepositoryImpl{}

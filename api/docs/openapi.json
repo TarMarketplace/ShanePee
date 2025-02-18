@@ -505,13 +505,13 @@
         ],
         "type": "object"
       },
-      "RequestPasswordChangeBody": {
+      "RequestPasswordResetBody": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/RequestPasswordChangeBody.json"
+              "https://example.com/schemas/RequestPasswordResetBody.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -967,15 +967,15 @@
         ]
       }
     },
-    "/v1/auth/password-change-requests": {
+    "/v1/auth/password-reset-requests": {
       "post": {
         "description": "Initiates a password reset process by sending an email with reset instructions",
-        "operationId": "password-change-requests",
+        "operationId": "password-reset-requests",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RequestPasswordChangeBody"
+                "$ref": "#/components/schemas/RequestPasswordResetBody"
               }
             }
           },

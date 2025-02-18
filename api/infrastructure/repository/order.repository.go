@@ -24,7 +24,7 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 }
 
 func (r *orderRepositoryImpl) CreateOrder(ctx context.Context, order *domain.Order) error {
-	return nil
+	return r.db.Create(order).Error
 }
 
 func (r *orderRepositoryImpl) UpdateOrder(ctx context.Context, id int64, order map[string]any) error {

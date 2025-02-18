@@ -9,6 +9,7 @@ import (
 	"shanepee.com/api/infrastructure/email"
 	"shanepee.com/api/infrastructure/handler/arttoy"
 	"shanepee.com/api/infrastructure/handler/auth"
+	"shanepee.com/api/infrastructure/handler/order"
 	"shanepee.com/api/infrastructure/handler/user"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
@@ -19,11 +20,14 @@ func InitializeApp() (App, error) {
 	wire.Build(
 		service.NewUserService,
 		service.NewArtToyService,
+		service.NewOrderService,
 		repository.NewUserRepository,
 		repository.NewArtToyRepository,
+		repository.NewOrderRepository,
 		auth.NewHandler,
 		user.NewHandler,
 		arttoy.NewHandler,
+		order.NewHandler,
 		service.NewAuthService,
 		repository.NewDB,
 		config.LoadConfig,

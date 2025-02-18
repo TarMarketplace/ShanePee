@@ -72,6 +72,8 @@ func main() {
 	app.artToyHdr.RegisterGetArtToyById(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
 
+	app.orderHdr.RegisterGetOrdersByStatus(api)
+
 	flag.Parse()
 
 	if cmd == nil {

@@ -8,6 +8,7 @@ var (
 	ErrIntervalServerError    = huma.Error500InternalServerError("Internal server error")
 	ErrArtToyNotFound         = huma.Error404NotFound("Art toy not found")
 	ErrUserNotFound           = huma.Error404NotFound("User not found")
+	ErrOrderNotFound          = huma.Error404NotFound("Order not found")
 	ErrIncorrectCredential    = huma.Error403Forbidden("Incorrect email or password")
 	ErrInvalidToken           = huma.Error403Forbidden("Invalid token")
 	ErrIncorrectOldPassword   = huma.Error401Unauthorized("Incorrect old password")

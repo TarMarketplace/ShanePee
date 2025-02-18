@@ -27,7 +27,7 @@ type OrderItem struct {
 	OrderId  int64 `json:"order_id" gorm:"not null" example:"97"`
 }
 
-func NewOrder(artToys []int64, sellerId int64, buyerId int64) *Order {
+func NewOrder(sellerId int64, buyerId int64) *Order {
 	return &Order{
 		ID:       GenID(),
 		SellerId: sellerId,

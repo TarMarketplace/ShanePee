@@ -9,8 +9,8 @@ type UserRepository interface {
 	UpdateUser(ctx context.Context, id int64, user map[string]any) error
 	FindUserByEmail(ctx context.Context, email string) (*User, error)
 	FindUserByID(ctx context.Context, id int64) (*User, error)
-	CreatePasswordChangeRequest(ctx context.Context, passwordChangeRequest *PasswordChangeRequest) error
-	FindPasswordChangeRequestWithUserByID(ctx context.Context, id int64) (*PasswordChangeRequest, error)
+	CreatePasswordResetRequest(ctx context.Context, passwordResetRequest *PasswordResetRequest) error
+	FindPasswordResetRequestWithUserByID(ctx context.Context, id int64) (*PasswordResetRequest, error)
 	UpdateUserPasswordHash(ctx context.Context, id int64, passwordHash string) error
-	DeletePasswordChangeRequestByID(ctx context.Context, id int64) error
+	DeletePasswordResetRequestByID(ctx context.Context, id int64) error
 }

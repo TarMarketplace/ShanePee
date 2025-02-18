@@ -8,24 +8,24 @@ import (
 	"shanepee.com/api/infrastructure/handler"
 )
 
-type RequestPasswordChangeBody struct {
+type RequestPasswordResetBody struct {
 	Email string `json:"email" example:"johndoe@example.com"`
 }
 
-type CreateRequestPasswordChangeInput struct {
-	Body RequestPasswordChangeBody
+type CreateRequestPasswordResetInput struct {
+	Body RequestPasswordResetBody
 }
 
-func (h *AuthHandler) RegisterCreatePasswordChangeRequests(api huma.API) {
+func (h *AuthHandler) RegisterCreatePasswordResetRequests(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "password-change-requests",
+		OperationID: "password-reset-requests",
 		Method:      http.MethodPost,
-		Path:        "/v1/auth/password-change-requests",
+		Path:        "/v1/auth/password-reset-requests",
 		Tags:        []string{"Authentication"},
 		Summary:     "Request a password reset",
 		Description: "Initiates a password reset process by sending an email with reset instructions",
-	}, func(ctx context.Context, i *CreateRequestPasswordChangeInput) (*struct{}, error) {
-		if err := h.authSvc.RequestPasswordChange(ctx, i.Body.Email); err != nil {
+	}, func(ctx context.Context, i *CreateRequestPasswordResetInput) (*struct{}, error) {
+		if err := h.authSvc.RequestPasswordReset(ctx, i.Body.Email); err != nil {
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

@@ -10,6 +10,7 @@ var (
 	ErrUserNotFound           = huma.Error404NotFound("User not found")
 	ErrIncorrectCredential    = huma.Error403Forbidden("Incorrect email or password")
 	ErrInvalidToken           = huma.Error403Forbidden("Invalid token")
+	ErrIncorrectOldPassword   = huma.Error401Unauthorized("Incorrect old password")
 )
 
 type ArrayResponse[T any] struct {

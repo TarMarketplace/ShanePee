@@ -4,4 +4,3 @@ GOBIN  := $(BINDIR)
 GO     := go
 GOFMT  := gofmt
 WIRE   := wire
-

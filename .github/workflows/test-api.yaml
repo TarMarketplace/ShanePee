@@ -64,6 +64,13 @@ jobs:
       - name: Install wire
         run: go install github.com/google/wire/cmd/wire@v0.6.0
 
+      - name: Save old docs
+        id: old-docs
+        run: |
+          OLD_DOCS_PATH="$(mktemp)"
+          cat api/docs/openapi.json > "$OLD_DOCS_PATH"
+          echo "OLD_DOCS_PATH=$OLD_DOCS_PATH" >> "$GITHUB_OUTPUT"
+
       - name: Build
         run: make docs
         env:
@@ -71,4 +78,7 @@ jobs:
         working-directory: api
 
       - name: Check openapi is up to date
-        run: git diff --exit-code -- api/docs/openapi.json
+        env:
+          OLD_DOCS_PATH: ${{ steps.old-docs.OLD_DOCS_PATH }}
+        run: |
+          diff <(jq -S . "$OLD_DOCS_PATH") <(jq -S . docs/openapi.json)

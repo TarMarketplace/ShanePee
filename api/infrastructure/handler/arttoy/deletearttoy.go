@@ -11,7 +11,7 @@ import (
 )
 
 type DeleteArtToyInput struct {
-	ArtToyID int64 `path:"id" example:"1"`
+	ArtToyID int64 `path:"id" example:"3"`
 }
 
 func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {

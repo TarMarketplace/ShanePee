@@ -32,7 +32,7 @@ func NewOrder(artToys []int64, sellerID int64, buyerID int64) *Order {
 		ID:       GenID(),
 		SellerID: sellerID,
 		BuyerID:  buyerID,
-		Status:   Pending,
+		Status:   Preparing,
 	}
 }
 

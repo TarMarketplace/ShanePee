@@ -5,5 +5,5 @@ import (
 )
 
 type OrderRepository interface {
-	FindOrdersByStatus(ctx context.Context, status string, sellerId int64) ([]*Order, error)
+	FindOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*Order, error)
 }

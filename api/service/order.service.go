@@ -11,7 +11,7 @@ var (
 )
 
 type OrderService interface {
-	GetOrdersByStatus(ctx context.Context, status string, id int64) ([]*domain.Order, error)
+	GetOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error)
 }
 
 type orderServiceImpl struct {
@@ -26,8 +26,8 @@ func NewOrderService(orderRepo domain.OrderRepository) OrderService {
 
 var _ OrderService = &orderServiceImpl{}
 
-func (s *orderServiceImpl) GetOrdersByStatus(ctx context.Context, status string, id int64) ([]*domain.Order, error) {
-	orders, err := s.orderRepo.FindOrdersByStatus(ctx, status, id)
+func (s *orderServiceImpl) GetOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error) {
+	orders, err := s.orderRepo.FindOrdersByStatus(ctx, status, sellerID)
 	if err != nil {
 		return nil, err
 	}

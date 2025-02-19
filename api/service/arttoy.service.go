@@ -2,12 +2,14 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"shanepee.com/api/domain"
 )
 
 var (
 	ErrArtToyNotFound error = domain.ErrArtToyNotFound
+	ErrUnauthorized   error = errors.New("unauthorized access")
 )
 
 type ArtToyService interface {
@@ -75,7 +77,7 @@ func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID 
 	}
 
 	if artToy.OwnerID != ownerID {
-		return domain.ErrUnauthorized
+		return ErrUnauthorized
 	}
 
 	return s.artToyRepo.DeleteArtToy(ctx, id)

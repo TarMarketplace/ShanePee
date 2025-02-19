@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
 )
@@ -33,7 +32,7 @@ func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 			if err == service.ErrArtToyNotFound {
 				return nil, handler.ErrArtToyNotFound
 			}
-			if err == domain.ErrUnauthorized {
+			if err == service.ErrUnauthorized {
 				return nil, handler.ErrForbidden
 			}
 			return nil, handler.ErrIntervalServerError

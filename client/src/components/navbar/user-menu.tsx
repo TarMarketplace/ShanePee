@@ -9,7 +9,7 @@ import {
 } from '@/components/dropdown-menu'
 import { Text } from '@/components/text'
 
-import type { User } from '@/types/users'
+import type { User } from '@/generated/api'
 
 interface UserMenuProps {
   user: User

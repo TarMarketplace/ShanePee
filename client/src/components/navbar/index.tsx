@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { Text } from '@/components/text'
 
-import type { User } from '@/types/users'
+import type { User } from '@/generated/api'
 
 import { UserMenu } from './user-menu'
 

@@ -85,6 +85,7 @@ export function UserInfoForm({
                         placeholder='example@gmail.com'
                         type='email'
                         readOnly
+                        disabled
                       />
                     </FormControl>
                     <FormMessage />
@@ -154,7 +155,10 @@ export function UserInfoForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>เพศ</FormLabel>
-                    <Select onValueChange={field.onChange} {...field}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder='กรุณาเลือก' />

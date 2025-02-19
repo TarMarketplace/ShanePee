@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -10,6 +9,7 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
+import type { User } from '@/generated/api'
 import { updateUser } from '@/generated/api'
 
 import { PaymentForm } from '../_components/payment-form'
@@ -32,30 +32,30 @@ const paymentFormSchema = z.object({
 
 export type PaymentFormSchema = z.infer<typeof paymentFormSchema>
 
-export function PaymentContainer() {
-  const { user, fetchUser } = useUser()
+interface PaymentContainerProps {
+  user: User | null
+}
+
+export function PaymentContainer({ user }: PaymentContainerProps) {
+  const { fetchUser } = useUser()
   const router = useRouter()
 
   const form = useForm<PaymentFormSchema>({
     resolver: zodResolver(paymentFormSchema),
-    defaultValues: {
-      cardNumber: '',
-      cardHolderName: '',
-      expirationDate: '',
-      cvv: '',
-    },
+    defaultValues: user
+      ? {
+          cardNumber: user.payment_method.card_number ?? '',
+          cardHolderName: user.payment_method.card_owner ?? '',
+          expirationDate: user.payment_method.expire_date ?? '',
+          cvv: user.payment_method.cvv ?? '',
+        }
+      : {
+          cardNumber: '',
+          cardHolderName: '',
+          expirationDate: '',
+          cvv: '',
+        },
   })
-
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        cardNumber: user.payment_method.card_number ?? '',
-        cardHolderName: user.payment_method.card_owner ?? '',
-        expirationDate: user.payment_method.expire_date ?? '',
-        cvv: user.payment_method.cvv ?? '',
-      })
-    }
-  }, [user, form])
 
   const onSubmit: SubmitHandler<PaymentFormSchema> = async (data) => {
     const { response, error } = await updateUser({

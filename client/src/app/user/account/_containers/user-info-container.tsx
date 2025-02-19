@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -10,6 +9,7 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
+import type { User } from '@/generated/api'
 import { updateUser } from '@/generated/api'
 
 import { UserInfoForm } from '../_components/user-info-form'
@@ -29,31 +29,32 @@ const userInfoFormSchema = z.object({
 
 export type UserInfoFormSchema = z.infer<typeof userInfoFormSchema>
 
-export function UserInfoContainer() {
-  const { user, fetchUser } = useUser()
+interface UserInfoContainerProps {
+  user: User | null
+}
+
+export function UserInfoContainer({ user }: UserInfoContainerProps) {
+  const { fetchUser } = useUser()
   const router = useRouter()
 
   const form = useForm<UserInfoFormSchema>({
     resolver: zodResolver(userInfoFormSchema),
-    defaultValues: {
-      name: '',
-      surname: '',
-      email: '',
-      phone: '',
-    },
+    defaultValues: user
+      ? {
+          name: user.first_name ?? '',
+          surname: user.last_name ?? '',
+          email: user.email ?? '',
+          phone: user.tel ?? '',
+          gender: user.gender as UserInfoFormSchema['gender'],
+        }
+      : {
+          name: '',
+          surname: '',
+          gender: undefined,
+          email: '',
+          phone: '',
+        },
   })
-
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        name: user.first_name ?? '',
-        surname: user.last_name ?? '',
-        email: user.email ?? '',
-        phone: user.tel ?? '',
-        gender: user.gender as 'MALE' | 'FEMALE' | 'OTHER',
-      })
-    }
-  }, [user, form])
 
   const onSubmit: SubmitHandler<UserInfoFormSchema> = async (data) => {
     const { response, error } = await updateUser({
@@ -86,13 +87,11 @@ export function UserInfoContainer() {
         <Icon icon='mdi:account' className='size-10' />
         <Text variant='heading-lg'>บัญชีของฉัน</Text>
       </div>
-      {form.getValues('gender') && ( // Leon, please fix this. I spent thousands of years with Tar and Boom trying to debug this but no luck at all 😔
-        <UserInfoForm
-          onSubmit={onSubmit}
-          handleChangePicture={handleChangePicture}
-          form={form}
-        />
-      )}
+      <UserInfoForm
+        onSubmit={onSubmit}
+        handleChangePicture={handleChangePicture}
+        form={form}
+      />
     </div>
   )
 }

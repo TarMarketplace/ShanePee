@@ -3,8 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-import type { User } from '@/types/users'
-
+import type { User } from '@/generated/api'
 import { me } from '@/generated/api'
 
 export interface UserData {
@@ -34,8 +33,8 @@ function UserProvider({ children }: { children?: React.ReactNode }) {
   }
 
   useEffect(() => {
-    fetchUser()
-  }, [])
+    if (!user) fetchUser()
+  }, [user])
 
   return (
     <UserContext.Provider

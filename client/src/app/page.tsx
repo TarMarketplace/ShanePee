@@ -2,7 +2,6 @@ import { Icon } from '@iconify/react'
 import Image from 'next/image'
 
 import { Button } from '@/components/button'
-import { ProductCard } from '@/components/product-card'
 import { Text } from '@/components/text'
 
 import { RecommendedStore } from './_components/recommended-store'
@@ -46,8 +45,7 @@ export default function Home() {
         </Text>
         <hr className='w-full border border-primary md:border-4' />
         <div className='grid size-full grid-cols-2 place-items-center gap-4 md:grid-cols-4'>
-          {Array.from({ length: 12 }).map((_, index) => (
-            <ProductCard
+          {/* <ProductCard
               key={index}
               product={{
                 id: `${index}`,
@@ -58,8 +56,7 @@ export default function Home() {
                 location: 'Location 1',
                 image: 'https://placehold.co/250x140.png',
               }}
-            />
-          ))}
+            /> */}
         </div>
         <Button>View More</Button>
       </section>

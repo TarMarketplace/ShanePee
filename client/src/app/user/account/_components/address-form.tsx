@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/form'
 import { Input } from '@/components/input'
+import { Textarea } from '@/components/textarea'
 
 import { formatPostalCode } from '@/utils/input-formatter'
 
@@ -42,9 +43,9 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
                         className='hidden md:block'
                         placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
                       />
-                      <textarea
+                      <Textarea
                         {...field}
-                        className='peer flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-primary-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:hidden'
+                        className='md:hidden'
                         rows={3}
                         placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
                       />

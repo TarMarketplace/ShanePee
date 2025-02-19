@@ -71,6 +71,7 @@ func main() {
 	app.artToyHdr.RegisterCreateArtToy(api)
 	app.artToyHdr.RegisterGetArtToyByID(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
+	app.artToyHdr.RegisterDeleteArtToy(api)
 
 	flag.Parse()
 

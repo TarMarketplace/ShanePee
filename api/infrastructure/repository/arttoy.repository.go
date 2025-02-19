@@ -57,3 +57,11 @@ func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 		db,
 	}
 }
+
+func (r *artToyRepositoryImpl) DeleteArtToy(ctx context.Context, id int64) error {
+	result := r.db.Delete(&domain.ArtToy{}, id)
+	if result.RowsAffected == 0 {
+		return domain.ErrArtToyNotFound
+	}
+	return result.Error
+}

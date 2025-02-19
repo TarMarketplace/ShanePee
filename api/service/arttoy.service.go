@@ -15,6 +15,7 @@ type ArtToyService interface {
 	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
 	GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
+	DeleteArtToy(ctx context.Context, id int64, ownerID int64) error
 }
 
 type artToyServiceImpl struct {
@@ -65,4 +66,17 @@ func (s *artToyServiceImpl) GetArtToyByID(ctx context.Context, id int64) (*domai
 		return nil, err
 	}
 	return artToy, nil
+}
+
+func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID int64) error {
+	artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if artToy.OwnerID != ownerID {
+		return domain.ErrUnauthorized
+	}
+
+	return s.artToyRepo.DeleteArtToy(ctx, id)
 }

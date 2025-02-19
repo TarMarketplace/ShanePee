@@ -14,10 +14,6 @@ type DeleteArtToyInput struct {
 	ArtToyID int64 `path:"id" example:"1"`
 }
 
-type DeleteArtToyOutput struct {
-	Message string `json:"message" example:"Art toy deleted successfully"`
-}
-
 func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "delete-art-toy",
@@ -26,7 +22,7 @@ func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Delete Art Toy",
 		Description: "Delete an art toy by ID",
-	}, func(ctx context.Context, i *DeleteArtToyInput) (*DeleteArtToyOutput, error) {
+	}, func(ctx context.Context, i *DeleteArtToyInput) (*struct{}, error) {
 		userId := handler.GetUserID(ctx)
 		if userId == nil {
 			return nil, handler.ErrAuthenticationRequired
@@ -43,8 +39,6 @@ func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 
-		return &DeleteArtToyOutput{
-			Message: "Art toy deleted successfully",
-		}, nil
+		return nil, nil
 	})
 }

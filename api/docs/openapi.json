@@ -807,17 +807,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content",
-            "headers": {
-              "Message": {
-                "schema": {
-                  "examples": [
-                    "Art toy deleted successfully"
-                  ],
-                  "type": "string"
-                }
-              }
-            }
+            "description": "No Content"
           },
           "default": {
             "content": {

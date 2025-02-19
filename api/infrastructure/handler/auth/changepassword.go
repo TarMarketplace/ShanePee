@@ -28,12 +28,12 @@ func (h *AuthHandler) RegisterChangePassword(api huma.API) {
 		Summary:     "Change password",
 		Description: "Change password for authenticated user",
 	}, func(ctx context.Context, i *ChangePasswordInput) (*struct{}, error) {
-		userId := handler.GetUserID(ctx)
-		if userId == nil {
+		userID := handler.GetUserID(ctx)
+		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		err := h.authSvc.ChangePassword(ctx, *userId, i.Body.OldPassword, i.Body.NewPassword)
+		err := h.authSvc.ChangePassword(ctx, *userID, i.Body.OldPassword, i.Body.NewPassword)
 		if err != nil {
 			if errors.Is(err, service.ErrInvalidOldPassword) {
 				return nil, handler.ErrIncorrectOldPassword

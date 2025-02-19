@@ -45,13 +45,13 @@ func (h *UserHandler) UpdateUser(api huma.API) {
 		Summary:     "Update User",
 		Description: "Update user by id",
 	}, func(ctx context.Context, i *UpdateUserInput) (*struct{}, error) {
-		userId := handler.GetUserID(ctx)
-		if userId == nil {
+		userID := handler.GetUserID(ctx)
+		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
 		updateBody := i.Body.IntoMap()
-		err := h.userSvc.UpdateUser(ctx, *userId, updateBody)
+		err := h.userSvc.UpdateUser(ctx, *userID, updateBody)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

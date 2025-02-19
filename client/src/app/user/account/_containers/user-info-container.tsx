@@ -30,7 +30,7 @@ const userInfoFormSchema = z.object({
 export type UserInfoFormSchema = z.infer<typeof userInfoFormSchema>
 
 interface UserInfoContainerProps {
-  user: User | null
+  user: User
 }
 
 export function UserInfoContainer({ user }: UserInfoContainerProps) {
@@ -39,21 +39,13 @@ export function UserInfoContainer({ user }: UserInfoContainerProps) {
 
   const form = useForm<UserInfoFormSchema>({
     resolver: zodResolver(userInfoFormSchema),
-    defaultValues: user
-      ? {
-          name: user.first_name ?? '',
-          surname: user.last_name ?? '',
-          email: user.email ?? '',
-          phone: user.tel ?? '',
-          gender: user.gender as UserInfoFormSchema['gender'],
-        }
-      : {
-          name: '',
-          surname: '',
-          gender: undefined,
-          email: '',
-          phone: '',
-        },
+    defaultValues: {
+      name: user.first_name ?? '',
+      surname: user.last_name ?? '',
+      email: user.email ?? '',
+      phone: user.tel ?? '',
+      gender: user.gender as UserInfoFormSchema['gender'],
+    },
   })
 
   const onSubmit: SubmitHandler<UserInfoFormSchema> = async (data) => {

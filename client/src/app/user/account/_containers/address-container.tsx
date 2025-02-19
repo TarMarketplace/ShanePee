@@ -17,7 +17,7 @@ import { AddressForm } from '../_components/address-form'
 const addressFormSchema = z.object({
   details: z.string().min(1, 'Details address is required'),
   district: z.string().min(1, 'Distric is required'),
-  province: z.string().min(1, 'Province is req`uired'),
+  province: z.string().min(1, 'Province is required'),
   postalCode: z
     .string()
     .min(5, 'Postal code is required')
@@ -27,7 +27,7 @@ const addressFormSchema = z.object({
 export type AddressFormSchema = z.infer<typeof addressFormSchema>
 
 interface AddressContainerProps {
-  user: User | null
+  user: User
 }
 
 export function AddressContainer({ user }: AddressContainerProps) {
@@ -36,19 +36,12 @@ export function AddressContainer({ user }: AddressContainerProps) {
 
   const form = useForm<AddressFormSchema>({
     resolver: zodResolver(addressFormSchema),
-    defaultValues: user?.address
-      ? {
-          details: user.address.house_no ?? '',
-          district: user.address.district ?? '',
-          province: user.address.province ?? '',
-          postalCode: user.address.postcode ?? '',
-        }
-      : {
-          details: '',
-          district: '',
-          province: '',
-          postalCode: '',
-        },
+    defaultValues: {
+      details: user.address.house_no ?? '',
+      district: user.address.district ?? '',
+      province: user.address.province ?? '',
+      postalCode: user.address.postcode ?? '',
+    },
   })
 
   const onSubmit: SubmitHandler<AddressFormSchema> = async (data) => {

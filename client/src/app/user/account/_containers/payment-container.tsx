@@ -33,7 +33,7 @@ const paymentFormSchema = z.object({
 export type PaymentFormSchema = z.infer<typeof paymentFormSchema>
 
 interface PaymentContainerProps {
-  user: User | null
+  user: User
 }
 
 export function PaymentContainer({ user }: PaymentContainerProps) {
@@ -42,19 +42,12 @@ export function PaymentContainer({ user }: PaymentContainerProps) {
 
   const form = useForm<PaymentFormSchema>({
     resolver: zodResolver(paymentFormSchema),
-    defaultValues: user
-      ? {
-          cardNumber: user.payment_method.card_number ?? '',
-          cardHolderName: user.payment_method.card_owner ?? '',
-          expirationDate: user.payment_method.expire_date ?? '',
-          cvv: user.payment_method.cvv ?? '',
-        }
-      : {
-          cardNumber: '',
-          cardHolderName: '',
-          expirationDate: '',
-          cvv: '',
-        },
+    defaultValues: {
+      cardNumber: user.payment_method.card_number ?? '',
+      cardHolderName: user.payment_method.card_owner ?? '',
+      expirationDate: user.payment_method.expire_date ?? '',
+      cvv: user.payment_method.cvv ?? '',
+    },
   })
 
   const onSubmit: SubmitHandler<PaymentFormSchema> = async (data) => {

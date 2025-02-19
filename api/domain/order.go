@@ -6,9 +6,9 @@ type OrderStatus string
 
 // TODO: Wait for the design from the frontend team
 const (
-	Pending   OrderStatus = "PENDING"
-	Shipping  OrderStatus = "SHIPPING"
-	Completed OrderStatus = "COMPLETED"
+	Preparing  OrderStatus = "PREPARING"
+	Delivering OrderStatus = "DELIVERING"
+	Completed  OrderStatus = "COMPLETED"
 )
 
 type Order struct {
@@ -17,7 +17,7 @@ type Order struct {
 	DeliveryService *string     `json:"delivery_service" example:"Kerry Express"`
 	SellerId        int64       `json:"seller_id" gorm:"not null" example:"97"`
 	BuyerId         int64       `json:"buyer_id" gorm:"not null" example:"97"`
-	Status          OrderStatus `json:"status" gorm:"not null" enum:"PENDING,SHIPPING,COMPLETED" example:"pending"`
+	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"PENDING"`
 	CreatedAt       time.Time   `json:"created_at" gorm:"autoCreateTime" example:"2021-08-01T00:00:00Z"`
 }
 
@@ -32,7 +32,7 @@ func NewOrder(sellerId int64, buyerId int64) *Order {
 		ID:       GenID(),
 		SellerId: sellerId,
 		BuyerId:  buyerId,
-		Status:   Pending,
+		Status:   Preparing,
 	}
 }
 

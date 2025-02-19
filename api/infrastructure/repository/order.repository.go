@@ -23,14 +23,6 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 	return order, nil
 }
 
-func (r *orderRepositoryImpl) CreateOrder(ctx context.Context, order *domain.Order) error {
-	return r.db.Create(order).Error
-}
-
-func (r *orderRepositoryImpl) UpdateOrder(ctx context.Context, id int64, order map[string]any) error {
-	return nil
-}
-
 var _ domain.OrderRepository = &orderRepositoryImpl{}
 
 func NewOrderRepository(db *gorm.DB) domain.OrderRepository {

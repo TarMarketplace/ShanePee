@@ -409,12 +409,12 @@
           },
           "status": {
             "enum": [
-              "PREPARING",
-              "DELIVERING",
+              "PENDING",
+              "SHIPPING",
               "COMPLETED"
             ],
             "examples": [
-              "PENDING"
+              "pending"
             ],
             "type": "string"
           },

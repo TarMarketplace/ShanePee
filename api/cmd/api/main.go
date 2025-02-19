@@ -72,6 +72,9 @@ func main() {
 	app.artToyHdr.RegisterGetArtToyByID(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
 
+	app.cartHdr.RegisterCreateCart(api)
+	app.cartHdr.RegisterAddItemToCart(api)
+
 	flag.Parse()
 
 	if cmd == nil {

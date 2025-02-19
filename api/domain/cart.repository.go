@@ -5,7 +5,6 @@ import (
 )
 
 type CartRepository interface {
-	AddArtToyToCart(ctx context.Context, userID int64, artToyID int64) error
-	FindArtToysInCart(ctx context.Context, userID int64) ([]*ArtToy, error)
-	DeleteArtToysInCart(ctx context.Context, userID int64, artToyIDs []int64) error
+	CreateCart(ctx context.Context, cart *Cart) error
+	AddItemToCart(ctx context.Context, cartItem *CartItem) error
 }

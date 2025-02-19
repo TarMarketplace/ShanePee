@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 import type { User } from '@/generated/api'
 import { me } from '@/generated/api'
@@ -21,14 +20,13 @@ function UserProvider({ children }: { children?: React.ReactNode }) {
     try {
       const { response, data } = await me()
       if (!data) {
-        toast.error('Something went wrong')
         return
       }
       if (response.ok) {
         setUser(data)
       }
     } catch {
-      toast.error('Something went wrong')
+      setUser(null)
     }
   }
 

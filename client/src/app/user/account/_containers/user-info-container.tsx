@@ -44,7 +44,7 @@ export function UserInfoContainer({ user }: UserInfoContainerProps) {
       surname: user.last_name ?? '',
       email: user.email ?? '',
       phone: user.tel ?? '',
-      gender: user.gender as UserInfoFormSchema['gender'],
+      gender: (user.gender as UserInfoFormSchema['gender']) ?? undefined,
     },
   })
 

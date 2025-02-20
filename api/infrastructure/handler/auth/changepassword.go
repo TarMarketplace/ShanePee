@@ -11,9 +11,8 @@ import (
 )
 
 type ChangePasswordBody struct {
-	RequestID   int64  `json:"request_id"`
-	Token       string `json:"token"`
-	NewPassword string `json:"new_password"`
+	OldPassword string `json:"old_password" example:"VerySecurePassword"`
+	NewPassword string `json:"new_password" example:"VerySecureNewPassword"`
 }
 
 type ChangePasswordInput struct {
@@ -27,11 +26,17 @@ func (h *AuthHandler) RegisterChangePassword(api huma.API) {
 		Path:        "/v1/auth/change-password",
 		Tags:        []string{"Authentication"},
 		Summary:     "Change password",
-		Description: "Change password of a user using token and request id",
+		Description: "Change password for authenticated user",
 	}, func(ctx context.Context, i *ChangePasswordInput) (*struct{}, error) {
-		if err := h.authSvc.ChangePassword(ctx, i.Body.RequestID, i.Body.Token, i.Body.NewPassword); err != nil {
-			if errors.Is(err, service.ErrInvalidToken) {
-				return nil, handler.ErrInvalidToken
+		userID := handler.GetUserID(ctx)
+		if userID == nil {
+			return nil, handler.ErrAuthenticationRequired
+		}
+
+		err := h.authSvc.ChangePassword(ctx, *userID, i.Body.OldPassword, i.Body.NewPassword)
+		if err != nil {
+			if errors.Is(err, service.ErrInvalidOldPassword) {
+				return nil, handler.ErrIncorrectOldPassword
 			}
 			return nil, handler.ErrIntervalServerError
 		}

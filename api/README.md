@@ -10,6 +10,17 @@
 - [Docker](https://docs.docker.com/engine/install/) (optional)
 - [Wire](https://github.com/google/wire)
 
+## Building application
+build application with `make`
+```sh
+make
+```
+
+To update `openapi.json` run
+```sh
+make docs
+```
+
 ## Artchitecture
 `apperror/` contains `AppError` interface. This is method allow application error to convert into HTTP error response.
 

@@ -45,10 +45,9 @@ const Navbar = ({
             </button>
           </div>
         </div>
-        {user ? (
-          <UserMenu user={user} onLogout={onLogout} />
-        ) : (
-          <div className='flex items-center divide-x divide-white text-nowrap'>
+        <UserMenu user={user} onLogout={onLogout} />
+        {!user && (
+          <div className='hidden items-center divide-x divide-white text-nowrap md:flex'>
             <Link href='/login?mode=login' className='px-3'>
               <Text variant='md-semibold'>เข้าสู่ระบบ</Text>
             </Link>

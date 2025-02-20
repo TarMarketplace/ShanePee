@@ -11,15 +11,15 @@ import (
 	"shanepee.com/api/service"
 )
 
-type GetArtToyByIdInput struct {
-	Id int `path:"id"`
+type GetArtToyByIDInput struct {
+	ID int `path:"id"`
 }
 
-type GetArtToyByIdOutput struct {
+type GetArtToyByIDOutput struct {
 	Body *domain.ArtToy
 }
 
-func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
+func (h *ArtToyHandler) RegisterGetArtToyByID(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "get-art-toy-by-id",
 		Method:      http.MethodGet,
@@ -27,8 +27,8 @@ func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Get Art Toy by ID",
 		Description: "Get art toy by id",
-	}, func(ctx context.Context, i *GetArtToyByIdInput) (*GetArtToyByIdOutput, error) {
-		data, err := h.artToySvc.GetArtToyById(ctx, int64(i.Id))
+	}, func(ctx context.Context, i *GetArtToyByIDInput) (*GetArtToyByIDOutput, error) {
+		data, err := h.artToySvc.GetArtToyByID(ctx, int64(i.ID))
 
 		if err != nil {
 			if errors.Is(err, service.ErrArtToyNotFound) {
@@ -36,7 +36,7 @@ func (h *ArtToyHandler) RegisterGetArtToyById(api huma.API) {
 			}
 			return nil, handler.ErrIntervalServerError
 		}
-		return &GetArtToyByIdOutput{
+		return &GetArtToyByIDOutput{
 			Body: data,
 		}, nil
 	})

@@ -42,7 +42,7 @@ func (h *AuthHandler) RegisterLogin(api huma.API) {
 		}
 
 		session := handler.GetSession(ctx)
-		session.Set(handler.UserIdSessionKey, data.ID)
+		session.Set(handler.UserIDSessionKey, data.ID)
 		if err := session.Save(); err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

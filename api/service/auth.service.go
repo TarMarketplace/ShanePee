@@ -14,13 +14,14 @@ import (
 type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, error)
 	Login(ctx context.Context, email string, password string) (*domain.User, error)
-	RequestPasswordChange(ctx context.Context, email string) error
+	RequestPasswordReset(ctx context.Context, email string) error
 	GetUserByID(ctx context.Context, id int64) (*domain.User, error)
-	ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) error
+	ResetPassword(ctx context.Context, requestID int64, token string, newPassword string) error
+	ChangePassword(ctx context.Context, userID int64, oldPassword string, newPassword string) error
 }
 
 type EmailSender interface {
-	SendChangePasswordEmail(ctx context.Context, to string, token string, requestID int64) error
+	SendResetPasswordEmail(ctx context.Context, to string, token string, requestID int64) error
 }
 
 func NewAuthService(userRepo domain.UserRepository, emailSender EmailSender) AuthService {
@@ -40,6 +41,8 @@ var _ AuthService = &authServiceImpl{}
 var (
 	ErrIncorrectCredential error = errors.New("Invalid email or password")
 	ErrInvalidToken        error = errors.New("Invalid token or request id")
+	ErrUserNotFound        error = domain.ErrUserNotFound
+	ErrInvalidOldPassword  error = errors.New("Invalid old password")
 )
 
 func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, error) {
@@ -82,7 +85,7 @@ func (s *authServiceImpl) Login(ctx context.Context, email string, password stri
 	return user, nil
 }
 
-func (s *authServiceImpl) RequestPasswordChange(ctx context.Context, email string) error {
+func (s *authServiceImpl) RequestPasswordReset(ctx context.Context, email string) error {
 	user, err := s.userRepo.FindUserByEmail(ctx, email)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
@@ -92,39 +95,44 @@ func (s *authServiceImpl) RequestPasswordChange(ctx context.Context, email strin
 		return err
 	}
 
-	randomBytes := make([]byte, 32)
-	if _, err := rand.Read(randomBytes); err != nil {
+	token := make([]byte, 72)
+	if _, err := rand.Read(token); err != nil {
 		return err
 	}
-	token := base64.URLEncoding.EncodeToString(randomBytes)
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 	tokenHash := string(hash)
-	passwordChangeRequest := domain.NewPasswordChangeRequest(tokenHash, user.ID)
-	if err := s.userRepo.CreatePasswordChangeRequest(ctx, passwordChangeRequest); err != nil {
+	passwordResetRequest := domain.NewPasswordResetRequest(tokenHash, user.ID)
+	if err := s.userRepo.CreatePasswordResetRequest(ctx, passwordResetRequest); err != nil {
 		return err
 	}
 
-	if err := s.emailSender.SendChangePasswordEmail(ctx, user.Email, token, passwordChangeRequest.ID); err != nil {
+	encodedToken := base64.RawURLEncoding.EncodeToString(token)
+	if err := s.emailSender.SendResetPasswordEmail(ctx, user.Email, encodedToken, passwordResetRequest.ID); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, token string, newPassword string) error {
-	passwordChangeRequest, err := s.userRepo.FindPasswordChangeRequestWithUserByID(ctx, requestID)
+func (s *authServiceImpl) ResetPassword(ctx context.Context, requestID int64, token string, newPassword string) error {
+	passwordResetRequest, err := s.userRepo.FindPasswordResetRequestWithUserByID(ctx, requestID)
 	if err != nil {
-		if errors.Is(err, domain.ErrPasswordChangeRequestNotFound) {
+		if errors.Is(err, domain.ErrPasswordResetRequestNotFound) {
 			return ErrInvalidToken
 		}
 		return err
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(passwordChangeRequest.TokenHash), []byte(token)); err != nil {
-		if errors.Is(err, domain.ErrPasswordChangeRequestNotFound) {
+	decodedToken, err := base64.RawURLEncoding.DecodeString(token)
+	if err != nil {
+		return ErrInvalidToken
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(passwordResetRequest.TokenHash), decodedToken); err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 			return ErrInvalidToken
 		}
 		return err
@@ -137,11 +145,11 @@ func (s *authServiceImpl) ChangePassword(ctx context.Context, requestID int64, t
 		return err
 	}
 
-	if err := s.userRepo.UpdateUserPasswordHash(ctx, passwordChangeRequest.UserID, hashStr); err != nil {
+	if err := s.userRepo.UpdateUserPasswordHash(ctx, passwordResetRequest.UserID, hashStr); err != nil {
 		return err
 	}
 
-	if err := s.userRepo.DeletePasswordChangeRequestByID(ctx, passwordChangeRequest.ID); err != nil {
+	if err := s.userRepo.DeletePasswordResetRequestByID(ctx, passwordResetRequest.ID); err != nil {
 		return err
 	}
 	return nil
@@ -153,4 +161,31 @@ func (s *authServiceImpl) GetUserByID(ctx context.Context, id int64) (*domain.Us
 		return nil, err
 	}
 	return user, nil
+}
+
+func (s *authServiceImpl) ChangePassword(ctx context.Context, userID int64, oldPassword string, newPassword string) error {
+	user, err := s.userRepo.FindUserByID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(oldPassword)); err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return ErrInvalidOldPassword
+		}
+		return err
+	}
+
+	passwordByte := []byte(newPassword)
+	hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+	hashStr := string(hash)
+	if err != nil {
+		return err
+	}
+
+	if err := s.userRepo.UpdateUserPasswordHash(ctx, userID, hashStr); err != nil {
+		return err
+	}
+
+	return nil
 }

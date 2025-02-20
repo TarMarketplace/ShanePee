@@ -237,19 +237,20 @@
             "type": "string"
           },
           "new_password": {
+            "examples": [
+              "VerySecureNewPassword"
+            ],
             "type": "string"
           },
-          "request_id": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "token": {
+          "old_password": {
+            "examples": [
+              "VerySecurePassword"
+            ],
             "type": "string"
           }
         },
         "required": [
-          "request_id",
-          "token",
+          "old_password",
           "new_password"
         ],
         "type": "object"
@@ -505,13 +506,13 @@
         ],
         "type": "object"
       },
-      "RequestPasswordChangeBody": {
+      "RequestPasswordResetBody": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/RequestPasswordChangeBody.json"
+              "https://example.com/schemas/RequestPasswordResetBody.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -526,6 +527,36 @@
         },
         "required": [
           "email"
+        ],
+        "type": "object"
+      },
+      "ResetPasswordBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ResetPasswordBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "new_password": {
+            "type": "string"
+          },
+          "request_id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "token",
+          "new_password"
         ],
         "type": "object"
       },
@@ -587,6 +618,15 @@
           "payment_method": {
             "$ref": "#/components/schemas/PaymentMethod"
           },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "tel": {
             "examples": [
               "0988888888"
@@ -605,7 +645,8 @@
           "gender",
           "tel",
           "address",
-          "payment_method"
+          "payment_method",
+          "photo"
         ],
         "type": "object"
       },
@@ -649,6 +690,12 @@
           },
           "payment_method": {
             "$ref": "#/components/schemas/PartialPaymentMethod"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
           },
           "tel": {
             "examples": [
@@ -835,7 +882,7 @@
     },
     "/v1/auth/change-password": {
       "post": {
-        "description": "Change password of a user using token and request id",
+        "description": "Change password for authenticated user",
         "operationId": "change-password",
         "requestBody": {
           "content": {
@@ -967,15 +1014,15 @@
         ]
       }
     },
-    "/v1/auth/password-change-requests": {
+    "/v1/auth/password-reset-requests": {
       "post": {
         "description": "Initiates a password reset process by sending an email with reset instructions",
-        "operationId": "password-change-requests",
+        "operationId": "password-reset-requests",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RequestPasswordChangeBody"
+                "$ref": "#/components/schemas/RequestPasswordResetBody"
               }
             }
           },
@@ -1039,6 +1086,41 @@
           }
         },
         "summary": "Register User",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/v1/auth/reset-password": {
+      "post": {
+        "description": "Reset password of a user using token and request id",
+        "operationId": "reset-password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Reset password",
         "tags": [
           "Authentication"
         ]

@@ -58,8 +58,7 @@ export type ChangePasswordBody = {
      */
     readonly $schema?: string;
     new_password: string;
-    request_id: number;
-    token: string;
+    old_password: string;
 };
 
 export type ErrorDetail = {
@@ -147,12 +146,22 @@ export type RegisterBody = {
     password: string;
 };
 
-export type RequestPasswordChangeBody = {
+export type RequestPasswordResetBody = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
     email: string;
+};
+
+export type ResetPasswordBody = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    new_password: string;
+    request_id: number;
+    token: string;
 };
 
 export type User = {
@@ -167,6 +176,7 @@ export type User = {
     id: number;
     last_name: string | null;
     payment_method: PaymentMethod;
+    photo: string | null;
     tel: string | null;
 };
 
@@ -180,6 +190,7 @@ export type UserUpdateBody = {
     gender?: 'MALE' | 'FEMALE' | 'OTHER';
     last_name?: string;
     payment_method?: PartialPaymentMethod;
+    photo?: string;
     tel?: string;
 };
 
@@ -387,30 +398,30 @@ export type MeResponses = {
 
 export type MeResponse = MeResponses[keyof MeResponses];
 
-export type PasswordChangeRequestsData = {
-    body: RequestPasswordChangeBody;
+export type PasswordResetRequestsData = {
+    body: RequestPasswordResetBody;
     path?: never;
     query?: never;
-    url: '/v1/auth/password-change-requests';
+    url: '/v1/auth/password-reset-requests';
 };
 
-export type PasswordChangeRequestsErrors = {
+export type PasswordResetRequestsErrors = {
     /**
      * Error
      */
     default: ErrorModel;
 };
 
-export type PasswordChangeRequestsError = PasswordChangeRequestsErrors[keyof PasswordChangeRequestsErrors];
+export type PasswordResetRequestsError = PasswordResetRequestsErrors[keyof PasswordResetRequestsErrors];
 
-export type PasswordChangeRequestsResponses = {
+export type PasswordResetRequestsResponses = {
     /**
      * No Content
      */
     204: void;
 };
 
-export type PasswordChangeRequestsResponse = PasswordChangeRequestsResponses[keyof PasswordChangeRequestsResponses];
+export type PasswordResetRequestsResponse = PasswordResetRequestsResponses[keyof PasswordResetRequestsResponses];
 
 export type RegisterData = {
     body: RegisterBody;
@@ -436,6 +447,31 @@ export type RegisterResponses = {
 };
 
 export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
+
+export type ResetPasswordData = {
+    body: ResetPasswordBody;
+    path?: never;
+    query?: never;
+    url: '/v1/auth/reset-password';
+};
+
+export type ResetPasswordErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
+
+export type ResetPasswordResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
 
 export type UpdateUserData = {
     body: UserUpdateBody;

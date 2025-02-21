@@ -8,5 +8,6 @@ var (
 	ErrArtToyNotFound               error = errors.New("art toy not found")
 	ErrCartNotFound                 error = errors.New("cart not found")
 	ErrCartAndArtToyNotFound        error = errors.New("cart and art toy not found")
+	ErrOrderNotFound                error = errors.New("order not found")
 	ErrPasswordResetRequestNotFound error = errors.New("password reset request not found")
 )

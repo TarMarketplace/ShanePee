@@ -6,9 +6,9 @@ type OrderStatus string
 
 // TODO: Wait for the design from the frontend team
 const (
-	Pending   OrderStatus = "PENDING"
-	Shipping  OrderStatus = "SHIPPING"
-	Completed OrderStatus = "COMPLETED"
+	Preparing  OrderStatus = "PREPARING"
+	Delivering OrderStatus = "DELIVERING"
+	Completed  OrderStatus = "COMPLETED"
 )
 
 type Order struct {
@@ -22,17 +22,19 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID       int64 `json:"id" gorm:"primaryKey" example:"97"`
-	ArtToyID int64 `json:"art_toy_id" gorm:"not null" example:"97"`
-	OrderID  int64 `json:"order_id" gorm:"not null" example:"97"`
+	ID       int64  `json:"id" gorm:"primaryKey" example:"97"`
+	ArtToyID int64  `json:"art_toy_id" gorm:"not null" example:"97"`
+	OrderID  int64  `json:"order_id" gorm:"not null" example:"97"`
+	ArtToy   ArtToy `gorm:"foreignKey:ArtToyID;constraint:OnDelete:CASCADE;"`
+	Order    Order  `gorm:"foreignKey:OrderID;constraint:OnDelete:CASCADE;"`
 }
 
-func NewOrder(artToys []int64, sellerID int64, buyerID int64) *Order {
+func NewOrder(sellerID int64, buyerID int64) *Order {
 	return &Order{
 		ID:       GenID(),
 		SellerID: sellerID,
 		BuyerID:  buyerID,
-		Status:   Pending,
+		Status:   Preparing,
 	}
 }
 

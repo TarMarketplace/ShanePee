@@ -10,6 +10,7 @@ import (
 	"shanepee.com/api/infrastructure/handler/arttoy"
 	"shanepee.com/api/infrastructure/handler/auth"
 	"shanepee.com/api/infrastructure/handler/cart"
+	"shanepee.com/api/infrastructure/handler/order"
 	"shanepee.com/api/infrastructure/handler/user"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
@@ -21,13 +22,16 @@ func InitializeApp() (App, error) {
 		service.NewUserService,
 		service.NewArtToyService,
 		service.NewCartService,
+		service.NewOrderService,
 		repository.NewUserRepository,
 		repository.NewArtToyRepository,
 		repository.NewCartRepository,
+		repository.NewOrderRepository,
 		auth.NewHandler,
 		user.NewHandler,
 		arttoy.NewHandler,
 		cart.NewHandler,
+		order.NewHandler,
 		service.NewAuthService,
 		repository.NewDB,
 		config.LoadConfig,

@@ -76,6 +76,8 @@ func main() {
 	app.cartHdr.RegisterCreateCart(api)
 	app.cartHdr.RegisterAddItemToCart(api)
 
+	app.orderHdr.RegisterGetOrdersByStatus(api)
+
 	flag.Parse()
 
 	if cmd == nil {

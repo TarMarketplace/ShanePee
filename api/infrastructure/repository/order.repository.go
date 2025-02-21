@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
@@ -15,9 +14,6 @@ type orderRepositoryImpl struct {
 func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error) {
 	var order []*domain.Order
 	if err := r.db.Where("seller_id = ? AND status = ?", sellerID, status).Find(&order).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, domain.ErrOrderNotFound
-		}
 		return nil, err
 	}
 	return order, nil

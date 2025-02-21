@@ -9,4 +9,5 @@ type ArtToyRepository interface {
 	UpdateArtToy(ctx context.Context, id int64, artToy map[string]any) error
 	FindArtToys(ctx context.Context) ([]*ArtToy, error)
 	FindArtToyByID(ctx context.Context, id int64) (*ArtToy, error)
+	DeleteArtToy(ctx context.Context, id int64) error
 }

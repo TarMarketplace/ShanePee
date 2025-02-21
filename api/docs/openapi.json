@@ -787,6 +787,44 @@
       }
     },
     "/v1/art-toy/{id}": {
+      "delete": {
+        "description": "Delete an art toy by ID",
+        "operationId": "delete-art-toy",
+        "parameters": [
+          {
+            "example": 3,
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "examples": [
+                3
+              ],
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Delete Art Toy",
+        "tags": [
+          "Art toy"
+        ]
+      },
       "get": {
         "description": "Get art toy by id",
         "operationId": "get-art-toy-by-id",

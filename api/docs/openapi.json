@@ -1427,7 +1427,7 @@
     },
     "/v1/order/{status}": {
       "get": {
-        "description": "Get order by status",
+        "description": "Get orders by status",
         "operationId": "get-orders-by-status",
         "parameters": [
           {
@@ -1435,6 +1435,11 @@
             "name": "status",
             "required": true,
             "schema": {
+              "enum": [
+                "PENDING",
+                "SHIPPING",
+                "COMPLETED"
+              ],
               "type": "string"
             }
           }
@@ -1467,7 +1472,7 @@
             "description": "Error"
           }
         },
-        "summary": "Get Order by Status",
+        "summary": "Get Orders by Status",
         "tags": [
           "Order"
         ]

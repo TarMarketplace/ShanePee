@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"strings"
+	"errors"
 
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
@@ -18,15 +18,17 @@ func (r *cartRepositoryImpl) CreateCart(ctx context.Context, cart *domain.Cart) 
 
 func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain.CartItem) error {
 	err := r.db.Create(cartItem).Error
-	// gorm.ErrForeignKeyConstraintFailed does not exist in this gorm version
-	if strings.Contains(err.Error(), "FOREIGN KEY constraint failed") {
+
+	if errors.Is(err, gorm.ErrForeignKeyViolated) {
 		cartNotFoundErr := r.db.First(&domain.Cart{}, cartItem.CartID).Error
 		artToyNotFoundErr := r.db.First(&domain.ArtToy{}, cartItem.ArtToyID).Error
-		if cartNotFoundErr != nil && artToyNotFoundErr != nil {
+		if errors.Is(cartNotFoundErr, gorm.ErrRecordNotFound) && errors.Is(artToyNotFoundErr, gorm.ErrRecordNotFound) {
 			return domain.ErrCartAndArtToyNotFound
-		} else if err := r.db.First(&domain.Cart{}, cartItem.CartID).Error; err != nil {
+		}
+		if errors.Is(cartNotFoundErr, gorm.ErrRecordNotFound) {
 			return domain.ErrCartNotFound
-		} else if err := r.db.First(&domain.ArtToy{}, cartItem.ArtToyID).Error; err != nil {
+		}
+		if errors.Is(artToyNotFoundErr, gorm.ErrRecordNotFound) {
 			return domain.ErrArtToyNotFound
 		}
 	}

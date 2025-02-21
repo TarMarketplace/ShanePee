@@ -269,6 +269,12 @@
             "readOnly": true,
             "type": "string"
           },
+          "ArtToy": {
+            "$ref": "#/components/schemas/ArtToy"
+          },
+          "Cart": {
+            "$ref": "#/components/schemas/Cart"
+          },
           "art_toy_id": {
             "examples": [
               97
@@ -294,7 +300,9 @@
         "required": [
           "id",
           "cart_id",
-          "art_toy_id"
+          "art_toy_id",
+          "Cart",
+          "ArtToy"
         ],
         "type": "object"
       },
@@ -316,9 +324,17 @@
             ],
             "format": "int64",
             "type": "integer"
+          },
+          "cart_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
           }
         },
         "required": [
+          "cart_id",
           "art_toy_id"
         ],
         "type": "object"

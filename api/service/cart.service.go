@@ -6,6 +6,11 @@ import (
 	"shanepee.com/api/domain"
 )
 
+var (
+	ErrCartNotFound          error = domain.ErrCartNotFound
+	ErrCartAndArtToyNotFound error = domain.ErrCartAndArtToyNotFound
+)
+
 type CartService interface {
 	AddItemToCart(ctx context.Context, cartID int64, artToyID int64) (*domain.CartItem, error)
 	CreateCart(ctx context.Context, ownerID int64) (*domain.Cart, error)

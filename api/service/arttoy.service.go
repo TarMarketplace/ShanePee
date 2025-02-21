@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrArtToyNotFound error = domain.ErrArtToyNotFound
+	ErrReviewNotFound error = domain.ErrReviewNotFound
 	ErrUnauthorized   error = errors.New("unauthorized access")
 )
 
@@ -18,6 +19,10 @@ type ArtToyService interface {
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
 	GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
 	DeleteArtToy(ctx context.Context, id int64, ownerID int64) error
+	CreateReview(ctx context.Context, rating int, comment string, artToyID int64) (*domain.Review, error)
+	GetReviews(ctx context.Context, artToyID int64) ([]*domain.Review, error)
+	UpdateReview(ctx context.Context, id int64, updateBody map[string]any) (*domain.Review, error)
+	DeleteReview(ctx context.Context, id int64) error
 }
 
 type artToyServiceImpl struct {
@@ -46,21 +51,17 @@ func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBo
 	if err != nil {
 		return nil, err
 	}
-
 	if artToy.OwnerID != ownerID {
 		return nil, ErrUnauthorized
 	}
-
 	err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody)
 	if err != nil {
 		return nil, err
 	}
-
 	updatedArtToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-
 	return updatedArtToy, nil
 }
 
@@ -85,10 +86,42 @@ func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID 
 	if err != nil {
 		return err
 	}
-
 	if artToy.OwnerID != ownerID {
 		return ErrUnauthorized
 	}
-
 	return s.artToyRepo.DeleteArtToy(ctx, id)
+}
+
+func (s *artToyServiceImpl) CreateReview(ctx context.Context, rating int, comment string, artToyID int64) (*domain.Review, error) {
+	review := domain.NewReview(rating, comment, artToyID)
+	err := s.artToyRepo.CreateReview(ctx, review)
+	if err != nil {
+		return nil, err
+	}
+	return review, nil
+}
+
+func (s *artToyServiceImpl) GetReviews(ctx context.Context, artToyID int64) ([]*domain.Review, error) {
+	reviews, err := s.artToyRepo.FindReviewsByArtToyID(ctx, artToyID)
+	if err != nil {
+		return nil, err
+	}
+	return reviews, nil
+}
+
+func (s *artToyServiceImpl) UpdateReview(ctx context.Context, id int64, updateBody map[string]any) (*domain.Review, error) {
+	err := s.artToyRepo.UpdateReview(ctx, id, updateBody)
+	if err != nil {
+		return nil, err
+	}
+	updatedReview, err := s.artToyRepo.FindReviewByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedReview, nil
+}
+
+func (s *artToyServiceImpl) DeleteReview(ctx context.Context, id int64) error {
+	return s.artToyRepo.DeleteReview(ctx, id)
 }

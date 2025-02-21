@@ -34,7 +34,7 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		Method:      http.MethodPatch,
 		Path:        "/v1/art-toy/{id}",
 		Tags:        []string{"Art toy"},
-		Summary:     "Update Art toy",
+		Summary:     "Update Art Toy",
 		Description: "Update an existing art toy by ID",
 		Security: []map[string][]string{
 			{"sessionId": {}},

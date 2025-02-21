@@ -10,7 +10,7 @@ type ArtToy struct {
 	Photo        *string   `json:"photo" nullable:"true" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
 	Availability bool      `json:"availability" gorm:"not null"`
 	OwnerID      int64     `json:"owner_id" gorm:"not null"`
-	ReleaseDate  time.Time `json:"release_date" gorm:"autoCreateTime"`
+	ReleaseDate  time.Time `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 }
 
 type Review struct {
@@ -30,5 +30,6 @@ func NewArtToy(name string, description string, price float64, photo *string, ow
 		Photo:        photo,
 		Availability: true,
 		OwnerID:      ownerID,
+		ReleaseDate:  time.Now(),
 	}
 }

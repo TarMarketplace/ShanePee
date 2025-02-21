@@ -144,6 +144,13 @@
           "price": {
             "format": "double",
             "type": "number"
+          },
+          "release_date": {
+            "examples": [
+              "2021-01-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
@@ -153,7 +160,8 @@
           "price",
           "photo",
           "availability",
-          "owner_id"
+          "owner_id",
+          "release_date"
         ],
         "type": "object"
       },

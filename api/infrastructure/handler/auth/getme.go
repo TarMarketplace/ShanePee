@@ -23,6 +23,9 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 		Tags:        []string{"Authentication"},
 		Summary:     "Get current authenticated user",
 		Description: "Get authenticated user from the session",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *struct{}) (*GetMeOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {

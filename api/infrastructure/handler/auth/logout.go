@@ -16,6 +16,9 @@ func (h *AuthHandler) RegisterLogout(api huma.API) {
 		Tags:        []string{"Authentication"},
 		Summary:     "Logout User",
 		Description: "Logout",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *struct{}) (*struct{}, error) {
 		session := handler.GetSession(ctx)
 		session.Clear()

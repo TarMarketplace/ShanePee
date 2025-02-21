@@ -144,6 +144,13 @@
           "price": {
             "format": "double",
             "type": "number"
+          },
+          "release_date": {
+            "examples": [
+              "2021-01-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
@@ -153,7 +160,8 @@
           "price",
           "photo",
           "availability",
-          "owner_id"
+          "owner_id",
+          "release_date"
         ],
         "type": "object"
       },
@@ -1036,6 +1044,14 @@
         },
         "type": "object"
       }
+    },
+    "securitySchemes": {
+      "sessionId": {
+        "description": "session from login route",
+        "in": "cookie",
+        "name": "session",
+        "type": "apiKey"
+      }
     }
   },
   "info": {
@@ -1110,6 +1126,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Create Art toy",
         "tags": [
           "Art toy"
@@ -1150,6 +1171,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Delete Art Toy",
         "tags": [
           "Art toy"
@@ -1242,6 +1268,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Update Art toy",
         "tags": [
           "Art toy"
@@ -1277,6 +1308,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Change password",
         "tags": [
           "Authentication"
@@ -1344,6 +1380,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Logout User",
         "tags": [
           "Authentication"
@@ -1376,6 +1417,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Get current authenticated user",
         "tags": [
           "Authentication"
@@ -1520,6 +1566,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Create Cart",
         "tags": [
           "Cart"
@@ -1562,6 +1613,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Add Item To Cart",
         "tags": [
           "Cart"
@@ -1654,7 +1710,7 @@
     },
     "/v1/order/{status}": {
       "get": {
-        "description": "Get order by status",
+        "description": "Get orders by status",
         "operationId": "get-orders-by-status",
         "parameters": [
           {
@@ -1662,6 +1718,11 @@
             "name": "status",
             "required": true,
             "schema": {
+              "enum": [
+                "PENDING",
+                "SHIPPING",
+                "COMPLETED"
+              ],
               "type": "string"
             }
           }
@@ -1688,7 +1749,12 @@
             "description": "Error"
           }
         },
-        "summary": "Get Order by Status",
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get Orders by Status",
         "tags": [
           "Order"
         ]
@@ -1723,6 +1789,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Update User",
         "tags": [
           "User"

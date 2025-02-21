@@ -2,17 +2,15 @@ package order
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
-	"shanepee.com/api/service"
 )
 
 type GetOrdersByStatusInput struct {
-	Status string `path:"status"`
+	Status string `path:"status" enum:"PENDING,SHIPPING,COMPLETED"`
 }
 
 type GetOrdersByStatusOutput struct {
@@ -25,8 +23,11 @@ func (h *OrderHandler) RegisterGetOrdersByStatus(api huma.API) {
 		Method:      http.MethodGet,
 		Path:        "/v1/order/{status}",
 		Tags:        []string{"Order"},
-		Summary:     "Get Order by Status",
-		Description: "Get order by status",
+		Summary:     "Get Orders by Status",
+		Description: "Get orders by status",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *GetOrdersByStatusInput) (*GetOrdersByStatusOutput, error) {
 		userId := handler.GetUserID(ctx)
 		if userId == nil {
@@ -35,9 +36,6 @@ func (h *OrderHandler) RegisterGetOrdersByStatus(api huma.API) {
 		data, err := h.orderSvc.GetOrdersByStatus(ctx, i.Status, *userId)
 
 		if err != nil {
-			if errors.Is(err, service.ErrOrderNotFound) {
-				return nil, handler.ErrOrderNotFound
-			}
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetOrdersByStatusOutput{

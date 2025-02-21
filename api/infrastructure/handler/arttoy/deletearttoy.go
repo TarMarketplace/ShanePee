@@ -21,6 +21,9 @@ func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Delete Art Toy",
 		Description: "Delete an art toy by ID",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *DeleteArtToyInput) (*struct{}, error) {
 		userId := handler.GetUserID(ctx)
 		if userId == nil {

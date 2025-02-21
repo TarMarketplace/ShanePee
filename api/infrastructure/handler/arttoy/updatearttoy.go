@@ -36,6 +36,9 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Update Art toy",
 		Description: "Update an existing art toy by ID",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *UpdateArtToyInput) (*UpdateArtToyOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {

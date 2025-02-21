@@ -6,8 +6,8 @@ HANDLERS      := $(shell find infrastructure/handler -type f -name 'handler.go')
 EMAIL         := $(shell find infrastructure/email -type f -name '*.go')
 DOMAINS       := $(shell find domain -type f -name '*.go')
 
-ORANGE        := $(shell tput setaf 166)
-RESET         := $(shell tput sgr0)
+ORANGE        := $(shell command -v tput > /dev/null 2>&1 && tput setaf 166 || echo "")
+RESET         := $(shell command -v tput > /dev/null 2>&1 && tput sgr0 || echo "")
 
 export GOROOT := $(shell go env GOROOT)
 

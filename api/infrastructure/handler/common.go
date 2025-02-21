@@ -11,6 +11,7 @@ var (
 	ErrCartNotFound           = huma.Error404NotFound("Cart not found")
 	ErrCartAndArtToyNotFound  = huma.Error404NotFound("Cart and art toy not found")
 	ErrOrderNotFound          = huma.Error404NotFound("Order not found")
+	ErrOrderAndArtToyNotFound = huma.Error404NotFound("Order and art toy not found")
 	ErrIncorrectCredential    = huma.Error403Forbidden("Incorrect email or password")
 	ErrInvalidToken           = huma.Error403Forbidden("Invalid token")
 	ErrIncorrectOldPassword   = huma.Error401Unauthorized("Incorrect old password")

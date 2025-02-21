@@ -83,9 +83,8 @@ func main() {
 
 	app.cartHdr.RegisterCreateCart(api)
 	app.cartHdr.RegisterAddItemToCart(api)
+	app.cartHdr.RegisterCheckout(api)
 
-	app.orderHdr.RegisterCreateOrder(api)
-	app.orderHdr.RegisterCreateOrderItem(api)
 	app.orderHdr.RegisterGetOrdersByStatus(api)
 
 	flag.Parse()

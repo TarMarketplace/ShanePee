@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
@@ -16,7 +17,22 @@ func (r *orderRepositoryImpl) CreateOrder(ctx context.Context, order *domain.Ord
 }
 
 func (r *orderRepositoryImpl) CreateOrderItem(ctx context.Context, orderItem *domain.OrderItem) error {
-	return r.db.Create(orderItem).Error
+	err := r.db.Create(orderItem).Error
+
+	if errors.Is(err, gorm.ErrForeignKeyViolated) {
+		orderNotFoundErr := r.db.First(&domain.Order{}, orderItem.OrderID).Error
+		artToyNotFoundErr := r.db.First(&domain.ArtToy{}, orderItem.ArtToyID).Error
+		if errors.Is(orderNotFoundErr, gorm.ErrRecordNotFound) && errors.Is(artToyNotFoundErr, gorm.ErrRecordNotFound) {
+			return domain.ErrOrderAndArtToyNotFound
+		}
+		if errors.Is(orderNotFoundErr, gorm.ErrRecordNotFound) {
+			return domain.ErrOrderNotFound
+		}
+		if errors.Is(artToyNotFoundErr, gorm.ErrRecordNotFound) {
+			return domain.ErrArtToyNotFound
+		}
+	}
+	return err
 }
 
 func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error) {

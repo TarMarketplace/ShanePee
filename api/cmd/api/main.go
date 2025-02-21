@@ -76,6 +76,7 @@ func main() {
 	app.userHdr.UpdateUser(api)
 
 	app.artToyHdr.RegisterGetArtToys(api)
+	app.artToyHdr.RegisterGetMyArtToys(api)
 	app.artToyHdr.RegisterCreateArtToy(api)
 	app.artToyHdr.RegisterGetArtToyByID(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)

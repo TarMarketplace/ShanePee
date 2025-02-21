@@ -1508,6 +1508,43 @@
         ]
       }
     },
+    "/v1/my-art-toy": {
+      "get": {
+        "description": "Get my art toys",
+        "operationId": "get-my-art-toys",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get My Art Toys",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
     "/v1/order/{status}": {
       "get": {
         "description": "Get orders by status",

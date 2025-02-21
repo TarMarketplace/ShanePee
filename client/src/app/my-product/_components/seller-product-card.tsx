@@ -1,47 +1,22 @@
-import Image from 'next/image'
-
-import { Text } from '@/components/text'
-
 import type { ArtToy } from '@/generated/api'
+
+import { SellerProductCardDesktop } from './seller-product-card-desktop'
+import { SellerProductCardMobile } from './seller-product-card-mobile'
 
 export interface SellerProductCardProps {
   product: ArtToy
 }
 
-const SellerProductCard = ({ product }: SellerProductCardProps) => {
+const SellerProductCard = (props: SellerProductCardProps) => {
   return (
-    <div className='aspect-[250/320] size-full max-w-64 overflow-hidden rounded-xl bg-card shadow-sm'>
-      <div className='relative h-2/5 w-full'>
-        <Image src={product.photo as string} alt={product.name} fill />
+    <>
+      <div className='hidden sm:flex'>
+        <SellerProductCardDesktop product={props.product} />
       </div>
-      <div className='flex h-3/5 w-full flex-col justify-between p-3'>
-        <div className='flex flex-col gap-2'>
-          <Text variant='xs-regular' desktopVariant='md-regular'>
-            {product.name}
-          </Text>
-        </div>
-        <div className='flex justify-between'>
-          <div className='flex items-center'>
-            <div className='flex flex-col'>
-              <Text variant='sm-regular' className='text-grey-500'>
-                ราคาป้าย
-              </Text>
-              <Text variant='md-regular'>฿ {product.price}</Text>
-            </div>
-          </div>
-          <div className='flex justify-end'>
-            <div className='flex flex-col'>
-              <Text variant='sm-regular' className='text-end text-grey-500'>
-                วันที่วางขาย
-              </Text>
-              <Text variant='md-regular'>
-                {new Date(product.release_date).toLocaleDateString()}
-              </Text>
-            </div>
-          </div>
-        </div>
+      <div className='flex sm:hidden'>
+        <SellerProductCardMobile product={props.product} />
       </div>
-    </div>
+    </>
   )
 }
 

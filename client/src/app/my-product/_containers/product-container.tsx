@@ -39,7 +39,7 @@ export function ProductContainer() {
   }, [])
 
   return (
-    <div className='flex flex-col sm:grid sm:grid-cols-[repeat(2,minmax(0,max-content))] md:grid-cols-[repeat(3,minmax(0,max-content))] lg:grid-cols-[repeat(4,minmax(0,max-content))] gap-3 p-3'>
+    <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,max-content))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,max-content))] lg:grid-cols-[repeat(4,minmax(0,max-content))]'>
       {products?.map((product) => {
         return <SellerProductCard key={product.id} product={product} />
       })}

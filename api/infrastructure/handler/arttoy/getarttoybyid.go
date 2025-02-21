@@ -29,7 +29,6 @@ func (h *ArtToyHandler) RegisterGetArtToyByID(api huma.API) {
 		Description: "Get art toy by id",
 	}, func(ctx context.Context, i *GetArtToyByIDInput) (*GetArtToyByIDOutput, error) {
 		data, err := h.artToySvc.GetArtToyByID(ctx, int64(i.ID))
-
 		if err != nil {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound

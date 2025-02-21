@@ -12,7 +12,8 @@ func NewDB(cfg config.Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = db.AutoMigrate(&domain.User{}, &domain.ArtToy{}, &domain.Order{}, &domain.OrderItem{}, &domain.PasswordResetRequest{}); err != nil {
+	db.Exec("PRAGMA foreign_keys = ON;")
+	if err = db.AutoMigrate(&domain.User{}, &domain.ArtToy{}, &domain.Cart{}, &domain.CartItem{}, &domain.Order{}, &domain.OrderItem{}, &domain.PasswordResetRequest{}); err != nil {
 		return nil, err
 	}
 	return db, nil

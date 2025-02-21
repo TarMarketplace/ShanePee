@@ -55,6 +55,14 @@ func main() {
 
 	humaConfig := huma.DefaultConfig("Shanepee API", "0.0.0")
 	humaConfig.DocsPath = ""
+	humaConfig.Components.SecuritySchemes = map[string]*huma.SecurityScheme{
+		"sessionId": {
+			Type:        "apiKey",
+			Description: "session from login route",
+			Name:        "session",
+			In:          "cookie",
+		},
+	}
 	api := humagin.New(r, humaConfig)
 
 	app.authHdr.RegisterChangePassword(api)

@@ -44,6 +44,9 @@ func (h *UserHandler) UpdateUser(api huma.API) {
 		Tags:        []string{"User"},
 		Summary:     "Update User",
 		Description: "Update user by id",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *UpdateUserInput) (*struct{}, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {

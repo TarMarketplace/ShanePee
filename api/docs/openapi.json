@@ -920,6 +920,14 @@
         },
         "type": "object"
       }
+    },
+    "securitySchemes": {
+      "sessionId": {
+        "description": "session from login route",
+        "in": "cookie",
+        "name": "session",
+        "type": "apiKey"
+      }
     }
   },
   "info": {
@@ -994,6 +1002,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Create Art toy",
         "tags": [
           "Art toy"
@@ -1034,6 +1047,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Delete Art Toy",
         "tags": [
           "Art toy"
@@ -1126,6 +1144,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Update Art toy",
         "tags": [
           "Art toy"
@@ -1161,6 +1184,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Change password",
         "tags": [
           "Authentication"
@@ -1228,6 +1256,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Logout User",
         "tags": [
           "Authentication"
@@ -1260,6 +1293,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Get current authenticated user",
         "tags": [
           "Authentication"
@@ -1404,6 +1442,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Create Cart",
         "tags": [
           "Cart"
@@ -1446,6 +1489,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Add Item To Cart",
         "tags": [
           "Cart"
@@ -1493,6 +1541,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Get Orders by Status",
         "tags": [
           "Order"
@@ -1528,6 +1581,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Update User",
         "tags": [
           "User"

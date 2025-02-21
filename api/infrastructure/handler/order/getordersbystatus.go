@@ -25,6 +25,9 @@ func (h *OrderHandler) RegisterGetOrdersByStatus(api huma.API) {
 		Tags:        []string{"Order"},
 		Summary:     "Get Orders by Status",
 		Description: "Get orders by status",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *GetOrdersByStatusInput) (*GetOrdersByStatusOutput, error) {
 		userId := handler.GetUserID(ctx)
 		if userId == nil {

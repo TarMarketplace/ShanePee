@@ -42,10 +42,20 @@ func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, descr
 }
 
 func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error) {
-	err := s.artToyRepo.UpdateArtToy(ctx, id, updateBody)
+	artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
+
+	if artToy.OwnerID != ownerID {
+		return nil, ErrUnauthorized
+	}
+
+	err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody)
+	if err != nil {
+		return nil, err
+	}
+
 	updatedArtToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err

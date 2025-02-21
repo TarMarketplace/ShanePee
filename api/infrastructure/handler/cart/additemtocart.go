@@ -32,6 +32,9 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 		Tags:        []string{"Cart"},
 		Summary:     "Add Item To Cart",
 		Description: "Add an item to the cart",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *AddItemToCartInput) (*AddItemToCartOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {

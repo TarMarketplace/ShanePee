@@ -27,6 +27,9 @@ func (h *AuthHandler) RegisterChangePassword(api huma.API) {
 		Tags:        []string{"Authentication"},
 		Summary:     "Change password",
 		Description: "Change password for authenticated user",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *ChangePasswordInput) (*struct{}, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {

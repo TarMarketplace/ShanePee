@@ -32,6 +32,9 @@ func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 		Tags:        []string{"Art toy"},
 		Summary:     "Create Art toy",
 		Description: "Create a new art toy record",
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
 	}, func(ctx context.Context, i *CreateArtToyInput) (*CreateArtToyOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {

@@ -7,7 +7,7 @@ import (
 )
 
 type CartService interface {
-	AddItemToCart(ctx context.Context, userID int64, artToyID int64) (*domain.CartItem, error)
+	AddItemToCart(ctx context.Context, cartID int64, artToyID int64) (*domain.CartItem, error)
 	CreateCart(ctx context.Context, ownerID int64) (*domain.Cart, error)
 }
 
@@ -23,8 +23,8 @@ func NewCartService(cartRepo domain.CartRepository) CartService {
 
 var _ CartService = &cartServiceImpl{}
 
-func (s *cartServiceImpl) AddItemToCart(ctx context.Context, userID int64, artToyID int64) (*domain.CartItem, error) {
-	cartItem := domain.NewCartItem(userID, artToyID)
+func (s *cartServiceImpl) AddItemToCart(ctx context.Context, cartID int64, artToyID int64) (*domain.CartItem, error) {
+	cartItem := domain.NewCartItem(cartID, artToyID)
 	err := s.cartRepo.AddItemToCart(ctx, cartItem)
 	if err != nil {
 		return nil, err

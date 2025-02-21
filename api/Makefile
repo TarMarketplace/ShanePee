@@ -33,6 +33,6 @@ clean:
 docs: docs/openapi.json
 
 docs/openapi.json: out/api
-	@echo "$(YELLOW)Generating documentation$(RESET)"
+	@echo "$(ORANGE)Generating documentation$(RESET)"
 	mkdir -p docs
 	./out/api -command=openapi

@@ -31,7 +31,7 @@ type UpdateArtToyOutput struct {
 func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "update-art-toy",
-		Method:      http.MethodPut,
+		Method:      http.MethodPatch,
 		Path:        "/v1/art-toy/{id}",
 		Tags:        []string{"Art toy"},
 		Summary:     "Update Art toy",

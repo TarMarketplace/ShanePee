@@ -900,7 +900,7 @@
           "Art toy"
         ]
       },
-      "put": {
+      "patch": {
         "description": "Update an existing art toy by ID",
         "operationId": "update-art-toy",
         "parameters": [

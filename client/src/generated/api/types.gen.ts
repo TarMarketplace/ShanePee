@@ -15,6 +15,14 @@ export type ArrayResponseArtToy = {
     data: Array<ArtToy> | null;
 };
 
+export type ArrayResponseOrder = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    data: Array<Order> | null;
+};
+
 export type ArtToy = {
     /**
      * A URL to the JSON Schema for this object.
@@ -27,6 +35,7 @@ export type ArtToy = {
     owner_id: number;
     photo: string | null;
     price: number;
+    release_date: string;
 };
 
 export type ArtToyCreateBody = {
@@ -52,14 +61,43 @@ export type ArtToyUpdateBody = {
     price?: number;
 };
 
+export type Cart = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    id: number;
+    owner_id: number;
+};
+
+export type CartItem = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    ArtToy: ArtToy;
+    Cart: Cart;
+    art_toy_id: number;
+    cart_id: number;
+    id: number;
+};
+
+export type CartItemCreateBody = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    art_toy_id: number;
+    cart_id: number;
+};
+
 export type ChangePasswordBody = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
     new_password: string;
-    request_id: number;
-    token: string;
+    old_password: string;
 };
 
 export type ErrorDetail = {
@@ -117,6 +155,16 @@ export type LoginBody = {
     password: string;
 };
 
+export type Order = {
+    buyer_id: number;
+    created_at: string;
+    delivery_service: string | null;
+    id: number;
+    seller_id: number;
+    status: 'PENDING' | 'SHIPPING' | 'COMPLETED';
+    tracking_number: string | null;
+};
+
 export type PartialAddress = {
     district?: string;
     house_no?: string;
@@ -147,12 +195,22 @@ export type RegisterBody = {
     password: string;
 };
 
-export type RequestPasswordChangeBody = {
+export type RequestPasswordResetBody = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
     email: string;
+};
+
+export type ResetPasswordBody = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    new_password: string;
+    request_id: number;
+    token: string;
 };
 
 export type User = {
@@ -167,6 +225,7 @@ export type User = {
     id: number;
     last_name: string | null;
     payment_method: PaymentMethod;
+    photo: string | null;
     tel: string | null;
 };
 
@@ -180,6 +239,7 @@ export type UserUpdateBody = {
     gender?: 'MALE' | 'FEMALE' | 'OTHER';
     last_name?: string;
     payment_method?: PartialPaymentMethod;
+    photo?: string;
     tel?: string;
 };
 
@@ -232,6 +292,33 @@ export type CreateArtToyResponses = {
 };
 
 export type CreateArtToyResponse = CreateArtToyResponses[keyof CreateArtToyResponses];
+
+export type DeleteArtToyData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/v1/art-toy/{id}';
+};
+
+export type DeleteArtToyErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type DeleteArtToyError = DeleteArtToyErrors[keyof DeleteArtToyErrors];
+
+export type DeleteArtToyResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type DeleteArtToyResponse = DeleteArtToyResponses[keyof DeleteArtToyResponses];
 
 export type GetArtToyByIdData = {
     body?: never;
@@ -387,30 +474,30 @@ export type MeResponses = {
 
 export type MeResponse = MeResponses[keyof MeResponses];
 
-export type PasswordChangeRequestsData = {
-    body: RequestPasswordChangeBody;
+export type PasswordResetRequestsData = {
+    body: RequestPasswordResetBody;
     path?: never;
     query?: never;
-    url: '/v1/auth/password-change-requests';
+    url: '/v1/auth/password-reset-requests';
 };
 
-export type PasswordChangeRequestsErrors = {
+export type PasswordResetRequestsErrors = {
     /**
      * Error
      */
     default: ErrorModel;
 };
 
-export type PasswordChangeRequestsError = PasswordChangeRequestsErrors[keyof PasswordChangeRequestsErrors];
+export type PasswordResetRequestsError = PasswordResetRequestsErrors[keyof PasswordResetRequestsErrors];
 
-export type PasswordChangeRequestsResponses = {
+export type PasswordResetRequestsResponses = {
     /**
      * No Content
      */
     204: void;
 };
 
-export type PasswordChangeRequestsResponse = PasswordChangeRequestsResponses[keyof PasswordChangeRequestsResponses];
+export type PasswordResetRequestsResponse = PasswordResetRequestsResponses[keyof PasswordResetRequestsResponses];
 
 export type RegisterData = {
     body: RegisterBody;
@@ -436,6 +523,133 @@ export type RegisterResponses = {
 };
 
 export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
+
+export type ResetPasswordData = {
+    body: ResetPasswordBody;
+    path?: never;
+    query?: never;
+    url: '/v1/auth/reset-password';
+};
+
+export type ResetPasswordErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
+
+export type ResetPasswordResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
+
+export type CreateCartData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/cart';
+};
+
+export type CreateCartErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type CreateCartError = CreateCartErrors[keyof CreateCartErrors];
+
+export type CreateCartResponses = {
+    /**
+     * OK
+     */
+    200: Cart;
+};
+
+export type CreateCartResponse = CreateCartResponses[keyof CreateCartResponses];
+
+export type AddItemToCartData = {
+    body: CartItemCreateBody;
+    path?: never;
+    query?: never;
+    url: '/v1/cart/add-item';
+};
+
+export type AddItemToCartErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type AddItemToCartError = AddItemToCartErrors[keyof AddItemToCartErrors];
+
+export type AddItemToCartResponses = {
+    /**
+     * OK
+     */
+    200: CartItem;
+};
+
+export type AddItemToCartResponse = AddItemToCartResponses[keyof AddItemToCartResponses];
+
+export type GetMyArtToysData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/my-art-toy';
+};
+
+export type GetMyArtToysErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetMyArtToysError = GetMyArtToysErrors[keyof GetMyArtToysErrors];
+
+export type GetMyArtToysResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseArtToy;
+};
+
+export type GetMyArtToysResponse = GetMyArtToysResponses[keyof GetMyArtToysResponses];
+
+export type GetOrdersByStatusData = {
+    body?: never;
+    path: {
+        status: 'PENDING' | 'SHIPPING' | 'COMPLETED';
+    };
+    query?: never;
+    url: '/v1/order/{status}';
+};
+
+export type GetOrdersByStatusErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetOrdersByStatusError = GetOrdersByStatusErrors[keyof GetOrdersByStatusErrors];
+
+export type GetOrdersByStatusResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseOrder;
+};
+
+export type GetOrdersByStatusResponse = GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses];
 
 export type UpdateUserData = {
     body: UserUpdateBody;

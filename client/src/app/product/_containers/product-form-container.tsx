@@ -90,7 +90,6 @@ export function ProductFormContainer({
             description: data.description,
             price: data.price,
             photo: imageAsBase64,
-            owner_id: user.id,
           }),
         }
       )

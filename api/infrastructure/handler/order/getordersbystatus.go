@@ -14,7 +14,7 @@ type GetOrdersByStatusInput struct {
 }
 
 type GetOrdersByStatusOutput struct {
-	Body []*domain.Order
+	Body handler.ArrayResponse[domain.Order]
 }
 
 func (h *OrderHandler) RegisterGetOrdersByStatus(api huma.API) {
@@ -36,7 +36,9 @@ func (h *OrderHandler) RegisterGetOrdersByStatus(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetOrdersByStatusOutput{
-			Body: data,
+			Body: handler.ArrayResponse[domain.Order]{
+				Data: data,
+			},
 		}, nil
 	})
 }

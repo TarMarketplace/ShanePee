@@ -117,6 +117,10 @@
           "price": {
             "format": "double",
             "type": "number"
+          },
+          "release_date": {
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
@@ -126,7 +130,8 @@
           "price",
           "photo",
           "availability",
-          "owner_id"
+          "owner_id",
+          "release_date"
         ],
         "type": "object"
       },

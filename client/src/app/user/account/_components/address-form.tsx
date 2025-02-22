@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/form'
 import { Input } from '@/components/input'
+import { Textarea } from '@/components/textarea'
 
 import { formatPostalCode } from '@/utils/input-formatter'
 
@@ -36,8 +37,9 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
                 <FormItem>
                   <FormLabel>บ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล</FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       {...field}
+                      rows={3}
                       placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
                     />
                   </FormControl>
@@ -49,7 +51,7 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
           <div className='col-span-1'>
             <FormField
               control={form.control}
-              name='distric'
+              name='district'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>เขต/อำเภอ</FormLabel>

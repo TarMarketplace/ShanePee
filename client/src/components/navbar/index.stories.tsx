@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { useState } from 'react'
 
-import type { User } from '@/types/users'
+import type { User } from '@/generated/api'
 
 import { Navbar } from '.'
 

@@ -56,8 +56,8 @@ export function UserInfoForm({
               <Text variant='sm-semibold'>เปลี่ยนรูป</Text>
             </button>
           </div>
-          <div className='grid w-full grid-cols-2 gap-4 md:grid-cols-6'>
-            <div className='col-span-2 md:col-span-6'>
+          <div className='grid w-full grid-cols-2 gap-4'>
+            {/* <div className='col-span-2 md:col-span-6'>
               <FormField
                 control={form.control}
                 name='username'
@@ -71,8 +71,29 @@ export function UserInfoForm({
                   </FormItem>
                 )}
               />
+            </div> */}
+            <div className='col-span-2'>
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>อีเมล</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder='example@gmail.com'
+                        type='email'
+                        readOnly
+                        disabled
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <div className='col-span-1 md:col-span-2'>
+            <div className='col-span-1'>
               <FormField
                 control={form.control}
                 name='name'
@@ -87,7 +108,7 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-1 md:col-span-2'>
+            <div className='col-span-1'>
               <FormField
                 control={form.control}
                 name='surname'
@@ -102,7 +123,32 @@ export function UserInfoForm({
                 )}
               />
             </div>
-            <div className='col-span-2'>
+            <div className='col-span-1'>
+              <FormField
+                control={form.control}
+                name='phone'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>เบอร์โทรศัพท์</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='0xx-xxx-xxxx'
+                        type='tel'
+                        onChange={(e) => {
+                          const phone = e.target.value
+                            .replaceAll('-', '')
+                            .slice(0, 10)
+                          field.onChange(phone)
+                        }}
+                        value={formatPhoneNumber(field.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className='col-span-1'>
               <FormField
                 control={form.control}
                 name='gender'
@@ -124,50 +170,6 @@ export function UserInfoForm({
                         <SelectItem value='OTHER'>ไม่ระบุ</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className='col-span-2 md:col-span-3'>
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>อีเมล</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder='example@gmail.com'
-                        type='email'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className='col-span-2 md:col-span-3'>
-              <FormField
-                control={form.control}
-                name='phone'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>เบอร์โทรศัพท์</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='0xx-xxx-xxxx'
-                        type='tel'
-                        onChange={(e) => {
-                          const phone = e.target.value
-                            .replaceAll('-', '')
-                            .slice(0, 10)
-                          field.onChange(phone)
-                        }}
-                        value={formatPhoneNumber(field.value)}
-                      />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

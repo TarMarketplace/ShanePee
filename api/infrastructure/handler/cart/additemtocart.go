@@ -39,7 +39,7 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		cart, err := h.cartSvc.AddItemToCart(ctx, i.Body.ArtToyID, *userID)
+		cartItem, err := h.cartSvc.AddItemToCart(ctx, *userID, i.Body.ArtToyID)
 		if err != nil {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
@@ -47,7 +47,7 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &AddItemToCartOutput{
-			Body: cart,
+			Body: cartItem,
 		}, nil
 	})
 }

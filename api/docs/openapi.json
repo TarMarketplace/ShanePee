@@ -278,14 +278,14 @@
             "format": "int64",
             "type": "integer"
           },
-          "cart_id": {
+          "id": {
             "examples": [
               97
             ],
             "format": "int64",
             "type": "integer"
           },
-          "id": {
+          "owner_id": {
             "examples": [
               97
             ],
@@ -295,8 +295,8 @@
         },
         "required": [
           "id",
-          "art_toy_id",
-          "cart_id"
+          "owner_id",
+          "art_toy_id"
         ],
         "type": "object"
       },
@@ -1444,6 +1444,43 @@
         "summary": "Checkout Items In Cart",
         "tags": [
           "Cart"
+        ]
+      }
+    },
+    "/v1/my-art-toy": {
+      "get": {
+        "description": "Get my art toys",
+        "operationId": "get-my-art-toys",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get My Art Toys",
+        "tags": [
+          "Art toy"
         ]
       }
     },

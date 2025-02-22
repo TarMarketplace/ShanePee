@@ -23,6 +23,7 @@ function SellerProductCardMobile({ product }: SellerProductCardDesktopProps) {
           src={product.photo as string}
           alt={product.name}
           fill
+          objectFit='cover'
         />
       </div>
       <div className='flex grow gap-2'>

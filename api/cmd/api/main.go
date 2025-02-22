@@ -81,10 +81,10 @@ func main() {
 	app.artToyHdr.RegisterUpdateArtToy(api)
 	app.artToyHdr.RegisterDeleteArtToy(api)
 
-	app.artToyHdr.RegisterCreateReview(api)
-	app.artToyHdr.RegisterGetReviews(api)
-	app.artToyHdr.RegisterUpdateReview(api)
-	app.artToyHdr.RegisterDeleteReview(api)
+	app.reviewHdr.RegisterCreateReview(api)
+	app.reviewHdr.RegisterGetReview(api)
+	app.reviewHdr.RegisterUpdateReview(api)
+	app.reviewHdr.RegisterDeleteReview(api)
 
 	app.cartHdr.RegisterCreateCart(api)
 	app.cartHdr.RegisterAddItemToCart(api)

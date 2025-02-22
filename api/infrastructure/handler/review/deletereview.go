@@ -1,4 +1,4 @@
-package arttoy
+package review
 
 import (
 	"context"
@@ -11,14 +11,14 @@ import (
 )
 
 type DeleteReviewInput struct {
-	ID int64 `path:"id"`
+	ArtToyID int64 `path:"artToyID"`
 }
 
-func (h *ArtToyHandler) RegisterDeleteReview(api huma.API) {
+func (h *ReviewHandler) RegisterDeleteReview(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "delete-review",
 		Method:      http.MethodDelete,
-		Path:        "/v1/art-toy/review/{id}",
+		Path:        "/v1/art-toy/review/{artToyID}",
 		Tags:        []string{"Art toy"},
 		Summary:     "Delete Art Toy Review",
 		Description: "Delete an existing art toy review by ID",
@@ -30,7 +30,7 @@ func (h *ArtToyHandler) RegisterDeleteReview(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		if err := h.artToySvc.DeleteReview(ctx, i.ID); err != nil {
+		if err := h.reviewSvc.DeleteReview(ctx, i.ArtToyID); err != nil {
 			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound
 			}

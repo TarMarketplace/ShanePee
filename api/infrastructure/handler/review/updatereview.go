@@ -1,4 +1,4 @@
-package arttoy
+package review
 
 import (
 	"context"
@@ -17,19 +17,19 @@ type ReviewUpdateBody struct {
 }
 
 type UpdateReviewInput struct {
-	ID   int64 `path:"id"`
-	Body ReviewUpdateBody
+	ArtToyID int64 `path:"artToyID"`
+	Body     ReviewUpdateBody
 }
 
 type UpdateReviewOutput struct {
 	Body *domain.Review
 }
 
-func (h *ArtToyHandler) RegisterUpdateReview(api huma.API) {
+func (h *ReviewHandler) RegisterUpdateReview(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "update-review",
 		Method:      http.MethodPatch,
-		Path:        "/v1/art-toy/review/{id}",
+		Path:        "/v1/art-toy/review/{artToyID}",
 		Tags:        []string{"Art toy"},
 		Summary:     "Update Art Toy Review",
 		Description: "Update an existing art toy review by ID",
@@ -41,7 +41,7 @@ func (h *ArtToyHandler) RegisterUpdateReview(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		data, err := h.artToySvc.UpdateReview(ctx, i.ID, i.Body.ToMap())
+		data, err := h.reviewSvc.UpdateReview(ctx, i.ArtToyID, i.Body.ToMap())
 		if err != nil {
 			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound

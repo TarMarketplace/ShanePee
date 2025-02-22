@@ -10,7 +10,7 @@ import { ProductContainer } from './product-container'
 
 export function ListProductContainer() {
   return (
-    <div className='flex flex-col w-full sm:w-fit sm:min-w-[60%] sm:divide-y-4 sm:divide-primary'>
+    <div className='flex w-full flex-col sm:w-fit sm:min-w-[60%] sm:divide-y-4 sm:divide-primary'>
       <div className='flex justify-between py-3'>
         <div className='flex items-center'>
           <Icon icon='material-symbols:list' className='size-9' />

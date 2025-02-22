@@ -8,6 +8,7 @@ import (
 
 type CartService interface {
 	AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error)
+	GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error)
 	Checkout(ctx context.Context, ownerID int64) error
 }
 
@@ -34,6 +35,14 @@ func (s *cartServiceImpl) AddItemToCart(ctx context.Context, ownerID int64, artT
 		return nil, err
 	}
 	return cartItem, nil
+}
+
+func (s *cartServiceImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {
+	cart, err := s.cartRepo.GetCartWithItemByOwnerID(ctx, ownerID)
+	if err != nil {
+		return nil, err
+	}
+	return cart, nil
 }
 
 func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {

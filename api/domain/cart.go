@@ -5,7 +5,7 @@ type CartItem struct {
 	OwnerID  int64  `json:"owner_id" gorm:"not null" example:"97"`
 	ArtToyID int64  `json:"art_toy_id" gorm:"not null" example:"97"`
 	Owner    User   `json:"-" gorm:"foreignKey:OwnerID;constraint:OnDelete:CASCADE;"`
-	ArtToy   ArtToy `json:"-" gorm:"foreignKey:ArtToyID;constraint:OnDelete:CASCADE;"`
+	ArtToy   ArtToy `json:"art_toy" gorm:"foreignKey:ArtToyID;constraint:OnDelete:CASCADE;"`
 }
 
 func NewCartItem(ownerID int64, artToyID int64) *CartItem {

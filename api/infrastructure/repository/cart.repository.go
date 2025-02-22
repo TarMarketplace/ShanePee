@@ -21,18 +21,16 @@ func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain
 	return err
 }
 
-func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) (*domain.Cart, error) {
-	var cart domain.Cart
-	err := r.db.Preload("Items").Where("owner_id = ?", ownerID).First(&cart).Error
+func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {
+	var cartItems []*domain.CartItem
+	err := r.db.Preload("ArtToy").Where("owner_id = ?", ownerID).Find(&cartItems).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		newCart := domain.NewCart(ownerID)
-		err := r.CreateCart(ctx, newCart)
-		if err != nil {
-			return nil, err
-		}
-		return newCart, nil
+		return []*domain.CartItem{}, nil
 	}
-	return &cart, err
+	if err != nil {
+		return nil, err
+	}
+	return cartItems, err
 }
 
 var _ domain.CartRepository = &cartRepositoryImpl{}

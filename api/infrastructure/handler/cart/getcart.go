@@ -10,7 +10,7 @@ import (
 )
 
 type GetCartOutput struct {
-	Body []*domain.CartItem
+	Body handler.ArrayResponse[domain.CartItem]
 }
 
 func (h *CartHandler) RegisterGetCart(api huma.API) {
@@ -34,7 +34,7 @@ func (h *CartHandler) RegisterGetCart(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetCartOutput{
-			Body: cart,
+			Body: handler.ArrayResponse[domain.CartItem]{Data: cart},
 		}, nil
 	})
 }

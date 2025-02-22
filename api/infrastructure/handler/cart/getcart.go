@@ -2,11 +2,13 @@ package cart
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type GetCartOutput struct {
@@ -31,6 +33,9 @@ func (h *CartHandler) RegisterGetCart(api huma.API) {
 		}
 		cart, err := h.cartSvc.GetCartByOwnerID(ctx, *userID)
 		if err != nil {
+			if errors.Is(err, service.ErrCartNotFound) {
+				return nil, handler.ErrCartNotFound
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetCartOutput{

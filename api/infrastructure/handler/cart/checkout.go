@@ -10,14 +10,6 @@ import (
 	"shanepee.com/api/service"
 )
 
-type OrderCreateBody struct {
-	CartID int64 `json:"cart_id" example:"97"`
-}
-
-type CheckoutInput struct {
-	Body OrderCreateBody
-}
-
 func (h *CartHandler) RegisterCheckout(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "checkout",
@@ -26,12 +18,12 @@ func (h *CartHandler) RegisterCheckout(api huma.API) {
 		Tags:        []string{"Cart"},
 		Summary:     "Checkout Items In Cart",
 		Description: "Place a new order from items in the cart",
-	}, func(ctx context.Context, i *CheckoutInput) (*struct{}, error) {
+	}, func(ctx context.Context, i *struct{}) (*struct{}, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		err := h.cartSvc.Checkout(ctx, i.Body.CartID, *userID)
+		err := h.cartSvc.Checkout(ctx, *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrOrderAndArtToyNotFound) {
 				return nil, handler.ErrOrderAndArtToyNotFound

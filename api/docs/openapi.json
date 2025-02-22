@@ -259,39 +259,6 @@
         },
         "type": "object"
       },
-      "Cart": {
-        "additionalProperties": false,
-        "properties": {
-          "$schema": {
-            "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/Cart.json"
-            ],
-            "format": "uri",
-            "readOnly": true,
-            "type": "string"
-          },
-          "id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "seller_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "id",
-          "seller_id"
-        ],
-        "type": "object"
-      },
       "CartItem": {
         "additionalProperties": false,
         "properties": {
@@ -328,8 +295,8 @@
         },
         "required": [
           "id",
-          "cart_id",
-          "art_toy_id"
+          "art_toy_id",
+          "cart_id"
         ],
         "type": "object"
       },
@@ -351,17 +318,9 @@
             ],
             "format": "int64",
             "type": "integer"
-          },
-          "cart_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
           }
         },
         "required": [
-          "cart_id",
           "art_toy_id"
         ],
         "type": "object"
@@ -578,31 +537,6 @@
           "buyer_id",
           "status",
           "created_at"
-        ],
-        "type": "object"
-      },
-      "OrderCreateBody": {
-        "additionalProperties": false,
-        "properties": {
-          "$schema": {
-            "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/OrderCreateBody.json"
-            ],
-            "format": "uri",
-            "readOnly": true,
-            "type": "string"
-          },
-          "cart_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "cart_id"
         ],
         "type": "object"
       },
@@ -1441,43 +1375,6 @@
         ]
       }
     },
-    "/v1/cart": {
-      "post": {
-        "description": "Create a new cart record",
-        "operationId": "create-cart",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cart"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Create Cart",
-        "tags": [
-          "Cart"
-        ]
-      }
-    },
     "/v1/cart/add-item": {
       "post": {
         "description": "Add an item to the cart",
@@ -1529,16 +1426,6 @@
       "post": {
         "description": "Place a new order from items in the cart",
         "operationId": "checkout",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OrderCreateBody"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "204": {
             "description": "No Content"

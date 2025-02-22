@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useMemo } from 'react'
 
 import { Text } from '@/components/text'
 
@@ -8,11 +9,11 @@ export interface SellerProductCardDesktopProps {
   product: ArtToy
 }
 
-const SellerProductCardMobile = ({
-  product,
-}: SellerProductCardDesktopProps) => {
-  const date = new Date(product.release_date)
-  const formattedDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear() + 543}`
+function SellerProductCardMobile({ product }: SellerProductCardDesktopProps) {
+  const formattedDate = useMemo(() => {
+    const date = new Date(product.release_date)
+    return `${date.getDate()}-${date.getMonth()}-${date.getFullYear() + 543}`
+  }, [product])
 
   return (
     <div className='flex h-[76px] w-full items-center gap-3 overflow-hidden rounded-lg bg-card px-2 py-1 shadow-sm'>

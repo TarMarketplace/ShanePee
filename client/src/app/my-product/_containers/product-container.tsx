@@ -12,8 +12,6 @@ const getMyProducts = async () => {
     cache: 'no-cache',
   })
 
-  console.log({ data, response })
-
   if (response.ok) {
     return data
   } else {

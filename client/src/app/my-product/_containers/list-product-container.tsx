@@ -8,7 +8,7 @@ import { Text } from '@/components/text'
 
 import { ProductContainer } from './product-container'
 
-export async function ListProductContainer() {
+export function ListProductContainer() {
   return (
     <div className='flex w-full flex-col sm:min-w-[60%] sm:divide-y-4 sm:divide-primary'>
       <div className='flex justify-between py-3'>

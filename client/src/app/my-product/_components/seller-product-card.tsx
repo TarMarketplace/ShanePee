@@ -7,7 +7,7 @@ export interface SellerProductCardProps {
   product: ArtToy
 }
 
-const SellerProductCard = (props: SellerProductCardProps) => {
+function SellerProductCard(props: SellerProductCardProps) {
   return (
     <>
       <div className='hidden sm:flex'>

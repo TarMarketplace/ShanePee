@@ -6,7 +6,7 @@ import { Text } from '@/components/text'
 
 import { ProductContainer } from './_containers/product-container'
 
-export default function Login() {
+export default function MyProductPage() {
   return (
     <main className='grid size-full grid-cols-1 place-items-center p-4 md:p-12'>
       <div className='flex w-full flex-col sm:w-fit sm:min-w-[60%] sm:divide-y-4 sm:divide-primary'>
@@ -26,9 +26,7 @@ export default function Login() {
             </Button>
           </Link>
         </div>
-        <div>
-          <ProductContainer />
-        </div>
+        <ProductContainer />
       </div>
     </main>
   )

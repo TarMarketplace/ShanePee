@@ -19,11 +19,10 @@ function SellerProductCardMobile({ product }: SellerProductCardDesktopProps) {
     <div className='flex h-[76px] w-full items-center gap-3 overflow-hidden rounded-lg bg-card px-2 py-1 shadow-sm'>
       <div className='relative h-full w-1/4'>
         <Image
-          className='rounded-lg'
+          className='rounded-lg object-cover'
           src={product.photo as string}
           alt={product.name}
           fill
-          objectFit='cover'
         />
       </div>
       <div className='flex grow gap-2'>

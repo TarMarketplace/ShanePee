@@ -13,11 +13,11 @@ var (
 )
 
 type ArtToyService interface {
-	CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, sellerID int64) (*domain.ArtToy, error)
-	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.ArtToy, error)
+	CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error)
+	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
 	GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
-	DeleteArtToy(ctx context.Context, id int64, sellerID int64) error
+	DeleteArtToy(ctx context.Context, id int64, ownerID int64) error
 }
 
 type artToyServiceImpl struct {
@@ -32,8 +32,8 @@ func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService {
 
 var _ ArtToyService = &artToyServiceImpl{}
 
-func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, sellerID int64) (*domain.ArtToy, error) {
-	artToy := domain.NewArtToy(name, description, price, photo, sellerID)
+func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error) {
+	artToy := domain.NewArtToy(name, description, price, photo, ownerID)
 	err := s.artToyRepo.CreateArtToy(ctx, artToy)
 	if err != nil {
 		return nil, err
@@ -41,13 +41,13 @@ func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, descr
 	return artToy, nil
 }
 
-func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.ArtToy, error) {
+func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error) {
 	artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	if artToy.SellerID != sellerID {
+	if artToy.OwnerID != ownerID {
 		return nil, ErrUnauthorized
 	}
 
@@ -80,13 +80,13 @@ func (s *artToyServiceImpl) GetArtToyByID(ctx context.Context, id int64) (*domai
 	return artToy, nil
 }
 
-func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, sellerID int64) error {
+func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID int64) error {
 	artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return err
 	}
 
-	if artToy.SellerID != sellerID {
+	if artToy.OwnerID != ownerID {
 		return ErrUnauthorized
 	}
 

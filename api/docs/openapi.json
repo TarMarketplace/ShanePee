@@ -128,6 +128,10 @@
           "name": {
             "type": "string"
           },
+          "owner_id": {
+            "format": "int64",
+            "type": "integer"
+          },
           "photo": {
             "examples": [
               "data:image/png;base64,mfkirjIDSFIj324if..."
@@ -147,10 +151,6 @@
             ],
             "format": "date-time",
             "type": "string"
-          },
-          "seller_id": {
-            "format": "int64",
-            "type": "integer"
           }
         },
         "required": [
@@ -160,7 +160,7 @@
           "price",
           "photo",
           "availability",
-          "seller_id",
+          "owner_id",
           "release_date"
         ],
         "type": "object"

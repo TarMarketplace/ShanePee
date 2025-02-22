@@ -9,7 +9,7 @@ type ArtToy struct {
 	Price        float64   `json:"price" gorm:"not null"`
 	Photo        *string   `json:"photo" nullable:"true" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
 	Availability bool      `json:"availability" gorm:"not null"`
-	SellerID     int64     `json:"seller_id" gorm:"not null"`
+	OwnerID      int64     `json:"owner_id" gorm:"not null"`
 	ReleaseDate  time.Time `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 }
 
@@ -21,7 +21,7 @@ type Review struct {
 	ArtToy   ArtToy  `json:"-" gorm:"foreignKey:ArtToyID;constraint:OnDelete:CASCADE;"`
 }
 
-func NewArtToy(name string, description string, price float64, photo *string, sellerID int64) *ArtToy {
+func NewArtToy(name string, description string, price float64, photo *string, ownerID int64) *ArtToy {
 	return &ArtToy{
 		ID:           GenID(),
 		Name:         name,
@@ -29,7 +29,7 @@ func NewArtToy(name string, description string, price float64, photo *string, se
 		Price:        price,
 		Photo:        photo,
 		Availability: true,
-		SellerID:     sellerID,
+		OwnerID:      ownerID,
 		ReleaseDate:  time.Now(),
 	}
 }

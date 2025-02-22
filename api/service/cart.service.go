@@ -12,12 +12,14 @@ type CartService interface {
 }
 
 type cartServiceImpl struct {
-	cartRepo  domain.CartRepository
-	orderRepo domain.OrderRepository
+	artToyRepo domain.ArtToyRepository
+	cartRepo   domain.CartRepository
+	orderRepo  domain.OrderRepository
 }
 
-func NewCartService(cartRepo domain.CartRepository, orderRepo domain.OrderRepository) CartService {
+func NewCartService(artToyRepo domain.ArtToyRepository, cartRepo domain.CartRepository, orderRepo domain.OrderRepository) CartService {
 	return &cartServiceImpl{
+		artToyRepo,
 		cartRepo,
 		orderRepo,
 	}
@@ -53,6 +55,11 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 		if err := s.orderRepo.CreateOrderItem(ctx, orderItem); err != nil {
 			return err
 		}
+		if err := s.artToyRepo.UpdateArtToy(ctx, item.ArtToyID, map[string]any{
+			"availability": true,
+		}); err != nil {
+			return err
+		}
 	}
 
 	// TODO: implement DeleteItemsInCart and handle error
@@ -60,5 +67,7 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 	// if err != nil {
 	// 	return err
 	// }
+
+	// TODO: make transaction
 	return nil
 }

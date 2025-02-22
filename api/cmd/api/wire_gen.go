@@ -42,7 +42,7 @@ func InitializeApp() (App, error) {
 	artToyHandler := arttoy.NewHandler(artToyService)
 	cartRepository := repository.NewCartRepository(db)
 	orderRepository := repository.NewOrderRepository(db)
-	cartService := service.NewCartService(cartRepository, orderRepository)
+	cartService := service.NewCartService(artToyRepository, cartRepository, orderRepository)
 	cartHandler := cart.NewHandler(cartService)
 	orderService := service.NewOrderService(orderRepository)
 	orderHandler := order.NewHandler(orderService)

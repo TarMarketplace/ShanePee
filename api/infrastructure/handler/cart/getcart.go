@@ -12,7 +12,7 @@ import (
 )
 
 type GetCartOutput struct {
-	Body []*domain.ArtToy
+	Body *domain.Cart
 }
 
 func (h *CartHandler) RegisterGetCart(api huma.API) {
@@ -31,7 +31,7 @@ func (h *CartHandler) RegisterGetCart(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		cart, err := h.cartSvc.GetCartByOwnerID(ctx, *userID)
+		cart, err := h.cartSvc.GetCartWithItemByOwnerID(ctx, *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrCartNotFound) {
 				return nil, handler.ErrCartNotFound

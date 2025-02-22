@@ -35,37 +35,18 @@ func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain
 	return err
 }
 
-func (r *cartRepositoryImpl) GetCartByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) {
-	var cartItems []domain.CartItem
+func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) (*domain.Cart, error) {
 	var cart domain.Cart
-	
-	err := r.db.WithContext(ctx).Where("owner_id = ?", ownerID).First(&cart).Error
+	err := r.db.Preload("Items").Where("owner_id = ?", ownerID).First(&cart).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		newCart := domain.NewCart(ownerID)
 		err := r.CreateCart(ctx, newCart)
 		if err != nil {
 			return nil, err
 		}
+		return newCart, nil
 	}
-	err = r.db.WithContext(ctx).
-		Joins("JOIN carts ON carts.id = cart_items.cart_id").
-		Where("carts.owner_id = ?", ownerID).
-		Preload("ArtToy").
-		Find(&cartItems).Error
-	
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, domain.ErrCartNotFound
-	}
-
-	if len(cartItems) == 0 {
-        return []*domain.ArtToy{}, err
-    }
-
-	var artToys []*domain.ArtToy
-	for _, item := range cartItems {
-		artToys = append(artToys, &item.ArtToy)
-	}
-	return artToys, err
+	return &cart, err
 }
 
 var _ domain.CartRepository = &cartRepositoryImpl{}

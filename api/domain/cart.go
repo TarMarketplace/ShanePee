@@ -3,6 +3,7 @@ package domain
 type Cart struct {
 	ID      int64 `json:"id" gorm:"primaryKey" example:"97"`
 	OwnerID int64 `json:"owner_id" gorm:"not null" example:"97"`
+	Items   []CartItem `json:"items" gorm:"foreignKey:CartID;constraint:OnDelete:CASCADE;"`
 }
 
 type CartItem struct {
@@ -17,6 +18,7 @@ func NewCart(ownerID int64) *Cart {
 	return &Cart{
 		ID:      GenID(),
 		OwnerID: ownerID,
+		Items: 	 []CartItem{},
 	}
 }
 

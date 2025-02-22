@@ -271,12 +271,6 @@
             "readOnly": true,
             "type": "string"
           },
-          "ArtToy": {
-            "$ref": "#/components/schemas/ArtToy"
-          },
-          "Owner": {
-            "$ref": "#/components/schemas/User"
-          },
           "art_toy_id": {
             "examples": [
               97
@@ -302,9 +296,7 @@
         "required": [
           "id",
           "owner_id",
-          "art_toy_id",
-          "Owner",
-          "ArtToy"
+          "art_toy_id"
         ],
         "type": "object"
       },

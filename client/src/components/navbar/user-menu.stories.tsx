@@ -40,6 +40,7 @@ export const Default: Story = {
         cvv: null,
         expire_date: null,
       },
+      photo: null,
     },
   },
   render: ({ user, onLogout }) => (

@@ -2,9 +2,11 @@
 
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useMemo } from 'react'
 
+import { Skeleton } from '@/components/skeleton'
 import { Text } from '@/components/text'
+
+import { useUser } from '@/providers/user-provider'
 
 import { AddressContainer } from './address-container'
 import { PasswordContainer } from './password-container'
@@ -15,6 +17,7 @@ export function AccountContainer() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+  const { user } = useUser()
 
   const mode = searchParams.get('mode') || 'info'
 
@@ -24,18 +27,20 @@ export function AccountContainer() {
     router.push(`${pathname}?${params.toString()}`)
   }
 
-  const renderMode = useMemo(() => {
+  const renderMode = () => {
+    if (!user) return <Skeleton className='size-full rounded-r-lg' />
+
     switch (mode) {
       case 'info':
-        return <UserInfoContainer />
+        return <UserInfoContainer user={user} />
       case 'address':
-        return <AddressContainer />
+        return <AddressContainer user={user} />
       case 'payment':
-        return <PaymentContainer />
+        return <PaymentContainer user={user} />
       case 'password':
         return <PasswordContainer />
     }
-  }, [mode])
+  }
 
   const modeList = [
     {
@@ -72,7 +77,7 @@ export function AccountContainer() {
           </button>
         ))}
       </div>
-      {renderMode}
+      {renderMode()}
     </div>
   )
 }

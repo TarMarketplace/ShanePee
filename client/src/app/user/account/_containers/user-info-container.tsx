@@ -1,14 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
+import { useRouter } from 'next/navigation'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
 
+import { useUser } from '@/providers/user-provider'
+
+import type { User } from '@/generated/api'
+import { updateUser } from '@/generated/api'
+
 import { UserInfoForm } from '../_components/user-info-form'
 
 const userInfoFormSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
   name: z.string().min(1, 'Name is required'),
   surname: z.string().min(1, 'Surname is required'),
   gender: z.enum(['MALE', 'FEMALE', 'OTHER']),
@@ -23,25 +29,48 @@ const userInfoFormSchema = z.object({
 
 export type UserInfoFormSchema = z.infer<typeof userInfoFormSchema>
 
-export function UserInfoContainer() {
+interface UserInfoContainerProps {
+  user: User
+}
+
+export function UserInfoContainer({ user }: UserInfoContainerProps) {
+  const { fetchUser } = useUser()
+  const router = useRouter()
+
   const form = useForm<UserInfoFormSchema>({
     resolver: zodResolver(userInfoFormSchema),
     defaultValues: {
-      username: '',
-      name: '',
-      surname: '',
-      email: '',
-      phone: '',
-      gender: undefined,
+      name: user.first_name ?? '',
+      surname: user.last_name ?? '',
+      email: user.email ?? '',
+      phone: user.tel ?? '',
+      gender: (user.gender as UserInfoFormSchema['gender']) ?? undefined,
     },
   })
 
-  const onSubmit: SubmitHandler<UserInfoFormSchema> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<UserInfoFormSchema> = async (data) => {
+    const { response, error } = await updateUser({
+      body: {
+        first_name: data.name,
+        last_name: data.surname,
+        tel: data.phone,
+        gender: data.gender,
+      },
+    })
+
+    if (response.ok) {
+      toast.success('Updated successfully')
+      fetchUser()
+    } else if (response.status == 401) {
+      router.push('/login')
+    } else {
+      toast.error('Something went wrong')
+      toast.error(error?.detail)
+    }
   }
 
   const handleChangePicture = () => {
-    console.log('habdleChangePicture')
+    console.log('handleChangePicture')
   }
 
   return (

@@ -61,25 +61,14 @@ export type ArtToyUpdateBody = {
     price?: number;
 };
 
-export type Cart = {
-    /**
-     * A URL to the JSON Schema for this object.
-     */
-    readonly $schema?: string;
-    id: number;
-    owner_id: number;
-};
-
 export type CartItem = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
-    ArtToy: ArtToy;
-    Cart: Cart;
     art_toy_id: number;
-    cart_id: number;
     id: number;
+    owner_id: number;
 };
 
 export type CartItemCreateBody = {
@@ -88,7 +77,6 @@ export type CartItemCreateBody = {
      */
     readonly $schema?: string;
     art_toy_id: number;
-    cart_id: number;
 };
 
 export type ChangePasswordBody = {
@@ -548,31 +536,6 @@ export type ResetPasswordResponses = {
 };
 
 export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
-
-export type CreateCartData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/cart';
-};
-
-export type CreateCartErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type CreateCartError = CreateCartErrors[keyof CreateCartErrors];
-
-export type CreateCartResponses = {
-    /**
-     * OK
-     */
-    200: Cart;
-};
-
-export type CreateCartResponse = CreateCartResponses[keyof CreateCartResponses];
 
 export type AddItemToCartData = {
     body: CartItemCreateBody;

@@ -30,7 +30,7 @@ func (h *ReviewHandler) RegisterDeleteReview(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		if err := h.reviewSvc.DeleteReview(ctx, i.ArtToyID); err != nil {
+		if err := h.reviewSvc.DeleteReview(ctx, i.ArtToyID, *userID); err != nil {
 			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound
 			}

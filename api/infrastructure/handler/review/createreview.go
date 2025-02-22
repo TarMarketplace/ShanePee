@@ -40,7 +40,7 @@ func (h *ReviewHandler) RegisterCreateReview(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		review, err := h.reviewSvc.CreateReview(ctx, i.Body.Rating, i.Body.Comment, i.ArtToyID)
+		review, err := h.reviewSvc.CreateReview(ctx, i.Body.Rating, i.Body.Comment, i.ArtToyID, *userID)
 		if err != nil {
 			if err == service.ErrArtToyNotFound {
 				return nil, handler.ErrArtToyNotFound

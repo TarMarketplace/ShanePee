@@ -39,6 +39,17 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 	return &review, nil
 }
 
+func (r *reviewRepositoryImpl) FindReviewerByArtToyID(ctx context.Context, artToyID int64) (*int64, error) {
+	var buyerID int64
+	if err := r.db.Table("orders").Select("orders.buyer_id").Joins("JOIN order_items ON order_items.order_id = orders.id").Joins("JOIN art_toys ON order_items.art_toy_id = art_toys.id").Where("art_toys.id = ?", artToyID).Scan(&buyerID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, domain.ErrUserNotFound
+		}
+		return nil, err
+	}
+	return &buyerID, nil
+}
+
 func (r *reviewRepositoryImpl) UpdateReview(ctx context.Context, artToyID int64, review map[string]interface{}) error {
 	var count int64
 	if err := r.db.Model(&domain.Review{}).Where("art_toy_id = ?", artToyID).Count(&count).Error; err != nil {

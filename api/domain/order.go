@@ -17,7 +17,7 @@ type Order struct {
 	DeliveryService *string     `json:"delivery_service" example:"Kerry Express"`
 	SellerID        int64       `json:"seller_id" gorm:"not null" example:"97"`
 	BuyerID         int64       `json:"buyer_id" gorm:"not null" example:"97"`
-	Status          OrderStatus `json:"status" gorm:"not null" enum:"PENDING,SHIPPING,COMPLETED" example:"pending"`
+	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`
 	CreatedAt       time.Time   `json:"created_at" gorm:"autoCreateTime" example:"2021-08-01T00:00:00Z"`
 }
 

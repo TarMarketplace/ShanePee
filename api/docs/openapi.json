@@ -544,8 +544,8 @@
           },
           "status": {
             "enum": [
-              "PENDING",
-              "SHIPPING",
+              "PREPARING",
+              "DELIVERING",
               "COMPLETED"
             ],
             "examples": [
@@ -1566,8 +1566,8 @@
             "required": true,
             "schema": {
               "enum": [
-                "PENDING",
-                "SHIPPING",
+                "PREPARING",
+                "DELIVERING",
                 "COMPLETED"
               ],
               "type": "string"

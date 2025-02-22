@@ -46,25 +46,23 @@ func (s *cartServiceImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID 
 }
 
 func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
-	var items []*domain.CartItem
-	// TODO: implement GetItemsInCart and handle error
-	// items, err := s.cartRepo.GetItemsInCart(ctx, ownerID)
-	// if err != nil {
-	// 	return err
-	// }
+	cartItems, err := s.cartRepo.GetCartWithItemByOwnerID(ctx, ownerID)
+	if err != nil {
+		return err
+	}
 
 	// All items should be owned by the same seller
-	sellerID := items[0].OwnerID
+	sellerID := cartItems[0].ArtToy.OwnerID
 	order := domain.NewOrder(sellerID, ownerID)
 	if err := s.orderRepo.CreateOrder(ctx, order); err != nil {
 		return err
 	}
-	for _, item := range items {
-		orderItem := domain.NewOrderItem(item.ArtToyID, order.ID)
+	for _, cartItem := range cartItems {
+		orderItem := domain.NewOrderItem(cartItem.ArtToyID, order.ID)
 		if err := s.orderRepo.CreateOrderItem(ctx, orderItem); err != nil {
 			return err
 		}
-		if err := s.artToyRepo.UpdateArtToy(ctx, item.ArtToyID, map[string]any{
+		if err := s.artToyRepo.UpdateArtToy(ctx, cartItem.ArtToyID, map[string]any{
 			"availability": true,
 		}); err != nil {
 			return err

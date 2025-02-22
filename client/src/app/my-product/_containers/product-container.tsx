@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-import { ArtToy, getMyArtToys } from '@/generated/api'
+import { type ArtToy, getMyArtToys } from '@/generated/api'
 
 import { SellerProductCard } from '../_components/seller-product-card'
 

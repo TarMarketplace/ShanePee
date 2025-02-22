@@ -1425,6 +1425,47 @@
       }
     },
     "/v1/cart": {
+      "get": {
+        "description": "Retrieve the user's cart",
+        "operationId": "get-cart",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ArtToy"
+                  },
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get Cart",
+        "tags": [
+          "Cart"
+        ]
+      },
       "post": {
         "description": "Create a new cart record",
         "operationId": "create-cart",

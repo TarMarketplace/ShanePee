@@ -14,6 +14,7 @@ var (
 type CartService interface {
 	AddItemToCart(ctx context.Context, cartID int64, artToyID int64) (*domain.CartItem, error)
 	CreateCart(ctx context.Context, ownerID int64) (*domain.Cart, error)
+	GetCartByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error)
 }
 
 type cartServiceImpl struct {
@@ -40,6 +41,14 @@ func (s *cartServiceImpl) AddItemToCart(ctx context.Context, cartID int64, artTo
 func (s *cartServiceImpl) CreateCart(ctx context.Context, ownerID int64) (*domain.Cart, error) {
 	cart := domain.NewCart(ownerID)
 	err := s.cartRepo.CreateCart(ctx, cart)
+	if err != nil {
+		return nil, err
+	}
+	return cart, nil
+}
+
+func (s *cartServiceImpl) GetCartByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) {
+	cart, err := s.cartRepo.GetCartByOwnerID(ctx, ownerID)
 	if err != nil {
 		return nil, err
 	}

@@ -12,27 +12,25 @@ type cartRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func (r *cartRepositoryImpl) CreateCart(ctx context.Context, cart *domain.Cart) error {
-	return r.db.Create(cart).Error
-}
-
 func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain.CartItem) error {
 	err := r.db.Create(cartItem).Error
 
 	if errors.Is(err, gorm.ErrForeignKeyViolated) {
-		cartNotFoundErr := r.db.First(&domain.Cart{}, cartItem.CartID).Error
-		artToyNotFoundErr := r.db.First(&domain.ArtToy{}, cartItem.ArtToyID).Error
-		if errors.Is(cartNotFoundErr, gorm.ErrRecordNotFound) && errors.Is(artToyNotFoundErr, gorm.ErrRecordNotFound) {
-			return domain.ErrCartAndArtToyNotFound
-		}
-		if errors.Is(cartNotFoundErr, gorm.ErrRecordNotFound) {
-			return domain.ErrCartNotFound
-		}
-		if errors.Is(artToyNotFoundErr, gorm.ErrRecordNotFound) {
-			return domain.ErrArtToyNotFound
-		}
+		return domain.ErrArtToyNotFound
 	}
 	return err
+}
+
+func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {
+	var cartItems []*domain.CartItem
+	err := r.db.Preload("ArtToy").Where("owner_id = ?", ownerID).Find(&cartItems).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []*domain.CartItem{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return cartItems, err
 }
 
 var _ domain.CartRepository = &cartRepositoryImpl{}

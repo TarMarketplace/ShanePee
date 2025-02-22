@@ -1,9 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
+
+import { changePassword } from '@/generated/api'
 
 import { PasswordForm } from '../_components/password-form'
 
@@ -32,8 +35,21 @@ export function PasswordContainer() {
     },
   })
 
-  const onSubmit: SubmitHandler<PasswordFormSchema> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<PasswordFormSchema> = async (data) => {
+    const { response, error } = await changePassword({
+      body: {
+        new_password: data.password,
+        old_password: data.oldPassword,
+      },
+    })
+
+    if (response.ok) {
+      toast.success('Updated successfully')
+      form.reset()
+    } else {
+      toast.error('Something went wrong')
+      toast.error(error?.detail)
+    }
   }
 
   return (

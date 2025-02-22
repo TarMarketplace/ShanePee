@@ -37,7 +37,9 @@ const eslintConfig = [
       parser: tsParser,
     },
 
-    rules: {},
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+    },
   },
 ]
 

@@ -8,7 +8,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-RUN npm i -g pnpm@8
+RUN npm i -g pnpm@9
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
@@ -26,7 +26,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN npm i -g pnpm@8
+RUN npm i -g pnpm@9
 
 ARG NEXT_PUBLIC_BASE_API_URL=${NEXT_PUBLIC_BASE_API_URL}
 

@@ -9,32 +9,32 @@ import (
 	"shanepee.com/api/infrastructure/handler"
 )
 
-type CreateCartOutput struct {
-	Body *domain.Cart
+type GetCartOutput struct {
+	Body handler.ArrayResponse[domain.CartItem]
 }
 
-func (h *CartHandler) RegisterCreateCart(api huma.API) {
+func (h *CartHandler) RegisterGetCart(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "create-cart",
-		Method:      http.MethodPost,
+		OperationID: "get-cart",
+		Method:      http.MethodGet,
 		Path:        "/v1/cart",
 		Tags:        []string{"Cart"},
-		Summary:     "Create Cart",
-		Description: "Create a new cart record",
+		Summary:     "Get Cart",
+		Description: "Retrieve the user's cart",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *struct{}) (*CreateCartOutput, error) {
+	}, func(ctx context.Context, i *struct{}) (*GetCartOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		cart, err := h.cartSvc.CreateCart(ctx, *userID)
+		cart, err := h.cartSvc.GetCartWithItemByOwnerID(ctx, *userID)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}
-		return &CreateCartOutput{
-			Body: cart,
+		return &GetCartOutput{
+			Body: handler.ArrayResponse[domain.CartItem]{Data: cart},
 		}, nil
 	})
 }

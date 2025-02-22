@@ -1,9 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
+import { useRouter } from 'next/navigation'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
+
+import { useUser } from '@/providers/user-provider'
+
+import type { User } from '@/generated/api'
+import { updateUser } from '@/generated/api'
 
 import { PaymentForm } from '../_components/payment-form'
 
@@ -25,19 +32,45 @@ const paymentFormSchema = z.object({
 
 export type PaymentFormSchema = z.infer<typeof paymentFormSchema>
 
-export function PaymentContainer() {
+interface PaymentContainerProps {
+  user: User
+}
+
+export function PaymentContainer({ user }: PaymentContainerProps) {
+  const { fetchUser } = useUser()
+  const router = useRouter()
+
   const form = useForm<PaymentFormSchema>({
     resolver: zodResolver(paymentFormSchema),
     defaultValues: {
-      cardNumber: '',
-      cardHolderName: '',
-      expirationDate: '',
-      cvv: '',
+      cardNumber: user.payment_method.card_number ?? '',
+      cardHolderName: user.payment_method.card_owner ?? '',
+      expirationDate: user.payment_method.expire_date ?? '',
+      cvv: user.payment_method.cvv ?? '',
     },
   })
 
-  const onSubmit: SubmitHandler<PaymentFormSchema> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<PaymentFormSchema> = async (data) => {
+    const { response, error } = await updateUser({
+      body: {
+        payment_method: {
+          card_number: data.cardNumber,
+          card_owner: data.cardHolderName,
+          expire_date: data.expirationDate,
+          cvv: data.cvv,
+        },
+      },
+    })
+
+    if (response.ok) {
+      toast.success('Updated successfully')
+      fetchUser()
+    } else if (response.status == 401) {
+      router.push('/login')
+    } else {
+      toast.error('Something went wrong')
+      toast.error(error?.detail)
+    }
   }
 
   return (

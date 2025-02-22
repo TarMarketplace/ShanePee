@@ -3,6 +3,7 @@ package domain
 import "time"
 
 type ArtToy struct {
+	_ 			 struct{}  `nullable:"true"`
 	ID           int64     `json:"id" gorm:"primaryKey"`
 	Name         string    `json:"name" gorm:"not null"`
 	Description  string    `json:"description" gorm:"not null"`

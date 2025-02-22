@@ -16,7 +16,7 @@ import { AddressForm } from '../_components/address-form'
 
 const addressFormSchema = z.object({
   details: z.string().min(1, 'Details address is required'),
-  district: z.string().min(1, 'Distric is required'),
+  district: z.string().min(1, 'District is required'),
   province: z.string().min(1, 'Province is required'),
   postalCode: z
     .string()

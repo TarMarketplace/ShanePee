@@ -37,19 +37,11 @@ export function AddressForm({ onSubmit, form }: AddressFormProps) {
                 <FormItem>
                   <FormLabel>บ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล</FormLabel>
                   <FormControl>
-                    <div>
-                      <Input
-                        {...field}
-                        className='hidden md:block'
-                        placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
-                      />
-                      <Textarea
-                        {...field}
-                        className='md:hidden'
-                        rows={3}
-                        placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
-                      />
-                    </div>
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder='กรุณากรอกบ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

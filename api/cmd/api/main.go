@@ -76,12 +76,12 @@ func main() {
 	app.userHdr.UpdateUser(api)
 
 	app.artToyHdr.RegisterGetArtToys(api)
+	app.artToyHdr.RegisterGetMyArtToys(api)
 	app.artToyHdr.RegisterCreateArtToy(api)
 	app.artToyHdr.RegisterGetArtToyByID(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
 	app.artToyHdr.RegisterDeleteArtToy(api)
 
-	app.cartHdr.RegisterCreateCart(api)
 	app.cartHdr.RegisterAddItemToCart(api)
 	app.cartHdr.RegisterGetCart(api)
 

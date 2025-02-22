@@ -3,12 +3,14 @@ import Image from 'next/image'
 
 import { Text } from '@/components/text'
 
-import type { Product } from '@/types/products'
+import type { ArtToy } from '@/generated/api'
 
 import { Badge } from '../badge'
 
 export interface ProductCardProps {
-  product: Product
+  // TODO: remove any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  product: ArtToy | any
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {

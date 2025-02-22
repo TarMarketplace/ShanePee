@@ -5,48 +5,23 @@
         "additionalProperties": false,
         "properties": {
           "district": {
-            "examples": [
-              "Pathumwan"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["Pathumwan"],
+            "type": ["string", "null"]
           },
           "house_no": {
-            "examples": [
-              "254"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["254"],
+            "type": ["string", "null"]
           },
           "postcode": {
-            "examples": [
-              "10330"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["10330"],
+            "type": ["string", "null"]
           },
           "province": {
-            "examples": [
-              "Bangkok"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["Bangkok"],
+            "type": ["string", "null"]
           }
         },
-        "required": [
-          "house_no",
-          "district",
-          "province",
-          "postcode"
-        ],
+        "required": ["house_no", "district", "province", "postcode"],
         "type": "object"
       },
       "ArrayResponseArtToy": {
@@ -65,15 +40,10 @@
             "items": {
               "$ref": "#/components/schemas/ArtToy"
             },
-            "type": [
-              "array",
-              "null"
-            ]
+            "type": ["array", "null"]
           }
         },
-        "required": [
-          "data"
-        ],
+        "required": ["data"],
         "type": "object"
       },
       "ArrayResponseOrder": {
@@ -81,9 +51,7 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ArrayResponseOrder.json"
-            ],
+            "examples": ["https://example.com/schemas/ArrayResponseOrder.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
@@ -92,15 +60,10 @@
             "items": {
               "$ref": "#/components/schemas/Order"
             },
-            "type": [
-              "array",
-              "null"
-            ]
+            "type": ["array", "null"]
           }
         },
-        "required": [
-          "data"
-        ],
+        "required": ["data"],
         "type": "object"
       },
       "ArtToy": {
@@ -108,9 +71,7 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ArtToy.json"
-            ],
+            "examples": ["https://example.com/schemas/ArtToy.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
@@ -133,22 +94,15 @@
             "type": "integer"
           },
           "photo": {
-            "examples": [
-              "data:image/png;base64,mfkirjIDSFIj324if..."
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["data:image/png;base64,mfkirjIDSFIj324if..."],
+            "type": ["string", "null"]
           },
           "price": {
             "format": "double",
             "type": "number"
           },
           "release_date": {
-            "examples": [
-              "2021-01-01T00:00:00Z"
-            ],
+            "examples": ["2021-01-01T00:00:00Z"],
             "format": "date-time",
             "type": "string"
           }
@@ -170,47 +124,30 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ArtToyCreateBody.json"
-            ],
+            "examples": ["https://example.com/schemas/ArtToyCreateBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "description": {
-            "examples": [
-              "Delicious fish"
-            ],
+            "examples": ["Delicious fish"],
             "type": "string"
           },
           "name": {
-            "examples": [
-              "Tuna"
-            ],
+            "examples": ["Tuna"],
             "type": "string"
           },
           "photo": {
-            "examples": [
-              "data:image/png;base64,mfkirjIDSFIj324if..."
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["data:image/png;base64,mfkirjIDSFIj324if..."],
+            "type": ["string", "null"]
           },
           "price": {
-            "examples": [
-              55.55
-            ],
+            "examples": [55.55],
             "format": "double",
             "type": "number"
           }
         },
-        "required": [
-          "name",
-          "description",
-          "price"
-        ],
+        "required": ["name", "description", "price"],
         "type": "object"
       },
       "ArtToyUpdateBody": {
@@ -218,78 +155,33 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ArtToyUpdateBody.json"
-            ],
+            "examples": ["https://example.com/schemas/ArtToyUpdateBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "availability": {
-            "examples": [
-              false
-            ],
+            "examples": [false],
             "type": "boolean"
           },
           "description": {
-            "examples": [
-              "Delicious fish"
-            ],
+            "examples": ["Delicious fish"],
             "type": "string"
           },
           "name": {
-            "examples": [
-              "Tuna"
-            ],
+            "examples": ["Tuna"],
             "type": "string"
           },
           "photo": {
-            "examples": [
-              "data:image/png;base64,mfkirjIDSFIj324if..."
-            ],
+            "examples": ["data:image/png;base64,mfkirjIDSFIj324if..."],
             "type": "string"
           },
           "price": {
-            "examples": [
-              55.55
-            ],
+            "examples": [55.55],
             "format": "double",
             "type": "number"
           }
         },
-        "type": "object"
-      },
-      "Cart": {
-        "additionalProperties": false,
-        "properties": {
-          "$schema": {
-            "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/Cart.json"
-            ],
-            "format": "uri",
-            "readOnly": true,
-            "type": "string"
-          },
-          "id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "owner_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "id",
-          "owner_id"
-        ],
         "type": "object"
       },
       "CartItem": {
@@ -297,48 +189,28 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/CartItem.json"
-            ],
+            "examples": ["https://example.com/schemas/CartItem.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
-          "ArtToy": {
-            "$ref": "#/components/schemas/ArtToy"
-          },
-          "Cart": {
-            "$ref": "#/components/schemas/Cart"
-          },
           "art_toy_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "cart_id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           },
           "id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
+            "format": "int64",
+            "type": "integer"
+          },
+          "owner_id": {
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           }
         },
-        "required": [
-          "id",
-          "cart_id",
-          "art_toy_id",
-          "Cart",
-          "ArtToy"
-        ],
+        "required": ["id", "owner_id", "art_toy_id"],
         "type": "object"
       },
       "CartItemCreateBody": {
@@ -346,32 +218,18 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/CartItemCreateBody.json"
-            ],
+            "examples": ["https://example.com/schemas/CartItemCreateBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "art_toy_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "cart_id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           }
         },
-        "required": [
-          "cart_id",
-          "art_toy_id"
-        ],
+        "required": ["art_toy_id"],
         "type": "object"
       },
       "ChangePasswordBody": {
@@ -379,30 +237,21 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ChangePasswordBody.json"
-            ],
+            "examples": ["https://example.com/schemas/ChangePasswordBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "new_password": {
-            "examples": [
-              "VerySecureNewPassword"
-            ],
+            "examples": ["VerySecureNewPassword"],
             "type": "string"
           },
           "old_password": {
-            "examples": [
-              "VerySecurePassword"
-            ],
+            "examples": ["VerySecurePassword"],
             "type": "string"
           }
         },
-        "required": [
-          "old_password",
-          "new_password"
-        ],
+        "required": ["old_password", "new_password"],
         "type": "object"
       },
       "ErrorDetail": {
@@ -427,18 +276,14 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ErrorModel.json"
-            ],
+            "examples": ["https://example.com/schemas/ErrorModel.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "detail": {
             "description": "A human-readable explanation specific to this occurrence of the problem.",
-            "examples": [
-              "Property foo is required but is missing."
-            ],
+            "examples": ["Property foo is required but is missing."],
             "type": "string"
           },
           "errors": {
@@ -446,40 +291,29 @@
             "items": {
               "$ref": "#/components/schemas/ErrorDetail"
             },
-            "type": [
-              "array",
-              "null"
-            ]
+            "type": ["array", "null"]
           },
           "instance": {
             "description": "A URI reference that identifies the specific occurrence of the problem.",
-            "examples": [
-              "https://example.com/error-log/abc123"
-            ],
+            "examples": ["https://example.com/error-log/abc123"],
             "format": "uri",
             "type": "string"
           },
           "status": {
             "description": "HTTP status code",
-            "examples": [
-              400
-            ],
+            "examples": [400],
             "format": "int64",
             "type": "integer"
           },
           "title": {
             "description": "A short, human-readable summary of the problem type. This value should not change between occurrences of the error.",
-            "examples": [
-              "Bad Request"
-            ],
+            "examples": ["Bad Request"],
             "type": "string"
           },
           "type": {
             "default": "about:blank",
             "description": "A URI reference to human-readable documentation for the error.",
-            "examples": [
-              "https://example.com/errors/example"
-            ],
+            "examples": ["https://example.com/errors/example"],
             "format": "uri",
             "type": "string"
           }
@@ -491,91 +325,58 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/LoginBody.json"
-            ],
+            "examples": ["https://example.com/schemas/LoginBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "email": {
-            "examples": [
-              "johndoe@example.com"
-            ],
+            "examples": ["johndoe@example.com"],
             "type": "string"
           },
           "password": {
-            "examples": [
-              "VerySecurePassword"
-            ],
+            "examples": ["VerySecurePassword"],
             "type": "string"
           }
         },
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "type": "object"
       },
       "Order": {
         "additionalProperties": false,
         "properties": {
           "buyer_id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           },
           "created_at": {
-            "examples": [
-              "2021-08-01T00:00:00Z"
-            ],
+            "examples": ["2021-08-01T00:00:00Z"],
             "format": "date-time",
             "type": "string"
           },
           "delivery_service": {
-            "examples": [
-              "Kerry Express"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["Kerry Express"],
+            "type": ["string", "null"]
           },
           "id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           },
           "seller_id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           },
           "status": {
-            "enum": [
-              "PENDING",
-              "SHIPPING",
-              "COMPLETED"
-            ],
-            "examples": [
-              "pending"
-            ],
+            "enum": ["PENDING", "SHIPPING", "COMPLETED"],
+            "examples": ["pending"],
             "type": "string"
           },
           "tracking_number": {
-            "examples": [
-              "TH1234567890"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["TH1234567890"],
+            "type": ["string", "null"]
           }
         },
         "required": [
@@ -593,27 +394,19 @@
         "additionalProperties": false,
         "properties": {
           "district": {
-            "examples": [
-              "Pathumwan"
-            ],
+            "examples": ["Pathumwan"],
             "type": "string"
           },
           "house_no": {
-            "examples": [
-              "254"
-            ],
+            "examples": ["254"],
             "type": "string"
           },
           "postcode": {
-            "examples": [
-              "10330"
-            ],
+            "examples": ["10330"],
             "type": "string"
           },
           "province": {
-            "examples": [
-              "Bangkok"
-            ],
+            "examples": ["Bangkok"],
             "type": "string"
           }
         },
@@ -623,27 +416,19 @@
         "additionalProperties": false,
         "properties": {
           "card_number": {
-            "examples": [
-              "4242424242424242"
-            ],
+            "examples": ["4242424242424242"],
             "type": "string"
           },
           "card_owner": {
-            "examples": [
-              "Freddy Mercury"
-            ],
+            "examples": ["Freddy Mercury"],
             "type": "string"
           },
           "cvv": {
-            "examples": [
-              "132"
-            ],
+            "examples": ["132"],
             "type": "string"
           },
           "expire_date": {
-            "examples": [
-              "02/27"
-            ],
+            "examples": ["02/27"],
             "type": "string"
           }
         },
@@ -653,48 +438,23 @@
         "additionalProperties": false,
         "properties": {
           "card_number": {
-            "examples": [
-              "4242424242424242"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["4242424242424242"],
+            "type": ["string", "null"]
           },
           "card_owner": {
-            "examples": [
-              "Freddy Mercury"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["Freddy Mercury"],
+            "type": ["string", "null"]
           },
           "cvv": {
-            "examples": [
-              "132"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["132"],
+            "type": ["string", "null"]
           },
           "expire_date": {
-            "examples": [
-              "02/27"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["02/27"],
+            "type": ["string", "null"]
           }
         },
-        "required": [
-          "card_number",
-          "expire_date",
-          "cvv",
-          "card_owner"
-        ],
+        "required": ["card_number", "expire_date", "cvv", "card_owner"],
         "type": "object"
       },
       "RegisterBody": {
@@ -702,30 +462,21 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/RegisterBody.json"
-            ],
+            "examples": ["https://example.com/schemas/RegisterBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
           },
           "email": {
-            "examples": [
-              "johndoe@example.com"
-            ],
+            "examples": ["johndoe@example.com"],
             "type": "string"
           },
           "password": {
-            "examples": [
-              "VerySecurePassword"
-            ],
+            "examples": ["VerySecurePassword"],
             "type": "string"
           }
         },
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "type": "object"
       },
       "RequestPasswordResetBody": {
@@ -741,15 +492,11 @@
             "type": "string"
           },
           "email": {
-            "examples": [
-              "johndoe@example.com"
-            ],
+            "examples": ["johndoe@example.com"],
             "type": "string"
           }
         },
-        "required": [
-          "email"
-        ],
+        "required": ["email"],
         "type": "object"
       },
       "ResetPasswordBody": {
@@ -757,9 +504,7 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ResetPasswordBody.json"
-            ],
+            "examples": ["https://example.com/schemas/ResetPasswordBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
@@ -775,11 +520,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "request_id",
-          "token",
-          "new_password"
-        ],
+        "required": ["request_id", "token", "new_password"],
         "type": "object"
       },
       "User": {
@@ -787,9 +528,7 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/User.json"
-            ],
+            "examples": ["https://example.com/schemas/User.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
@@ -798,65 +537,36 @@
             "$ref": "#/components/schemas/Address"
           },
           "email": {
-            "examples": [
-              "johndoe@example.com"
-            ],
+            "examples": ["johndoe@example.com"],
             "type": "string"
           },
           "first_name": {
-            "examples": [
-              "John"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["John"],
+            "type": ["string", "null"]
           },
           "gender": {
-            "examples": [
-              "MALE"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["MALE"],
+            "type": ["string", "null"]
           },
           "id": {
-            "examples": [
-              97
-            ],
+            "examples": [97],
             "format": "int64",
             "type": "integer"
           },
           "last_name": {
-            "examples": [
-              "Doe"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["Doe"],
+            "type": ["string", "null"]
           },
           "payment_method": {
             "$ref": "#/components/schemas/PaymentMethod"
           },
           "photo": {
-            "examples": [
-              "data:image/png;base64,mfkirjIDSFIj324if..."
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["data:image/png;base64,mfkirjIDSFIj324if..."],
+            "type": ["string", "null"]
           },
           "tel": {
-            "examples": [
-              "0988888888"
-            ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "examples": ["0988888888"],
+            "type": ["string", "null"]
           }
         },
         "required": [
@@ -877,9 +587,7 @@
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/UserUpdateBody.json"
-            ],
+            "examples": ["https://example.com/schemas/UserUpdateBody.json"],
             "format": "uri",
             "readOnly": true,
             "type": "string"
@@ -888,41 +596,27 @@
             "$ref": "#/components/schemas/PartialAddress"
           },
           "first_name": {
-            "examples": [
-              "John"
-            ],
+            "examples": ["John"],
             "type": "string"
           },
           "gender": {
-            "enum": [
-              "MALE",
-              "FEMALE",
-              "OTHER"
-            ],
-            "examples": [
-              "MALE"
-            ],
+            "enum": ["MALE", "FEMALE", "OTHER"],
+            "examples": ["MALE"],
             "type": "string"
           },
           "last_name": {
-            "examples": [
-              "Doe"
-            ],
+            "examples": ["Doe"],
             "type": "string"
           },
           "payment_method": {
             "$ref": "#/components/schemas/PartialPaymentMethod"
           },
           "photo": {
-            "examples": [
-              "data:image/png;base64,mfkirjIDSFIj324if..."
-            ],
+            "examples": ["data:image/png;base64,mfkirjIDSFIj324if..."],
             "type": "string"
           },
           "tel": {
-            "examples": [
-              "0988888888"
-            ],
+            "examples": ["0988888888"],
             "type": "string"
           }
         },
@@ -971,9 +665,7 @@
           }
         },
         "summary": "Get Art Toys",
-        "tags": [
-          "Art toy"
-        ]
+        "tags": ["Art toy"]
       },
       "post": {
         "description": "Create a new art toy record",
@@ -1016,9 +708,7 @@
           }
         ],
         "summary": "Create Art toy",
-        "tags": [
-          "Art toy"
-        ]
+        "tags": ["Art toy"]
       }
     },
     "/v1/art-toy/{id}": {
@@ -1032,9 +722,7 @@
             "name": "id",
             "required": true,
             "schema": {
-              "examples": [
-                3
-              ],
+              "examples": [3],
               "format": "int64",
               "type": "integer"
             }
@@ -1061,9 +749,7 @@
           }
         ],
         "summary": "Delete Art Toy",
-        "tags": [
-          "Art toy"
-        ]
+        "tags": ["Art toy"]
       },
       "get": {
         "description": "Get art toy by id",
@@ -1102,9 +788,7 @@
           }
         },
         "summary": "Get Art Toy by ID",
-        "tags": [
-          "Art toy"
-        ]
+        "tags": ["Art toy"]
       },
       "patch": {
         "description": "Update an existing art toy by ID",
@@ -1158,9 +842,7 @@
           }
         ],
         "summary": "Update Art toy",
-        "tags": [
-          "Art toy"
-        ]
+        "tags": ["Art toy"]
       }
     },
     "/v1/auth/change-password": {
@@ -1198,9 +880,7 @@
           }
         ],
         "summary": "Change password",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/auth/login": {
@@ -1240,9 +920,7 @@
           }
         },
         "summary": "Login User",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/auth/logout": {
@@ -1270,9 +948,7 @@
           }
         ],
         "summary": "Logout User",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/auth/me": {
@@ -1307,9 +983,7 @@
           }
         ],
         "summary": "Get current authenticated user",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/auth/password-reset-requests": {
@@ -1342,9 +1016,7 @@
           }
         },
         "summary": "Request a password reset",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/auth/register": {
@@ -1384,9 +1056,7 @@
           }
         },
         "summary": "Register User",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/auth/reset-password": {
@@ -1419,90 +1089,10 @@
           }
         },
         "summary": "Reset password",
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/v1/cart": {
-      "get": {
-        "description": "Retrieve the user's cart",
-        "operationId": "get-cart",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ArtToy"
-                  },
-                  "type": [
-                    "array",
-                    "null"
-                  ]
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get Cart",
-        "tags": [
-          "Cart"
-        ]
-      },
-      "post": {
-        "description": "Create a new cart record",
-        "operationId": "create-cart",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cart"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Create Cart",
-        "tags": [
-          "Cart"
-        ]
-      }
-    },
-    "/v1/cart/add-item": {
       "post": {
         "description": "Add an item to the cart",
         "operationId": "add-item-to-cart",
@@ -1544,9 +1134,42 @@
           }
         ],
         "summary": "Add Item To Cart",
-        "tags": [
-          "Cart"
-        ]
+        "tags": ["Cart"]
+      }
+    },
+    "/v1/my-art-toy": {
+      "get": {
+        "description": "Get my art toys",
+        "operationId": "get-my-art-toys",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get My Art Toys",
+        "tags": ["Art toy"]
       }
     },
     "/v1/order/{status}": {
@@ -1559,11 +1182,7 @@
             "name": "status",
             "required": true,
             "schema": {
-              "enum": [
-                "PENDING",
-                "SHIPPING",
-                "COMPLETED"
-              ],
+              "enum": ["PENDING", "SHIPPING", "COMPLETED"],
               "type": "string"
             }
           }
@@ -1596,9 +1215,7 @@
           }
         ],
         "summary": "Get Orders by Status",
-        "tags": [
-          "Order"
-        ]
+        "tags": ["Order"]
       }
     },
     "/v1/user": {
@@ -1636,9 +1253,7 @@
           }
         ],
         "summary": "Update User",
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       }
     }
   }

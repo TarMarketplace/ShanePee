@@ -12,7 +12,6 @@ import (
 )
 
 type CartItemCreateBody struct {
-	CartID   int64 `json:"cart_id" example:"97"`
 	ArtToyID int64 `json:"art_toy_id" example:"97"`
 }
 
@@ -40,13 +39,9 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		cart, err := h.cartSvc.AddItemToCart(ctx, i.Body.CartID, i.Body.ArtToyID)
+		cart, err := h.cartSvc.AddItemToCart(ctx, *userID, i.Body.ArtToyID)
 		if err != nil {
-			if errors.Is(err, service.ErrCartAndArtToyNotFound) {
-				return nil, handler.ErrCartAndArtToyNotFound
-			} else if errors.Is(err, service.ErrCartNotFound) {
-				return nil, handler.ErrCartNotFound
-			} else if errors.Is(err, service.ErrArtToyNotFound) {
+			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
 			}
 			return nil, handler.ErrIntervalServerError

@@ -2,9 +2,12 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Text } from '@/components/text'
+
+import { passwordResetRequests } from '@/generated/api'
 
 import { ForgotPasswordForm } from '../_components/fogot-password-form'
 
@@ -28,8 +31,20 @@ export function ForgotPasswordContainer({
     },
   })
 
-  const onSubmit: SubmitHandler<ForgotPasswordFormSchema> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<ForgotPasswordFormSchema> = async (data) => {
+    const { response, error } = await passwordResetRequests({
+      body: {
+        email: data.email,
+      },
+    })
+
+    if (!response.ok) {
+      toast.error(error?.detail)
+      return
+    }
+
+    toast.success('Email sent successfully')
+    form.reset()
   }
 
   return (

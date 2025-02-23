@@ -43,11 +43,11 @@ type authServiceImpl struct {
 var _ AuthService = &authServiceImpl{}
 
 var (
-	ErrIncorrectCredential error = errors.New("invalid email or password")
-	ErrInvalidToken        error = errors.New("invalid token or request id")
+	ErrUnauthorized        error = errors.New("Unauthorized access")
+	ErrIncorrectCredential error = errors.New("Invalid email or password")
+	ErrInvalidToken        error = errors.New("Invalid token or request id")
 	ErrUserNotFound        error = domain.ErrUserNotFound
-	ErrInvalidOldPassword  error = errors.New("invalid old password")
-	ErrUnauthorized        error = errors.New("unauthorized access")
+	ErrInvalidOldPassword  error = errors.New("Invalid old password")
 )
 
 func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, error) {

@@ -7,6 +7,7 @@ import (
 	"shanepee.com/api/infrastructure/handler/auth"
 	"shanepee.com/api/infrastructure/handler/cart"
 	"shanepee.com/api/infrastructure/handler/order"
+	"shanepee.com/api/infrastructure/handler/review"
 	"shanepee.com/api/infrastructure/handler/user"
 )
 
@@ -14,17 +15,19 @@ type App struct {
 	authHdr      auth.AuthHandler
 	userHdr      user.UserHandler
 	artToyHdr    arttoy.ArtToyHandler
+	reviewHdr    review.ReviewHandler
 	cartHdr      cart.CartHandler
 	orderHdr     order.OrderHandler
 	cfg          config.Config
 	sessionStore sessions.Store
 }
 
-func NewApp(authHdr auth.AuthHandler, userHdr user.UserHandler, artToyHdr arttoy.ArtToyHandler, cartHdr cart.CartHandler, orderHdr order.OrderHandler, cfg config.Config, sessionStore sessions.Store) App {
+func NewApp(authHdr auth.AuthHandler, userHdr user.UserHandler, artToyHdr arttoy.ArtToyHandler, reviewHdr review.ReviewHandler, cartHdr cart.CartHandler, orderHdr order.OrderHandler, cfg config.Config, sessionStore sessions.Store) App {
 	return App{
 		authHdr,
 		userHdr,
 		artToyHdr,
+		reviewHdr,
 		cartHdr,
 		orderHdr,
 		cfg,

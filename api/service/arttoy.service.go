@@ -45,21 +45,17 @@ func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBo
 	if err != nil {
 		return nil, err
 	}
-
 	if artToy.OwnerID != ownerID {
 		return nil, ErrUnauthorized
 	}
-
 	err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody)
 	if err != nil {
 		return nil, err
 	}
-
 	updatedArtToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-
 	return updatedArtToy, nil
 }
 
@@ -92,10 +88,8 @@ func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID 
 	if err != nil {
 		return err
 	}
-
 	if artToy.OwnerID != ownerID {
 		return ErrUnauthorized
 	}
-
 	return s.artToyRepo.DeleteArtToy(ctx, id)
 }

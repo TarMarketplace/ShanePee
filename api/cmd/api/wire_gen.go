@@ -13,6 +13,7 @@ import (
 	"shanepee.com/api/infrastructure/handler/auth"
 	"shanepee.com/api/infrastructure/handler/cart"
 	"shanepee.com/api/infrastructure/handler/order"
+	"shanepee.com/api/infrastructure/handler/review"
 	"shanepee.com/api/infrastructure/handler/user"
 	"shanepee.com/api/infrastructure/repository"
 	"shanepee.com/api/infrastructure/session"
@@ -40,13 +41,16 @@ func InitializeApp() (App, error) {
 	artToyRepository := repository.NewArtToyRepository(db)
 	artToyService := service.NewArtToyService(artToyRepository)
 	artToyHandler := arttoy.NewHandler(artToyService)
-	cartRepository := repository.NewCartRepository(db)
 	orderRepository := repository.NewOrderRepository(db)
+	reviewRepository := repository.NewReviewRepository(db)
+	reviewService := service.NewReviewService(orderRepository, reviewRepository)
+	reviewHandler := review.NewHandler(reviewService)
+	cartRepository := repository.NewCartRepository(db)
 	cartService := service.NewCartService(artToyRepository, cartRepository, orderRepository)
 	cartHandler := cart.NewHandler(cartService)
 	orderService := service.NewOrderService(orderRepository)
 	orderHandler := order.NewHandler(orderService)
 	store := session.NewStore(configConfig, options, db)
-	app := NewApp(authHandler, userHandler, artToyHandler, cartHandler, orderHandler, configConfig, store)
+	app := NewApp(authHandler, userHandler, artToyHandler, reviewHandler, cartHandler, orderHandler, configConfig, store)
 	return app, nil
 }

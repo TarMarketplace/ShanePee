@@ -11,6 +11,10 @@ import (
 	"shanepee.com/api/domain"
 )
 
+var (
+	ErrUserEmailAlreadyExist error = domain.ErrUserEmailAlreadyExist
+)
+
 type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, error)
 	Login(ctx context.Context, email string, password string) (*domain.User, error)
@@ -39,11 +43,11 @@ type authServiceImpl struct {
 var _ AuthService = &authServiceImpl{}
 
 var (
-	ErrIncorrectCredential error = errors.New("Invalid email or password")
-	ErrInvalidToken        error = errors.New("Invalid token or request id")
+	ErrIncorrectCredential error = errors.New("invalid email or password")
+	ErrInvalidToken        error = errors.New("invalid token or request id")
 	ErrUserNotFound        error = domain.ErrUserNotFound
-	ErrInvalidOldPassword  error = errors.New("Invalid old password")
-	ErrUnauthorized        error = errors.New("Unauthorized access")
+	ErrInvalidOldPassword  error = errors.New("invalid old password")
+	ErrUnauthorized        error = errors.New("unauthorized access")
 )
 
 func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, error) {

@@ -13,8 +13,8 @@ const (
 
 type Order struct {
 	ID              int64       `json:"id" gorm:"primaryKey" example:"97"`
-	TrackingNumber  *string     `json:"tracking_number" example:"TH1234567890"`
-	DeliveryService *string     `json:"delivery_service" example:"Kerry Express"`
+	TrackingNumber  *string     `json:"tracking_number,omitempty" example:"TH1234567890"`
+	DeliveryService *string     `json:"delivery_service,omitempty" example:"Kerry Express"`
 	SellerID        int64       `json:"seller_id" gorm:"not null" example:"97"`
 	BuyerID         int64       `json:"buyer_id" gorm:"not null" example:"97"`
 	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`

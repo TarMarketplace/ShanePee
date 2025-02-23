@@ -5,6 +5,7 @@ import "errors"
 var (
 	// Known error
 	ErrUserNotFound                 error = errors.New("user not found")
+	ErrUserEmailAlreadyExist        error = errors.New("user with this email already exists")
 	ErrArtToyNotFound               error = errors.New("art toy not found")
 	ErrUserAndArtToyNotFound        error = errors.New("user and art toy not found")
 	ErrOrderNotFound                error = errors.New("order not found")

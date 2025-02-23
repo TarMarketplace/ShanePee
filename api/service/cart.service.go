@@ -63,7 +63,7 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 			return err
 		}
 		if err := s.artToyRepo.UpdateArtToy(ctx, cartItem.ArtToyID, map[string]any{
-			"availability": true,
+			"availability": false,
 		}); err != nil {
 			return err
 		}

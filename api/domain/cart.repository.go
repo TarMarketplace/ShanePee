@@ -6,5 +6,6 @@ import (
 
 type CartRepository interface {
 	AddItemToCart(ctx context.Context, cartItem *CartItem) error
+	RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error
 	GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*CartItem, error)
 }

@@ -2,12 +2,19 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"shanepee.com/api/domain"
 )
 
+var (
+	ErrCartItemNotFound error = domain.ErrCartItemNotFound
+	ErrCartItemNotBelongToOwner error = domain.ErrCartItemNotBelongToOwner
+)
+
 type CartService interface {
 	AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error)
+	RemoveItemFromCart(ctx context.Context, ownerID int64, artToyID int64) error
 	GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error)
 	Checkout(ctx context.Context, ownerID int64) error
 }
@@ -35,6 +42,20 @@ func (s *cartServiceImpl) AddItemToCart(ctx context.Context, ownerID int64, artT
 		return nil, err
 	}
 	return cartItem, nil
+}
+
+func (s *cartServiceImpl) RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error {
+	err := s.cartRepo.RemoveItemFromCart(ctx, ownerID, ID)
+	if err != nil {
+		if errors.Is(err, domain.ErrCartItemNotFound) {
+			return ErrCartItemNotFound
+		}
+		if errors.Is(err, domain.ErrCartItemNotBelongToOwner) {
+			return ErrCartItemNotBelongToOwner
+		}
+		return err
+	}
+	return nil
 }
 
 func (s *cartServiceImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {

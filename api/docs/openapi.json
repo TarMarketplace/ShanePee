@@ -1745,6 +1745,51 @@
         ]
       }
     },
+    "/v1/cart/remove-item/{id}": {
+      "delete": {
+        "description": "Remove an item from the cart",
+        "operationId": "remove-item-from-cart",
+        "parameters": [
+          {
+            "example": 97,
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "examples": [
+                97
+              ],
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Remove Item From Cart",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
     "/v1/my-art-toy": {
       "get": {
         "description": "Get my art toys",

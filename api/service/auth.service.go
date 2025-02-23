@@ -43,6 +43,7 @@ var (
 	ErrInvalidToken        error = errors.New("Invalid token or request id")
 	ErrUserNotFound        error = domain.ErrUserNotFound
 	ErrInvalidOldPassword  error = errors.New("Invalid old password")
+	ErrUnauthorized        error = errors.New("Unauthorized access")
 )
 
 func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, error) {

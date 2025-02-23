@@ -11,6 +11,10 @@ import (
 	"shanepee.com/api/domain"
 )
 
+var (
+	ErrUserEmailAlreadyExist error = domain.ErrUserEmailAlreadyExist
+)
+
 type AuthService interface {
 	Register(ctx context.Context, username string, password string) (*domain.User, error)
 	Login(ctx context.Context, email string, password string) (*domain.User, error)

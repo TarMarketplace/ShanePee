@@ -13,7 +13,14 @@ type userRepositoryImpl struct {
 }
 
 func (a *userRepositoryImpl) CreateUser(ctx context.Context, user *domain.User) error {
-	return a.db.Create(user).Error
+	err := a.db.Create(user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return domain.ErrUserEmailAlreadyExist
+		}
+		return err
+	}
+	return err
 }
 
 func (u *userRepositoryImpl) UpdateUser(ctx context.Context, id int64, user map[string]any) error {

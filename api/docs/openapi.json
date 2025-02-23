@@ -8,45 +8,27 @@
             "examples": [
               "Pathumwan"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "house_no": {
             "examples": [
               "254"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "postcode": {
             "examples": [
               "10330"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "province": {
             "examples": [
               "Bangkok"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
-        "required": [
-          "house_no",
-          "district",
-          "province",
-          "postcode"
-        ],
         "type": "object"
       },
       "ArrayResponseArtToy": {
@@ -163,10 +145,7 @@
             "examples": [
               "data:image/png;base64,mfkirjIDSFIj324if..."
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "price": {
             "format": "double",
@@ -185,15 +164,11 @@
           "name",
           "description",
           "price",
-          "photo",
           "availability",
           "owner_id",
           "release_date"
         ],
-        "type": [
-          "object",
-          "null"
-        ]
+        "type": "object"
       },
       "ArtToyCreateBody": {
         "additionalProperties": false,
@@ -318,6 +293,9 @@
             "format": "int64",
             "type": "integer"
           },
+          "owner": {
+            "$ref": "#/components/schemas/User"
+          },
           "owner_id": {
             "examples": [
               97
@@ -329,8 +307,7 @@
         "required": [
           "id",
           "owner_id",
-          "art_toy_id",
-          "art_toy"
+          "art_toy_id"
         ],
         "type": "object"
       },
@@ -523,10 +500,7 @@
             "examples": [
               "Kerry Express"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "id": {
             "examples": [
@@ -557,16 +531,11 @@
             "examples": [
               "TH1234567890"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "tracking_number",
-          "delivery_service",
           "seller_id",
           "buyer_id",
           "status",
@@ -641,45 +610,27 @@
             "examples": [
               "4242424242424242"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "card_owner": {
             "examples": [
               "Freddy Mercury"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "cvv": {
             "examples": [
               "132"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "expire_date": {
             "examples": [
               "02/27"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
-        "required": [
-          "card_number",
-          "expire_date",
-          "cvv",
-          "card_owner"
-        ],
         "type": "object"
       },
       "RegisterBody": {
@@ -894,19 +845,13 @@
             "examples": [
               "John"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "gender": {
             "examples": [
               "MALE"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "id": {
             "examples": [
@@ -919,10 +864,7 @@
             "examples": [
               "Doe"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "payment_method": {
             "$ref": "#/components/schemas/PaymentMethod"
@@ -931,31 +873,20 @@
             "examples": [
               "data:image/png;base64,mfkirjIDSFIj324if..."
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "tel": {
             "examples": [
               "0988888888"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "required": [
           "id",
           "email",
-          "first_name",
-          "last_name",
-          "gender",
-          "tel",
           "address",
-          "payment_method",
-          "photo"
+          "payment_method"
         ],
         "type": "object"
       },

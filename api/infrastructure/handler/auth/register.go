@@ -2,11 +2,13 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type RegisterBody struct {
@@ -33,6 +35,9 @@ func (h *AuthHandler) RegisterRegister(api huma.API) {
 	}, func(ctx context.Context, i *RegisterInput) (*RegisterOutput, error) {
 		data, err := h.authSvc.Register(ctx, i.Body.Email, i.Body.Password)
 		if err != nil {
+			if errors.Is(err, service.ErrUserEmailAlreadyExist) {
+				return nil, handler.ErrUserEmailAlreadyExist
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 

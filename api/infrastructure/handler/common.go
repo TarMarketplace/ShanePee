@@ -13,6 +13,7 @@ var (
 	ErrIncorrectCredential    = huma.Error403Forbidden("Incorrect email or password")
 	ErrInvalidToken           = huma.Error403Forbidden("Invalid token")
 	ErrIncorrectOldPassword   = huma.Error401Unauthorized("Incorrect old password")
+	ErrUserEmailAlreadyExist  = huma.Error403Forbidden("User with this email already exists")
 )
 
 type ArrayResponse[T any] struct {

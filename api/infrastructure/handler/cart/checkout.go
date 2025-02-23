@@ -25,11 +25,7 @@ func (h *CartHandler) RegisterCheckout(api huma.API) {
 		}
 		err := h.cartSvc.Checkout(ctx, *userID)
 		if err != nil {
-			if errors.Is(err, service.ErrOrderAndArtToyNotFound) {
-				return nil, handler.ErrOrderAndArtToyNotFound
-			} else if errors.Is(err, service.ErrOrderNotFound) {
-				return nil, handler.ErrOrderNotFound
-			} else if errors.Is(err, service.ErrArtToyNotFound) {
+			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
 			}
 			return nil, handler.ErrIntervalServerError

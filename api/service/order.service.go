@@ -6,11 +6,6 @@ import (
 	"shanepee.com/api/domain"
 )
 
-var (
-	ErrOrderNotFound          error = domain.ErrOrderNotFound
-	ErrOrderAndArtToyNotFound error = domain.ErrOrderAndArtToyNotFound
-)
-
 type OrderService interface {
 	GetOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error)
 }

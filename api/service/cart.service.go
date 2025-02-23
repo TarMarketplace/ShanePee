@@ -57,16 +57,24 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 	if err := s.orderRepo.CreateOrder(ctx, order); err != nil {
 		return err
 	}
+
+	orderItems := make([]*domain.OrderItem, 0)
+	artToyIDs := make([]int64, 0)
 	for _, cartItem := range cartItems {
+		artToyIDs = append(artToyIDs, cartItem.ArtToyID)
+
+		if !cartItem.ArtToy.Availability {
+			return ErrArtToyNotFound
+		}
 		orderItem := domain.NewOrderItem(cartItem.ArtToyID, order.ID)
-		if err := s.orderRepo.CreateOrderItem(ctx, orderItem); err != nil {
-			return err
-		}
-		if err := s.artToyRepo.UpdateArtToy(ctx, cartItem.ArtToyID, map[string]any{
-			"availability": false,
-		}); err != nil {
-			return err
-		}
+		orderItems = append(orderItems, orderItem)
+	}
+
+	if err := s.orderRepo.CreateOrderItems(ctx, orderItems); err != nil {
+		return err
+	}
+	if err := s.artToyRepo.UpdateArtToysAvailability(ctx, artToyIDs, false); err != nil {
+		return err
 	}
 
 	// TODO: implement DeleteItemsInCart and handle error

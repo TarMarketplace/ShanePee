@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 	"shanepee.com/api/domain"
@@ -9,6 +10,18 @@ import (
 
 type orderRepositoryImpl struct {
 	db *gorm.DB
+}
+
+func (r *orderRepositoryImpl) CreateOrder(ctx context.Context, order *domain.Order) error {
+	return r.db.Create(order).Error
+}
+
+func (r *orderRepositoryImpl) CreateOrderItems(ctx context.Context, orderItems []*domain.OrderItem) error {
+	err := r.db.CreateInBatches(orderItems, len(orderItems)).Error
+	if errors.Is(err, gorm.ErrForeignKeyViolated) {
+		return domain.ErrArtToyNotFound
+	}
+	return err
 }
 
 func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error) {

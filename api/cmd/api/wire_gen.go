@@ -46,7 +46,7 @@ func InitializeApp() (App, error) {
 	reviewService := service.NewReviewService(orderRepository, reviewRepository)
 	reviewHandler := review.NewHandler(reviewService)
 	cartRepository := repository.NewCartRepository(db)
-	cartService := service.NewCartService(cartRepository)
+	cartService := service.NewCartService(artToyRepository, cartRepository, orderRepository)
 	cartHandler := cart.NewHandler(cartService)
 	orderService := service.NewOrderService(orderRepository)
 	orderHandler := order.NewHandler(orderService)

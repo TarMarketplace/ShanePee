@@ -39,7 +39,7 @@ type authServiceImpl struct {
 var _ AuthService = &authServiceImpl{}
 
 var (
-	ErrUnauthorized        error = errors.New("unauthorized access")
+	ErrUnauthorized        error = errors.New("Unauthorized access")
 	ErrIncorrectCredential error = errors.New("Invalid email or password")
 	ErrInvalidToken        error = errors.New("Invalid token or request id")
 	ErrUserNotFound        error = domain.ErrUserNotFound

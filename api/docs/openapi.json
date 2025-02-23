@@ -544,8 +544,8 @@
           },
           "status": {
             "enum": [
-              "PENDING",
-              "SHIPPING",
+              "PREPARING",
+              "DELIVERING",
               "COMPLETED"
             ],
             "examples": [
@@ -1789,6 +1789,31 @@
         ]
       }
     },
+    "/v1/cart/checkout": {
+      "post": {
+        "description": "Place a new order from items in the cart",
+        "operationId": "checkout",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Checkout Items In Cart",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
     "/v1/my-art-toy": {
       "get": {
         "description": "Get my art toys",
@@ -1837,8 +1862,8 @@
             "required": true,
             "schema": {
               "enum": [
-                "PENDING",
-                "SHIPPING",
+                "PREPARING",
+                "DELIVERING",
                 "COMPLETED"
               ],
               "type": "string"

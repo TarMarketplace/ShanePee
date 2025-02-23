@@ -20,6 +20,19 @@ func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain
 	return err
 }
 
+func (r *cartRepositoryImpl) RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error {
+	var cartItem domain.CartItem
+	err := r.db.Where("owner_id = ? AND id = ?", ownerID, ID).First(&cartItem).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return domain.ErrCartItemNotFound
+		}
+		return err
+	}
+	err = r.db.Delete(&cartItem).Error
+	return err
+}
+
 func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {
 	var cartItems []*domain.CartItem
 	err := r.db.Preload("ArtToy").Where("owner_id = ?", ownerID).Find(&cartItems).Error

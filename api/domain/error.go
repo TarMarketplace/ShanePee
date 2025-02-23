@@ -11,4 +11,5 @@ var (
 	ErrOrderNotFound                error = errors.New("order not found")
 	ErrOrderAndArtToyNotFound       error = errors.New("order and art toy not found")
 	ErrPasswordResetRequestNotFound error = errors.New("password reset request not found")
+	ErrCartItemNotFound             error = errors.New("cart item not found")
 )

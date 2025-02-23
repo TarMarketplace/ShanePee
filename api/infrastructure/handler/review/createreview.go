@@ -2,6 +2,7 @@ package review
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -42,8 +43,10 @@ func (h *ReviewHandler) RegisterCreateReview(api huma.API) {
 		}
 		review, err := h.reviewSvc.CreateReview(ctx, i.Body.Rating, i.Body.Comment, i.ArtToyID, *userID)
 		if err != nil {
-			if err == service.ErrArtToyNotFound {
-				return nil, handler.ErrArtToyNotFound
+			if errors.Is(err, service.ErrOrderNotFound) {
+				return nil, handler.ErrOrderNotFound
+			} else if errors.Is(err, service.ErrReviewNotFound) {
+				return nil, handler.ErrReviewNotFound
 			}
 			return nil, handler.ErrIntervalServerError
 		}

@@ -41,9 +41,9 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 
 func (r *reviewRepositoryImpl) FindReviewerByArtToyID(ctx context.Context, artToyID int64) (*int64, error) {
 	var buyerID int64
-	if err := r.db.Table("orders").Select("orders.buyer_id").Joins("JOIN order_items ON order_items.order_id = orders.id").Joins("JOIN art_toys ON order_items.art_toy_id = art_toys.id").Where("art_toys.id = ?", artToyID).Scan(&buyerID).Error; err != nil {
+	if err := r.db.Table("orders").Select("orders.buyer_id").Joins("JOIN order_items ON order_items.order_id = orders.id").Where("order_items.art_toy_id = ?", artToyID).Scan(&buyerID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, domain.ErrUserNotFound
+			return nil, domain.ErrOrderNotFound
 		}
 		return nil, err
 	}

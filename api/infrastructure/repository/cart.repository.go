@@ -22,12 +22,15 @@ func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain
 
 func (r *cartRepositoryImpl) RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error {
 	var cartItem domain.CartItem
-	err := r.db.Where("owner_id = ? AND id = ?", ownerID, ID).First(&cartItem).Error
+	err := r.db.Where("id = ?", ID).First(&cartItem).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domain.ErrCartItemNotFound
 		}
 		return err
+	}
+	if cartItem.OwnerID != ownerID {
+		return domain.ErrCartItemNotBelongToOwner
 	}
 	err = r.db.Delete(&cartItem).Error
 	return err

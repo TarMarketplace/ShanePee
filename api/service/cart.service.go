@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrCartItemNotFound error = domain.ErrCartItemNotFound
+	ErrCartItemNotBelongToOwner error = domain.ErrCartItemNotBelongToOwner
 )
 
 type CartService interface {
@@ -48,6 +49,9 @@ func (s *cartServiceImpl) RemoveItemFromCart(ctx context.Context, ownerID int64,
 	if err != nil {
 		if errors.Is(err, domain.ErrCartItemNotFound) {
 			return ErrCartItemNotFound
+		}
+		if errors.Is(err, domain.ErrCartItemNotBelongToOwner) {
+			return ErrCartItemNotBelongToOwner
 		}
 		return err
 	}

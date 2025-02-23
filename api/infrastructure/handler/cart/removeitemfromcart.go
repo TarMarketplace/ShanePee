@@ -2,10 +2,12 @@ package cart
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type RemoveItemFromCart struct {
@@ -30,6 +32,12 @@ func (h *CartHandler) RegisterRemoveItemFromCart(api huma.API) {
 		}
 		err := h.cartSvc.RemoveItemFromCart(ctx, *userID, i.ID)
 		if err != nil {
+			if errors.Is(err, service.ErrCartItemNotFound) {
+				return nil, handler.ErrCartItemNotFound
+			}
+			if errors.Is(err, service.ErrCartItemNotBelongToOwner) {
+				return nil, handler.ErrCartItemNotBelongToOwner
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 		

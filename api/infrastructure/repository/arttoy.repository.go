@@ -12,13 +12,13 @@ type artToyRepositoryImpl struct {
 	db *gorm.DB
 }
 
+var _ domain.ArtToyRepository = &artToyRepositoryImpl{}
+
 func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 	return &artToyRepositoryImpl{
 		db,
 	}
 }
-
-var _ domain.ArtToyRepository = &artToyRepositoryImpl{}
 
 func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) error {
 	return r.db.Create(artToy).Error

@@ -13,14 +13,6 @@ type ArtToy struct {
 	ReleaseDate  time.Time `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 }
 
-type Review struct {
-	ID       int64   `json:"id" gorm:"primaryKey"`
-	Rating   *int    `json:"rating" example:"5"`
-	Comment  *string `json:"comment" example:"Good toy"`
-	ArtToyID int64   `json:"art_toy_id" gorm:"not null"`
-	ArtToy   ArtToy  `json:"-" gorm:"foreignKey:ArtToyID;constraint:OnDelete:CASCADE;"`
-}
-
 func NewArtToy(name string, description string, price float64, photo *string, ownerID int64) *ArtToy {
 	return &ArtToy{
 		ID:           GenID(),

@@ -12,7 +12,7 @@ import (
 )
 
 type GetArtToyByIDInput struct {
-	ID int `path:"id"`
+	ID int64 `path:"id"`
 }
 
 type GetArtToyByIDOutput struct {

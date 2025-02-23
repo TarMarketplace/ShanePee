@@ -2,14 +2,12 @@ package service
 
 import (
 	"context"
-	"errors"
 
 	"shanepee.com/api/domain"
 )
 
 var (
 	ErrArtToyNotFound error = domain.ErrArtToyNotFound
-	ErrUnauthorized   error = errors.New("unauthorized access")
 )
 
 type ArtToyService interface {

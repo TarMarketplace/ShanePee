@@ -14,7 +14,6 @@ type cartRepositoryImpl struct {
 
 func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain.CartItem) error {
 	err := r.db.Create(cartItem).Error
-
 	if errors.Is(err, gorm.ErrForeignKeyViolated) {
 		return domain.ErrArtToyNotFound
 	}

@@ -60,6 +60,9 @@ jobs:
               refs/tags/v*)
                   RESULT="${RESULT},$IMAGE_NAME:${REF#refs/tags/v}"
               ;;
+              refs/tags/w*)
+                  RESULT="${RESULT},$IMAGE_NAME:$REF"
+              ;;
               refs/heads/main)
                   RESULT="${RESULT},$IMAGE_NAME:latest"
               ;;

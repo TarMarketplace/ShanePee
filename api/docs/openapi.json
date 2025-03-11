@@ -1233,6 +1233,72 @@
         ]
       }
     },
+    "/v1/art-toy/search": {
+      "get": {
+        "description": "Search art toys",
+        "operationId": "search-art-toys",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sorting key. Available values: 'release_date', 'price'.",
+            "explode": false,
+            "in": "query",
+            "name": "sort_key",
+            "schema": {
+              "description": "Sorting key. Available values: 'release_date', 'price'.",
+              "enum": [
+                "release_date",
+                "price"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "If true, sorting is in descending order. Sorting is applied only if 'sort_key' is defined.",
+            "explode": false,
+            "in": "query",
+            "name": "reverse",
+            "schema": {
+              "description": "If true, sorting is in descending order. Sorting is applied only if 'sort_key' is defined.",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Search Art Toys",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
     "/v1/art-toy/{id}": {
       "delete": {
         "description": "Delete an art toy by ID",

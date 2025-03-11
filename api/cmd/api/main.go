@@ -81,6 +81,7 @@ func main() {
 	app.artToyHdr.RegisterGetArtToyByID(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
 	app.artToyHdr.RegisterDeleteArtToy(api)
+	app.artToyHdr.RegisterSearchArtToys(api)
 
 	app.reviewHdr.RegisterCreateReview(api)
 	app.reviewHdr.RegisterGetReview(api)

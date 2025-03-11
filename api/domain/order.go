@@ -11,6 +11,11 @@ const (
 	Completed  OrderStatus = "COMPLETED"
 )
 
+type OrderWithArtToys struct {
+	Order   *Order    `json:"order"`
+	ArtToys []*ArtToy `json:"art_toys"`
+}
+
 type Order struct {
 	ID              int64       `json:"id" gorm:"primaryKey" example:"97"`
 	TrackingNumber  *string     `json:"tracking_number,omitempty" example:"TH1234567890"`
@@ -19,6 +24,7 @@ type Order struct {
 	BuyerID         int64       `json:"buyer_id" gorm:"not null" example:"97"`
 	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`
 	CreatedAt       time.Time   `json:"created_at" gorm:"autoCreateTime" example:"2021-08-01T00:00:00Z"`
+	OrderItems      []OrderItem `json:"-" gorm:"foreignKey:OrderID"`
 }
 
 type OrderItem struct {

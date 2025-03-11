@@ -112,6 +112,33 @@
         ],
         "type": "object"
       },
+      "ArrayResponseOrderWithArtToys": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseOrderWithArtToys.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/OrderWithArtToys"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ArtToy": {
         "additionalProperties": false,
         "properties": {
@@ -540,6 +567,28 @@
           "buyer_id",
           "status",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "OrderWithArtToys": {
+        "additionalProperties": false,
+        "properties": {
+          "art_toys": {
+            "items": {
+              "$ref": "#/components/schemas/ArtToy"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          }
+        },
+        "required": [
+          "order",
+          "art_toys"
         ],
         "type": "object"
       },
@@ -1874,6 +1923,43 @@
           }
         ],
         "summary": "Get Orders by Status",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/v1/seller/orders": {
+      "get": {
+        "description": "Get orders of seller",
+        "operationId": "get-orders-of-seller",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrderWithArtToys"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of seller",
         "tags": [
           "Order"
         ]

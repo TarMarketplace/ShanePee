@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ErrCartItemNotFound error = domain.ErrCartItemNotFound
+	ErrCartItemNotFound         error = domain.ErrCartItemNotFound
 	ErrCartItemNotBelongToOwner error = domain.ErrCartItemNotBelongToOwner
 )
 

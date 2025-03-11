@@ -93,6 +93,7 @@ func main() {
 	app.cartHdr.RegisterCheckout(api)
 
 	app.orderHdr.RegisterGetOrdersByStatus(api)
+	app.orderHdr.RegisterGetOrdersOfSeller(api)
 
 	flag.Parse()
 

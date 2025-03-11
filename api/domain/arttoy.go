@@ -13,6 +13,19 @@ type ArtToy struct {
 	ReleaseDate  time.Time `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 }
 
+type ArtToySortKey int
+
+const (
+	ArtToyPriceSortKey ArtToySortKey = iota
+	ArtToyReleaseDateSortKey
+)
+
+type ArtToySearchParams struct {
+	Keyword string
+	SortKey *ArtToySortKey
+	Reverse bool
+}
+
 func NewArtToy(name string, description string, price float64, photo *string, ownerID int64) *ArtToy {
 	return &ArtToy{
 		ID:           GenID(),

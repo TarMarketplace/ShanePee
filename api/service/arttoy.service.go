@@ -16,7 +16,7 @@ type ArtToySortKey = domain.ArtToySortKey
 
 const (
 	ArtToyReleaseDateSortKey = domain.ArtToyReleaseDateSortKey
-	ArtToyPriceSortKey = domain.ArtToyPriceSortKey
+	ArtToyPriceSortKey       = domain.ArtToyPriceSortKey
 )
 
 type ArtToyService interface {

@@ -32,6 +32,14 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 	return order, nil
 }
 
+func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.Order, error) {
+	var orders []*domain.Order
+	if err := r.db.Preload("OrderItems.ArtToy").Where("seller_id = ?", sellerID).Find(&orders).Error; err != nil {
+		return nil, err
+	}
+	return orders, nil
+}
+
 var _ domain.OrderRepository = &orderRepositoryImpl{}
 
 func NewOrderRepository(db *gorm.DB) domain.OrderRepository {

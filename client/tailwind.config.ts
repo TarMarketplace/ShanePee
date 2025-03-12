@@ -138,6 +138,7 @@ const config: Config = {
       boxShadow: {
         sm: '0px 7px 29px 0px rgba(100, 100, 111, 0.20)',
         md: '0px 6px 12px 0px rgba(0, 0, 0, 0.16)',
+        cardbox: '0px 0px 4px rgba(0, 0, 0, 0.25)',
       },
       fontFamily: {
         prompt: ['var(--font-prompt)', ...fontFamily.sans],

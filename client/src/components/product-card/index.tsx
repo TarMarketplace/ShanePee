@@ -17,7 +17,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className='aspect-[170/240] size-full max-w-64 overflow-hidden rounded-xl bg-card shadow-cardbox md:aspect-[250/320]'>
       <div className='relative h-2/5 w-full'>
-        <Image src={product.photo as string} alt={product.name} fill />
+        <Image src={product.photo ?? ''} alt={product.name} fill />
       </div>
       <div className='flex h-3/5 w-full flex-col justify-between p-3'>
         <div className='flex flex-col gap-2'>

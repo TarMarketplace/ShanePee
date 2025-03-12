@@ -24,7 +24,7 @@ export function SearchMenu() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
-  const currentSort = searchParams.get('sort') || 'latest'
+  const currentSort = searchParams.get('sort') ?? 'latest'
 
   const getSortUrl = (value: string) => {
     const params = new URLSearchParams(searchParams.toString())

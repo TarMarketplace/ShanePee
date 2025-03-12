@@ -21,7 +21,7 @@ export default async function Search({
     sort?: string
   }
 }) {
-  const sortOptions = SORT_OPTIONS_MAP[searchParams.sort || 'latest']
+  const sortOptions = SORT_OPTIONS_MAP[searchParams.sort ?? 'latest']
 
   const { data } = await searchArtToys({
     query: {
@@ -32,7 +32,7 @@ export default async function Search({
     cache: 'no-cache',
   })
 
-  const products = data?.data || []
+  const products = data?.data ?? []
 
   return (
     <main className='flex size-full flex-col items-center justify-center p-4'>

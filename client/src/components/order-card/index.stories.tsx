@@ -23,7 +23,7 @@ export const Default: Story = {
       delivery_service: 'Shopee express',
       id: 97,
       seller_id: 4321,
-      status: 'PENDING',
+      status: 'PREPARING',
       tracking_number: 'SPX123456789',
     },
     order_items: [

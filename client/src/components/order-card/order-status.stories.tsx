@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     status: {
       control: { type: 'select' },
-      options: ['PENDING', 'SHIPPING', 'COMPLETED'],
+      options: ['PREPARING', 'DELIVERING', 'COMPLETED'],
     },
   },
 } satisfies Meta<typeof OrderStatus>
@@ -22,6 +22,6 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    status: 'PENDING',
+    status: 'PREPARING',
   },
 }

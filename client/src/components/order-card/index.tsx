@@ -112,7 +112,7 @@ const OrderCard = ({ buyer_name, order, order_items }: OrderCardProps) => {
           </Text>
         </div>
         <div className='mt-4 flex justify-end gap-2 md:mt-0 md:justify-normal'>
-          {order.status == 'PENDING' && (
+          {order.status == 'PREPARING' && (
             <Button variant='filled'>เพิ่มรหัสติดตาม</Button>
           )}
           <Button variant='outline' colorVariant='outline'>

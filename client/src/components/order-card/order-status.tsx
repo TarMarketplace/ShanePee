@@ -1,12 +1,12 @@
 import { Text } from '../text'
 
 export interface OrderStatusProps {
-  status: 'PENDING' | 'SHIPPING' | 'COMPLETED'
+  status: 'PREPARING' | 'DELIVERING' | 'COMPLETED'
 }
 
 const OrderStatus = ({ status }: OrderStatusProps) => {
   switch (status) {
-    case 'PENDING':
+    case 'PREPARING':
       return (
         <div className='flex h-6 w-20 items-center justify-center rounded-xl border border-warning bg-warning-50'>
           <Text variant='sm-semibold' className='text-center text-warning'>
@@ -14,7 +14,7 @@ const OrderStatus = ({ status }: OrderStatusProps) => {
           </Text>
         </div>
       )
-    case 'SHIPPING':
+    case 'DELIVERING':
       return (
         <div className='flex h-6 w-20 items-center justify-center rounded-xl border border-info bg-info-50'>
           <Text variant='sm-semibold' className='text-center text-info'>

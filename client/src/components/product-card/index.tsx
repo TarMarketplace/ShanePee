@@ -5,12 +5,8 @@ import { Text } from '@/components/text'
 
 import type { ArtToy } from '@/generated/api'
 
-import { Badge } from '../badge'
-
 export interface ProductCardProps {
-  // TODO: remove any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  product: ArtToy | any
+  product: ArtToy
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
@@ -24,7 +20,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <Text variant='sm-semibold' desktopVariant='md-semibold'>
             {product.name}
           </Text>
-          {product.discount ? (
+          <Text variant='sm-regular' desktopVariant='md-regular'>
+            ฿{product.price}
+          </Text>
+          {/* {product.discount ? (
             <div className='flex flex-col'>
               <div className='flex items-center gap-2'>
                 <Text
@@ -50,7 +49,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <Text variant='sm-regular' desktopVariant='md-regular'>
               ฿{product.price}
             </Text>
-          )}
+          )} */}
         </div>
         <div className='flex items-center gap-4'>
           <div className='flex items-center'>
@@ -59,13 +58,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
               className='size-5 text-warning md:size-6'
             />
             <Text variant='xs-regular' desktopVariant='sm-regular'>
-              1
+              4.5
             </Text>
           </div>
           <div className='flex items-center text-grey-500'>
             <Icon icon='typcn:location' className='size-4 md:size-5' />
             <Text variant='xs-regular' desktopVariant='sm-regular'>
-              {product.location}
+              Bangkok
             </Text>
           </div>
         </div>

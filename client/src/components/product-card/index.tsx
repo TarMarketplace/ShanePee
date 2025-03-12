@@ -11,7 +11,7 @@ export interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <div className='aspect-[250/320] size-full max-w-64 overflow-hidden rounded-xl bg-card'>
+    <div className='aspect-[170/240] size-full max-w-64 overflow-hidden rounded-xl bg-card shadow-cardbox md:aspect-[250/320]'>
       <div className='relative h-2/5 w-full'>
         <Image src={product.photo ?? ''} alt={product.name} fill />
       </div>

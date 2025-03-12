@@ -27,8 +27,6 @@ const NavbarContainer = () => {
   }
 
   const handleSearch = () => {
-    // TODO: Implement search
-    console.log(search)
     router.push(`/search?query=${search}`)
   }
 

@@ -41,6 +41,13 @@ export const Filled: Story = {
   },
 }
 
+export const Outline: Story = {
+  args: {
+    variant: 'outline',
+    colorVariant: 'outline',
+  },
+}
+
 export const FilledGradient: Story = {
   args: {
     variant: 'filled',

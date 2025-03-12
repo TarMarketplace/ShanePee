@@ -10,7 +10,7 @@ import (
 )
 
 type GetOrdersOfSellerOutput struct {
-	Body handler.ArrayResponse[domain.OrderWithArtToys]
+	Body handler.ArrayResponse[domain.Order]
 }
 
 func (h *OrderHandler) RegisterGetOrdersOfSeller(api huma.API) {
@@ -34,7 +34,7 @@ func (h *OrderHandler) RegisterGetOrdersOfSeller(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetOrdersOfSellerOutput{
-			Body: handler.ArrayResponse[domain.OrderWithArtToys]{
+			Body: handler.ArrayResponse[domain.Order]{
 				Data: data,
 			},
 		}, nil

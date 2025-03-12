@@ -32,28 +32,12 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 	return order, nil
 }
 
-func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.OrderWithArtToys, error) {
+func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.Order, error) {
 	var orders []*domain.Order
 	if err := r.db.Preload("OrderItems.ArtToy").Where("seller_id = ?", sellerID).Find(&orders).Error; err != nil {
 		return nil, err
 	}
-
-	result := []*domain.OrderWithArtToys{}
-
-	for _, order := range orders {
-		orderWithArtToys := &domain.OrderWithArtToys{
-			Order: order,
-			ArtToys: []*domain.ArtToy{},
-		}
-
-		for _, orderItem :=  range order.OrderItems {
-			orderWithArtToys.ArtToys = append(orderWithArtToys.ArtToys, &orderItem.ArtToy)
-		}
-		
-		result = append(result, orderWithArtToys)
-	}
-
-	return result, nil
+	return orders, nil
 }
 
 var _ domain.OrderRepository = &orderRepositoryImpl{}

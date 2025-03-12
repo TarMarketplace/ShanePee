@@ -10,6 +10,7 @@ const buttonVariants = cva(
       variant: {
         filled: 'rounded-sm',
         capsule: 'rounded-full',
+        outline: 'rounded-sm border-2 border-primary',
       },
       colorVariant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',

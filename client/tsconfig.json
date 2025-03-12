@@ -7,7 +7,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "vitest.config.mts"
+    "vitest.config.mts",
+    "tests/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,12 +1,6 @@
 import { After, Before, Given, Then, When } from '@cucumber/cucumber'
-import type {
-  BrowserContext} from '@playwright/test';
-import {
-  type Browser,
-  type Page,
-  chromium,
-  expect,
-} from '@playwright/test'
+import type { BrowserContext } from '@playwright/test'
+import { type Browser, type Page, chromium, expect } from '@playwright/test'
 
 const adjectives = [
   'happy',
@@ -115,7 +109,7 @@ const nouns = [
 ]
 
 function randomUsername() {
-  return `${pick(adjectives)}_${pick(nouns)}@example.com`
+  return `${pick(adjectives)}_${pick(nouns)}_${new Date().getTime()}@example.com`
 }
 
 function randomPassword() {
@@ -127,7 +121,7 @@ function pick<T>(data: T[]) {
 }
 
 Before(async function () {
-  this.browser = await chromium.launch({ headless: true })
+  this.browser = await chromium.launch({ headless: false })
 
   this.context = await this.browser.newContext()
 
@@ -144,29 +138,81 @@ After(async function () {
   await browser.close()
 })
 
-Given('a registered user with a valid email and password', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
+Given('a registered user with a valid email and password', async function () {
+  this.username = 'registered@example.com'
+  this.password = 'does-not-matter'
+
+  try {
+    const response = await fetch('http://localhost:8080/v1/auth/register', {
+      body: JSON.stringify({
+        email: this.username,
+        password: this.password,
+      }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok && response.status != 403) {
+      throw response.body
+    }
+  } catch (e) {
+    console.error('fail to create scenario', e)
+    throw e
+  }
 })
 
-When('they enter their credentials correctly', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
+When('they enter their credentials correctly', async function () {
+  const page = this.page as Page
+
+  await page.goto('http://localhost:3000/login')
+  await page.getByRole('textbox', { name: 'อีเมล' }).click()
+  await page.getByRole('textbox', { name: 'อีเมล' }).fill(this.username)
+  await page.getByRole('textbox', { name: 'อีเมล' }).press('Tab')
+  await page.getByRole('textbox', { name: 'รหัสผ่าน', exact: true }).click()
+  await page
+    .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
+    .fill(this.password)
+  await page
+    .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
+    .press('Tab')
+  await page.getByRole('button', { name: 'เข้าสู่ระบบ', exact: true }).click()
+
+  await page.waitForResponse('http://localhost:8080/v1/auth/login')
 })
 
-Then('the system logs them in', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
+Then('the system logs them in', async function () {
+  const page = this.page as Page
+
+  await page.goto('http://localhost:3000/')
+
+  await page.waitForResponse('http://localhost:8080/v1/auth/me')
+  const locators = await page
+    .getByRole('button', { name: 'สวัสดี, Registered' })
+    .all()
+
+  expect(locators.length).toBe(1)
 })
 
-When('they enter their credentials incorrectly', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
+When('they enter their credentials incorrectly', async function () {
+  const page = this.page as Page
+
+  await page.goto('http://localhost:3000/login')
+  await page.getByRole('textbox', { name: 'อีเมล' }).fill(this.username)
+  await page
+    .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
+    .fill('wrong-password')
+  await page.getByRole('button', { name: 'เข้าสู่ระบบ', exact: true }).click()
+
+  await page.waitForResponse('http://localhost:8080/v1/auth/login')
 })
 
-Then('the system does not log them in', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
+Then('the system does not log them in', async function () {
+  const page = this.page as Page
+  const locators = await page.getByText('Incorrect email or password').all()
+
+  expect(locators.length).toBe(1)
 })
 
 Given('a user with a unique email', async function () {
@@ -179,26 +225,18 @@ When('they submit their email and password', async function () {
 
   await page.goto('http://localhost:3000/')
   await page.getByRole('link', { name: 'สมัครใช้งาน' }).click()
-  await page.getByRole('textbox', { name: 'ชื่อจริง' }).click()
   await page.getByRole('textbox', { name: 'ชื่อจริง' }).fill('John')
-  await page.getByRole('textbox', { name: 'ชื่อจริง' }).press('Tab')
   await page.getByRole('textbox', { name: 'นามสกุล' }).fill('Doe')
-  await page.getByRole('textbox', { name: 'นามสกุล' }).press('Tab')
   await page
     .getByRole('textbox', { name: 'เบอร์โทรศัพท์' })
     .fill('086-666-6666')
   await page.getByRole('combobox', { name: 'เพศ' }).click()
   await page.getByRole('option', { name: 'หญิง' }).click()
   await page.getByRole('button', { name: 'ถัดไป' }).click()
-  await page.getByRole('textbox', { name: 'อีเมล' }).click()
   await page.getByRole('textbox', { name: 'อีเมล' }).fill(this.username)
-  await page.getByRole('textbox', { name: 'อีเมล' }).press('Tab')
   await page
     .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
     .fill(this.password)
-  await page
-    .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
-    .press('Tab')
   await page
     .getByRole('textbox', { name: 'ยืนยันรหัสผ่าน' })
     .fill(this.password)
@@ -250,26 +288,18 @@ When('they attempt to register with the same email', async function () {
 
   await page.goto('http://localhost:3000/')
   await page.getByRole('link', { name: 'สมัครใช้งาน' }).click()
-  await page.getByRole('textbox', { name: 'ชื่อจริง' }).click()
   await page.getByRole('textbox', { name: 'ชื่อจริง' }).fill('John')
-  await page.getByRole('textbox', { name: 'ชื่อจริง' }).press('Tab')
   await page.getByRole('textbox', { name: 'นามสกุล' }).fill('Doe')
-  await page.getByRole('textbox', { name: 'นามสกุล' }).press('Tab')
   await page
     .getByRole('textbox', { name: 'เบอร์โทรศัพท์' })
     .fill('086-666-6666')
   await page.getByRole('combobox', { name: 'เพศ' }).click()
   await page.getByRole('option', { name: 'หญิง' }).click()
   await page.getByRole('button', { name: 'ถัดไป' }).click()
-  await page.getByRole('textbox', { name: 'อีเมล' }).click()
   await page.getByRole('textbox', { name: 'อีเมล' }).fill(this.username)
-  await page.getByRole('textbox', { name: 'อีเมล' }).press('Tab')
   await page
     .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
     .fill(this.password)
-  await page
-    .getByRole('textbox', { name: 'รหัสผ่าน', exact: true })
-    .press('Tab')
   await page
     .getByRole('textbox', { name: 'ยืนยันรหัสผ่าน' })
     .fill(this.password)

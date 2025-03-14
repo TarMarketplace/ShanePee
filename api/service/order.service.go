@@ -12,6 +12,7 @@ var (
 
 type OrderService interface {
 	GetOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error)
+	GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.Order, error)
 	UpdateOrder(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error)
 }
 
@@ -33,6 +34,10 @@ func (s *orderServiceImpl) GetOrdersByStatus(ctx context.Context, status string,
 		return nil, err
 	}
 	return orders, nil
+}
+
+func (s *orderServiceImpl) GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.Order, error) {
+	return s.orderRepo.FindOrdersWithArtToysBySellerID(ctx, sellerID)
 }
 
 func (s *orderServiceImpl) UpdateOrder(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error) {

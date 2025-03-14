@@ -81,6 +81,7 @@ func main() {
 	app.artToyHdr.RegisterGetArtToyByID(api)
 	app.artToyHdr.RegisterUpdateArtToy(api)
 	app.artToyHdr.RegisterDeleteArtToy(api)
+	app.artToyHdr.RegisterSearchArtToys(api)
 
 	app.reviewHdr.RegisterCreateReview(api)
 	app.reviewHdr.RegisterGetReview(api)
@@ -93,6 +94,7 @@ func main() {
 	app.cartHdr.RegisterCheckout(api)
 
 	app.orderHdr.RegisterGetOrdersByStatus(api)
+	app.orderHdr.RegisterGetOrdersOfSeller(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
 	flag.Parse()

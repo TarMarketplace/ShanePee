@@ -17,13 +17,14 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     product: {
-      id: '1',
+      id: 1,
       name: 'Product',
-      image: 'https://placehold.co/250x140.png',
+      photo: 'https://placehold.co/250x140.png',
       price: 100,
-      discount: 10,
-      rating: 4.5,
-      location: 'Thailand',
+      availability: true,
+      description: 'Description for Product',
+      owner_id: 1,
+      release_date: new Date().toISOString(),
     },
   },
 }

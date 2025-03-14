@@ -518,6 +518,15 @@
             "format": "int64",
             "type": "integer"
           },
+          "order_items": {
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
           "seller_id": {
             "examples": [
               97
@@ -549,6 +558,41 @@
           "buyer_id",
           "status",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "OrderItem": {
+        "additionalProperties": false,
+        "properties": {
+          "art_toy": {
+            "$ref": "#/components/schemas/ArtToy"
+          },
+          "art_toy_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "order_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "art_toy_id",
+          "order_id"
         ],
         "type": "object"
       },
@@ -1286,6 +1330,72 @@
         ]
       }
     },
+    "/v1/art-toy/search": {
+      "get": {
+        "description": "Search art toys",
+        "operationId": "search-art-toys",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sorting key. Available values: 'release_date', 'price'.",
+            "explode": false,
+            "in": "query",
+            "name": "sort_key",
+            "schema": {
+              "description": "Sorting key. Available values: 'release_date', 'price'.",
+              "enum": [
+                "release_date",
+                "price"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "If true, sorting is in descending order. Sorting is applied only if 'sort_key' is defined.",
+            "explode": false,
+            "in": "query",
+            "name": "reverse",
+            "schema": {
+              "description": "If true, sorting is in descending order. Sorting is applied only if 'sort_key' is defined.",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Search Art Toys",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
     "/v1/art-toy/{id}": {
       "delete": {
         "description": "Delete an art toy by ID",
@@ -1985,6 +2095,43 @@
           }
         ],
         "summary": "Get Orders by Status",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/v1/seller/orders": {
+      "get": {
+        "description": "Get orders of seller",
+        "operationId": "get-orders-of-seller",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of seller",
         "tags": [
           "Order"
         ]

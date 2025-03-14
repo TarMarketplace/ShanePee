@@ -15,6 +15,8 @@ const buttonVariants = cva(
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         gradient:
           'bg-primary-gradient text-primary-foreground hover:opacity-90',
+        outline:
+          'border border-primary bg-transparent text-primary hover:bg-secondary-100',
       },
       size: {
         default: 'h-10 px-3 py-2',

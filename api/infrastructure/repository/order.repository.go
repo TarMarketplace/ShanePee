@@ -32,6 +32,32 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 	return order, nil
 }
 
+func (r *orderRepositoryImpl) FindOrderByID(ctx context.Context, id int64) (*domain.Order, error) {
+	var order domain.Order
+	if err := r.db.Where("id = ?", id).Take(&order).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, domain.ErrOrderNotFound
+		}
+		return nil, err
+	}
+	return &order, nil
+}
+
+func (r *orderRepositoryImpl) UpdateOrder(ctx context.Context, id int64, order map[string]any) error {
+	var count int64
+
+	if err := r.db.Model(&domain.Order{}).Where("id = ?", id).Count(&count).Error; err != nil {
+		return err
+	}
+	if count == 0 {
+		return domain.ErrOrderNotFound
+	}
+	if err := r.db.Model(&domain.Order{}).Where("id = ?", id).Updates(order).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 var _ domain.OrderRepository = &orderRepositoryImpl{}
 
 func NewOrderRepository(db *gorm.DB) domain.OrderRepository {

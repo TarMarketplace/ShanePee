@@ -33,8 +33,7 @@ var _ ArtToyService = &artToyServiceImpl{}
 
 func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error) {
 	artToy := domain.NewArtToy(name, description, price, photo, ownerID)
-	err := s.artToyRepo.CreateArtToy(ctx, artToy)
-	if err != nil {
+	if err := s.artToyRepo.CreateArtToy(ctx, artToy); err != nil {
 		return nil, err
 	}
 	return artToy, nil
@@ -48,8 +47,7 @@ func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBo
 	if artToy.OwnerID != ownerID {
 		return nil, ErrUnauthorized
 	}
-	err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody)
-	if err != nil {
+	if err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody); err != nil {
 		return nil, err
 	}
 	updatedArtToy, err := s.artToyRepo.FindArtToyByID(ctx, id)

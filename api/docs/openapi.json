@@ -482,6 +482,15 @@
       "Order": {
         "additionalProperties": false,
         "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/Order.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
           "buyer_id": {
             "examples": [
               97
@@ -540,6 +549,50 @@
           "buyer_id",
           "status",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "OrderUpdateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OrderUpdateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "delivery_service": {
+            "examples": [
+              "Kerry Express"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PREPARING",
+              "DELIVERING",
+              "COMPLETED"
+            ],
+            "examples": [
+              "pending"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tracking_number": {
+            "examples": [
+              "TH1234567890"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -1824,6 +1877,64 @@
         "summary": "Get My Art Toys",
         "tags": [
           "Art toy"
+        ]
+      }
+    },
+    "/v1/order/{id}": {
+      "patch": {
+        "description": "Update an existing order by ID",
+        "operationId": "update-order",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpdateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Update Order",
+        "tags": [
+          "Order"
         ]
       }
     },

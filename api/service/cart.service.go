@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ErrCartItemNotFound error = domain.ErrCartItemNotFound
+	ErrCartItemNotFound         error = domain.ErrCartItemNotFound
 	ErrCartItemNotBelongToOwner error = domain.ErrCartItemNotBelongToOwner
 )
 
@@ -37,16 +37,14 @@ var _ CartService = &cartServiceImpl{}
 
 func (s *cartServiceImpl) AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error) {
 	cartItem := domain.NewCartItem(ownerID, artToyID)
-	err := s.cartRepo.AddItemToCart(ctx, cartItem)
-	if err != nil {
+	if err := s.cartRepo.AddItemToCart(ctx, cartItem); err != nil {
 		return nil, err
 	}
 	return cartItem, nil
 }
 
 func (s *cartServiceImpl) RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error {
-	err := s.cartRepo.RemoveItemFromCart(ctx, ownerID, ID)
-	if err != nil {
+	if err := s.cartRepo.RemoveItemFromCart(ctx, ownerID, ID); err != nil {
 		if errors.Is(err, domain.ErrCartItemNotFound) {
 			return ErrCartItemNotFound
 		}
@@ -97,12 +95,9 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 	if err := s.artToyRepo.UpdateArtToysAvailability(ctx, artToyIDs, false); err != nil {
 		return err
 	}
-
-	// TODO: implement DeleteItemsInCart and handle error
-	// err = s.cartRepo.DeleteItemsInCart(ctx, cartID)
-	// if err != nil {
-	// 	return err
-	// }
+	if err = s.cartRepo.ClearItemsFromCart(ctx, ownerID); err != nil {
+		return err
+	}
 
 	// TODO: make transaction
 	return nil

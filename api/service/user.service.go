@@ -23,8 +23,7 @@ type userServiceImpl struct {
 var _ UserService = &userServiceImpl{}
 
 func (s *userServiceImpl) UpdateUser(ctx context.Context, id int64, body map[string]any) error {
-	err := s.userRepo.UpdateUser(ctx, id, body)
-	if err != nil {
+	if err := s.userRepo.UpdateUser(ctx, id, body); err != nil {
 		return err
 	}
 	return nil

@@ -22,8 +22,7 @@ func (r *cartRepositoryImpl) AddItemToCart(ctx context.Context, cartItem *domain
 
 func (r *cartRepositoryImpl) RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error {
 	var cartItem domain.CartItem
-	err := r.db.Where("id = ?", ID).First(&cartItem).Error
-	if err != nil {
+	if err := r.db.Where("id = ?", ID).First(&cartItem).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domain.ErrCartItemNotFound
 		}
@@ -32,8 +31,12 @@ func (r *cartRepositoryImpl) RemoveItemFromCart(ctx context.Context, ownerID int
 	if cartItem.OwnerID != ownerID {
 		return domain.ErrCartItemNotBelongToOwner
 	}
-	err = r.db.Delete(&cartItem).Error
+	err := r.db.Delete(&cartItem).Error
 	return err
+}
+
+func (r *cartRepositoryImpl) ClearItemsFromCart(ctx context.Context, ownerID int64) error {
+	return r.db.Where("owner_id = ?", ownerID).Delete(&domain.CartItem{}).Error
 }
 
 func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {

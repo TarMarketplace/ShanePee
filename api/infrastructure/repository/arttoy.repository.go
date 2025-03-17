@@ -63,7 +63,7 @@ func (r *artToyRepositoryImpl) FindArtToysBySearchParams(ctx context.Context, se
 		if searchParams.SortKey != nil {
 			var sortKey string
 			vaildSortKey := true
-			switch (*searchParams.SortKey) {
+			switch *searchParams.SortKey {
 			case domain.ArtToyPriceSortKey:
 				sortKey = "price"
 			case domain.ArtToyReleaseDateSortKey:
@@ -77,11 +77,11 @@ func (r *artToyRepositoryImpl) FindArtToysBySearchParams(ctx context.Context, se
 				if searchParams.Reverse {
 					direction = "desc"
 				}
-				query = query.Order(sortKey+ " " + direction)
+				query = query.Order(sortKey + " " + direction)
 			}
 		}
 	}
-	
+
 	if err := query.Find(&artToys).Error; err != nil {
 		return nil, err
 	}

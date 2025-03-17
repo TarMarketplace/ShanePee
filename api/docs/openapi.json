@@ -623,10 +623,7 @@
             "examples": [
               "pending"
             ],
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "tracking_number": {
             "examples": [
@@ -635,9 +632,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "status"
-        ],
         "type": "object"
       },
       "PartialAddress": {

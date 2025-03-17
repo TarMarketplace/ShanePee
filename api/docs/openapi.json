@@ -1793,6 +1793,43 @@
         ]
       }
     },
+    "/v1/buyer/orders": {
+      "get": {
+        "description": "Get orders of buyer",
+        "operationId": "get-orders-of-buyer",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of buyer",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/cart": {
       "get": {
         "description": "Retrieve the user's cart",

@@ -40,6 +40,14 @@ func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Contex
 	return orders, nil
 }
 
+func (r *orderRepositoryImpl) FindOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64) ([]*domain.Order, error) {
+	var orders []*domain.Order
+	if err := r.db.Preload("OrderItems.ArtToy").Where("buyer_id = ?", buyerID).Find(&orders).Error; err != nil {
+		return nil, err
+	}
+	return orders, nil
+}
+
 func (r *orderRepositoryImpl) FindOrderByID(ctx context.Context, id int64) (*domain.Order, error) {
 	var order domain.Order
 	if err := r.db.Preload("OrderItems.ArtToy").Where("id = ?", id).Take(&order).Error; err != nil {

@@ -42,7 +42,7 @@ func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Contex
 
 func (r *orderRepositoryImpl) FindOrderByID(ctx context.Context, id int64) (*domain.Order, error) {
 	var order domain.Order
-	if err := r.db.Where("id = ?", id).Take(&order).Error; err != nil {
+	if err := r.db.Preload("OrderItems.ArtToy").Where("id = ?", id).Take(&order).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, domain.ErrOrderNotFound
 		}

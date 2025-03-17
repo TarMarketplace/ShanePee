@@ -2094,6 +2094,54 @@
         ]
       }
     },
+    "/v1/seller/order/{orderID}": {
+      "get": {
+        "description": "Get order detail of seller",
+        "operationId": "get-order-of-seller",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get order detail of seller",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/seller/orders": {
       "get": {
         "description": "Get orders of seller",

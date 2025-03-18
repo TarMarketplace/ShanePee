@@ -78,6 +78,7 @@ export function ProductPage({
             <div className='flex items-center gap-4'>
               <Button
                 variant='filled'
+                colorVariant={isInCart ? 'outline' : 'default'}
                 disabled={!product.availability}
                 onClick={() => handleCartButton()}
               >

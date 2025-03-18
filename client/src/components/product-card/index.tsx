@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { Text } from '@/components/text'
 
@@ -13,7 +14,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className='aspect-[170/240] size-full max-w-64 overflow-hidden rounded-xl bg-card shadow-cardbox md:aspect-[250/320]'>
       <div className='relative h-2/5 w-full'>
-        <Image src={product.photo ?? ''} alt={product.name} fill />
+        <Link href={`/product/${product.id}`}>
+          <Image
+            src={product.photo ?? ''}
+            alt={product.name}
+            fill
+            className='object-cover'
+          />
+        </Link>
       </div>
       <div className='flex h-3/5 w-full flex-col justify-between p-3'>
         <div className='flex flex-col gap-2'>

@@ -158,9 +158,17 @@ export type Order = {
     created_at: string;
     delivery_service?: string;
     id: number;
+    order_items?: Array<OrderItem> | null;
     seller_id: number;
     status: 'PREPARING' | 'DELIVERING' | 'COMPLETED';
     tracking_number?: string;
+};
+
+export type OrderItem = {
+    art_toy?: ArtToy;
+    art_toy_id: number;
+    id: number;
+    order_id: number;
 };
 
 export type PartialAddress = {
@@ -872,6 +880,31 @@ export type GetOrdersByStatusResponses = {
 };
 
 export type GetOrdersByStatusResponse = GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses];
+
+export type GetOrdersOfSellerData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/seller/orders';
+};
+
+export type GetOrdersOfSellerErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetOrdersOfSellerError = GetOrdersOfSellerErrors[keyof GetOrdersOfSellerErrors];
+
+export type GetOrdersOfSellerResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseOrder;
+};
+
+export type GetOrdersOfSellerResponse = GetOrdersOfSellerResponses[keyof GetOrdersOfSellerResponses];
 
 export type UpdateUserData = {
     body: UserUpdateBody;

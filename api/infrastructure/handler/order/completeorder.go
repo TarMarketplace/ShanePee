@@ -23,7 +23,7 @@ func (h *OrderHandler) RegisterCompleteOrder(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "complete-order",
 		Method:      http.MethodPatch,
-		Path:        "/v1/buyer/order/{id}",
+		Path:        "/v1/buyer/order/{id}/complete",
 		Tags:        []string{"Order"},
 		Summary:     "Complete Order by Buyer",
 		Description: "Update status to completed of an order by buyer",

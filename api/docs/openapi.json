@@ -1793,7 +1793,7 @@
         ]
       }
     },
-    "/v1/buyer/order/{id}": {
+    "/v1/buyer/order/{id}/complete": {
       "patch": {
         "description": "Update status to completed of an order by buyer",
         "operationId": "complete-order",

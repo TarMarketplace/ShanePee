@@ -15,6 +15,7 @@ var (
 type CartService interface {
 	AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error)
 	RemoveItemFromCart(ctx context.Context, ownerID int64, artToyID int64) error
+	ClearItemsFromCart(ctx context.Context, ownerID int64) error
 	GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error)
 	Checkout(ctx context.Context, ownerID int64) error
 }
@@ -51,6 +52,13 @@ func (s *cartServiceImpl) RemoveItemFromCart(ctx context.Context, ownerID int64,
 		if errors.Is(err, domain.ErrCartItemNotBelongToOwner) {
 			return ErrCartItemNotBelongToOwner
 		}
+		return err
+	}
+	return nil
+}
+
+func (s *cartServiceImpl) ClearItemsFromCart(ctx context.Context, ownerID int64) error {
+	if err := s.cartRepo.ClearItemsFromCart(ctx, ownerID); err != nil {
 		return err
 	}
 	return nil

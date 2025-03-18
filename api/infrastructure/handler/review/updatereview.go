@@ -43,9 +43,13 @@ func (h *ReviewHandler) RegisterUpdateReview(api huma.API) {
 		}
 		data, err := h.reviewSvc.UpdateReview(ctx, i.ArtToyID, i.Body.ToMap(), *userID)
 		if err != nil {
+			if errors.Is(err, service.ErrUnauthorized) {
+				return nil, handler.ErrForbidden
+			}
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
-			} else if errors.Is(err, service.ErrReviewNotFound) {
+			}
+			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound
 			}
 			return nil, handler.ErrIntervalServerError

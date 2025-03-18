@@ -50,6 +50,9 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
 			}
+			if errors.Is(err, service.ErrUnauthorized) {
+				return nil, handler.ErrForbidden
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 

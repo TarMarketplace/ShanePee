@@ -1,0 +1,10 @@
+{
+  "default": {
+    "formatOptions": {
+      "snippetInterface": "synchronous"
+    },
+    "paths": ["src/tests/**/*.{feature,feature.md}"],
+    "import": ["src/tests/step-definitions/*.{js,ts,tsx,jsx,cjs,mjs}"],
+    "loader": ["ts-node/esm"]
+  }
+}

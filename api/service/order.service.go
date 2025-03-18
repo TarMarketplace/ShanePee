@@ -15,7 +15,8 @@ type OrderService interface {
 	GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.Order, error)
 	GetOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64) ([]*domain.Order, error)
 	GetSellerOrderWithArtToysByOrderID(ctx context.Context, orderID int64, sellerID int64) (*domain.Order, error)
-	UpdateOrder(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error)
+	UpdateOrderBySeller(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error)
+	UpdateOrderByBuyer(ctx context.Context, id int64, buyerID int64) (*domain.Order, error)
 }
 
 type orderServiceImpl struct {
@@ -57,7 +58,7 @@ func (s *orderServiceImpl) GetSellerOrderWithArtToysByOrderID(ctx context.Contex
 	return order, nil
 }
 
-func (s *orderServiceImpl) UpdateOrder(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error) {
+func (s *orderServiceImpl) UpdateOrderBySeller(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error) {
 	order, err := s.orderRepo.FindOrderByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -66,6 +67,27 @@ func (s *orderServiceImpl) UpdateOrder(ctx context.Context, id int64, updateBody
 		return nil, ErrUnauthorized
 	}
 
+	if err = s.orderRepo.UpdateOrder(ctx, id, updateBody); err != nil {
+		return nil, err
+	}
+	updatedOrder, err := s.orderRepo.FindOrderByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return updatedOrder, nil
+}
+
+func (s *orderServiceImpl) UpdateOrderByBuyer(ctx context.Context, id int64, buyerID int64) (*domain.Order, error) {
+	order, err := s.orderRepo.FindOrderByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	if order.BuyerID != buyerID {
+		return nil, ErrUnauthorized
+	}
+
+	updateBody := make(map[string]any)
+	updateBody["status"] = domain.Completed
 	if err = s.orderRepo.UpdateOrder(ctx, id, updateBody); err != nil {
 		return nil, err
 	}

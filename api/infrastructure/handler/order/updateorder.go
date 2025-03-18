@@ -45,6 +45,9 @@ func (h *OrderHandler) RegisterUpdateOrder(api huma.API) {
 
 		updatedOrder, err := h.orderSvc.UpdateOrder(ctx, i.ID, i.Body.ToMap(), *userID)
 		if err != nil {
+			if errors.Is(err, service.ErrUnauthorized) {
+				return nil, handler.ErrForbidden
+			}
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
 			}

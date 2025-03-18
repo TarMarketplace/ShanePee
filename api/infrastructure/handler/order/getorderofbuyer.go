@@ -2,11 +2,13 @@ package order
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
+	"shanepee.com/api/service"
 )
 
 type GetOrderOfBuyerInput struct {
@@ -35,6 +37,9 @@ func (h *OrderHandler) RegisterGetOrderOfBuyer(api huma.API) {
 		}
 		order, err := h.orderSvc.GetOrderWithArtToysByBuyerID(ctx, i.OrderID, *userId)
 		if err != nil {
+			if errors.Is(err, service.ErrUnauthorized) {
+				return nil, handler.ErrForbidden
+			}
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetOrderOfBuyerOutput{

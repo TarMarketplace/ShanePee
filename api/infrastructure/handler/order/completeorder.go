@@ -38,6 +38,9 @@ func (h *OrderHandler) RegisterCompleteOrder(api huma.API) {
 
 		updatedOrder, err := h.orderSvc.CompleteOrder(ctx, i.ID, *userID)
 		if err != nil {
+			if errors.Is(err, service.ErrUnauthorized) {
+				return nil, handler.ErrForbidden
+			}
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
 			}

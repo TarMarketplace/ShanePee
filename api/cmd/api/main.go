@@ -97,6 +97,7 @@ func main() {
 	app.orderHdr.RegisterGetOrdersOfSeller(api)
 	app.orderHdr.RegisterGetOrderOfSeller(api)
 	app.orderHdr.RegisterGetOrdersOfBuyer(api)
+	app.orderHdr.RegisterCompleteOrder(api)
 	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 

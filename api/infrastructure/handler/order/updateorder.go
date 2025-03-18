@@ -30,10 +30,10 @@ func (h *OrderHandler) RegisterUpdateOrder(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "update-order",
 		Method:      http.MethodPatch,
-		Path:        "/v1/order/{id}",
+		Path:        "/v1/seller/order/{id}",
 		Tags:        []string{"Order"},
-		Summary:     "Update Order",
-		Description: "Update an existing order by ID",
+		Summary:     "Update Order by Seller",
+		Description: "Update tracking number, delivery service, status of an order by seller",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},

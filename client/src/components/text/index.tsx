@@ -54,8 +54,8 @@ const textVariants = cva('font-prompt', {
       'md-regular': 'text-[1rem] font-normal leading-6',
       'md-semibold': 'text-[1rem] font-semibold leading-6',
 
-      'sm-regular': 'text-[0.75rem] font-normal leading-4',
-      'sm-semibold': 'text-[0.75rem] font-semibold leading-4',
+      'sm-regular': 'text-[0.875rem] font-normal leading-[1.125rem]',
+      'sm-semibold': 'text-[0.875rem] font-semibold leading-[1.125rem]',
 
       'xs-regular': 'text-[0.625rem] font-normal leading-[0.875rem]',
       'xs-semibold': 'text-[0.625rem] font-semibold leading-[0.875rem]',

@@ -42,15 +42,13 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='divide-y divide-grey-200'>
-          <DropdownMenuItem>
-            <Link href='/user/account'>บัญชีของฉัน</Link>
-          </DropdownMenuItem>
+          <Link href='/user/account'>
+            <DropdownMenuItem>บัญชีของฉัน</DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>การซื้อของฉัน</DropdownMenuItem>
           <DropdownMenuItem>ยืนยันตัวตนผู้ขาย</DropdownMenuItem>
-          <DropdownMenuItem>
-            <button onClick={onLogout} className='text-error'>
-              ออกจากระบบ
-            </button>
+          <DropdownMenuItem onClick={onLogout} className='text-error'>
+            ออกจากระบบ
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -22,6 +22,8 @@ import type { TrackingInputCardSchema } from '@/components/tracking-input-card/i
 
 import { type Order, getOrdersOfSeller } from '@/generated/api'
 
+// TODO: Refactor this file
+
 const trackingInputCardSchema = z.object({
   trackingNumberValue: z.string().min(1, 'Tracking number is required'),
   deliveryCompanyValue: z.enum(['Shopee express', 'Kerry', 'Flash']),
@@ -97,21 +99,27 @@ export default function OrderHistoryPage() {
             </DropdownMenu>
           </div>
         </div>
-        <section className='flex w-full flex-col'>
+        <section className='flex w-full flex-col gap-6 py-6 md:px-5'>
           {orders
             .filter((order) => order.order_items)
             .filter((order) => order.status === filter || filter === 'ALL')
             .map((order) => (
               <div
-                className='flex w-full flex-col gap-3 divide-y p-2.5'
+                className='flex w-full flex-col gap-3 divide-y rounded-lg p-2.5 shadow-cardbox'
                 key={order.id}
               >
-                <div className='flex items-center gap-3 pb-2.5'>
+                <div className='flex items-center justify-between gap-3 pb-2.5'>
                   <div className='flex flex-col'>
                     <Text variant='xs-regular' className='text-grey-500'>
-                      {order.id} (ขายเมื่อ {order.created_at})
+                      {order.id} (ขายเมื่อ{' '}
+                      {new Date(order.created_at).toLocaleDateString('th', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                      )
                     </Text>
-                    <Text variant='md-semibold'>ผู้ซื้อ</Text>
+                    <Text variant='md-semibold'>ผู้ซื้อ: {order.buyer_id}</Text>
                   </div>
                   <Badge
                     variant={

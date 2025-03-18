@@ -7,6 +7,8 @@ import { Text } from '@/components/text'
 
 import { getArtToyById } from '@/generated/api'
 
+import { AddToCartButton } from '../_containers/add-to-cart-button'
+
 const getProduct = async (id: string) => {
   const { data, response } = await getArtToyById({
     path: {
@@ -86,13 +88,10 @@ export default async function ProductPage({
           <div className='flex flex-col gap-3'>
             <Text variant='heading-lg'>{product.name}</Text>
             <Text variant='heading-md' className='text-primary'>
-              ฿ {product.price}
+              ฿ {product.price.toLocaleString()}
             </Text>
             <div className='flex items-center gap-4'>
-              <Button variant='filled' disabled={!product.availability}>
-                <Icon icon='tdesign:cart-filled' className='size-4' />
-                ซื้อเลย
-              </Button>
+              <AddToCartButton product={product} />
               <Button variant='filled' colorVariant='outline'>
                 <Icon icon='material-symbols:chat' className='size-4' />
                 สอบถามข้อมูล

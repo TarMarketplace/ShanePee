@@ -1793,6 +1793,54 @@
         ]
       }
     },
+    "/v1/buyer/order/{id}/complete": {
+      "patch": {
+        "description": "Update status to completed of an order by buyer",
+        "operationId": "complete-order",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Complete Order by Buyer",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/buyer/order/{orderID}": {
       "get": {
         "description": "Get order detail of buyer",
@@ -2069,9 +2117,61 @@
         ]
       }
     },
-    "/v1/order/{id}": {
+    "/v1/order/{status}": {
+      "get": {
+        "description": "Get orders by status",
+        "operationId": "get-orders-by-status",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "enum": [
+                "PREPARING",
+                "DELIVERING",
+                "COMPLETED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get Orders by Status",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/v1/seller/order/{id}": {
       "patch": {
-        "description": "Update an existing order by ID",
+        "description": "Update tracking number, delivery service, status of an order by seller",
         "operationId": "update-order",
         "parameters": [
           {
@@ -2121,59 +2221,7 @@
             "sessionId": []
           }
         ],
-        "summary": "Update Order",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
-    "/v1/order/{status}": {
-      "get": {
-        "description": "Get orders by status",
-        "operationId": "get-orders-by-status",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "status",
-            "required": true,
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get Orders by Status",
+        "summary": "Update Order by Seller",
         "tags": [
           "Order"
         ]

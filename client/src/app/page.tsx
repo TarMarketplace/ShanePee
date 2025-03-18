@@ -1,11 +1,10 @@
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
 
-import { Button } from '@/components/button'
-import { ProductCard } from '@/components/product-card'
 import { Text } from '@/components/text'
 
 import { RecommendedStore } from './_components/recommended-store'
+import { ProductListContainer } from './_containers/product-list-container'
 
 export default function Home() {
   return (
@@ -50,24 +49,7 @@ export default function Home() {
           Art Toys แนะนำสำหรับคุณ
         </Text>
         <hr className='w-full border border-primary md:border-2' />
-        <div className='grid size-full grid-cols-2 place-items-center gap-4 md:grid-cols-4'>
-          {Array.from({ length: 12 }).map((_, index) => (
-            <ProductCard
-              key={index}
-              product={{
-                name: `Product ${index + 1}`,
-                price: 330 + index * 10,
-                photo: 'https://placehold.co/250x140.png',
-                availability: true,
-                description: `Description for Product ${index}`,
-                id: index,
-                owner_id: 1,
-                release_date: new Date().toISOString(),
-              }}
-            />
-          ))}
-        </div>
-        <Button>View More</Button>
+        <ProductListContainer />
       </section>
     </main>
   )

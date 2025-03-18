@@ -8,7 +8,7 @@ import { Button } from '@/components/button'
 
 import { cn } from '@/lib/utils'
 
-import type { ArtToy} from '@/generated/api';
+import type { ArtToy } from '@/generated/api'
 import { addItemToCart } from '@/generated/api'
 
 interface AddToCartButtonProps {

@@ -17,13 +17,8 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
-import type {
-  CartItem} from '@/generated/api';
-import {
-  checkout,
-  getCart,
-  removeItemFromCart,
-} from '@/generated/api'
+import type { CartItem } from '@/generated/api'
+import { checkout, getCart, removeItemFromCart } from '@/generated/api'
 
 import { CartBox } from '../_components/cart-box'
 

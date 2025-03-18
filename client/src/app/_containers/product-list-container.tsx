@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { ProductCard } from '@/components/product-card'
 import { Skeleton } from '@/components/skeleton'
 
-import type { ArtToy} from '@/generated/api';
+import type { ArtToy } from '@/generated/api'
 import { getArtToys } from '@/generated/api'
 
 export function ProductListContainer() {

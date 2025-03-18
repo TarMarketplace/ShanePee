@@ -11,32 +11,32 @@ import (
 	"shanepee.com/api/service"
 )
 
-type UpdateOrderByBuyerInput struct {
+type CompleteOrderInput struct {
 	ID int64 `path:"id"`
 }
 
-type UpdateOrderByBuyerOutput struct {
+type CompleteOrderOutput struct {
 	Body *domain.Order
 }
 
-func (h *OrderHandler) RegisterUpdateOrderByBuyer(api huma.API) {
+func (h *OrderHandler) RegisterCompleteOrder(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "update-order-by-buyer",
+		OperationID: "complete-order",
 		Method:      http.MethodPatch,
 		Path:        "/v1/buyer/order/{id}",
 		Tags:        []string{"Order"},
-		Summary:     "Update Order by Buyer",
+		Summary:     "Complete Order by Buyer",
 		Description: "Update status to completed of an order by buyer",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *UpdateOrderByBuyerInput) (*UpdateOrderByBuyerOutput, error) {
+	}, func(ctx context.Context, i *CompleteOrderInput) (*CompleteOrderOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		updatedOrder, err := h.orderSvc.UpdateOrderByBuyer(ctx, i.ID, *userID)
+		updatedOrder, err := h.orderSvc.CompleteOrder(ctx, i.ID, *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
@@ -44,7 +44,7 @@ func (h *OrderHandler) RegisterUpdateOrderByBuyer(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 
-		return &UpdateOrderByBuyerOutput{
+		return &CompleteOrderOutput{
 			Body: updatedOrder,
 		}, nil
 	})

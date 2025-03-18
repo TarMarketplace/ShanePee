@@ -97,8 +97,8 @@ func main() {
 	app.orderHdr.RegisterGetOrdersOfSeller(api)
 	app.orderHdr.RegisterGetOrderOfSeller(api)
 	app.orderHdr.RegisterGetOrdersOfBuyer(api)
-	app.orderHdr.RegisterUpdateOrderByBuyer(api)
-	app.orderHdr.RegisterUpdateOrderBySeller(api)
+	app.orderHdr.RegisterCompleteOrder(api)
+	app.orderHdr.RegisterUpdateOrder(api)
 
 	flag.Parse()
 

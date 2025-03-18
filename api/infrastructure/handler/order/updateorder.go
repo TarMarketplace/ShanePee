@@ -17,18 +17,18 @@ type OrderUpdateBody struct {
 	Status          *domain.OrderStatus `json:"status,omitempty" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`
 }
 
-type UpdateOrderBySellerInput struct {
+type UpdateOrderInput struct {
 	ID   int64 `path:"id"`
 	Body OrderUpdateBody
 }
 
-type UpdateOrderBySellerOutput struct {
+type UpdateOrderOutput struct {
 	Body *domain.Order
 }
 
-func (h *OrderHandler) RegisterUpdateOrderBySeller(api huma.API) {
+func (h *OrderHandler) RegisterUpdateOrder(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "update-order-by-seller",
+		OperationID: "update-order",
 		Method:      http.MethodPatch,
 		Path:        "/v1/seller/order/{id}",
 		Tags:        []string{"Order"},
@@ -37,13 +37,13 @@ func (h *OrderHandler) RegisterUpdateOrderBySeller(api huma.API) {
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *UpdateOrderBySellerInput) (*UpdateOrderBySellerOutput, error) {
+	}, func(ctx context.Context, i *UpdateOrderInput) (*UpdateOrderOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		updatedOrder, err := h.orderSvc.UpdateOrderBySeller(ctx, i.ID, i.Body.ToMap(), *userID)
+		updatedOrder, err := h.orderSvc.UpdateOrder(ctx, i.ID, i.Body.ToMap(), *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
@@ -51,7 +51,7 @@ func (h *OrderHandler) RegisterUpdateOrderBySeller(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 
-		return &UpdateOrderBySellerOutput{
+		return &UpdateOrderOutput{
 			Body: updatedOrder,
 		}, nil
 	})

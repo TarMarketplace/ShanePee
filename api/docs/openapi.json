@@ -1796,7 +1796,7 @@
     "/v1/buyer/order/{id}": {
       "patch": {
         "description": "Update status to completed of an order by buyer",
-        "operationId": "update-order-by-buyer",
+        "operationId": "complete-order",
         "parameters": [
           {
             "in": "path",
@@ -1835,7 +1835,7 @@
             "sessionId": []
           }
         ],
-        "summary": "Update Order by Buyer",
+        "summary": "Complete Order by Buyer",
         "tags": [
           "Order"
         ]
@@ -2124,7 +2124,7 @@
     "/v1/seller/order/{id}": {
       "patch": {
         "description": "Update tracking number, delivery service, status of an order by seller",
-        "operationId": "update-order-by-seller",
+        "operationId": "update-order",
         "parameters": [
           {
             "in": "path",

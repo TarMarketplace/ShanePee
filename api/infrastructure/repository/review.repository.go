@@ -41,7 +41,7 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 
 func (r *reviewRepositoryImpl) FindReviewBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error) {
 	var reviews []*domain.Review
-	if err := r.db.Table("reviews").Joins("JOIN order_items ON order_items.art_toy_id = reviews.art_toy_id").Joins("JOIN orders ON orders.id = order_items.order_id").Where("orders.seller_id = ?", sellerID).Find(&reviews).Error; err != nil {
+	if err := r.db.Preload("ArtToy.OrderItems.Order", "orders.seller_id = ?", sellerID).Find(&reviews).Error; err != nil {
 		return nil, err
 	}
 	return reviews, nil

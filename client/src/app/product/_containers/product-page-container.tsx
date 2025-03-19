@@ -25,6 +25,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
   const { user } = useUser()
   const { cartItems, fetchCart } = useCart()
   const [showPopover, setShowPopover] = useState(false)
+  const [cartButtonLoading, setCartButtonLoading] = useState(false)
 
   if (!product) return <p>Product not found.</p>
 
@@ -43,6 +44,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
       toast.error('Please login to continue')
       return
     }
+    setCartButtonLoading(true)
     if (isInCart) {
       const cartItem = cartItems.find((item) => item.art_toy_id === product.id)
       if (cartItem?.id) {
@@ -59,6 +61,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
       await addItemToCart({ body: { art_toy_id: product.id } })
       toast.success('Added to cart successfully')
     }
+    setCartButtonLoading(false)
     fetchCart()
   }
 
@@ -79,6 +82,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
         product={product}
         handleCartButton={handleCartButton}
         isInCart={isInCart}
+        cartButtonLoading={cartButtonLoading}
       />
       {showPopover && (
         <>

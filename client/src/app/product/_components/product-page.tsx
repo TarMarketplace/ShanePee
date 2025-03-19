@@ -7,16 +7,20 @@ import { Text } from '@/components/text'
 
 import type { ArtToy } from '@/generated/api'
 
+import { AddToCartButton } from '../_containers/add-to-cart-button'
+
 type ProductPageProps = {
   product: ArtToy
   handleCartButton: () => void
   isInCart: boolean
+  cartButtonLoading: boolean
 }
 
 export function ProductPage({
   product,
   handleCartButton,
   isInCart,
+  cartButtonLoading,
 }: ProductPageProps) {
   return (
     <div className='mx-auto flex w-full max-w-screen-lg flex-col py-8'>
@@ -76,20 +80,12 @@ export function ProductPage({
               ฿ {product.price}
             </Text>
             <div className='flex items-center gap-4'>
-              <Button
-                variant='filled'
-                colorVariant={isInCart ? 'outline' : 'default'}
-                disabled={!product.availability}
-                onClick={() => handleCartButton()}
-              >
-                <Icon
-                  icon={
-                    isInCart ? 'mingcute:check-fill' : 'tdesign:cart-filled'
-                  }
-                  className='size-4'
-                />
-                {isInCart ? 'เพิ่มในตะกร้าแล้ว' : 'เพิ่มในตะกร้า'}
-              </Button>
+              <AddToCartButton
+                product={product}
+                isInCart={isInCart}
+                handleAddToCart={handleCartButton}
+                loading={cartButtonLoading}
+              />
               <Button variant='filled' colorVariant='outline'>
                 <Icon icon='material-symbols:chat' className='size-4' />
                 สอบถามข้อมูล

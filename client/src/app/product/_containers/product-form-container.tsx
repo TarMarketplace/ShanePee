@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { useUser } from '@/providers/user-provider'
 
 import { env } from '@/env'
+import { deleteArtToy } from '@/generated/api'
 import { imageLoader } from '@/utils/image-loader'
 
 import { ProductForm } from '../_components/product-form'
@@ -66,6 +67,23 @@ export function ProductFormContainer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultImage])
 
+  const handleDeleteProduct = async () => {
+    if (id) {
+      const { response } = await deleteArtToy({
+        path: {
+          id: id,
+        },
+      })
+
+      if (response.ok) {
+        toast.success('Product deleted successfully')
+        router.push('/my-product')
+      } else {
+        toast.error('Failed to delete product')
+      }
+    }
+  }
+
   const onSubmit: SubmitHandler<ProductFormSchema> = async (data) => {
     if (!user) {
       toast.error('Please login first')
@@ -116,6 +134,7 @@ export function ProductFormContainer({
         onSubmit={onSubmit}
         form={form}
         isEditing={!!defaultValues}
+        handleDeleteProduct={handleDeleteProduct}
       />
     </main>
   )

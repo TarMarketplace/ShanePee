@@ -80,7 +80,7 @@ export function ProductFormContainer({
       const response = await fetch(
         `${env.NEXT_PUBLIC_BASE_API_URL}/v1/art-toy` + (id ? `/${id}` : ''),
         {
-          method: id ? 'PUT' : 'POST',
+          method: id ? 'PATCH' : 'POST',
           headers: {
             'Content-Type': 'application/json',
           },

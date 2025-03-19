@@ -37,6 +37,14 @@ func NewCartService(artToyRepo domain.ArtToyRepository, cartRepo domain.CartRepo
 var _ CartService = &cartServiceImpl{}
 
 func (s *cartServiceImpl) AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error) {
+	artToy, err := s.artToyRepo.FindArtToyByID(ctx, artToyID)
+	if err != nil {
+		return nil, err
+	}
+	if artToy.OwnerID != ownerID {
+		return nil, ErrArtToyNotBelongToOwner
+	}
+
 	cartItem := domain.NewCartItem(ownerID, artToyID)
 	if err := s.cartRepo.AddItemToCart(ctx, cartItem); err != nil {
 		return nil, err

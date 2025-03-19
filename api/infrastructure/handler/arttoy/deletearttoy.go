@@ -2,6 +2,7 @@ package arttoy
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -32,11 +33,11 @@ func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 
 		err := h.artToySvc.DeleteArtToy(ctx, i.ArtToyID, *userId)
 		if err != nil {
-			if err == service.ErrArtToyNotFound {
-				return nil, handler.ErrArtToyNotFound
+			if errors.Is(err, service.ErrArtToyNotBelongToOwner) {
+				return nil, handler.ErrArtToyNotBelongToOwner
 			}
-			if err == service.ErrUnauthorized {
-				return nil, handler.ErrForbidden
+			if errors.Is(err, service.ErrArtToyNotFound) {
+				return nil, handler.ErrArtToyNotFound
 			}
 			return nil, handler.ErrIntervalServerError
 		}

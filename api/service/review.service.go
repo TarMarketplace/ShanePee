@@ -37,7 +37,7 @@ func (s *reviewServiceImpl) CreateReview(ctx context.Context, rating int, commen
 		return nil, err
 	}
 	if *buyerID != ownerID {
-		return nil, ErrUnauthorized
+		return nil, ErrArtToyNotBelongToOwner
 	}
 
 	review := domain.NewReview(rating, comment, artToyID)
@@ -61,7 +61,7 @@ func (s *reviewServiceImpl) UpdateReview(ctx context.Context, artToyID int64, up
 		return nil, err
 	}
 	if *buyerID != ownerID {
-		return nil, ErrUnauthorized
+		return nil, ErrArtToyNotBelongToOwner
 	}
 
 	if err := s.reviewRepo.UpdateReview(ctx, artToyID, updateBody); err != nil {
@@ -80,7 +80,7 @@ func (s *reviewServiceImpl) DeleteReview(ctx context.Context, artToyID int64, ow
 		return err
 	}
 	if *buyerID != ownerID {
-		return ErrUnauthorized
+		return ErrArtToyNotBelongToOwner
 	}
 	return s.reviewRepo.DeleteReview(ctx, artToyID)
 }

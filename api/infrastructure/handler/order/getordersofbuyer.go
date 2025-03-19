@@ -10,7 +10,7 @@ import (
 )
 
 type GetOrdersOfBuyerInput struct {
-	Status string `query:"status" default:"ALL" enum:"ALL,PREPARING,DELIVERING,COMPLETED"`
+	Status string `query:"status" enum:"PREPARING,DELIVERING,COMPLETED"`
 }
 
 type GetOrdersOfBuyerOutput struct {

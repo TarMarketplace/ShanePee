@@ -24,7 +24,7 @@ func (h *CartHandler) RegisterClearItemsFromCart(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		err := h.cartSvc.ClearItemsFromCart(ctx, *userID)
+		err := h.cartSvc.ClearItemsByOwnerID(ctx, *userID)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

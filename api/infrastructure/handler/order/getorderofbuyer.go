@@ -11,38 +11,38 @@ import (
 	"shanepee.com/api/service"
 )
 
-type GetOrderOfSellerInput struct {
+type GetOrderOfBuyerInput struct {
 	OrderID int64 `path:"orderID"`
 }
 
-type GetOrderOfSellerOutput struct {
+type GetOrderOfBuyerOutput struct {
 	Body *domain.Order
 }
 
-func (h *OrderHandler) RegisterGetOrderOfSeller(api huma.API) {
+func (h *OrderHandler) RegisterGetOrderOfBuyer(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "get-order-of-seller",
+		OperationID: "get-order-of-buyer",
 		Method:      http.MethodGet,
-		Path:        "/v1/seller/order/{orderID}",
+		Path:        "/v1/buyer/order/{orderID}",
 		Tags:        []string{"Order"},
-		Summary:     "Get order detail of seller",
-		Description: "Get order detail of seller",
+		Summary:     "Get order detail of buyer",
+		Description: "Get order detail of buyer",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *GetOrderOfSellerInput) (*GetOrderOfSellerOutput, error) {
+	}, func(ctx context.Context, i *GetOrderOfBuyerInput) (*GetOrderOfBuyerOutput, error) {
 		userId := handler.GetUserID(ctx)
 		if userId == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		order, err := h.orderSvc.GetOrderWithArtToysBySellerID(ctx, i.OrderID, *userId)
+		order, err := h.orderSvc.GetOrderWithArtToysByBuyerID(ctx, i.OrderID, *userId)
 		if err != nil {
 			if errors.Is(err, service.ErrOrderNotBelongToOwner) {
 				return nil, handler.ErrOrderNotBelongToOwner
 			}
 			return nil, handler.ErrIntervalServerError
 		}
-		return &GetOrderOfSellerOutput{
+		return &GetOrderOfBuyerOutput{
 			Body: order,
 		}, nil
 	})

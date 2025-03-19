@@ -35,7 +35,7 @@ func (r *cartRepositoryImpl) RemoveItemFromCart(ctx context.Context, ownerID int
 	return err
 }
 
-func (r *cartRepositoryImpl) ClearItemsFromCart(ctx context.Context, ownerID int64) error {
+func (r *cartRepositoryImpl) ClearItemsByOwnerID(ctx context.Context, ownerID int64) error {
 	return r.db.Where("owner_id = ?", ownerID).Delete(&domain.CartItem{}).Error
 }
 

@@ -90,6 +90,7 @@ func main() {
 
 	app.cartHdr.RegisterAddItemToCart(api)
 	app.cartHdr.RegisterRemoveItemFromCart(api)
+	app.cartHdr.RegisterClearItemsFromCart(api)
 	app.cartHdr.RegisterGetCart(api)
 	app.cartHdr.RegisterCheckout(api)
 
@@ -97,6 +98,8 @@ func main() {
 	app.orderHdr.RegisterGetOrdersOfSeller(api)
 	app.orderHdr.RegisterGetOrderOfSeller(api)
 	app.orderHdr.RegisterGetOrdersOfBuyer(api)
+	app.orderHdr.RegisterCompleteOrder(api)
+	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
 	flag.Parse()

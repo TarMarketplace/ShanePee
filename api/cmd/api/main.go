@@ -85,6 +85,7 @@ func main() {
 
 	app.reviewHdr.RegisterCreateReview(api)
 	app.reviewHdr.RegisterGetReview(api)
+	app.reviewHdr.RegisterGetSellerRating(api)
 	app.reviewHdr.RegisterUpdateReview(api)
 	app.reviewHdr.RegisterDeleteReview(api)
 

@@ -41,6 +41,7 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 
 func (r *reviewRepositoryImpl) FindReviewerByArtToyID(ctx context.Context, artToyID int64) (*int64, error) {
 	var buyerID int64
+	// TODO: Handle this
 	if err := r.db.Table("orders").Select("orders.buyer_id").Joins("JOIN order_items ON order_items.order_id = orders.id").Where("order_items.art_toy_id = ?", artToyID).Scan(&buyerID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, domain.ErrOrderNotFound
@@ -48,6 +49,15 @@ func (r *reviewRepositoryImpl) FindReviewerByArtToyID(ctx context.Context, artTo
 		return nil, err
 	}
 	return &buyerID, nil
+}
+
+func (r *reviewRepositoryImpl) FindAverageRatingBySellerID(ctx context.Context, sellerID int64) (*float64, error) {
+	var reviews []*domain.Review
+	var rating float64
+	if err := r.db.Preload("ArtToy.OrderItems.Order", "orders.seller_id = ?", sellerID).Find(reviews).Select("COALESCE(AVG(rating), 0)").Scan(&rating).Error; err != nil {
+		return nil, err
+	}
+	return &rating, nil
 }
 
 func (r *reviewRepositoryImpl) UpdateReview(ctx context.Context, artToyID int64, review map[string]interface{}) error {

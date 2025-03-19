@@ -2294,6 +2294,53 @@
         ]
       }
     },
+    "/v1/seller/{sellerID}/rating": {
+      "get": {
+        "description": "Get average rating from all art toys of seller",
+        "operationId": "get-seller-rating",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "double",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Seller Rating",
+        "tags": [
+          "Art Toy"
+        ]
+      }
+    },
     "/v1/user": {
       "patch": {
         "description": "Update user by id",

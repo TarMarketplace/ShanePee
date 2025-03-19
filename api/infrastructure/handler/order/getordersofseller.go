@@ -9,6 +9,10 @@ import (
 	"shanepee.com/api/infrastructure/handler"
 )
 
+type GetOrdersOfSellerInput struct {
+	Status string `query:"status" default:"ALL" enum:"ALL,PREPARING,DELIVERING,COMPLETED"`
+}
+
 type GetOrdersOfSellerOutput struct {
 	Body handler.ArrayResponse[domain.Order]
 }
@@ -24,12 +28,12 @@ func (h *OrderHandler) RegisterGetOrdersOfSeller(api huma.API) {
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *struct{}) (*GetOrdersOfSellerOutput, error) {
+	}, func(ctx context.Context, i *GetOrdersOfSellerInput) (*GetOrdersOfSellerOutput, error) {
 		userId := handler.GetUserID(ctx)
 		if userId == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		data, err := h.orderSvc.GetOrdersWithArtToysBySellerID(ctx, *userId)
+		data, err := h.orderSvc.GetOrdersWithArtToysBySellerID(ctx, *userId, i.Status)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

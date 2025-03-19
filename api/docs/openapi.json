@@ -1987,6 +1987,36 @@
         ]
       }
     },
+    "/v1/cart/clear-items": {
+      "delete": {
+        "description": "Clear items from the cart",
+        "operationId": "clear-items-from-cart",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Clear Items From Cart",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
     "/v1/cart/remove-item/{id}": {
       "delete": {
         "description": "Remove an item from the cart",

@@ -90,6 +90,7 @@ func main() {
 
 	app.cartHdr.RegisterAddItemToCart(api)
 	app.cartHdr.RegisterRemoveItemFromCart(api)
+	app.cartHdr.RegisterClearItemsFromCart(api)
 	app.cartHdr.RegisterGetCart(api)
 	app.cartHdr.RegisterCheckout(api)
 

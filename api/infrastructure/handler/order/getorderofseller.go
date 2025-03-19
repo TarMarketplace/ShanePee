@@ -37,8 +37,8 @@ func (h *OrderHandler) RegisterGetOrderOfSeller(api huma.API) {
 		}
 		order, err := h.orderSvc.GetOrderWithArtToysBySellerID(ctx, i.OrderID, *userId)
 		if err != nil {
-			if errors.Is(err, service.ErrUnauthorized) {
-				return nil, handler.ErrForbidden
+			if errors.Is(err, service.ErrOrderNotBelongToOwner) {
+				return nil, handler.ErrOrderNotBelongToOwner
 			}
 			return nil, handler.ErrIntervalServerError
 		}

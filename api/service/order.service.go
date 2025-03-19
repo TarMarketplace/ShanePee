@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrOrderNotFound error = domain.ErrOrderNotFound
+	ErrOrderNotFound         error = domain.ErrOrderNotFound
+	ErrOrderNotBelongToOwner error = domain.ErrOrderNotBelongToOwner
 )
 
 type OrderService interface {
@@ -54,7 +55,7 @@ func (s *orderServiceImpl) GetOrderWithArtToysBySellerID(ctx context.Context, or
 		return nil, err
 	}
 	if order.SellerID != sellerID {
-		return nil, ErrUnauthorized
+		return nil, ErrOrderNotBelongToOwner
 	}
 	return order, nil
 }
@@ -65,7 +66,7 @@ func (s *orderServiceImpl) GetOrderWithArtToysByBuyerID(ctx context.Context, ord
 		return nil, err
 	}
 	if order.BuyerID != buyerID {
-		return nil, ErrUnauthorized
+		return nil, ErrOrderNotBelongToOwner
 	}
 	return order, nil
 }
@@ -76,7 +77,7 @@ func (s *orderServiceImpl) UpdateOrder(ctx context.Context, id int64, updateBody
 		return nil, err
 	}
 	if order.SellerID != sellerID {
-		return nil, ErrUnauthorized
+		return nil, ErrOrderNotBelongToOwner
 	}
 
 	if err = s.orderRepo.UpdateOrder(ctx, id, updateBody); err != nil {
@@ -95,7 +96,7 @@ func (s *orderServiceImpl) CompleteOrder(ctx context.Context, id int64, buyerID 
 		return nil, err
 	}
 	if order.BuyerID != buyerID {
-		return nil, ErrUnauthorized
+		return nil, ErrOrderNotBelongToOwner
 	}
 
 	updateBody := make(map[string]any)

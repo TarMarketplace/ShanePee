@@ -31,8 +31,8 @@ func (h *ReviewHandler) RegisterDeleteReview(api huma.API) {
 			return nil, handler.ErrAuthenticationRequired
 		}
 		if err := h.reviewSvc.DeleteReview(ctx, i.ArtToyID, *userID); err != nil {
-			if errors.Is(err, service.ErrUnauthorized) {
-				return nil, handler.ErrForbidden
+			if errors.Is(err, service.ErrArtToyNotBelongToOwner) {
+				return nil, handler.ErrArtToyNotBelongToOwner
 			}
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound

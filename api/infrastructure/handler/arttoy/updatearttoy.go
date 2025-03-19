@@ -47,11 +47,11 @@ func (h *ArtToyHandler) RegisterUpdateArtToy(api huma.API) {
 
 		updatedArtToy, err := h.artToySvc.UpdateArtToy(ctx, i.ID, i.Body.ToMap(), *userID)
 		if err != nil {
+			if errors.Is(err, service.ErrArtToyNotBelongToOwner) {
+				return nil, handler.ErrArtToyNotBelongToOwner
+			}
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
-			}
-			if errors.Is(err, service.ErrUnauthorized) {
-				return nil, handler.ErrForbidden
 			}
 			return nil, handler.ErrIntervalServerError
 		}

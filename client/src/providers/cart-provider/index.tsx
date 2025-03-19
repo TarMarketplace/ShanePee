@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import type { CartItem} from '@/generated/api';
+import type { CartItem } from '@/generated/api'
 import { getCart } from '@/generated/api'
 
 export interface CartData {

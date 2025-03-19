@@ -51,13 +51,12 @@ func (r *reviewRepositoryImpl) FindReviewerByArtToyID(ctx context.Context, artTo
 	return &buyerID, nil
 }
 
-func (r *reviewRepositoryImpl) FindAverageRatingBySellerID(ctx context.Context, sellerID int64) (*float64, error) {
+func (r *reviewRepositoryImpl) FindReviewBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error) {
 	var reviews []*domain.Review
-	var rating float64
-	if err := r.db.Preload("ArtToy.OrderItems.Order", "orders.seller_id = ?", sellerID).Find(reviews).Select("COALESCE(AVG(rating), 0)").Scan(&rating).Error; err != nil {
+	if err := r.db.Preload("ArtToy.OrderItems.Order", "orders.seller_id = ?", sellerID).Find(&reviews).Error; err != nil {
 		return nil, err
 	}
-	return &rating, nil
+	return reviews, nil
 }
 
 func (r *reviewRepositoryImpl) UpdateReview(ctx context.Context, artToyID int64, review map[string]interface{}) error {

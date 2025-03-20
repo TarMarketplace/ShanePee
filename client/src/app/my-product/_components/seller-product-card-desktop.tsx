@@ -16,7 +16,7 @@ function SellerProductCardDesktop({ product }: SellerProductCardDesktopProps) {
   }, [product])
 
   return (
-    <div className='aspect-[250/320] size-full max-w-64 overflow-hidden rounded-xl bg-card shadow-sm'>
+    <div className='aspect-[250/320] size-full overflow-hidden rounded-xl shadow-sm'>
       <div className='relative h-2/5 w-full'>
         <Image src={product.photo as string} alt={product.name} fill />
       </div>

@@ -226,10 +226,10 @@ export function ProductForm({
                   {form.getValues('name') || 'ไม่มีชื่อสินค้า'}
                 </span>
                 <br />
-                หากคุณเปลี่ยนร้าน <br className='md:hidden' />
                 <span className='text-primary underline'>
-                  สินค้าของคุณจะหายไปและไม่สามารถกู้คืนได้!!
+                  สินค้าของคุณจะหายไปและไม่สามารถกู้คืนได้!!{' '}
                 </span>
+                <br />
                 กรุณาตรวจสอบก่อนยืนยัน
               </Text>
             </div>

@@ -20,14 +20,21 @@ import { Textarea } from '@/components/textarea'
 import { cn } from '@/lib/utils'
 
 import { type ProductFormSchema } from '../_containers/product-form-container'
+import { DeleteItemDialog } from './delete-item-dialog'
 
 type ProductFormProps = {
   form: UseFormReturn<ProductFormSchema>
   onSubmit: SubmitHandler<ProductFormSchema>
   isEditing: boolean
+  handleDeleteProduct: () => void
 }
 
-export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
+export function ProductForm({
+  form,
+  onSubmit,
+  isEditing,
+  handleDeleteProduct,
+}: ProductFormProps) {
   const [isShowingButton, setIsShowingButton] = useState(false)
   const router = useRouter()
 
@@ -165,13 +172,21 @@ export function ProductForm({ form, onSubmit, isEditing }: ProductFormProps) {
 
         <div className='mt-auto flex items-center justify-end gap-4'>
           {isEditing && (
-            <button
-              type='button'
-              className='font-bold text-grey-500 underline'
-              onClick={() => router.back()}
-            >
-              ยกเลิก
-            </button>
+            <>
+              <div className='w-full'>
+                <DeleteItemDialog
+                  productName={form.getValues('name')}
+                  handleDeleteProduct={handleDeleteProduct}
+                />
+              </div>
+              <button
+                type='button'
+                className='font-bold text-grey-500 underline'
+                onClick={() => router.back()}
+              >
+                ยกเลิก
+              </button>
+            </>
           )}
           <Button variant='filled' type='submit'>
             {isEditing ? 'แก้ไข' : 'วางจำหน่าย'}

@@ -7,6 +7,7 @@ const getProduct = async (id: string) => {
     path: {
       id: parseInt(id),
     },
+    cache: 'no-cache',
   })
 
   if (response.ok) {

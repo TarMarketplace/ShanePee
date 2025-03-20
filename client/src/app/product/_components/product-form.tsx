@@ -6,6 +6,16 @@ import type { SubmitHandler, UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/button'
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/dialog'
+import {
   Form,
   FormControl,
   FormField,
@@ -35,7 +45,6 @@ export function ProductForm({
   handleDeleteProduct,
 }: ProductFormProps) {
   const [isShowingButton, setIsShowingButton] = useState(false)
-  const [showPopover, setShowPopover] = useState(false)
   const router = useRouter()
 
   const image = form.watch('image')
@@ -47,7 +56,7 @@ export function ProductForm({
   }, [image])
 
   return (
-    <>
+    <Dialog>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -178,14 +187,11 @@ export function ProductForm({
             {isEditing && (
               <>
                 <div className='w-full'>
-                  <Button
-                    variant='filled'
-                    className='w-14'
-                    type='button'
-                    onClick={() => setShowPopover(true)}
-                  >
-                    ลบ
-                  </Button>
+                  <DialogTrigger asChild>
+                    <Button variant='filled' className='w-14' type='button'>
+                      ลบ
+                    </Button>
+                  </DialogTrigger>
                 </div>
                 <button
                   type='button'
@@ -202,45 +208,36 @@ export function ProductForm({
           </div>
         </form>
       </Form>
-      {showPopover && (
-        <>
-          <div
-            className='fixed inset-0 z-10 bg-black/20'
-            onClick={() => setShowPopover(false)}
-          ></div>
-          <div className='fixed left-1/2 top-1/2 z-10 flex w-[354px] -translate-x-1/2 -translate-y-1/2 flex-col rounded bg-white p-4 shadow-lg md:w-[500px]'>
-            <div className='mb-4 flex items-center'>
-              <Text variant='heading-md' className='w-full'>
-                ต้องการลบสินค้าหรือไม่
-              </Text>
-              <Icon
-                icon='maki:cross'
-                className='size-5 cursor-pointer text-grey-500'
-                onClick={() => setShowPopover(false)}
-              />
-            </div>
-            <div className='flex flex-wrap gap-1'>
-              <Text variant='lg-regular' className=''>
-                คุณกำลังจะลบสินค้า
-                <span className='mx-1 font-bold'>
-                  {form.getValues('name') || 'ไม่มีชื่อสินค้า'}
-                </span>
-                <br />
-                <span className='text-primary underline'>
-                  สินค้าของคุณจะหายไปและไม่สามารถกู้คืนได้!!{' '}
-                </span>
-                <br />
-                กรุณาตรวจสอบก่อนยืนยัน
-              </Text>
-            </div>
-            <div className='flex justify-end'>
-              <Button variant='filled' onClick={handleDeleteProduct}>
-                ลบสินค้า
-              </Button>
-            </div>
-          </div>
-        </>
-      )}
-    </>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            <Text variant='heading-md' className='w-full'>
+              ต้องการลบสินค้าหรือไม่
+            </Text>
+          </DialogTitle>
+          <DialogDescription>
+            <Text variant='lg-regular' className='text-black'>
+              คุณกำลังจะลบสินค้า
+              <span className='mx-1 font-bold'>
+                {form.getValues('name') || 'ไม่มีชื่อสินค้า'}
+              </span>
+              <br />
+              <span className='text-primary underline'>
+                สินค้าของคุณจะหายไปและไม่สามารถกู้คืนได้!!{' '}
+              </span>
+              <br />
+              กรุณาตรวจสอบก่อนยืนยัน
+            </Text>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant='filled' onClick={() => handleDeleteProduct()}>
+              ลบสินค้า
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -13,6 +13,7 @@ var (
 type ReviewService interface {
 	CreateReview(ctx context.Context, rating int, comment string, artToyID int64, ownerID int64) (*domain.Review, error)
 	GetReview(ctx context.Context, artToyID int64) (*domain.Review, error)
+	GetSellerRating(ctx context.Context, sellerID int64) (*float64, error)
 	UpdateReview(ctx context.Context, artToyID int64, updateBody map[string]any, ownerID int64) (*domain.Review, error)
 	DeleteReview(ctx context.Context, artToyID int64, ownerID int64) error
 }
@@ -53,6 +54,21 @@ func (s *reviewServiceImpl) GetReview(ctx context.Context, artToyID int64) (*dom
 		return nil, err
 	}
 	return review, nil
+}
+
+func (s *reviewServiceImpl) GetSellerRating(ctx context.Context, sellerID int64) (*float64, error) {
+	reviews, err := s.reviewRepo.FindReviewBySellerID(ctx, sellerID)
+	if err != nil {
+		return nil, err
+	}
+
+	var totalRating float64 = 0.0
+	for _, review := range reviews {
+		totalRating += float64(review.Rating)
+	}
+
+	avgRating := totalRating / float64(len(reviews))
+	return &avgRating, nil
 }
 
 func (s *reviewServiceImpl) UpdateReview(ctx context.Context, artToyID int64, updateBody map[string]any, ownerID int64) (*domain.Review, error) {

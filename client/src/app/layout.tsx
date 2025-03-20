@@ -4,6 +4,7 @@ import { Prompt } from 'next/font/google'
 import { Footer } from '@/components/footer'
 import { Toaster } from '@/components/toast'
 
+import { CartProvider } from '@/providers/cart-provider'
 import { UserProvider } from '@/providers/user-provider'
 
 import { cn } from '@/lib/utils'
@@ -35,10 +36,12 @@ export default function RootLayout({
         className={cn('min-h-dvh font-prompt antialiased', prompt.variable)}
       >
         <UserProvider>
-          <NavbarContainer />
-          <main className='min-h-[calc(100dvh-60px-236px)]'>{children}</main>
-          <Footer />
-          <Toaster richColors />
+          <CartProvider>
+            <NavbarContainer />
+            <main className='min-h-[calc(100dvh-60px-236px)]'>{children}</main>
+            <Footer />
+            <Toaster richColors />
+          </CartProvider>
         </UserProvider>
       </body>
     </html>

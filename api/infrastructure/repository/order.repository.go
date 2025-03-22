@@ -32,9 +32,14 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 	return order, nil
 }
 
-func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64) ([]*domain.Order, error) {
+func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error) {
+	query := r.db.Preload("OrderItems.ArtToy").Where("seller_id = ?", sellerID)
+	if status != "" {
+		query = query.Where("status = ?", status)
+	}
+
 	var orders []*domain.Order
-	if err := r.db.Preload("OrderItems.ArtToy").Where("seller_id = ?", sellerID).Find(&orders).Error; err != nil {
+	if err := query.Find(&orders).Error; err != nil {
 		return nil, err
 	}
 	return orders, nil
@@ -42,7 +47,7 @@ func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Contex
 
 func (r *orderRepositoryImpl) FindOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64, status string) ([]*domain.Order, error) {
 	query := r.db.Preload("OrderItems.ArtToy").Where("buyer_id = ?", buyerID)
-	if status != "ALL" {
+	if status != "" {
 		query = query.Where("status = ?", status)
 	}
 

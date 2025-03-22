@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -37,9 +38,13 @@ export function ProductContainer() {
   }, [])
 
   return (
-    <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,max-content))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,max-content))] lg:grid-cols-[repeat(4,minmax(0,max-content))]'>
+    <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
       {products?.map((product) => {
-        return <SellerProductCard key={product.id} product={product} />
+        return (
+          <Link key={product.id} href={`/product/edit/${product.id}`}>
+            <SellerProductCard key={product.id} product={product} />
+          </Link>
+        )
       })}
     </div>
   )

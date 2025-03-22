@@ -34,7 +34,7 @@ func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status str
 
 func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error) {
 	query := r.db.Preload("OrderItems.ArtToy").Where("seller_id = ?", sellerID)
-	if status != "ALL" {
+	if status != "" {
 		query = query.Where("status = ?", status)
 	}
 

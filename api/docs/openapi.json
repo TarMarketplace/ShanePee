@@ -1899,9 +1899,7 @@
             "in": "query",
             "name": "status",
             "schema": {
-              "default": "ALL",
               "enum": [
-                "ALL",
                 "PREPARING",
                 "DELIVERING",
                 "COMPLETED"

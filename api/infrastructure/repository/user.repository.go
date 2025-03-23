@@ -52,6 +52,37 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 	return &user, nil
 }
 
+func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.User, error) {
+	var users []*domain.User
+	err := u.db.Model(&domain.User{}).
+		Select("*, users.id AS id, users.photo AS photo, AVG(reviews.rating) AS rating, COUNT(reviews.id) AS number_of_reviews").
+		Joins("LEFT JOIN art_toys on users.id = art_toys.owner_id").
+		Joins("LEFT JOIN reviews on reviews.art_toy_id = art_toys.id").
+		Group("users.id").
+		Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*domain.User, error) {
+	var user *domain.User
+	err := u.db.Model(&domain.User{}).
+		Select("*, users.id AS id, users.photo AS photo, AVG(reviews.rating) AS rating, COUNT(reviews.id) AS number_of_reviews").
+		Joins("LEFT JOIN art_toys on users.id = art_toys.owner_id").
+		Joins("LEFT JOIN reviews on reviews.art_toy_id = art_toys.id").
+		Group("users.id").
+		Take(&user, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, domain.ErrUserNotFound
+		}
+		return nil, err
+	}
+	return user, nil
+}
+
 func (u *userRepositoryImpl) CreatePasswordResetRequest(ctx context.Context, passwordResetRequest *domain.PasswordResetRequest) error {
 	return u.db.Create(passwordResetRequest).Error
 }

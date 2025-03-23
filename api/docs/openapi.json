@@ -112,6 +112,33 @@
         ],
         "type": "object"
       },
+      "ArrayResponseUser": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseUser.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/User"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ArtToy": {
         "additionalProperties": false,
         "properties": {
@@ -957,6 +984,13 @@
             ],
             "type": "string"
           },
+          "number_of_reviews": {
+            "examples": [
+              52
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
           "payment_method": {
             "$ref": "#/components/schemas/PaymentMethod"
           },
@@ -965,6 +999,13 @@
               "data:image/png;base64,mfkirjIDSFIj324if..."
             ],
             "type": "string"
+          },
+          "rating": {
+            "examples": [
+              4.5
+            ],
+            "format": "double",
+            "type": "number"
           },
           "tel": {
             "examples": [
@@ -2214,6 +2255,38 @@
         ]
       }
     },
+    "/v1/seller": {
+      "get": {
+        "description": "Get sellers",
+        "operationId": "get-sellers",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseUser"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Sellers",
+        "tags": [
+          "User"
+        ]
+      }
+    },
     "/v1/seller/order/{id}": {
       "patch": {
         "description": "Update tracking number, delivery service, status of an order by seller",
@@ -2369,6 +2442,49 @@
         "summary": "Get orders of seller",
         "tags": [
           "Order"
+        ]
+      }
+    },
+    "/v1/seller/{id}": {
+      "get": {
+        "description": "Get seller by id",
+        "operationId": "get-seller-by-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Seller by ID",
+        "tags": [
+          "User"
         ]
       }
     },

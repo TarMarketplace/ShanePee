@@ -30,10 +30,10 @@ func (h *OrderHandler) RegisterUpdateOrder(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "update-order",
 		Method:      http.MethodPatch,
-		Path:        "/v1/order/{id}",
+		Path:        "/v1/seller/order/{id}",
 		Tags:        []string{"Order"},
-		Summary:     "Update Order",
-		Description: "Update an existing order by ID",
+		Summary:     "Update Order by Seller",
+		Description: "Update tracking number, delivery service, status of an order by seller",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
@@ -45,6 +45,9 @@ func (h *OrderHandler) RegisterUpdateOrder(api huma.API) {
 
 		updatedOrder, err := h.orderSvc.UpdateOrder(ctx, i.ID, i.Body.ToMap(), *userID)
 		if err != nil {
+			if errors.Is(err, service.ErrOrderNotBelongToOwner) {
+				return nil, handler.ErrOrderNotBelongToOwner
+			}
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
 			}

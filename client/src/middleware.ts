@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const PROTECTED_ROUTES = ['/product/create', '/product/edit', '/user/account']
+const PROTECTED_ROUTES = [
+  '/product/create',
+  '/product/edit',
+  '/user/account',
+  '/cart',
+  '/order-history',
+]
 const AUTH_ROUTES = ['/login', '/register']
 
 export default async function middleware(request: NextRequest) {

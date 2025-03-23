@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrArtToyNotFound error = domain.ErrArtToyNotFound
+	ErrArtToyNotFound         error = domain.ErrArtToyNotFound
+	ErrArtToyNotBelongToOwner error = domain.ErrArtToyNotBelongToOwner
 )
 
 type ArtToySearchParams = domain.ArtToySearchParams
@@ -55,7 +56,7 @@ func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBo
 		return nil, err
 	}
 	if artToy.OwnerID != ownerID {
-		return nil, ErrUnauthorized
+		return nil, ErrArtToyNotBelongToOwner
 	}
 	if err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody); err != nil {
 		return nil, err
@@ -101,7 +102,7 @@ func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID 
 		return err
 	}
 	if artToy.OwnerID != ownerID {
-		return ErrUnauthorized
+		return ErrArtToyNotBelongToOwner
 	}
 	return s.artToyRepo.DeleteArtToy(ctx, id)
 }

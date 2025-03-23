@@ -40,7 +40,6 @@ func (h *CartHandler) RegisterRemoveItemFromCart(api huma.API) {
 			}
 			return nil, handler.ErrIntervalServerError
 		}
-		
 		return nil, nil
 	})
 }

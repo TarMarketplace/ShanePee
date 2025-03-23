@@ -953,6 +953,13 @@
           "address": {
             "$ref": "#/components/schemas/Address"
           },
+          "created_at": {
+            "examples": [
+              "2021-01-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
           "email": {
             "examples": [
               "johndoe@example.com"
@@ -1018,7 +1025,8 @@
           "id",
           "email",
           "address",
-          "payment_method"
+          "payment_method",
+          "created_at"
         ],
         "type": "object"
       },

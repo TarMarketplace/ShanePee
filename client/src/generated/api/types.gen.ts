@@ -1035,7 +1035,7 @@ export type GetOrdersByStatusResponses = {
 export type GetOrdersByStatusResponse =
   GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses]
 
-export type GetReviewBySellerIDData = {
+export type GetReviewBySellerIdData = {
   body?: never
   path: {
     sellerID: number
@@ -1044,25 +1044,25 @@ export type GetReviewBySellerIDData = {
   url: '/v1/seller/art-toy/review/{sellerID}'
 }
 
-export type GetReviewBySellerIDErrors = {
+export type GetReviewBySellerIdErrors = {
   /**
    * Error
    */
   default: ErrorModel
 }
 
-export type GetReviewBySellerIDError =
-  GetReviewBySellerIDErrors[keyof GetReviewErrors]
+export type GetReviewBySellerIdError =
+  GetReviewBySellerIdErrors[keyof GetReviewBySellerIdErrors]
 
-export type GetReviewBySellerIDResponses = {
+export type GetReviewBySellerIdResponses = {
   /**
    * OK
    */
   200: ArrayResponseReview
 }
 
-export type GetReviewBySellerIDResponse =
-  GetReviewBySellerIDResponses[keyof GetReviewResponses]
+export type GetReviewBySellerIdResponse =
+  GetReviewBySellerIdResponses[keyof GetReviewBySellerIdResponses]
 
 export type UpdateOrderData = {
   body: OrderUpdateBody

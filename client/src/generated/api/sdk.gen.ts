@@ -61,6 +61,9 @@ import type {
   GetOrdersOfSellerData,
   GetOrdersOfSellerError,
   GetOrdersOfSellerResponse,
+  GetReviewBySellerIdData,
+  GetReviewBySellerIdError,
+  GetReviewBySellerIdResponse,
   GetReviewData,
   GetReviewError,
   GetReviewResponse,
@@ -622,12 +625,12 @@ export const getOrdersByStatus = <ThrowOnError extends boolean = false>(
  * Get Art Toy Reviews of seller
  * Get art toy reviews of seller
  */
-export const getReviewBySellerID = <ThrowOnError extends boolean = false>(
-  options: Options<GetReviewData, ThrowOnError>
+export const getReviewBySellerId = <ThrowOnError extends boolean = false>(
+  options: Options<GetReviewBySellerIdData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
-    GetReviewResponse,
-    GetReviewError,
+    GetReviewBySellerIdResponse,
+    GetReviewBySellerIdError,
     ThrowOnError
   >({
     url: '/v1/seller/art-toy/review/{sellerID}',

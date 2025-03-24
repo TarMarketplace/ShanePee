@@ -2383,6 +2383,49 @@
         ]
       }
     },
+    "/v1/seller/art-toy/review/{sellerID}": {
+      "get": {
+        "description": "Get art toy reviews of seller",
+        "operationId": "get-review",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseReview"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Art Toy Reviews of seller",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
     "/v1/seller/order/{orderID}": {
       "get": {
         "description": "Get order detail of seller",

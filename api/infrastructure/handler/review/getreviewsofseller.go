@@ -16,29 +16,33 @@ type GetReviewsOfSellerInput struct {
 }
 
 type GetReviewsOfSellerOutput struct {
-	Body handler.ArrayResponse[domain.Review]
+	Body handler.ArrayResponse[domain.ReviewResponse]
 }
 
 func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "get-review",
+		OperationID: "get-reviews-of-seller",
 		Method:      http.MethodGet,
 		Path:        "/v1/seller/art-toy/review/{sellerID}",
 		Tags:        []string{"Art toy"},
-		Summary:     "Get Art Toy Reviews of seller",
-		Description: "Get art toy reviews of seller",
+		Summary:     "Get Art Toy Reviews of Seller",
+		Description: "Get art toy reviews of a specific seller",
 	}, func(ctx context.Context, i *GetReviewsOfSellerInput) (*GetReviewsOfSellerOutput, error) {
-		data, err := h.reviewSvc.GetReviewsBySellerID(ctx, i.SellerID)
+		reviews, err := h.reviewSvc.GetReviewsBySellerID(ctx, i.SellerID)
 		if err != nil {
 			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound
 			}
 			return nil, handler.ErrIntervalServerError
 		}
+
+		var response []*domain.ReviewResponse
+		for _, review := range reviews {
+			response = append(response, domain.NewReviewResponse(review))
+		}
+
 		return &GetReviewsOfSellerOutput{
-			Body: handler.ArrayResponse[domain.Review]{
-				Data: data,
-			},
+			Body: handler.ArrayResponse[domain.ReviewResponse]{Data: response},
 		}, nil
 	})
 }

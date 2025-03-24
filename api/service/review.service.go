@@ -41,7 +41,7 @@ func (s *reviewServiceImpl) CreateReview(ctx context.Context, rating int, commen
 		return nil, ErrArtToyNotBelongToOwner
 	}
 
-	review := domain.NewReview(rating, comment, artToyID)
+	review := domain.NewReview(rating, comment, artToyID, ownerID)
 	if err := s.reviewRepo.CreateReview(ctx, review); err != nil {
 		return nil, err
 	}

@@ -55,7 +55,7 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWithReview, error) {
 	var users []*domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(DISTINCT CASE WHEN art_toys.availability = FALSE THEN art_toys.id END) AS number_of_art_toys_sold").
+		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(reviews.id) AS number_of_reviews, COUNT(CASE WHEN art_toys.availability = FALSE THEN art_toys.id END) AS number_of_art_toys_sold").
 		Joins("LEFT JOIN art_toys ON users.id = art_toys.owner_id").
 		Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
 		Group("users.id").
@@ -69,7 +69,7 @@ func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWit
 func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error) {
 	var user *domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(DISTINCT CASE WHEN art_toys.availability = FALSE THEN art_toys.id END) AS number_of_art_toys_sold").
+		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(reviews.id) AS number_of_reviews, COUNT(CASE WHEN art_toys.availability = FALSE THEN art_toys.id END) AS number_of_art_toys_sold").
 		Joins("LEFT JOIN art_toys ON users.id = art_toys.owner_id").
 		Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
 		Group("users.id").

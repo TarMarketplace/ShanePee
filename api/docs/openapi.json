@@ -586,15 +586,6 @@
               "null"
             ]
           },
-          "reviews": {
-            "items": {
-              "$ref": "#/components/schemas/Review"
-            },
-            "type": [
-              "array",
-              "null"
-            ]
-          },
           "seller_id": {
             "examples": [
               97

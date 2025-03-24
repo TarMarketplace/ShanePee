@@ -16,6 +16,12 @@ import type {
   CheckoutData,
   CheckoutError,
   CheckoutResponse,
+  ClearItemsFromCartData,
+  ClearItemsFromCartError,
+  ClearItemsFromCartResponse,
+  CompleteOrderData,
+  CompleteOrderError,
+  CompleteOrderResponse,
   CreateArtToyData,
   CreateArtToyError,
   CreateArtToyResponse,
@@ -40,9 +46,18 @@ import type {
   GetMyArtToysData,
   GetMyArtToysError,
   GetMyArtToysResponse,
+  GetOrderOfBuyerData,
+  GetOrderOfBuyerError,
+  GetOrderOfBuyerResponse,
+  GetOrderOfSellerData,
+  GetOrderOfSellerError,
+  GetOrderOfSellerResponse,
   GetOrdersByStatusData,
   GetOrdersByStatusError,
   GetOrdersByStatusResponse,
+  GetOrdersOfBuyerData,
+  GetOrdersOfBuyerError,
+  GetOrdersOfBuyerResponse,
   GetOrdersOfSellerData,
   GetOrdersOfSellerError,
   GetOrdersOfSellerResponse,
@@ -76,6 +91,9 @@ import type {
   UpdateArtToyData,
   UpdateArtToyError,
   UpdateArtToyResponse,
+  UpdateOrderData,
+  UpdateOrderError,
+  UpdateOrderResponse,
   UpdateReviewData,
   UpdateReviewError,
   UpdateReviewResponse,
@@ -427,6 +445,57 @@ export const resetPassword = <ThrowOnError extends boolean = false>(
 }
 
 /**
+ * Complete Order by Buyer
+ * Update status to completed of an order by buyer
+ */
+export const completeOrder = <ThrowOnError extends boolean = false>(
+  options: Options<CompleteOrderData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).patch<
+    CompleteOrderResponse,
+    CompleteOrderError,
+    ThrowOnError
+  >({
+    url: '/v1/buyer/order/{id}/complete',
+    ...options,
+  })
+}
+
+/**
+ * Get order detail of buyer
+ * Get order detail of buyer
+ */
+export const getOrderOfBuyer = <ThrowOnError extends boolean = false>(
+  options: Options<GetOrderOfBuyerData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetOrderOfBuyerResponse,
+    GetOrderOfBuyerError,
+    ThrowOnError
+  >({
+    url: '/v1/buyer/order/{orderID}',
+    ...options,
+  })
+}
+
+/**
+ * Get orders of buyer
+ * Get orders of buyer
+ */
+export const getOrdersOfBuyer = <ThrowOnError extends boolean = false>(
+  options?: Options<GetOrdersOfBuyerData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetOrdersOfBuyerResponse,
+    GetOrdersOfBuyerError,
+    ThrowOnError
+  >({
+    url: '/v1/buyer/orders',
+    ...options,
+  })
+}
+
+/**
  * Get Cart
  * Retrieve the user's cart
  */
@@ -482,6 +551,23 @@ export const checkout = <ThrowOnError extends boolean = false>(
 }
 
 /**
+ * Clear Items From Cart
+ * Clear items from the cart
+ */
+export const clearItemsFromCart = <ThrowOnError extends boolean = false>(
+  options?: Options<ClearItemsFromCartData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).delete<
+    ClearItemsFromCartResponse,
+    ClearItemsFromCartError,
+    ThrowOnError
+  >({
+    url: '/v1/cart/clear-items',
+    ...options,
+  })
+}
+
+/**
  * Remove Item From Cart
  * Remove an item from the cart
  */
@@ -528,6 +614,61 @@ export const getOrdersByStatus = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     url: '/v1/order/{status}',
+    ...options,
+  })
+}
+
+/**
+ * Get Art Toy Reviews of seller
+ * Get art toy reviews of seller
+ */
+export const getReviewBySellerID = <ThrowOnError extends boolean = false>(
+  options: Options<GetReviewData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetReviewResponse,
+    GetReviewError,
+    ThrowOnError
+  >({
+    url: '/v1/seller/art-toy/review/{sellerID}',
+    ...options,
+  })
+}
+
+/**
+ * Update Order by Seller
+ * Update tracking number, delivery service, status of an order by seller
+ */
+export const updateOrder = <ThrowOnError extends boolean = false>(
+  options: Options<UpdateOrderData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).patch<
+    UpdateOrderResponse,
+    UpdateOrderError,
+    ThrowOnError
+  >({
+    url: '/v1/seller/order/{id}',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  })
+}
+
+/**
+ * Get order detail of seller
+ * Get order detail of seller
+ */
+export const getOrderOfSeller = <ThrowOnError extends boolean = false>(
+  options: Options<GetOrderOfSellerData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetOrderOfSellerResponse,
+    GetOrderOfSellerError,
+    ThrowOnError
+  >({
+    url: '/v1/seller/order/{orderID}',
     ...options,
   })
 }

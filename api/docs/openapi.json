@@ -112,6 +112,33 @@
         ],
         "type": "object"
       },
+      "ArrayResponseReview": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseReview.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/Review"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ArtToy": {
         "additionalProperties": false,
         "properties": {
@@ -2269,6 +2296,49 @@
         "summary": "Update Order by Seller",
         "tags": [
           "Order"
+        ]
+      }
+    },
+    "/v1/seller/art-toy/review/{sellerID}": {
+      "get": {
+        "description": "Get art toy reviews of seller",
+        "operationId": "get-review",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseReview"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Art Toy Reviews of seller",
+        "tags": [
+          "Art toy"
         ]
       }
     },

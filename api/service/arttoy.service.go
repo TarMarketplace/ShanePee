@@ -25,8 +25,8 @@ type ArtToyService interface {
 	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
 	GetArtToysBySearchParams(ctx context.Context, searchParams *ArtToySearchParams) ([]*domain.ArtToy, error)
+	GetArtToysByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error)
 	GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
-	GetArtToysByOwnerID(ctx context.Context, id int64) ([]*domain.ArtToy, error)
 	DeleteArtToy(ctx context.Context, id int64, ownerID int64) error
 }
 

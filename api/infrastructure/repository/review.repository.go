@@ -42,7 +42,7 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 func (r *reviewRepositoryImpl) FindReviewWithTruncatedBuyerBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithTruncatedBuyer, error) {
 	var reviews []*domain.ReviewWithTruncatedBuyer
 	err := r.db.Table("reviews").
-		Select("*, users.first_name AS buyer_first_name, users.last_name AS buyer_last_name, users.photo AS buyer_photo").
+		Select("*, CASE WHEN LENGTH(users.first_name) > 3 THEN CONCAT(SUBSTRING(users.first_name, 1, 3), '***') ELSE users.first_name END AS buyer_first_name, CASE WHEN LENGTH(users.last_name) > 3 THEN CONCAT(SUBSTRING(users.last_name, 1, 3), '***') ELSE users.last_name END AS buyer_last_name, users.photo AS buyer_photo").
 		Joins("JOIN order_items ON order_items.art_toy_id = reviews.art_toy_id").
 		Joins("JOIN orders ON orders.id = order_items.order_id").
 		Joins("JOIN users ON users.id = orders.buyer_id").

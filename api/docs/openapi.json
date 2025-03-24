@@ -112,13 +112,13 @@
         ],
         "type": "object"
       },
-      "ArrayResponseReviewWithBuyer": {
+      "ArrayResponseReviewWithTruncatedBuyer": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/ArrayResponseReviewWithBuyer.json"
+              "https://example.com/schemas/ArrayResponseReviewWithTruncatedBuyer.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -126,7 +126,7 @@
           },
           "data": {
             "items": {
-              "$ref": "#/components/schemas/ReviewWithBuyer"
+              "$ref": "#/components/schemas/ReviewWithTruncatedBuyer"
             },
             "type": [
               "array",
@@ -946,7 +946,7 @@
         },
         "type": "object"
       },
-      "ReviewWithBuyer": {
+      "ReviewWithTruncatedBuyer": {
         "additionalProperties": false,
         "properties": {
           "buyer_first_name": {
@@ -2310,7 +2310,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseReviewWithBuyer"
+                  "$ref": "#/components/schemas/ArrayResponseReviewWithTruncatedBuyer"
                 }
               }
             },

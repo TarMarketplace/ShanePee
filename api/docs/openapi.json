@@ -127,10 +127,6 @@
           "availability": {
             "type": "boolean"
           },
-          "average_rating": {
-            "format": "double",
-            "type": "number"
-          },
           "description": {
             "type": "string"
           },
@@ -170,8 +166,7 @@
           "price",
           "availability",
           "owner_id",
-          "release_date",
-          "average_rating"
+          "release_date"
         ],
         "type": "object"
       },

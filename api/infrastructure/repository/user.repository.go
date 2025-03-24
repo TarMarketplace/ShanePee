@@ -52,12 +52,12 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 	return &user, nil
 }
 
-func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.User, error) {
-	var users []*domain.User
+func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWithReview, error) {
+	var users []*domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(reviews.id) AS number_of_reviews").
-		Joins("LEFT JOIN art_toys on users.id = art_toys.owner_id").
-		Joins("LEFT JOIN reviews on reviews.art_toy_id = art_toys.id").
+		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(DISTINCT CASE WHEN art_toys.availability = FALSE THEN art_toys.id END) AS number_of_art_toys_sold").
+		Joins("LEFT JOIN art_toys ON users.id = art_toys.owner_id").
+		Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
 		Group("users.id").
 		Find(&users).Error
 	if err != nil {
@@ -66,12 +66,12 @@ func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.User, e
 	return users, nil
 }
 
-func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*domain.User, error) {
-	var user *domain.User
+func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error) {
+	var user *domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(reviews.id) AS number_of_reviews").
-		Joins("LEFT JOIN art_toys on users.id = art_toys.owner_id").
-		Joins("LEFT JOIN reviews on reviews.art_toy_id = art_toys.id").
+		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(DISTINCT CASE WHEN art_toys.availability = FALSE THEN art_toys.id END) AS number_of_art_toys_sold").
+		Joins("LEFT JOIN art_toys ON users.id = art_toys.owner_id").
+		Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
 		Group("users.id").
 		Take(&user, id).Error
 	if err != nil {

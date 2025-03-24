@@ -10,7 +10,7 @@ import (
 )
 
 type GetSellersOutput struct {
-	Body handler.ArrayResponse[domain.User]
+	Body handler.ArrayResponse[domain.UserWithReview]
 }
 
 func (h *UserHandler) RegisterGetSellers(api huma.API) {
@@ -27,7 +27,7 @@ func (h *UserHandler) RegisterGetSellers(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetSellersOutput{
-			Body: handler.ArrayResponse[domain.User]{
+			Body: handler.ArrayResponse[domain.UserWithReview]{
 				Data: data,
 			},
 		}, nil

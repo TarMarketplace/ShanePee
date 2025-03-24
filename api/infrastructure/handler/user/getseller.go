@@ -16,7 +16,7 @@ type GetSellerByIDInput struct {
 }
 
 type GetSellerByIDOutput struct {
-	Body *domain.User
+	Body *domain.UserWithReview
 }
 
 func (h *UserHandler) RegisterGetSellerByID(api huma.API) {

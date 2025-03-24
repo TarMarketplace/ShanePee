@@ -7,6 +7,7 @@ import (
 type ArtToyRepository interface {
 	CreateArtToy(ctx context.Context, artToy *ArtToy) error
 	FindArtToys(ctx context.Context) ([]*ArtToy, error)
+	FindArtToysWithRating(ctx context.Context) ([]*ArtToyWithRating, error)
 	FindArtToysByOwnerID(ctx context.Context, ownerID int64) ([]*ArtToy, error)
 	FindArtToyByID(ctx context.Context, id int64) (*ArtToy, error)
 	FindArtToysBySearchParams(ctx context.Context, searchParams *ArtToySearchParams) ([]*ArtToy, error)

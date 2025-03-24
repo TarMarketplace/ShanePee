@@ -10,7 +10,7 @@ import (
 )
 
 type GetArtToysOutput struct {
-	Body handler.ArrayResponse[domain.ArtToy]
+	Body handler.ArrayResponse[domain.ArtToyWithRating]
 }
 
 func (h *ArtToyHandler) RegisterGetArtToys(api huma.API) {
@@ -22,12 +22,12 @@ func (h *ArtToyHandler) RegisterGetArtToys(api huma.API) {
 		Summary:     "Get Art Toys",
 		Description: "Get art toys",
 	}, func(ctx context.Context, i *struct{}) (*GetArtToysOutput, error) {
-		data, err := h.artToySvc.GetArtToys(ctx)
+		data, err := h.artToySvc.GetArtToysWithRating(ctx)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetArtToysOutput{
-			Body: handler.ArrayResponse[domain.ArtToy]{
+			Body: handler.ArrayResponse[domain.ArtToyWithRating]{
 				Data: data,
 			},
 		}, nil

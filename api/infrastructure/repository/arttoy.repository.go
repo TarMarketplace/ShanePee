@@ -24,9 +24,25 @@ func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.
 	return r.db.Create(artToy).Error
 }
 
+func (r *artToyRepositoryImpl) findArtToysWithRatingQuery() *gorm.DB {
+	return r.db.Table("art_toys").
+		Select("*, users.first_name AS owner_first_name, users.last_name AS owner_last_name, COALESCE(avg_rating.avg_rating, 0) AS rating").
+		Joins("JOIN users ON users.id = art_toys.owner_id").
+		Joins("LEFT JOIN (SELECT art_toys.owner_id AS seller_id, COALESCE(AVG(reviews.rating), 0) AS avg_rating FROM art_toys JOIN reviews on reviews.art_toy_id = art_toys.id GROUP BY seller_id) AS avg_rating ON avg_rating.seller_id = art_toys.owner_id")
+}
+
 func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
 	if err := r.db.Find(&artToys).Error; err != nil {
+		return nil, err
+	}
+	return artToys, nil
+}
+
+func (r *artToyRepositoryImpl) FindArtToysWithRating(ctx context.Context) ([]*domain.ArtToyWithRating, error) {
+	var artToys []*domain.ArtToyWithRating
+	err := r.findArtToysWithRatingQuery().Find(&artToys).Error
+	if err != nil {
 		return nil, err
 	}
 	return artToys, nil
@@ -53,7 +69,7 @@ func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*d
 
 func (r *artToyRepositoryImpl) FindArtToysBySearchParams(ctx context.Context, searchParams *domain.ArtToySearchParams) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
-	query := r.db
+	query := r.findArtToysWithRatingQuery()
 
 	if searchParams != nil {
 		if searchParams.Keyword != "" {

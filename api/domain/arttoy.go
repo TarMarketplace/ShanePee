@@ -14,6 +14,17 @@ type ArtToy struct {
 	OrderItems   []OrderItem `json:"-" gorm:"foreignKey:ArtToyID"`
 }
 
+type ArtToyWithRating struct {
+	Name           string    `json:"name" gorm:"not null"`
+	Description    string    `json:"description" gorm:"not null"`
+	Price          float64   `json:"price" gorm:"not null"`
+	Photo          *string   `json:"photo,omitempty" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
+	Rating         float64   `json:"rating" gorm:"not null" example:"4.5"`
+	OwnerFirstName *string   `json:"owner_first_name,omitempty" example:"John"`
+	OwnerLastName  *string   `json:"owner_last_name,omitempty" example:"Doe"`
+	ReleaseDate    time.Time `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
+}
+
 type ArtToySortKey int
 
 const (

@@ -11,7 +11,7 @@ type ArtToy struct {
 	Availability  bool        `json:"availability" gorm:"not null"`
 	OwnerID       int64       `json:"owner_id" gorm:"not null"`
 	ReleaseDate   time.Time   `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
-	AverageRating float64     `json:"average_rating" gorm:"-:migration"`
+	AverageRating float64     `json:"average_rating" gorm:"-:migration;->"`
 	OrderItems    []OrderItem `json:"-" gorm:"foreignKey:ArtToyID"`
 }
 

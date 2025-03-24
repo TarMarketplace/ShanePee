@@ -29,7 +29,7 @@ func (h *ArtToyHandler) RegisterGetMyArtToys(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		data, err := h.artToySvc.GetMyArtToys(ctx, *userID)
+		data, err := h.artToySvc.GetArtToysByOwnerID(ctx, *userID)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

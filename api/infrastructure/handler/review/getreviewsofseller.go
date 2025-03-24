@@ -16,7 +16,7 @@ type GetReviewsOfSellerInput struct {
 }
 
 type GetReviewsOfSellerOutput struct {
-	Body handler.ArrayResponse[domain.ReviewWithBuyer]
+	Body handler.ArrayResponse[domain.ReviewWithTruncatedBuyer]
 }
 
 func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
@@ -28,7 +28,7 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 		Summary:     "Get Art Toy Reviews of seller",
 		Description: "Get art toy reviews of seller",
 	}, func(ctx context.Context, i *GetReviewsOfSellerInput) (*GetReviewsOfSellerOutput, error) {
-		data, err := h.reviewSvc.GetReviewsBySellerID(ctx, i.SellerID)
+		data, err := h.reviewSvc.GetReviewsWithTruncatedBuyerBySellerID(ctx, i.SellerID)
 		if err != nil {
 			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound
@@ -36,7 +36,7 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetReviewsOfSellerOutput{
-			Body: handler.ArrayResponse[domain.ReviewWithBuyer]{
+			Body: handler.ArrayResponse[domain.ReviewWithTruncatedBuyer]{
 				Data: data,
 			},
 		}, nil

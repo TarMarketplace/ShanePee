@@ -858,6 +858,13 @@
             ],
             "type": "string"
           },
+          "created_at": {
+            "examples": [
+              "2021-01-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
           "id": {
             "format": "int64",
             "type": "integer"
@@ -874,6 +881,7 @@
           "id",
           "rating",
           "comment",
+          "created_at",
           "art_toy_id"
         ],
         "type": "object"

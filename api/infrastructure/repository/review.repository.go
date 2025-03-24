@@ -39,14 +39,15 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 	return &review, nil
 }
 
-func (r *reviewRepositoryImpl) FindReviewBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithBuyer, error) {
-	var reviews []*domain.ReviewWithBuyer
+func (r *reviewRepositoryImpl) FindReviewWithTruncatedBuyerBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithTruncatedBuyer, error) {
+	var reviews []*domain.ReviewWithTruncatedBuyer
 	err := r.db.Table("reviews").
 		Select("*, users.first_name AS buyer_first_name, users.last_name AS buyer_last_name, users.photo AS buyer_photo").
 		Joins("JOIN order_items ON order_items.art_toy_id = reviews.art_toy_id").
 		Joins("JOIN orders ON orders.id = order_items.order_id").
 		Joins("JOIN users ON users.id = orders.buyer_id").
 		Where("orders.seller_id = ?", sellerID).
+		Order("created_at DESC").
 		Find(&reviews).Error
 	if err != nil {
 		return nil, err

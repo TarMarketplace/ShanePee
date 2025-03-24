@@ -17,8 +17,8 @@ type ReviewCreateBody struct {
 }
 
 type CreateReviewInput struct {
-	ArtToyID int64 `path:"artToyID"`
-	Body     ReviewCreateBody
+	OrderID int64 `path:"orderID"`
+	Body    ReviewCreateBody
 }
 
 type CreateReviewOutput struct {
@@ -29,10 +29,10 @@ func (h *ReviewHandler) RegisterCreateReview(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "create-review",
 		Method:      http.MethodPost,
-		Path:        "/v1/art-toy/review/{artToyID}",
-		Tags:        []string{"Art toy"},
-		Summary:     "Create Art Toy Review",
-		Description: "Create a new art toy review record",
+		Path:        "/v1/order/{orderID}/review",
+		Tags:        []string{"Review"},
+		Summary:     "Create Order Review",
+		Description: "Create a new order review record",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
@@ -41,16 +41,13 @@ func (h *ReviewHandler) RegisterCreateReview(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		review, err := h.reviewSvc.CreateReview(ctx, i.Body.Rating, i.Body.Comment, i.ArtToyID, *userID)
+		review, err := h.reviewSvc.CreateReview(ctx, i.Body.Rating, i.Body.Comment, i.OrderID, *userID)
 		if err != nil {
-			if errors.Is(err, service.ErrArtToyNotBelongToOwner) {
-				return nil, handler.ErrArtToyNotBelongToOwner
+			if errors.Is(err, service.ErrOrderNotBelongToOwner) {
+				return nil, handler.ErrOrderNotBelongToOwner
 			}
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
-			}
-			if errors.Is(err, service.ErrReviewNotFound) {
-				return nil, handler.ErrReviewNotFound
 			}
 			return nil, handler.ErrIntervalServerError
 		}

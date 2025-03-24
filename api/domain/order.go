@@ -20,6 +20,7 @@ type Order struct {
 	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`
 	CreatedAt       time.Time   `json:"created_at" gorm:"autoCreateTime" example:"2021-08-01T00:00:00Z"`
 	OrderItems      []OrderItem `json:"order_items,omitempty" gorm:"foreignKey:OrderID"`
+	Reviews         []Review    `json:"reviews,omitempty" gorm:"foreignKey:OrderID"`
 }
 
 type OrderItem struct {

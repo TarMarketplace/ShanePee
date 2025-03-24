@@ -16,7 +16,7 @@ type GetReviewsOfSellerInput struct {
 }
 
 type GetReviewsOfSellerOutput struct {
-	Body handler.ArrayResponse[domain.Review]
+	Body handler.ArrayResponse[domain.ReviewWithBuyer]
 }
 
 func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
@@ -36,7 +36,7 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetReviewsOfSellerOutput{
-			Body: handler.ArrayResponse[domain.Review]{
+			Body: handler.ArrayResponse[domain.ReviewWithBuyer]{
 				Data: data,
 			},
 		}, nil

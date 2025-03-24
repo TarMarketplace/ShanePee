@@ -112,13 +112,13 @@
         ],
         "type": "object"
       },
-      "ArrayResponseReview": {
+      "ArrayResponseReviewWithBuyer": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/ArrayResponseReview.json"
+              "https://example.com/schemas/ArrayResponseReviewWithBuyer.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -126,7 +126,7 @@
           },
           "data": {
             "items": {
-              "$ref": "#/components/schemas/Review"
+              "$ref": "#/components/schemas/ReviewWithBuyer"
             },
             "type": [
               "array",
@@ -936,6 +936,47 @@
             "type": "integer"
           }
         },
+        "type": "object"
+      },
+      "ReviewWithBuyer": {
+        "additionalProperties": false,
+        "properties": {
+          "buyer_first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": "string"
+          },
+          "buyer_last_name": {
+            "examples": [
+              "Doe"
+            ],
+            "type": "string"
+          },
+          "buyer_photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "comment": {
+            "examples": [
+              "This is a great art toy"
+            ],
+            "type": "string"
+          },
+          "rating": {
+            "examples": [
+              5
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rating",
+          "comment"
+        ],
         "type": "object"
       },
       "User": {
@@ -2241,6 +2282,49 @@
         ]
       }
     },
+    "/v1/seller/art-toy/review/{sellerID}": {
+      "get": {
+        "description": "Get art toy reviews of seller",
+        "operationId": "get-review",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseReviewWithBuyer"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Art Toy Reviews of seller",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
     "/v1/seller/order/{id}": {
       "patch": {
         "description": "Update tracking number, delivery service, status of an order by seller",
@@ -2296,49 +2380,6 @@
         "summary": "Update Order by Seller",
         "tags": [
           "Order"
-        ]
-      }
-    },
-    "/v1/seller/art-toy/review/{sellerID}": {
-      "get": {
-        "description": "Get art toy reviews of seller",
-        "operationId": "get-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sellerID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseReview"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "summary": "Get Art Toy Reviews of seller",
-        "tags": [
-          "Art toy"
         ]
       }
     },

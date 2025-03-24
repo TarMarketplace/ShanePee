@@ -2621,6 +2621,54 @@
         ]
       }
     },
+    "/v1/seller/{id}/art-toy": {
+      "get": {
+        "description": "Get art toys of seller",
+        "operationId": "get-art-toys-of-seller",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get Art Toys Of Seller",
+        "tags": [
+          "Art toy"
+        ]
+      }
+    },
     "/v1/user": {
       "patch": {
         "description": "Update user by id",

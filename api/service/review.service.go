@@ -13,7 +13,7 @@ var (
 type ReviewService interface {
 	CreateReview(ctx context.Context, rating int, comment string, artToyID int64, ownerID int64) (*domain.Review, error)
 	GetReview(ctx context.Context, artToyID int64) (*domain.Review, error)
-	GetSellerRating(ctx context.Context, sellerID int64) (*float64, error)
+	GetReviewsBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error)
 	UpdateReview(ctx context.Context, artToyID int64, updateBody map[string]any, ownerID int64) (*domain.Review, error)
 	DeleteReview(ctx context.Context, artToyID int64, ownerID int64) error
 }
@@ -38,7 +38,7 @@ func (s *reviewServiceImpl) CreateReview(ctx context.Context, rating int, commen
 		return nil, err
 	}
 	if *buyerID != ownerID {
-		return nil, ErrUnauthorized
+		return nil, ErrArtToyNotBelongToOwner
 	}
 
 	review := domain.NewReview(rating, comment, artToyID)
@@ -56,19 +56,12 @@ func (s *reviewServiceImpl) GetReview(ctx context.Context, artToyID int64) (*dom
 	return review, nil
 }
 
-func (s *reviewServiceImpl) GetSellerRating(ctx context.Context, sellerID int64) (*float64, error) {
+func (s *reviewServiceImpl) GetReviewsBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error) {
 	reviews, err := s.reviewRepo.FindReviewBySellerID(ctx, sellerID)
 	if err != nil {
 		return nil, err
 	}
-
-	var totalRating float64 = 0.0
-	for _, review := range reviews {
-		totalRating += float64(review.Rating)
-	}
-
-	avgRating := totalRating / float64(len(reviews))
-	return &avgRating, nil
+	return reviews, nil
 }
 
 func (s *reviewServiceImpl) UpdateReview(ctx context.Context, artToyID int64, updateBody map[string]any, ownerID int64) (*domain.Review, error) {
@@ -77,7 +70,7 @@ func (s *reviewServiceImpl) UpdateReview(ctx context.Context, artToyID int64, up
 		return nil, err
 	}
 	if *buyerID != ownerID {
-		return nil, ErrUnauthorized
+		return nil, ErrArtToyNotBelongToOwner
 	}
 
 	if err := s.reviewRepo.UpdateReview(ctx, artToyID, updateBody); err != nil {
@@ -96,7 +89,7 @@ func (s *reviewServiceImpl) DeleteReview(ctx context.Context, artToyID int64, ow
 		return err
 	}
 	if *buyerID != ownerID {
-		return ErrUnauthorized
+		return ErrArtToyNotBelongToOwner
 	}
 	return s.reviewRepo.DeleteReview(ctx, artToyID)
 }

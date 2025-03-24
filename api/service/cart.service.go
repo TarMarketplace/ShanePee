@@ -37,6 +37,14 @@ func NewCartService(artToyRepo domain.ArtToyRepository, cartRepo domain.CartRepo
 var _ CartService = &cartServiceImpl{}
 
 func (s *cartServiceImpl) AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error) {
+	artToy, err := s.artToyRepo.FindArtToyByID(ctx, artToyID)
+	if err != nil {
+		return nil, err
+	}
+	if artToy.OwnerID != ownerID {
+		return nil, ErrArtToyNotBelongToOwner
+	}
+
 	cartItem := domain.NewCartItem(ownerID, artToyID)
 	if err := s.cartRepo.AddItemToCart(ctx, cartItem); err != nil {
 		return nil, err
@@ -81,9 +89,6 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 	// All items should be owned by the same seller
 	sellerID := cartItems[0].ArtToy.OwnerID
 	order := domain.NewOrder(sellerID, ownerID)
-	if err := s.orderRepo.CreateOrder(ctx, order); err != nil {
-		return err
-	}
 
 	orderItems := make([]*domain.OrderItem, 0)
 	artToyIDs := make([]int64, 0)
@@ -97,6 +102,9 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 		orderItems = append(orderItems, orderItem)
 	}
 
+	if err := s.orderRepo.CreateOrder(ctx, order); err != nil {
+		return err
+	}
 	if err := s.orderRepo.CreateOrderItems(ctx, orderItems); err != nil {
 		return err
 	}

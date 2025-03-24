@@ -39,6 +39,14 @@ func (r *reviewRepositoryImpl) FindReviewByArtToyID(ctx context.Context, artToyI
 	return &review, nil
 }
 
+func (r *reviewRepositoryImpl) FindReviewBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error) {
+	var reviews []*domain.Review
+	if err := r.db.Preload("ArtToy.OrderItems.Order", "orders.seller_id = ?", sellerID).Find(&reviews).Error; err != nil {
+		return nil, err
+	}
+	return reviews, nil
+}
+
 func (r *reviewRepositoryImpl) FindReviewerByArtToyID(ctx context.Context, artToyID int64) (*int64, error) {
 	var buyerID int64
 	// TODO: Handle this

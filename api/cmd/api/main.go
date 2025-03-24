@@ -85,7 +85,7 @@ func main() {
 
 	app.reviewHdr.RegisterCreateReview(api)
 	app.reviewHdr.RegisterGetReview(api)
-	app.reviewHdr.RegisterGetSellerRating(api)
+	app.reviewHdr.RegisterGetReviewsOfSeller(api)
 	app.reviewHdr.RegisterUpdateReview(api)
 	app.reviewHdr.RegisterDeleteReview(api)
 
@@ -100,6 +100,7 @@ func main() {
 	app.orderHdr.RegisterGetOrderOfSeller(api)
 	app.orderHdr.RegisterGetOrdersOfBuyer(api)
 	app.orderHdr.RegisterCompleteOrder(api)
+	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
 	flag.Parse()

@@ -12,7 +12,6 @@ type ArtToy struct {
 	OwnerID      int64       `json:"owner_id" gorm:"not null"`
 	ReleaseDate  time.Time   `json:"release_date" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 	OrderItems   []OrderItem `json:"-" gorm:"foreignKey:ArtToyID"`
-	Rating       *float64    `json:"rating,omitempty" example:"4.5"`
 }
 
 type ArtToySortKey int

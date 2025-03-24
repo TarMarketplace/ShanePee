@@ -89,9 +89,6 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 	// All items should be owned by the same seller
 	sellerID := cartItems[0].ArtToy.OwnerID
 	order := domain.NewOrder(sellerID, ownerID)
-	if err := s.orderRepo.CreateOrder(ctx, order); err != nil {
-		return err
-	}
 
 	orderItems := make([]*domain.OrderItem, 0)
 	artToyIDs := make([]int64, 0)
@@ -105,6 +102,9 @@ func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error {
 		orderItems = append(orderItems, orderItem)
 	}
 
+	if err := s.orderRepo.CreateOrder(ctx, order); err != nil {
+		return err
+	}
 	if err := s.orderRepo.CreateOrderItems(ctx, orderItems); err != nil {
 		return err
 	}

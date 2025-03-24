@@ -85,10 +85,6 @@ func main() {
 	app.artToyHdr.RegisterSearchArtToys(api)
 
 	app.reviewHdr.RegisterCreateReview(api)
-	app.reviewHdr.RegisterGetReview(api)
-	app.reviewHdr.RegisterGetReviewsOfSeller(api)
-	app.reviewHdr.RegisterUpdateReview(api)
-	app.reviewHdr.RegisterDeleteReview(api)
 
 	app.cartHdr.RegisterAddItemToCart(api)
 	app.cartHdr.RegisterRemoveItemFromCart(api)

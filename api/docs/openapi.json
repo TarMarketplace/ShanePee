@@ -112,13 +112,13 @@
         ],
         "type": "object"
       },
-      "ArrayResponseReview": {
+      "ArrayResponseReviewWithTruncatedBuyer": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/ArrayResponseReview.json"
+              "https://example.com/schemas/ArrayResponseReviewWithTruncatedBuyer.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -126,7 +126,7 @@
           },
           "data": {
             "items": {
-              "$ref": "#/components/schemas/Review"
+              "$ref": "#/components/schemas/ReviewWithTruncatedBuyer"
             },
             "type": [
               "array",
@@ -181,10 +181,6 @@
           "availability": {
             "type": "boolean"
           },
-          "average_rating": {
-            "format": "double",
-            "type": "number"
-          },
           "description": {
             "type": "string"
           },
@@ -224,8 +220,7 @@
           "price",
           "availability",
           "owner_id",
-          "release_date",
-          "average_rating"
+          "release_date"
         ],
         "type": "object"
       },
@@ -949,6 +944,47 @@
             ],
             "format": "uri",
             "readOnly": true,
+            "type": "string"
+          },
+          "comment": {
+            "examples": [
+              "This is a great art toy"
+            ],
+            "type": "string"
+          },
+          "rating": {
+            "examples": [
+              5
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rating",
+          "comment"
+        ],
+        "type": "object"
+      },
+      "ReviewWithTruncatedBuyer": {
+        "additionalProperties": false,
+        "properties": {
+          "buyer_photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "buyer_truncated_first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": "string"
+          },
+          "buyer_truncated_last_name": {
+            "examples": [
+              "Doe"
+            ],
             "type": "string"
           },
           "comment": {
@@ -2527,7 +2563,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseReview"
+                  "$ref": "#/components/schemas/ArrayResponseReviewWithTruncatedBuyer"
                 }
               }
             },

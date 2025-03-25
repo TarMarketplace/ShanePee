@@ -55,9 +55,11 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWithReview, error) {
 	var users []*domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(reviews.id) AS number_of_reviews").
+		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(order_items.id) AS number_of_art_toys_sold, COUNT(art_toys.id) AS total_art_toys").
 		Joins("LEFT JOIN orders ON orders.seller_id = users.id").
+		Joins("LEFT JOIN order_items ON order_items.order_id = orders.id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
+		Joins("LEFT JOIN art_toys ON art_toys.owner_id = users.id").
 		Group("users.id").
 		Find(&users).Error
 	if err != nil {
@@ -81,16 +83,6 @@ func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*dom
 		}
 		return nil, err
 	}
-
-	var totalArtToys int64
-	err = u.db.Model(&domain.ArtToy{}).
-		Where("art_toys.owner_id = ?", id).
-		Count(&totalArtToys).Error
-	if err != nil {
-		return nil, err
-	}
-
-	user.TotalArtToys = int(totalArtToys)
 	return user, nil
 }
 

@@ -2041,6 +2041,36 @@
         ]
       }
     },
+    "/v1/cart/debug-checkout": {
+      "post": {
+        "description": "Checkout in debug mode, bypass payment step",
+        "operationId": "debug-checkout",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Checkout in debug mode",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
     "/v1/cart/payment-success-callback": {
       "post": {
         "description": "Callback after stripe payment success",

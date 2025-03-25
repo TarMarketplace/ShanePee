@@ -96,6 +96,7 @@ func main() {
 	app.cartHdr.RegisterClearItemsFromCart(api)
 	app.cartHdr.RegisterGetCart(api)
 	app.cartHdr.RegisterCheckout(api)
+	app.cartHdr.RegisterDebugCheckout(api)
 	app.cartHdr.RegisterPaymentSuccessCallback(api)
 
 	app.orderHdr.RegisterGetOrdersByStatus(api)

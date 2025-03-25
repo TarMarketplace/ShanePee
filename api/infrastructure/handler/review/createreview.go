@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
@@ -52,6 +53,7 @@ func (h *ReviewHandler) RegisterCreateReview(api huma.API) {
 			if errors.Is(err, service.ErrReviewNotFound) {
 				return nil, handler.ErrReviewNotFound
 			}
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &CreateReviewOutput{

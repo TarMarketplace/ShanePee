@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 
 import { useUser } from '@/providers/user-provider'
 
-import type { UserWithReview} from '@/generated/api';
+import type { UserWithReview } from '@/generated/api'
 import { getSellerById } from '@/generated/api'
 
 import { SellerStatsCard } from '../_components/seller-stats-card'

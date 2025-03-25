@@ -181,6 +181,10 @@
           "availability": {
             "type": "boolean"
           },
+          "average_rating": {
+            "format": "double",
+            "type": "number"
+          },
           "description": {
             "type": "string"
           },
@@ -220,7 +224,8 @@
           "price",
           "availability",
           "owner_id",
-          "release_date"
+          "release_date",
+          "average_rating"
         ],
         "type": "object"
       },
@@ -2830,6 +2835,54 @@
         "summary": "Get orders of seller",
         "tags": [
           "Order"
+        ]
+      }
+    },
+    "/v1/seller/{id}/art-toy": {
+      "get": {
+        "description": "Get art toys of seller",
+        "operationId": "get-art-toys-of-seller",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseArtToy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get Art Toys Of Seller",
+        "tags": [
+          "Art toy"
         ]
       }
     },

@@ -25,8 +25,8 @@ type ArtToyService interface {
 	UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
 	GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
 	GetArtToysBySearchParams(ctx context.Context, searchParams *ArtToySearchParams) ([]*domain.ArtToy, error)
-	GetMyArtToys(ctx context.Context, sellerID int64) ([]*domain.ArtToy, error)
 	GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
+	GetArtToysByOwnerID(ctx context.Context, id int64) ([]*domain.ArtToy, error)
 	DeleteArtToy(ctx context.Context, id int64, ownerID int64) error
 }
 
@@ -80,7 +80,7 @@ func (s *artToyServiceImpl) GetArtToysBySearchParams(ctx context.Context, search
 	return s.artToyRepo.FindArtToysBySearchParams(ctx, searchParams)
 }
 
-func (s *artToyServiceImpl) GetMyArtToys(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) {
+func (s *artToyServiceImpl) GetArtToysByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) {
 	artToys, err := s.artToyRepo.FindArtToysByOwnerID(ctx, ownerID)
 	if err != nil {
 		return nil, err

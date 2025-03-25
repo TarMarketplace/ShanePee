@@ -24,6 +24,7 @@ type UserWithReview struct {
 	Rating              float64   `json:"rating" example:"4.5"`
 	NumberOfReviews     int       `json:"number_of_reviews" example:"52"`
 	NumberOfArtToysSold int       `json:"number_of_art_toys_sold" example:"52"`
+	TotalArtToys        int       `json:"total_art_toys" example:"52"`
 	CreatedAt           time.Time `json:"created_at" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 }
 

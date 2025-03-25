@@ -37,6 +37,7 @@ export const Default: Story = {
         photo: 'https://placehold.co/150x96.png',
         price: 100,
         release_date: '2021-01-01T00:00:00Z',
+        average_rating: 4.5,
       },
       {
         $schema: 'https://example.com/schemas/ArtToy.json',
@@ -48,6 +49,7 @@ export const Default: Story = {
         photo: 'https://placehold.co/150x96.png',
         price: 100,
         release_date: '2021-01-01T00:00:00Z',
+        average_rating: 3.5,
       },
       {
         $schema: 'https://example.com/schemas/ArtToy.json',
@@ -59,6 +61,7 @@ export const Default: Story = {
         photo: 'https://placehold.co/150x96.png',
         price: 100,
         release_date: '2021-01-01T00:00:00Z',
+        average_rating: 3.8,
       },
     ],
   },

@@ -11,31 +11,23 @@ import (
 	"shanepee.com/api/service"
 )
 
-type CheckoutOutputBody struct {
-	URL string `json:"url"`
-}
-
-type CheckoutOutput struct {
-	Body *CheckoutOutputBody
-}
-
-func (h *CartHandler) RegisterCheckout(api huma.API) {
+func (h *CartHandler) RegisterDebugCheckout(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "checkout",
+		OperationID: "debug-checkout",
 		Method:      http.MethodPost,
-		Path:        "/v1/cart/checkout",
+		Path:        "/v1/cart/debug-checkout",
 		Tags:        []string{"Cart"},
-		Summary:     "Checkout Items In Cart",
-		Description: "Place a new order from items in the cart",
+		Summary:     "Checkout in debug mode",
+		Description: "Checkout in debug mode, bypass payment step",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *struct{}) (*CheckoutOutput, error) {
+	}, func(ctx context.Context, i *struct{}) (*struct{}, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		url, err := h.stripeSvc.Checkout(ctx, *userID)
+		err := h.cartSvc.Checkout(ctx, *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
@@ -43,6 +35,6 @@ func (h *CartHandler) RegisterCheckout(api huma.API) {
 			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
-		return &CheckoutOutput{Body: &CheckoutOutputBody{URL: url}}, nil
+		return nil, nil
 	})
 }

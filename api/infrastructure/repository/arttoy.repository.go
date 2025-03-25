@@ -21,7 +21,7 @@ func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 }
 
 func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) error {
-	return r.db.Create(artToy).Error
+	return r.db.Model(&artToy).Omit("average_rating").Create(artToy).Error
 }
 
 func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {

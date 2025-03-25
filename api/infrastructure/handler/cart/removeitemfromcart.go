@@ -35,8 +35,7 @@ func (h *CartHandler) RegisterRemoveItemFromCart(api huma.API) {
 		if err != nil {
 			if errors.Is(err, service.ErrCartItemNotFound) {
 				return nil, handler.ErrCartItemNotFound
-			}
-			if errors.Is(err, service.ErrCartItemNotBelongToOwner) {
+			} else if errors.Is(err, service.ErrCartItemNotBelongToOwner) {
 				return nil, handler.ErrCartItemNotBelongToOwner
 			}
 			logrus.Error(err)

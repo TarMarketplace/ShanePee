@@ -9,13 +9,15 @@ import (
 )
 
 type Config struct {
-	Debug                         string        `mapstructure:"DEBUG"`
-	ServerUrl                     string        `mapstructure:"SERVER_URL"`
-	DatabaseFile                  string        `mapstructure:"DATABASE_FILE"`
-	Session                       SessionConfig `mapstructure:"SESSION"`
-	ResetPasswordFrontendEndpoint string        `mapstructure:"RESET_PASSWORD_FRONTEND_ENDPOINT"`
-	Email                         EmailConfig   `mapstructure:"EMAIL"`
-	CorsAllowOrigins              []string      `mapstructure:"CORS_ALLOW_ORIGINS"`
+	Debug                           string        `mapstructure:"DEBUG"`
+	ServerUrl                       string        `mapstructure:"SERVER_URL"`
+	DatabaseFile                    string        `mapstructure:"DATABASE_FILE"`
+	Session                         SessionConfig `mapstructure:"SESSION"`
+	ResetPasswordFrontendEndpoint   string        `mapstructure:"RESET_PASSWORD_FRONTEND_ENDPOINT"`
+	Email                           EmailConfig   `mapstructure:"EMAIL"`
+	CorsAllowOrigins                []string      `mapstructure:"CORS_ALLOW_ORIGINS"`
+	StripeKey                       string        `mapstructure:"STRIPE_KEY"`
+	StripePaymentSuccessRedirectURL string        `mapstructure:"STRIPE_PAYMENT_SUCCESS_REDIRECT_URL"`
 }
 
 type SessionConfig struct {

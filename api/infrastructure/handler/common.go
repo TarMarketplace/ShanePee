@@ -1,6 +1,8 @@
 package handler
 
-import "github.com/danielgtaylor/huma/v2"
+import (
+	"github.com/danielgtaylor/huma/v2"
+)
 
 var (
 	ErrAuthenticationRequired   = huma.Error401Unauthorized("Authentication required")
@@ -18,6 +20,8 @@ var (
 	ErrInvalidToken             = huma.Error403Forbidden("Invalid token")
 	ErrIncorrectOldPassword     = huma.Error401Unauthorized("Incorrect old password")
 	ErrUserEmailAlreadyExist    = huma.Error403Forbidden("User with this email already exists")
+	ErrChatNotFound             = huma.Error404NotFound("Chat not found")
+	ErrChatNotBelongToOwner     = huma.Error403Forbidden("Chat does not belong to the owner")
 )
 
 type ArrayResponse[T any] struct {

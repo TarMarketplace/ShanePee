@@ -1969,16 +1969,37 @@
         ]
       }
     },
-    "/v1/buyer/chat/poll": {
+    "/v1/buyer/chat/poll/{chatID}": {
       "get": {
         "description": "Poll message by buyer",
         "operationId": "poll-message-by-buyer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "chatID",
+            "schema": {
+              "default": -1,
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Chat"
+                  "$ref": "#/components/schemas/ArrayResponseChat"
                 }
               }
             },
@@ -2695,16 +2716,37 @@
         ]
       }
     },
-    "/v1/seller/chat/poll": {
+    "/v1/seller/chat/poll/{buyerID}": {
       "get": {
         "description": "Poll message by seller",
         "operationId": "poll-message-by-seller",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "buyerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "chatID",
+            "schema": {
+              "default": -1,
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Chat"
+                  "$ref": "#/components/schemas/ArrayResponseChat"
                 }
               }
             },

@@ -1,6 +1,12 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+
 import { useUser } from '@/providers/user-provider'
+
+import type { UserWithReview} from '@/generated/api';
+import { getSellerById } from '@/generated/api'
 
 import { SellerStatsCard } from '../_components/seller-stats-card'
 
@@ -11,33 +17,38 @@ type SellerStatsContainerProps = {
 export function SellerStatsContainer({ sellerId }: SellerStatsContainerProps) {
   const { user } = useUser()
   const isSeller = user?.id.toString() == sellerId
+  const [stats, setStats] = useState<UserWithReview>({
+    created_at: '',
+    first_name: '',
+    id: 0,
+    last_name: '',
+    number_of_art_toys_sold: 0,
+    number_of_reviews: 0,
+    photo: '',
+    rating: 0,
+  })
 
-  // useEffect(() => {
-  //   getMyStats()
-  //   .then((response) => {
-  //     if (response?.data) {
-  //       setProducts(response.data)
-  //     } else {
-  //       toast.error('Something went wrong')
-  //     }
-  //   })
-  //   .catch(() => {
-  //     toast.error('Something went wrong')
-  //   })
-  // }, [])
-  // TODO get seller stat api
+  useEffect(() => {
+    getSellerById({
+      path: {
+        id: parseInt(sellerId),
+      },
+    })
+      .then((response) => {
+        if (response?.data) {
+          setStats(response.data)
+        } else {
+          toast.error('Something went wrong')
+        }
+      })
+      .catch(() => {
+        toast.error('Something went wrong')
+      })
+  }, [sellerId])
+
   return (
     <div className='w-full max-w-5xl md:my-4'>
-      <SellerStatsCard
-        photo='asdf'
-        sellerName='John Doe'
-        store_rating={4.5}
-        total_art_toys={7}
-        sold_art_toys={69}
-        total_review={120}
-        joined_for={70}
-        isSeller={isSeller}
-      />
+      <SellerStatsCard stats={stats} isSeller={isSeller} />
     </div>
   )
 }

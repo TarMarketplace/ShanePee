@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
-import { useUser } from '@/providers/user-provider'
-
-import { type Review } from '@/generated/api'
+import type { ArrayResponseReview} from '@/generated/api';
+import { getReview } from '@/generated/api'
 
 import { SellerReviewCard } from '../_components/seller-review-card'
 
@@ -18,62 +18,27 @@ type SellerReviewContainerProps = {
 export function SellerReviewContainer({
   sellerId,
 }: SellerReviewContainerProps) {
-  const [reviews, setReviews] = useState<Review[] | null>(null)
-  const { user } = useUser()
+  const [reviews, setReviews] = useState<ArrayResponseReview>({
+    data: [],
+  })
 
   useEffect(() => {
-    // if (user?.id) {
-    //   getSellerReviews(user.id)
-    //     .then((response) => {
-    //       if (response?.data) {
-    //         setReviews(response.data)
-    //       } else {
-    //         toast.error('Something went wrong')
-    //       }
-    //     })
-    //     .catch(() => {
-    //       toast.error('Something went wrong')
-    //     })
-    // }
-    // TODO get seller review api
-    setReviews([
-      {
-        art_toy_id: 4279569719,
-        comment:
-          'การบริหารดีมากครับ 10 เต็ม 10 ไปเลย แต่ว่า ผมพบปัญหานิดหน่อยครับ แต่ไม่มั่นใจว่าสามารถใช้ Binary Search ในการหาคำตอบได้มั้ย ...',
-        id: 9007199254740991,
-        rating: 5,
+    getReview({
+      path: {
+        sellerID: parseInt(sellerId),
       },
-      {
-        art_toy_id: 4279569719,
-        comment:
-          'การบริหารดีมากครับ 10 เต็ม 10 ไปเลย แต่ว่า ผมพบปัญหานิดหน่อยครับ แต่ไม่มั่นใจว่าสามารถใช้ Binary Search ในการหาคำตอบได้มั้ย ...',
-        id: 9007199254740991,
-        rating: 2,
-      },
-      {
-        art_toy_id: 4279569719,
-        comment:
-          'การบริหารดีมากครับ 10 เต็ม 10 ไปเลย แต่ว่า ผมพบปัญหานิดหน่อยครับ แต่ไม่มั่นใจว่าสามารถใช้ Binary Search ในการหาคำตอบได้มั้ย ...',
-        id: 9007199254740991,
-        rating: 3,
-      },
-      {
-        art_toy_id: 4279569719,
-        comment:
-          'การบริหารดีมากครับ 10 เต็ม 10 ไปเลย แต่ว่า ผมพบปัญหานิดหน่อยครับ แต่ไม่มั่นใจว่าสามารถใช้ Binary Search ในการหาคำตอบได้มั้ย ...',
-        id: 9007199254740991,
-        rating: 3,
-      },
-      {
-        art_toy_id: 4279569719,
-        comment:
-          'การบริหารดีมากครับ 10 เต็ม 10 ไปเลย แต่ว่า ผมพบปัญหานิดหน่อยครับ แต่ไม่มั่นใจว่าสามารถใช้ Binary Search ในการหาคำตอบได้มั้ย ...',
-        id: 9007199254740991,
-        rating: 3,
-      },
-    ])
-  }, [user])
+    })
+      .then((response) => {
+        if (response?.data) {
+          setReviews(response.data)
+        } else {
+          toast.error('Something went wrong')
+        }
+      })
+      .catch(() => {
+        toast.error('Something went wrong')
+      })
+  }, [sellerId])
 
   return (
     <div className='my-4 w-full max-w-5xl'>
@@ -88,7 +53,7 @@ export function SellerReviewContainer({
         </Link>
       </div>
       <div className='flex gap-3 overflow-x-auto p-4'>
-        {reviews?.map((review) => {
+        {reviews.data?.map((review) => {
           return (
             <SellerReviewCard
               key={review.id}

@@ -5,33 +5,29 @@ import { Avatar, AvatarFallback } from '@/components/avatar'
 import { Button } from '@/components/button'
 import { Text } from '@/components/text'
 
+import type { UserWithReview } from '@/generated/api'
+
 export interface SellerStatsCardProps {
-  photo: string
-  sellerName: string
-  store_rating: number
-  total_art_toys: number
-  sold_art_toys: number
-  total_review: number
-  joined_for: number
+  stats: UserWithReview
   isSeller: boolean
 }
 
-function SellerStatsCard({
-  photo,
-  sellerName,
-  store_rating,
-  total_art_toys,
-  sold_art_toys,
-  total_review,
-  joined_for,
-  isSeller,
-}: SellerStatsCardProps) {
+function SellerStatsCard({ stats, isSeller }: SellerStatsCardProps) {
+  const joined_for = Math.floor(
+    (new Date().getTime() - new Date(stats.created_at).getTime()) /
+      (1000 * 60 * 60 * 24)
+  )
+  const sellerName = stats.first_name + ' ' + stats.last_name
+
   return (
     <div className='grid grid-cols-1 items-center justify-center gap-1 md:grid-cols-3 md:gap-6'>
       <div className='flex size-full items-center gap-2 rounded-md border border-grey-50 bg-grey-50 p-4 shadow'>
         <Avatar className='size-20'>
-          <AvatarImage src={photo} alt={sellerName} />
-          <AvatarFallback>JD</AvatarFallback>
+          <AvatarImage src={stats.photo} alt={sellerName} />
+          <AvatarFallback>
+            {stats?.first_name?.[0]?.toUpperCase()}
+            {stats?.last_name?.[0]?.toUpperCase()}
+          </AvatarFallback>
         </Avatar>
         <Text variant='lg-semibold'>{sellerName}</Text>
       </div>
@@ -40,21 +36,22 @@ function SellerStatsCard({
           <Icon icon='iconoir:star-solid' className='size-5' />
           <Text variant='md-regular'>คะแนนร้านค้า: </Text>
           <Text variant='md-regular' className='text-primary'>
-            {store_rating}
+            {stats.rating}
           </Text>
         </span>
         <span className='flex items-center gap-2'>
           <Icon icon='material-symbols-light:box-rounded' className='size-5' />
           <Text variant='md-regular'>จำนวนสินค้าทั้งหมด: </Text>
           <Text variant='md-regular' className='text-primary'>
-            {total_art_toys} ชิ้น
+            {/* TODO chage to total number of art toy selling */}
+            {stats.number_of_art_toys_sold} ชิ้น
           </Text>
         </span>
         <span className='flex items-center gap-2'>
           <Icon icon='mdi:cart' className='size-5' />
           <Text variant='md-regular'>จำนวนสินค้าที่ขายได้: </Text>
           <Text variant='md-regular' className='text-primary'>
-            {sold_art_toys} ชิ้น
+            {stats.number_of_art_toys_sold} ชิ้น
           </Text>
         </span>
       </div>
@@ -63,7 +60,7 @@ function SellerStatsCard({
           <Icon icon='material-symbols:chat' className='size-5' />
           <Text variant='md-regular'>จำนวนรีวิว: </Text>
           <Text variant='md-regular' className='text-primary'>
-            {total_review}
+            {stats.number_of_reviews}
           </Text>
         </span>
         <span className='flex items-center gap-2'>

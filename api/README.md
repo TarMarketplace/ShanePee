@@ -37,6 +37,5 @@ make docs
 `service/` contains usecase level code. Manipulation of domains object should be perform here.
 
 ## TODO
-- proper logger
 - Input validation
 - DB File config

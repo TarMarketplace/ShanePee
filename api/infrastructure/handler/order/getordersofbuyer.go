@@ -22,7 +22,7 @@ func (h *OrderHandler) RegisterGetOrdersOfBuyer(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "get-orders-of-buyer",
 		Method:      http.MethodGet,
-		Path:        "/v1/buyer/orders",
+		Path:        "/v1/buyer/order",
 		Tags:        []string{"Order"},
 		Summary:     "Get orders of buyer",
 		Description: "Get orders of buyer",

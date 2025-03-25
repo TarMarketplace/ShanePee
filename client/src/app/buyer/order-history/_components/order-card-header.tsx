@@ -1,6 +1,6 @@
-import { Badge } from '@/components/badge'
 import { Text } from '@/components/text'
 
+import OrderBadge from '@/app/_containers/order-badge'
 import { type Order } from '@/generated/api'
 
 interface OrderCardHeaderProps {
@@ -22,21 +22,7 @@ export default function OrderCardHeader({ order }: OrderCardHeaderProps) {
         </Text>
         <Text variant='md-semibold'>ร้านค้า: {order.seller_id}</Text>
       </div>
-      <Badge
-        variant={
-          order.status === 'COMPLETED'
-            ? 'success'
-            : order.status === 'DELIVERING'
-              ? 'info'
-              : 'warning'
-        }
-      >
-        {order.status === 'COMPLETED'
-          ? 'จัดส่งสำเร็จ'
-          : order.status === 'DELIVERING'
-            ? 'กำลังจัดส่ง'
-            : 'รอจัดส่ง'}
-      </Badge>
+      <OrderBadge order={order} />
     </div>
   )
 }

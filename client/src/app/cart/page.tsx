@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 
 import { Text } from '@/components/text'
 
-import { AddressContainer } from './_containers/address-container'
+import { AddressContainer } from '../_containers/address-container'
 import { CartContainer } from './_containers/cart-container'
 
 export default async function CartPage() {
@@ -16,7 +16,7 @@ export default async function CartPage() {
           </Text>
         </div>
         <div className='flex flex-col gap-5 py-2 md:gap-6 md:p-6'>
-          <AddressContainer />
+          <AddressContainer enablePencil />
           <CartContainer />
         </div>
       </div>

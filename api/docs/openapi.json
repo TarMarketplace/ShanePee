@@ -1152,6 +1152,9 @@
         },
         "required": [
           "id",
+          "rating",
+          "number_of_reviews",
+          "number_of_art_toys_sold",
           "created_at"
         ],
         "type": "object"

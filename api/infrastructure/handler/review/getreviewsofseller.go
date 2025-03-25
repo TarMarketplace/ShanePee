@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 )
@@ -28,6 +29,7 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 	}, func(ctx context.Context, i *GetReviewsOfSellerInput) (*GetReviewsOfSellerOutput, error) {
 		data, err := h.reviewSvc.GetReviewsBySellerID(ctx, i.SellerID)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetReviewsOfSellerOutput{

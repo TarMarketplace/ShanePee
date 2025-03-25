@@ -94,20 +94,14 @@ func (s *chatServiceImpl) notifySubscribedBuyer(buyerID int64, chat *domain.Chat
 	s.Lock()
 	defer s.Unlock()
 
-	select {
-	case s.subscribedBuyers[buyerID] <- chat:
-	default:
-	}
+	s.subscribedBuyers[buyerID] <- chat
 }
 
 func (s *chatServiceImpl) notifySubscribedSeller(sellerID int64, chat *domain.Chat) {
 	s.Lock()
 	defer s.Unlock()
 
-	select {
-	case s.subscribedSellers[sellerID] <- chat:
-	default:
-	}
+	s.subscribedSellers[sellerID] <- chat
 }
 
 func (s *chatServiceImpl) addSubscribedBuyers(buyerID int64) {

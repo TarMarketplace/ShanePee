@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
 )
@@ -28,6 +29,7 @@ func (h *CartHandler) RegisterCheckout(api huma.API) {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
 			}
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

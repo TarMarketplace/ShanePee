@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"log"
 	"net/http"
 	"os"
 	"path"
@@ -16,12 +15,14 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 )
 
 var cmd = flag.String("command", "server", "command to run")
 var openApiOutDir = flag.String("output", "./docs", "output openapi file")
 
 func main() {
+	log := logrus.New()
 	if err := godotenv.Load(); err != nil {
 		if _, ok := err.(*os.PathError); ok {
 			log.Print(".env not found, skipping")
@@ -37,7 +38,8 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(Logger(log), gin.Recovery())
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = app.cfg.CorsAllowOrigins
 	corsConfig.AllowCredentials = true
@@ -104,6 +106,8 @@ func main() {
 	app.orderHdr.RegisterUpdateOrder(api)
 
 	flag.Parse()
+
+	log.Info("Starting server...")
 
 	if cmd == nil {
 		log.Fatal("Missing command")

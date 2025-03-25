@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 )
@@ -31,6 +32,7 @@ func (h *CartHandler) RegisterGetCart(api huma.API) {
 		}
 		cart, err := h.cartSvc.GetCartWithItemByOwnerID(ctx, *userID)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetCartOutput{

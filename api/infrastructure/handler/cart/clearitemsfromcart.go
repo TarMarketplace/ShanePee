@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 )
 
@@ -26,6 +27,7 @@ func (h *CartHandler) RegisterClearItemsFromCart(api huma.API) {
 		}
 		err := h.cartSvc.ClearItemsByOwnerID(ctx, *userID)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

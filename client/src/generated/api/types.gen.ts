@@ -31,12 +31,21 @@ export type ArrayResponseOrder = {
     data: Array<Order> | null;
 };
 
+export type ArrayResponseReview = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    data: Array<Review> | null;
+};
+
 export type ArtToy = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
     availability: boolean;
+    average_rating: number;
     description: string;
     id: number;
     name: string;
@@ -98,6 +107,14 @@ export type ChangePasswordBody = {
     old_password: string;
 };
 
+export type CheckoutOutputBody = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    url: string;
+};
+
 export type ErrorDetail = {
     /**
      * Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'
@@ -154,6 +171,10 @@ export type LoginBody = {
 };
 
 export type Order = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
     buyer_id: number;
     created_at: string;
     delivery_service?: string;
@@ -169,6 +190,16 @@ export type OrderItem = {
     art_toy_id: number;
     id: number;
     order_id: number;
+};
+
+export type OrderUpdateBody = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    delivery_service?: string;
+    status?: 'PREPARING' | 'DELIVERING' | 'COMPLETED';
+    tracking_number?: string;
 };
 
 export type PartialAddress = {
@@ -727,6 +758,87 @@ export type ResetPasswordResponses = {
 
 export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
 
+export type CompleteOrderData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/v1/buyer/order/{id}/complete';
+};
+
+export type CompleteOrderErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type CompleteOrderError = CompleteOrderErrors[keyof CompleteOrderErrors];
+
+export type CompleteOrderResponses = {
+    /**
+     * OK
+     */
+    200: Order;
+};
+
+export type CompleteOrderResponse = CompleteOrderResponses[keyof CompleteOrderResponses];
+
+export type GetOrderOfBuyerData = {
+    body?: never;
+    path: {
+        orderID: number;
+    };
+    query?: never;
+    url: '/v1/buyer/order/{orderID}';
+};
+
+export type GetOrderOfBuyerErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetOrderOfBuyerError = GetOrderOfBuyerErrors[keyof GetOrderOfBuyerErrors];
+
+export type GetOrderOfBuyerResponses = {
+    /**
+     * OK
+     */
+    200: Order;
+};
+
+export type GetOrderOfBuyerResponse = GetOrderOfBuyerResponses[keyof GetOrderOfBuyerResponses];
+
+export type GetOrdersOfBuyerData = {
+    body?: never;
+    path?: never;
+    query?: {
+        status?: 'PREPARING' | 'DELIVERING' | 'COMPLETED';
+    };
+    url: '/v1/buyer/orders';
+};
+
+export type GetOrdersOfBuyerErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetOrdersOfBuyerError = GetOrdersOfBuyerErrors[keyof GetOrdersOfBuyerErrors];
+
+export type GetOrdersOfBuyerResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseOrder;
+};
+
+export type GetOrdersOfBuyerResponse = GetOrdersOfBuyerResponses[keyof GetOrdersOfBuyerResponses];
+
 export type GetCartData = {
     body?: never;
     path?: never;
@@ -795,12 +907,65 @@ export type CheckoutError = CheckoutErrors[keyof CheckoutErrors];
 
 export type CheckoutResponses = {
     /**
+     * OK
+     */
+    200: CheckoutOutputBody;
+};
+
+export type CheckoutResponse = CheckoutResponses[keyof CheckoutResponses];
+
+export type ClearItemsFromCartData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/cart/clear-items';
+};
+
+export type ClearItemsFromCartErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type ClearItemsFromCartError = ClearItemsFromCartErrors[keyof ClearItemsFromCartErrors];
+
+export type ClearItemsFromCartResponses = {
+    /**
      * No Content
      */
     204: void;
 };
 
-export type CheckoutResponse = CheckoutResponses[keyof CheckoutResponses];
+export type ClearItemsFromCartResponse = ClearItemsFromCartResponses[keyof ClearItemsFromCartResponses];
+
+export type PaymentSuccessCallbackData = {
+    body: Blob | File;
+    headers?: {
+        'Stripe-Signature'?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/cart/payment-success-callback';
+};
+
+export type PaymentSuccessCallbackErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type PaymentSuccessCallbackError = PaymentSuccessCallbackErrors[keyof PaymentSuccessCallbackErrors];
+
+export type PaymentSuccessCallbackResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type PaymentSuccessCallbackResponse = PaymentSuccessCallbackResponses[keyof PaymentSuccessCallbackResponses];
 
 export type RemoveItemFromCartData = {
     body?: never;
@@ -881,10 +1046,93 @@ export type GetOrdersByStatusResponses = {
 
 export type GetOrdersByStatusResponse = GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses];
 
+export type GetReviewData = {
+    body?: never;
+    path: {
+        sellerID: number;
+    };
+    query?: never;
+    url: '/v1/seller/art-toy/review/{sellerID}';
+};
+
+export type GetReviewErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetReviewError = GetReviewErrors[keyof GetReviewErrors];
+
+export type GetReviewResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseReview;
+};
+
+export type GetReviewResponse = GetReviewResponses[keyof GetReviewResponses];
+
+export type UpdateOrderData = {
+    body: OrderUpdateBody;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/v1/seller/order/{id}';
+};
+
+export type UpdateOrderErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type UpdateOrderError = UpdateOrderErrors[keyof UpdateOrderErrors];
+
+export type UpdateOrderResponses = {
+    /**
+     * OK
+     */
+    200: Order;
+};
+
+export type UpdateOrderResponse = UpdateOrderResponses[keyof UpdateOrderResponses];
+
+export type GetOrderOfSellerData = {
+    body?: never;
+    path: {
+        orderID: number;
+    };
+    query?: never;
+    url: '/v1/seller/order/{orderID}';
+};
+
+export type GetOrderOfSellerErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetOrderOfSellerError = GetOrderOfSellerErrors[keyof GetOrderOfSellerErrors];
+
+export type GetOrderOfSellerResponses = {
+    /**
+     * OK
+     */
+    200: Order;
+};
+
+export type GetOrderOfSellerResponse = GetOrderOfSellerResponses[keyof GetOrderOfSellerResponses];
+
 export type GetOrdersOfSellerData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        status?: 'PREPARING' | 'DELIVERING' | 'COMPLETED';
+    };
     url: '/v1/seller/orders';
 };
 
@@ -905,6 +1153,33 @@ export type GetOrdersOfSellerResponses = {
 };
 
 export type GetOrdersOfSellerResponse = GetOrdersOfSellerResponses[keyof GetOrdersOfSellerResponses];
+
+export type GetArtToysOfSellerData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/v1/seller/{id}/art-toy';
+};
+
+export type GetArtToysOfSellerErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetArtToysOfSellerError = GetArtToysOfSellerErrors[keyof GetArtToysOfSellerErrors];
+
+export type GetArtToysOfSellerResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseArtToy;
+};
+
+export type GetArtToysOfSellerResponse = GetArtToysOfSellerResponses[keyof GetArtToysOfSellerResponses];
 
 export type UpdateUserData = {
     body: UserUpdateBody;

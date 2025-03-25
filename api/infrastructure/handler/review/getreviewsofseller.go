@@ -20,7 +20,7 @@ type GetReviewsOfSellerOutput struct {
 
 func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "get-review",
+		OperationID: "get-reviews-of-seller",
 		Method:      http.MethodGet,
 		Path:        "/v1/seller/review/{sellerID}",
 		Tags:        []string{"Review"},

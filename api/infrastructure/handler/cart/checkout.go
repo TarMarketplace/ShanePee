@@ -11,6 +11,14 @@ import (
 	"shanepee.com/api/service"
 )
 
+type CheckoutOutputBody struct {
+	URL string `json:"url"`
+}
+
+type CheckoutOutput struct {
+	Body *CheckoutOutputBody
+}
+
 func (h *CartHandler) RegisterCheckout(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "checkout",
@@ -19,12 +27,15 @@ func (h *CartHandler) RegisterCheckout(api huma.API) {
 		Tags:        []string{"Cart"},
 		Summary:     "Checkout Items In Cart",
 		Description: "Place a new order from items in the cart",
-	}, func(ctx context.Context, i *struct{}) (*struct{}, error) {
+		Security: []map[string][]string{
+			{"sessionId": {}},
+		},
+	}, func(ctx context.Context, i *struct{}) (*CheckoutOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		err := h.cartSvc.Checkout(ctx, *userID)
+		url, err := h.stripeSvc.Checkout(ctx, *userID)
 		if err != nil {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
@@ -32,6 +43,6 @@ func (h *CartHandler) RegisterCheckout(api huma.API) {
 			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
-		return nil, nil
+		return &CheckoutOutput{Body: &CheckoutOutputBody{URL: url}}, nil
 	})
 }

@@ -26,6 +26,7 @@ func InitializeApp() (App, error) {
 		service.NewReviewService,
 		service.NewCartService,
 		service.NewOrderService,
+		service.NewStripeService,
 		service.NewChatService,
 		repository.NewUserRepository,
 		repository.NewArtToyRepository,

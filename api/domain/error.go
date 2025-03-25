@@ -8,6 +8,7 @@ var (
 	ErrUserEmailAlreadyExist        error = errors.New("user with this email already exists")
 	ErrArtToyNotFound               error = errors.New("art toy not found")
 	ErrArtToyNotBelongToOwner       error = errors.New("art toy does not belong to the owner")
+	ErrArtToyBelongToOwner          error = errors.New("art toy does not belong to the owner")
 	ErrReviewNotFound               error = errors.New("review not found")
 	ErrOrderNotFound                error = errors.New("order not found")
 	ErrOrderNotBelongToOwner        error = errors.New("order does not belong to the owner")

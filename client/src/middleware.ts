@@ -7,6 +7,7 @@ const PROTECTED_ROUTES = [
   '/user/account',
   '/cart',
   '/order-history',
+  '/checkout/payment-success',
 ]
 const AUTH_ROUTES = ['/login', '/register']
 

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
@@ -40,6 +41,7 @@ func (h *OrderHandler) RegisterGetOrderOfBuyer(api huma.API) {
 			if errors.Is(err, service.ErrOrderNotBelongToOwner) {
 				return nil, handler.ErrOrderNotBelongToOwner
 			}
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetOrderOfBuyerOutput{

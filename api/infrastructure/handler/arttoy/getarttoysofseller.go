@@ -10,32 +10,32 @@ import (
 	"shanepee.com/api/infrastructure/handler"
 )
 
-type GetMyArtToysOutput struct {
+type GetArtToysOfSellerInput struct {
+	ID int64 `path:"id"`
+}
+
+type GetArtToysOfSellerOutput struct {
 	Body handler.ArrayResponse[domain.ArtToy]
 }
 
-func (h *ArtToyHandler) RegisterGetMyArtToys(api huma.API) {
+func (h *ArtToyHandler) RegisterGetArtToysOfSeller(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "get-my-art-toys",
+		OperationID: "get-art-toys-of-seller",
 		Method:      http.MethodGet,
-		Path:        "/v1/my-art-toy",
+		Path:        "/v1/seller/{id}/art-toy",
 		Tags:        []string{"Art toy"},
-		Summary:     "Get My Art Toys",
-		Description: "Get my art toys",
+		Summary:     "Get Art Toys Of Seller",
+		Description: "Get art toys of seller",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *struct{}) (*GetMyArtToysOutput, error) {
-		userID := handler.GetUserID(ctx)
-		if userID == nil {
-			return nil, handler.ErrAuthenticationRequired
-		}
-		data, err := h.artToySvc.GetArtToysByOwnerID(ctx, *userID)
+	}, func(ctx context.Context, i *GetArtToysOfSellerInput) (*GetArtToysOfSellerOutput, error) {
+		data, err := h.artToySvc.GetArtToysByOwnerID(ctx, i.ID)
 		if err != nil {
 			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
-		return &GetMyArtToysOutput{
+		return &GetArtToysOfSellerOutput{
 			Body: handler.ArrayResponse[domain.ArtToy]{
 				Data: data,
 			},

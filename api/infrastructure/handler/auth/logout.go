@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 )
 
@@ -26,6 +27,7 @@ func (h *AuthHandler) RegisterLogout(api huma.API) {
 		newSessionOpts.MaxAge = -1
 		session.Options(newSessionOpts)
 		if err := session.Save(); err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

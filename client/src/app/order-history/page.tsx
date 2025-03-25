@@ -1,11 +1,9 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 import { Badge } from '@/components/badge'
 import { Button } from '@/components/button'
@@ -15,19 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover'
 import { Text } from '@/components/text'
-import { TrackingInputCard } from '@/components/tracking-input-card'
-import type { TrackingInputCardSchema } from '@/components/tracking-input-card/index.stories'
 
 import { type Order, getOrdersOfSeller } from '@/generated/api'
 
-// TODO: Refactor this file
+import { TrackingInputContainer } from '../_containers/tracking-input-container'
 
-const trackingInputCardSchema = z.object({
-  trackingNumberValue: z.string().min(1, 'Tracking number is required'),
-  deliveryCompanyValue: z.enum(['Shopee express', 'Kerry', 'Flash']),
-})
+// TODO: Refactor this file
 
 const STATUS_MAP_TO_LABEL: Record<Order['status'] | 'ALL', string> = {
   ALL: 'ทั้งหมด',
@@ -53,14 +45,6 @@ export default function OrderHistoryPage() {
 
     fetchOrders()
   }, [])
-
-  const form = useForm<TrackingInputCardSchema>({
-    resolver: zodResolver(trackingInputCardSchema),
-    defaultValues: {
-      trackingNumberValue: '',
-      deliveryCompanyValue: 'Shopee express',
-    },
-  })
 
   return (
     <main className='grid size-full grid-cols-1 place-items-center p-4 md:p-12'>
@@ -185,27 +169,13 @@ export default function OrderHistoryPage() {
                   </Text>
                   <div className='flex items-center justify-center gap-3'>
                     {order.status === 'PREPARING' ? (
-                      <>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button variant='filled'>เพิ่มรหัสติดตาม</Button>
-                          </PopoverTrigger>
-                          <PopoverContent className='size-fit'>
-                            <TrackingInputCard
-                              id={order.id.toString()}
-                              name={order.order_items?.[0].art_toy?.name ?? ''}
-                              form={form}
-                              onSubmit={(data) => {
-                                console.log(data)
-                              }}
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </>
+                      <TrackingInputContainer order={order} />
                     ) : null}
-                    <Button variant='filled' colorVariant='outline'>
-                      รายละเอียด
-                    </Button>
+                    <Link href={`/order-detail/${order.id}`}>
+                      <Button variant='filled' colorVariant='outline'>
+                        รายละเอียด
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>

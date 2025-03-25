@@ -85,13 +85,13 @@
         ],
         "type": "object"
       },
-      "ArrayResponseChat": {
+      "ArrayResponseChatMessage": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/ArrayResponseChat.json"
+              "https://example.com/schemas/ArrayResponseChatMessage.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -99,7 +99,7 @@
           },
           "data": {
             "items": {
-              "$ref": "#/components/schemas/Chat"
+              "$ref": "#/components/schemas/ChatMessage"
             },
             "type": [
               "array",
@@ -453,13 +453,13 @@
         ],
         "type": "object"
       },
-      "Chat": {
+      "ChatMessage": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/Chat.json"
+              "https://example.com/schemas/ChatMessage.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -471,6 +471,12 @@
             ],
             "format": "int64",
             "type": "integer"
+          },
+          "content": {
+            "examples": [
+              "Hello world"
+            ],
+            "type": "string"
           },
           "created_at": {
             "examples": [
@@ -485,12 +491,6 @@
             ],
             "format": "int64",
             "type": "integer"
-          },
-          "message": {
-            "examples": [
-              "Hello world"
-            ],
-            "type": "string"
           },
           "seller_id": {
             "examples": [
@@ -515,7 +515,7 @@
           "buyer_id",
           "seller_id",
           "sender",
-          "message",
+          "content",
           "created_at"
         ],
         "type": "object"
@@ -1941,7 +1941,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Chat"
+                  "$ref": "#/components/schemas/ChatMessage"
                 }
               }
             },
@@ -1971,7 +1971,7 @@
     },
     "/v1/buyer/chat/poll/{chatID}": {
       "get": {
-        "description": "Poll message by buyer",
+        "description": "Poll message by buyer. In the chat with seller, poll message to wait for new message sent by the seller. When receiving messages from the seller or time out, polling again",
         "operationId": "poll-message-by-buyer",
         "parameters": [
           {
@@ -1988,7 +1988,6 @@
             "in": "query",
             "name": "chatID",
             "schema": {
-              "default": -1,
               "format": "int64",
               "type": "integer"
             }
@@ -1999,7 +1998,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseChat"
+                  "$ref": "#/components/schemas/ArrayResponseChatMessage"
                 }
               }
             },
@@ -2047,7 +2046,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseChat"
+                  "$ref": "#/components/schemas/ArrayResponseChatMessage"
                 }
               }
             },
@@ -2688,7 +2687,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Chat"
+                  "$ref": "#/components/schemas/ChatMessage"
                 }
               }
             },
@@ -2718,7 +2717,7 @@
     },
     "/v1/seller/chat/poll/{buyerID}": {
       "get": {
-        "description": "Poll message by seller",
+        "description": "Poll message by seller. In the chat with buyer, poll message to wait for new message sent by the buyer. When receiving messages from the buyer or time out, polling again",
         "operationId": "poll-message-by-seller",
         "parameters": [
           {
@@ -2735,7 +2734,6 @@
             "in": "query",
             "name": "chatID",
             "schema": {
-              "default": -1,
               "format": "int64",
               "type": "integer"
             }
@@ -2746,7 +2744,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseChat"
+                  "$ref": "#/components/schemas/ArrayResponseChatMessage"
                 }
               }
             },

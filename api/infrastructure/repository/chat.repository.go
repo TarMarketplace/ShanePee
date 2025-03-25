@@ -13,8 +13,8 @@ type chatRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func (r *chatRepositoryImpl) FindChatByID(ctx context.Context, chatID int64) (*domain.Chat, error) {
-	var chat domain.Chat
+func (r *chatRepositoryImpl) FindChatByID(ctx context.Context, chatID int64) (*domain.ChatMessage, error) {
+	var chat domain.ChatMessage
 	if err := r.db.Take(&chat, chatID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, domain.ErrChatNotFound
@@ -24,9 +24,9 @@ func (r *chatRepositoryImpl) FindChatByID(ctx context.Context, chatID int64) (*d
 	return &chat, nil
 }
 
-func (r *chatRepositoryImpl) FindChatsByBuyerIDAndSellerID(ctx context.Context, buyerID int64, sellerID int64) ([]*domain.Chat, error) {
-	var chats []*domain.Chat
-	err := r.db.Model(&domain.Chat{}).
+func (r *chatRepositoryImpl) FindChatsByBuyerIDAndSellerID(ctx context.Context, buyerID int64, sellerID int64) ([]*domain.ChatMessage, error) {
+	var chats []*domain.ChatMessage
+	err := r.db.Model(&domain.ChatMessage{}).
 		Where("buyer_id = ? AND seller_id = ?", buyerID, sellerID).
 		Order("created_at ASC").
 		Find(&chats).Error
@@ -36,9 +36,9 @@ func (r *chatRepositoryImpl) FindChatsByBuyerIDAndSellerID(ctx context.Context, 
 	return chats, nil
 }
 
-func (r *chatRepositoryImpl) FindLatestChatsByBuyerIDAndSellerID(ctx context.Context, buyerID int64, sellerID int64, latestChatTime time.Time) ([]*domain.Chat, error) {
-	var chats []*domain.Chat
-	err := r.db.Model(&domain.Chat{}).
+func (r *chatRepositoryImpl) FindLatestChatsByBuyerIDAndSellerID(ctx context.Context, buyerID int64, sellerID int64, latestChatTime time.Time) ([]*domain.ChatMessage, error) {
+	var chats []*domain.ChatMessage
+	err := r.db.Model(&domain.ChatMessage{}).
 		Where("buyer_id = ? AND seller_id = ? AND created_at > ?", buyerID, sellerID, latestChatTime).
 		Order("created_at ASC").
 		Find(&chats).Error
@@ -48,7 +48,7 @@ func (r *chatRepositoryImpl) FindLatestChatsByBuyerIDAndSellerID(ctx context.Con
 	return chats, nil
 }
 
-func (r *chatRepositoryImpl) CreateChat(ctx context.Context, chat *domain.Chat) error {
+func (r *chatRepositoryImpl) CreateChat(ctx context.Context, chat *domain.ChatMessage) error {
 	return r.db.Create(chat).Error
 }
 

@@ -14,11 +14,11 @@ import (
 
 type PollMessageByBuyerInput struct {
 	SellerID int64 `path:"sellerID"`
-	ChatID   int64 `query:"chatID" default:"-1"`
+	ChatID   int64 `query:"chatID"`
 }
 
 type PollMessageByBuyerOutput struct {
-	Body handler.ArrayResponse[domain.Chat]
+	Body handler.ArrayResponse[domain.ChatMessage]
 }
 
 func (h *ChatHandler) RegisterPollMessageByBuyer(api huma.API) {
@@ -28,7 +28,7 @@ func (h *ChatHandler) RegisterPollMessageByBuyer(api huma.API) {
 		Path:        "/v1/buyer/chat/poll/{chatID}",
 		Tags:        []string{"Chat"},
 		Summary:     "Poll Message By Buyer",
-		Description: "Poll message by buyer",
+		Description: "Poll message by buyer. In the chat with seller, poll message to wait for new message sent by the seller. When receiving messages from the seller or time out, polling again",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
@@ -49,7 +49,7 @@ func (h *ChatHandler) RegisterPollMessageByBuyer(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &PollMessageByBuyerOutput{
-			Body: handler.ArrayResponse[domain.Chat]{
+			Body: handler.ArrayResponse[domain.ChatMessage]{
 				Data: data,
 			},
 		}, nil

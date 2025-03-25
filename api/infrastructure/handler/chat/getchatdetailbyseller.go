@@ -14,7 +14,7 @@ type GetChatDetailBySellerInput struct {
 }
 
 type GetChatDetailBySellerOutput struct {
-	Body handler.ArrayResponse[domain.Chat]
+	Body handler.ArrayResponse[domain.ChatMessage]
 }
 
 func (h *ChatHandler) RegisterGetChatDetailBySeller(api huma.API) {
@@ -35,7 +35,7 @@ func (h *ChatHandler) RegisterGetChatDetailBySeller(api huma.API) {
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetChatDetailBySellerOutput{
-			Body: handler.ArrayResponse[domain.Chat]{
+			Body: handler.ArrayResponse[domain.ChatMessage]{
 				Data: data,
 			},
 		}, nil

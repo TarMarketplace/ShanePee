@@ -20,7 +20,7 @@ type SendMessageBySellerInput struct {
 }
 
 type SendMessageBySellerOutput struct {
-	Body *domain.Chat
+	Body *domain.ChatMessage
 }
 
 func (h *ChatHandler) RegisterSendMessageBySeller(api huma.API) {

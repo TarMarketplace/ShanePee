@@ -40,19 +40,19 @@ const ReviewCard = ({
         <Text variant='heading-md'>ให้คะแนนร้านค้า</Text>
 
         <button onClick={onClose}>
-          <Icon
-            icon='maki:cross'
-            className='size-[16px] text-[#8E8E8E]'
-          />
+          <Icon icon='maki:cross' className='size-[16px] text-[#8E8E8E]' />
         </button>
       </div>
 
       <div className='flex h-[76px] w-[321px] items-center gap-4 rounded-lg bg-[#F4F4F4] p-2 shadow-[0_0_4px_0px_#00000040] md:h-[96px] md:w-[468px] md:p-3'>
-        <Image
-          src={Photo}
-          alt='Shop photo'
-          className='size-[60px] rounded-full object-cover md:size-[80px]'
-        />
+        <div className='relative size-[60px] md:size-[80px]'>
+          <Image
+            src={Photo}
+            alt='Shop photo'
+            fill
+            className='rounded-full object-cover'
+          />
+        </div>
         <Text variant='md-semibold'>{Name}</Text>
       </div>
 

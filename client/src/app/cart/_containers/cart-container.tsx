@@ -1,6 +1,7 @@
 'use client'
 
 import { Icon } from '@iconify/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -29,6 +30,7 @@ export function CartContainer() {
   const [checkingOut, setCheckingOut] = useState(false)
   const [checkoutSuccess, setCheckoutSuccess] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -67,16 +69,22 @@ export function CartContainer() {
     )
   }
 
-  const handleCheckout = () => {
-    checkout()
-    setCart([])
-
+  const handleCheckout = async () => {
     setCheckingOut(true)
+    const { data, error, response } = await checkout()
+    if (!response.ok || !data) {
+      if (error) {
+        toast.error(error.title ?? 'Error checking out')
+      } else {
+        toast.error('Error checking out')
+      }
+      return
+    }
 
-    setTimeout(() => {
-      setCheckingOut(false)
-      setCheckoutSuccess(true)
-    }, 3000)
+    router.push(data.url)
+
+    setCheckingOut(false)
+    setCheckoutSuccess(true)
   }
 
   if (loading) {

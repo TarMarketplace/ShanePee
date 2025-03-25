@@ -25,6 +25,7 @@ export const Default: Story = {
       description: 'Description for Product',
       owner_id: 1,
       release_date: new Date().toISOString(),
+      average_rating: 4.5,
     },
   },
 }

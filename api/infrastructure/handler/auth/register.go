@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
@@ -38,12 +39,14 @@ func (h *AuthHandler) RegisterRegister(api huma.API) {
 			if errors.Is(err, service.ErrUserEmailAlreadyExist) {
 				return nil, handler.ErrUserEmailAlreadyExist
 			}
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 
 		session := handler.GetSession(ctx)
 		session.Set(handler.UserIDSessionKey, data.ID)
 		if err := session.Save(); err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 

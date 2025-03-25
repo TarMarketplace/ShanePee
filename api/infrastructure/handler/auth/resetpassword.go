@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
 )
@@ -33,6 +34,7 @@ func (h *AuthHandler) RegisterResetPassword(api huma.API) {
 			if errors.Is(err, service.ErrInvalidToken) {
 				return nil, handler.ErrInvalidToken
 			}
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

@@ -10,7 +10,9 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/sendgrid/sendgrid-go v3.16.0+incompatible
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
+	github.com/stripe/stripe-go/v81 v81.4.0
 	golang.org/x/crypto v0.31.0
 	gorm.io/driver/sqlite v1.5.7
 	gorm.io/gorm v1.25.12

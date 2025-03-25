@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 )
@@ -35,6 +36,7 @@ func (h *OrderHandler) RegisterGetOrdersOfBuyer(api huma.API) {
 		}
 		data, err := h.orderSvc.GetOrdersWithArtToysByBuyerID(ctx, *userId, i.Status)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetOrdersOfBuyerOutput{

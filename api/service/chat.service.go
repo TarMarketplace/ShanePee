@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"sync"
-	"time"
 
 	"shanepee.com/api/domain"
 )
@@ -70,24 +69,42 @@ func (s *chatServiceImpl) PollMessageByBuyer(ctx context.Context, buyerID int64)
 	s.addSubscribedBuyers(buyerID)
 	defer s.removeSubscribedBuyer(buyerID)
 
-	select {
-	case newChat := <-s.subscribedBuyers[buyerID]:
-		return newChat, nil
-	case <-time.After(10 * time.Second):
-		return nil, nil
-	}
+	var newChat *domain.Chat
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		for {
+			select {
+			case newChat = <-s.subscribedBuyers[buyerID]:
+				return
+			}
+		}
+	}()
+	wg.Wait()
+	return newChat, nil
 }
 
 func (s *chatServiceImpl) PollMessageBySeller(ctx context.Context, sellerID int64) (*domain.Chat, error) {
 	s.addSubscribedSellers(sellerID)
 	defer s.removeSubscribedSeller(sellerID)
 
-	select {
-	case newChat := <-s.subscribedSellers[sellerID]:
-		return newChat, nil
-	case <-time.After(10 * time.Second):
-		return nil, nil
-	}
+	var newChat *domain.Chat
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		for {
+			select {
+			case newChat = <-s.subscribedSellers[sellerID]:
+				return
+			}
+		}
+	}()
+	wg.Wait()
+	return newChat, nil
 }
 
 func (s *chatServiceImpl) notifySubscribedBuyer(buyerID int64, chat *domain.Chat) {

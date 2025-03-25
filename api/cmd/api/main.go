@@ -75,7 +75,9 @@ func main() {
 	app.authHdr.RegisterRegister(api)
 	app.authHdr.RegisterResetPassword(api)
 
-	app.userHdr.UpdateUser(api)
+	app.userHdr.RegisterUpdateUser(api)
+	app.userHdr.RegisterGetSellers(api)
+	app.userHdr.RegisterGetSellerByID(api)
 
 	app.artToyHdr.RegisterGetArtToys(api)
 	app.artToyHdr.RegisterGetMyArtToys(api)
@@ -87,10 +89,7 @@ func main() {
 	app.artToyHdr.RegisterSearchArtToys(api)
 
 	app.reviewHdr.RegisterCreateReview(api)
-	app.reviewHdr.RegisterGetReview(api)
 	app.reviewHdr.RegisterGetReviewsOfSeller(api)
-	app.reviewHdr.RegisterUpdateReview(api)
-	app.reviewHdr.RegisterDeleteReview(api)
 
 	app.cartHdr.RegisterAddItemToCart(api)
 	app.cartHdr.RegisterRemoveItemFromCart(api)

@@ -37,7 +37,7 @@ type PartialAddress struct {
 	Postcode *string `json:"postcode,omitempty" example:"10330"`
 }
 
-func (h *UserHandler) UpdateUser(api huma.API) {
+func (h *UserHandler) RegisterUpdateUser(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "update-user",
 		Method:      http.MethodPatch,

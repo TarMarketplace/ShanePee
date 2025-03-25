@@ -139,6 +139,33 @@
         ],
         "type": "object"
       },
+      "ArrayResponseUserWithReview": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseUserWithReview.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/UserWithReview"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ArtToy": {
         "additionalProperties": false,
         "properties": {
@@ -853,17 +880,24 @@
             "readOnly": true,
             "type": "string"
           },
-          "art_toy_id": {
-            "format": "int64",
-            "type": "integer"
-          },
           "comment": {
             "examples": [
               "This is a great art toy"
             ],
             "type": "string"
           },
+          "created_at": {
+            "examples": [
+              "2021-08-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
           "id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "order_id": {
             "format": "int64",
             "type": "integer"
           },
@@ -879,7 +913,8 @@
           "id",
           "rating",
           "comment",
-          "art_toy_id"
+          "order_id",
+          "created_at"
         ],
         "type": "object"
       },
@@ -915,34 +950,6 @@
         ],
         "type": "object"
       },
-      "ReviewUpdateBody": {
-        "additionalProperties": false,
-        "properties": {
-          "$schema": {
-            "description": "A URL to the JSON Schema for this object.",
-            "examples": [
-              "https://example.com/schemas/ReviewUpdateBody.json"
-            ],
-            "format": "uri",
-            "readOnly": true,
-            "type": "string"
-          },
-          "comment": {
-            "examples": [
-              "This is a great art toy"
-            ],
-            "type": "string"
-          },
-          "rating": {
-            "examples": [
-              5
-            ],
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
       "User": {
         "additionalProperties": false,
         "properties": {
@@ -957,6 +964,13 @@
           },
           "address": {
             "$ref": "#/components/schemas/Address"
+          },
+          "created_at": {
+            "examples": [
+              "2021-01-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
           },
           "email": {
             "examples": [
@@ -1009,7 +1023,8 @@
           "id",
           "email",
           "address",
-          "payment_method"
+          "payment_method",
+          "created_at"
         ],
         "type": "object"
       },
@@ -1067,6 +1082,81 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "UserWithReview": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/UserWithReview.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "created_at": {
+            "examples": [
+              "2021-01-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "last_name": {
+            "examples": [
+              "Doe"
+            ],
+            "type": "string"
+          },
+          "number_of_art_toys_sold": {
+            "examples": [
+              52
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "number_of_reviews": {
+            "examples": [
+              52
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "rating": {
+            "examples": [
+              4.5
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "number_of_reviews",
+          "number_of_art_toys_sold",
+          "created_at"
+        ],
         "type": "object"
       }
     },
@@ -1157,200 +1247,6 @@
           }
         ],
         "summary": "Create Art toy",
-        "tags": [
-          "Art toy"
-        ]
-      }
-    },
-    "/v1/art-toy/review/{artToyID}": {
-      "delete": {
-        "description": "Delete an existing art toy review by ID",
-        "operationId": "delete-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "artToyID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Delete Art Toy Review",
-        "tags": [
-          "Art toy"
-        ]
-      },
-      "get": {
-        "description": "Get art toy review by art toy ID",
-        "operationId": "get-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "artToyID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Review"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "summary": "Get Art Toy Review",
-        "tags": [
-          "Art toy"
-        ]
-      },
-      "patch": {
-        "description": "Update an existing art toy review by ID",
-        "operationId": "update-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "artToyID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ReviewUpdateBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Review"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Update Art Toy Review",
-        "tags": [
-          "Art toy"
-        ]
-      },
-      "post": {
-        "description": "Create a new art toy review record",
-        "operationId": "create-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "artToyID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ReviewCreateBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Review"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Create Art Toy Review",
         "tags": [
           "Art toy"
         ]
@@ -2194,6 +2090,64 @@
         ]
       }
     },
+    "/v1/order/{orderID}/review": {
+      "post": {
+        "description": "Create a new order review record",
+        "operationId": "create-review",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Create Order Review",
+        "tags": [
+          "Review"
+        ]
+      }
+    },
     "/v1/order/{status}": {
       "get": {
         "description": "Get orders by status",
@@ -2246,27 +2200,16 @@
         ]
       }
     },
-    "/v1/seller/art-toy/review/{sellerID}": {
+    "/v1/seller": {
       "get": {
-        "description": "Get art toy reviews of seller",
-        "operationId": "get-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sellerID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
+        "description": "Get sellers",
+        "operationId": "get-sellers",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseReview"
+                  "$ref": "#/components/schemas/ArrayResponseUserWithReview"
                 }
               }
             },
@@ -2283,9 +2226,9 @@
             "description": "Error"
           }
         },
-        "summary": "Get Art Toy Reviews of seller",
+        "summary": "Get Sellers",
         "tags": [
-          "Art toy"
+          "User"
         ]
       }
     },
@@ -2444,6 +2387,92 @@
         "summary": "Get orders of seller",
         "tags": [
           "Order"
+        ]
+      }
+    },
+    "/v1/seller/review/{sellerID}": {
+      "get": {
+        "description": "Get order reviews of seller",
+        "operationId": "get-review",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseReview"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Order Reviews of seller",
+        "tags": [
+          "Review"
+        ]
+      }
+    },
+    "/v1/seller/{id}": {
+      "get": {
+        "description": "Get seller by id",
+        "operationId": "get-seller-by-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithReview"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Seller by ID",
+        "tags": [
+          "User"
         ]
       }
     },

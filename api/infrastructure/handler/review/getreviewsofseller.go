@@ -2,14 +2,12 @@ package review
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
-	"shanepee.com/api/service"
 )
 
 type GetReviewsOfSellerInput struct {
@@ -24,16 +22,13 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "get-review",
 		Method:      http.MethodGet,
-		Path:        "/v1/seller/art-toy/review/{sellerID}",
-		Tags:        []string{"Art toy"},
-		Summary:     "Get Art Toy Reviews of seller",
-		Description: "Get art toy reviews of seller",
+		Path:        "/v1/seller/review/{sellerID}",
+		Tags:        []string{"Review"},
+		Summary:     "Get Order Reviews of seller",
+		Description: "Get order reviews of seller",
 	}, func(ctx context.Context, i *GetReviewsOfSellerInput) (*GetReviewsOfSellerOutput, error) {
 		data, err := h.reviewSvc.GetReviewsBySellerID(ctx, i.SellerID)
 		if err != nil {
-			if errors.Is(err, service.ErrReviewNotFound) {
-				return nil, handler.ErrReviewNotFound
-			}
 			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}

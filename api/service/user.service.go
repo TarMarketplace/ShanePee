@@ -8,6 +8,8 @@ import (
 
 type UserService interface {
 	UpdateUser(ctx context.Context, id int64, body map[string]any) error
+	GetSellers(ctx context.Context) ([]*domain.UserWithReview, error)
+	GetSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error)
 }
 
 func NewUserService(userRepo domain.UserRepository) UserService {
@@ -27,4 +29,20 @@ func (s *userServiceImpl) UpdateUser(ctx context.Context, id int64, body map[str
 		return err
 	}
 	return nil
+}
+
+func (s *userServiceImpl) GetSellers(ctx context.Context) ([]*domain.UserWithReview, error) {
+	sellers, err := s.userRepo.FindSellers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return sellers, nil
+}
+
+func (s *userServiceImpl) GetSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error) {
+	seller, err := s.userRepo.FindSellerByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return seller, nil
 }

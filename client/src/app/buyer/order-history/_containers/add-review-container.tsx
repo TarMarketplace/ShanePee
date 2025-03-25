@@ -4,7 +4,7 @@ import { Button } from '@/components/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover'
 import { Text } from '@/components/text'
 
-export default function AddReviewContainerl() {
+export default function AddReviewContainer() {
   return (
     <Popover>
       <PopoverTrigger asChild>

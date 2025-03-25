@@ -39,6 +39,14 @@ export type ArrayResponseReview = {
     data: Array<Review> | null;
 };
 
+export type ArrayResponseUserWithReview = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    data: Array<UserWithReview> | null;
+};
+
 export type ArtToy = {
     /**
      * A URL to the JSON Schema for this object.
@@ -255,9 +263,10 @@ export type Review = {
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
-    art_toy_id: number;
     comment: string;
+    created_at: string;
     id: number;
+    order_id: number;
     rating: number;
 };
 
@@ -270,21 +279,13 @@ export type ReviewCreateBody = {
     rating: number;
 };
 
-export type ReviewUpdateBody = {
-    /**
-     * A URL to the JSON Schema for this object.
-     */
-    readonly $schema?: string;
-    comment?: string;
-    rating?: number;
-};
-
 export type User = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
     address: Address;
+    created_at: string;
     email: string;
     first_name?: string;
     gender?: string;
@@ -307,6 +308,21 @@ export type UserUpdateBody = {
     payment_method?: PartialPaymentMethod;
     photo?: string;
     tel?: string;
+};
+
+export type UserWithReview = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    created_at: string;
+    first_name?: string;
+    id: number;
+    last_name?: string;
+    number_of_art_toys_sold: number;
+    number_of_reviews: number;
+    photo?: string;
+    rating: number;
 };
 
 export type GetArtToysData = {
@@ -358,114 +374,6 @@ export type CreateArtToyResponses = {
 };
 
 export type CreateArtToyResponse = CreateArtToyResponses[keyof CreateArtToyResponses];
-
-export type DeleteReviewData = {
-    body?: never;
-    path: {
-        artToyID: number;
-    };
-    query?: never;
-    url: '/v1/art-toy/review/{artToyID}';
-};
-
-export type DeleteReviewErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type DeleteReviewError = DeleteReviewErrors[keyof DeleteReviewErrors];
-
-export type DeleteReviewResponses = {
-    /**
-     * No Content
-     */
-    204: void;
-};
-
-export type DeleteReviewResponse = DeleteReviewResponses[keyof DeleteReviewResponses];
-
-export type GetReviewData = {
-    body?: never;
-    path: {
-        artToyID: number;
-    };
-    query?: never;
-    url: '/v1/art-toy/review/{artToyID}';
-};
-
-export type GetReviewErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type GetReviewError = GetReviewErrors[keyof GetReviewErrors];
-
-export type GetReviewResponses = {
-    /**
-     * OK
-     */
-    200: Review;
-};
-
-export type GetReviewResponse = GetReviewResponses[keyof GetReviewResponses];
-
-export type UpdateReviewData = {
-    body: ReviewUpdateBody;
-    path: {
-        artToyID: number;
-    };
-    query?: never;
-    url: '/v1/art-toy/review/{artToyID}';
-};
-
-export type UpdateReviewErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type UpdateReviewError = UpdateReviewErrors[keyof UpdateReviewErrors];
-
-export type UpdateReviewResponses = {
-    /**
-     * OK
-     */
-    200: Review;
-};
-
-export type UpdateReviewResponse = UpdateReviewResponses[keyof UpdateReviewResponses];
-
-export type CreateReviewData = {
-    body: ReviewCreateBody;
-    path: {
-        artToyID: number;
-    };
-    query?: never;
-    url: '/v1/art-toy/review/{artToyID}';
-};
-
-export type CreateReviewErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type CreateReviewError = CreateReviewErrors[keyof CreateReviewErrors];
-
-export type CreateReviewResponses = {
-    /**
-     * OK
-     */
-    200: Review;
-};
-
-export type CreateReviewResponse = CreateReviewResponses[keyof CreateReviewResponses];
 
 export type SearchArtToysData = {
     body?: never;
@@ -939,6 +847,31 @@ export type ClearItemsFromCartResponses = {
 
 export type ClearItemsFromCartResponse = ClearItemsFromCartResponses[keyof ClearItemsFromCartResponses];
 
+export type DebugCheckoutData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/cart/debug-checkout';
+};
+
+export type DebugCheckoutErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type DebugCheckoutError = DebugCheckoutErrors[keyof DebugCheckoutErrors];
+
+export type DebugCheckoutResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type DebugCheckoutResponse = DebugCheckoutResponses[keyof DebugCheckoutResponses];
+
 export type PaymentSuccessCallbackData = {
     body: Blob | File;
     headers?: {
@@ -1019,6 +952,33 @@ export type GetMyArtToysResponses = {
 
 export type GetMyArtToysResponse = GetMyArtToysResponses[keyof GetMyArtToysResponses];
 
+export type CreateReviewData = {
+    body: ReviewCreateBody;
+    path: {
+        orderID: number;
+    };
+    query?: never;
+    url: '/v1/order/{orderID}/review';
+};
+
+export type CreateReviewErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type CreateReviewError = CreateReviewErrors[keyof CreateReviewErrors];
+
+export type CreateReviewResponses = {
+    /**
+     * OK
+     */
+    200: Review;
+};
+
+export type CreateReviewResponse = CreateReviewResponses[keyof CreateReviewResponses];
+
 export type GetOrdersByStatusData = {
     body?: never;
     path: {
@@ -1046,32 +1006,30 @@ export type GetOrdersByStatusResponses = {
 
 export type GetOrdersByStatusResponse = GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses];
 
-export type GetReviewData = {
+export type GetSellersData = {
     body?: never;
-    path: {
-        sellerID: number;
-    };
+    path?: never;
     query?: never;
-    url: '/v1/seller/art-toy/review/{sellerID}';
+    url: '/v1/seller';
 };
 
-export type GetReviewErrors = {
+export type GetSellersErrors = {
     /**
      * Error
      */
     default: ErrorModel;
 };
 
-export type GetReviewError = GetReviewErrors[keyof GetReviewErrors];
+export type GetSellersError = GetSellersErrors[keyof GetSellersErrors];
 
-export type GetReviewResponses = {
+export type GetSellersResponses = {
     /**
      * OK
      */
-    200: ArrayResponseReview;
+    200: ArrayResponseUserWithReview;
 };
 
-export type GetReviewResponse = GetReviewResponses[keyof GetReviewResponses];
+export type GetSellersResponse = GetSellersResponses[keyof GetSellersResponses];
 
 export type UpdateOrderData = {
     body: OrderUpdateBody;
@@ -1153,6 +1111,60 @@ export type GetOrdersOfSellerResponses = {
 };
 
 export type GetOrdersOfSellerResponse = GetOrdersOfSellerResponses[keyof GetOrdersOfSellerResponses];
+
+export type GetReviewsOfSellerData = {
+    body?: never;
+    path: {
+        sellerID: number;
+    };
+    query?: never;
+    url: '/v1/seller/review/{sellerID}';
+};
+
+export type GetReviewsOfSellerErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetReviewsOfSellerError = GetReviewsOfSellerErrors[keyof GetReviewsOfSellerErrors];
+
+export type GetReviewsOfSellerResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseReview;
+};
+
+export type GetReviewsOfSellerResponse = GetReviewsOfSellerResponses[keyof GetReviewsOfSellerResponses];
+
+export type GetSellerByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/v1/seller/{id}';
+};
+
+export type GetSellerByIdErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetSellerByIdError = GetSellerByIdErrors[keyof GetSellerByIdErrors];
+
+export type GetSellerByIdResponses = {
+    /**
+     * OK
+     */
+    200: UserWithReview;
+};
+
+export type GetSellerByIdResponse = GetSellerByIdResponses[keyof GetSellerByIdResponses];
 
 export type GetArtToysOfSellerData = {
     body?: never;

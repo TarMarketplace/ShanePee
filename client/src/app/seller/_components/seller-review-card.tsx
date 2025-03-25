@@ -18,7 +18,7 @@ function SellerReviewCard({
   sellerName,
 }: SellerReviewCardProps) {
   return (
-    <div className='flex aspect-[250/320] size-full min-w-[200px] flex-col rounded-xl p-2 shadow'>
+    <div className='flex aspect-[250/140] size-full min-w-[180px] flex-col rounded-xl p-2 shadow md:aspect-[250/320]'>
       <div className='flex h-10 w-full items-center gap-2 p-1'>
         <Avatar className='size-8'>
           <AvatarImage src={photo} alt={sellerName} />

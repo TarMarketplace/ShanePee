@@ -55,11 +55,16 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWithReview, error) {
 	var users []*domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(order_items.id) AS number_of_art_toys_sold, COUNT(art_toys.id) AS total_art_toys").
+		Select(`*,
+			users.id AS id,
+			users.photo AS photo,
+			COALESCE(AVG(DISTINCT reviews.rating), 0) AS rating,
+			COUNT(DISTINCT reviews.id) AS number_of_reviews,
+			COUNT(DISTINCT CASE WHEN art_toys.availability = false THEN art_toys.id END) AS number_of_art_toys_sold,
+			COUNT(DISTINCT CASE WHEN art_toys.availability = true THEN art_toys.id END) AS total_art_toys_remaining`).
+		Joins("JOIN art_toys ON art_toys.owner_id = users.id").
 		Joins("LEFT JOIN orders ON orders.seller_id = users.id").
-		Joins("LEFT JOIN order_items ON order_items.order_id = orders.id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
-		Joins("LEFT JOIN art_toys ON art_toys.owner_id = users.id").
 		Group("users.id").
 		Find(&users).Error
 	if err != nil {
@@ -71,9 +76,15 @@ func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWit
 func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error) {
 	var user *domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(order_items.id) AS number_of_art_toys_sold").
+		Select(`*,
+			users.id AS id,
+			users.photo AS photo,
+			COALESCE(AVG(DISTINCT reviews.rating), 0) AS rating,
+			COUNT(DISTINCT reviews.id) AS number_of_reviews,
+			COUNT(DISTINCT CASE WHEN art_toys.availability = false THEN art_toys.id END) AS number_of_art_toys_sold,
+			COUNT(DISTINCT CASE WHEN art_toys.availability = true THEN art_toys.id END) AS total_art_toys_remaining`).
+		Joins("JOIN art_toys ON art_toys.owner_id = users.id").
 		Joins("LEFT JOIN orders ON orders.seller_id = users.id").
-		Joins("LEFT JOIN order_items ON order_items.order_id = orders.id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 		Group("users.id").
 		Take(&user, id).Error

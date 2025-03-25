@@ -1206,7 +1206,7 @@
             "format": "double",
             "type": "number"
           },
-          "total_art_toys": {
+          "total_art_toys_remaining": {
             "examples": [
               52
             ],
@@ -1219,7 +1219,7 @@
           "rating",
           "number_of_reviews",
           "number_of_art_toys_sold",
-          "total_art_toys",
+          "total_art_toys_remaining",
           "created_at"
         ],
         "type": "object"
@@ -1786,6 +1786,58 @@
         ]
       }
     },
+    "/v1/buyer/order": {
+      "get": {
+        "description": "Get orders of buyer",
+        "operationId": "get-orders-of-buyer",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "PREPARING",
+                "DELIVERING",
+                "COMPLETED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of buyer",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/buyer/order/{id}/complete": {
       "patch": {
         "description": "Update status to completed of an order by buyer",
@@ -1877,58 +1929,6 @@
           }
         ],
         "summary": "Get order detail of buyer",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
-    "/v1/buyer/orders": {
-      "get": {
-        "description": "Get orders of buyer",
-        "operationId": "get-orders-of-buyer",
-        "parameters": [
-          {
-            "explode": false,
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get orders of buyer",
         "tags": [
           "Order"
         ]
@@ -2385,6 +2385,58 @@
         ]
       }
     },
+    "/v1/seller/order": {
+      "get": {
+        "description": "Get orders of seller",
+        "operationId": "get-orders-of-seller",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "PREPARING",
+                "DELIVERING",
+                "COMPLETED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of seller",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/seller/order/{id}": {
       "patch": {
         "description": "Update tracking number, delivery service, status of an order by seller",
@@ -2486,58 +2538,6 @@
           }
         ],
         "summary": "Get order detail of seller",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
-    "/v1/seller/orders": {
-      "get": {
-        "description": "Get orders of seller",
-        "operationId": "get-orders-of-seller",
-        "parameters": [
-          {
-            "explode": false,
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get orders of seller",
         "tags": [
           "Order"
         ]

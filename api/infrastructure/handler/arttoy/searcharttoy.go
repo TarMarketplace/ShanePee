@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
@@ -52,9 +53,10 @@ func (h *ArtToyHandler) RegisterSearchArtToys(api huma.API) {
 			SortKey: sortKey,
 			Reverse: i.Reverse,
 		}
-		
+
 		data, err := h.artToySvc.GetArtToysBySearchParams(ctx, searchParams)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &SearchArtToysOutput{

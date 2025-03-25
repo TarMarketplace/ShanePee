@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 )
 
@@ -36,7 +37,7 @@ type PartialAddress struct {
 	Postcode *string `json:"postcode,omitempty" example:"10330"`
 }
 
-func (h *UserHandler) UpdateUser(api huma.API) {
+func (h *UserHandler) RegisterUpdateUser(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "update-user",
 		Method:      http.MethodPatch,
@@ -56,6 +57,7 @@ func (h *UserHandler) UpdateUser(api huma.API) {
 		updateBody := i.Body.IntoMap()
 		err := h.userSvc.UpdateUser(ctx, *userID, updateBody)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/domain"
 	"shanepee.com/api/infrastructure/handler"
 )
@@ -31,6 +32,7 @@ func (h *ArtToyHandler) RegisterGetArtToysOfSeller(api huma.API) {
 	}, func(ctx context.Context, i *GetArtToysOfSellerInput) (*GetArtToysOfSellerOutput, error) {
 		data, err := h.artToySvc.GetArtToysByOwnerID(ctx, i.ID)
 		if err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetArtToysOfSellerOutput{

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 	"shanepee.com/api/service"
 )
@@ -38,6 +39,7 @@ func (h *CartHandler) RegisterRemoveItemFromCart(api huma.API) {
 			if errors.Is(err, service.ErrCartItemNotBelongToOwner) {
 				return nil, handler.ErrCartItemNotBelongToOwner
 			}
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

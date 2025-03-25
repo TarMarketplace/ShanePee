@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
+	"github.com/sirupsen/logrus"
 	"shanepee.com/api/infrastructure/handler"
 )
 
@@ -26,6 +27,7 @@ func (h *AuthHandler) RegisterCreatePasswordResetRequests(api huma.API) {
 		Description: "Initiates a password reset process by sending an email with reset instructions",
 	}, func(ctx context.Context, i *CreateRequestPasswordResetInput) (*struct{}, error) {
 		if err := h.authSvc.RequestPasswordReset(ctx, i.Body.Email); err != nil {
+			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return nil, nil

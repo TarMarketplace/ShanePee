@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type UserType string
 
 const (
@@ -18,6 +20,18 @@ type User struct {
 	Address       Address       `gorm:"embedded" json:"address"`
 	PaymentMethod PaymentMethod `gorm:"embedded" json:"payment_method"`
 	Photo         *string       `json:"photo,omitempty" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
+	CreatedAt     time.Time     `json:"created_at" gorm:"not null" example:"2021-01-01T00:00:00Z"`
+}
+
+type UserWithReview struct {
+	ID                  int64     `json:"id" gorm:"primaryKey" example:"97"`
+	FirstName           *string   `json:"first_name,omitempty" example:"John"`
+	LastName            *string   `json:"last_name,omitempty" example:"Doe"`
+	Photo               *string   `json:"photo,omitempty" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
+	Rating              float64   `json:"rating" example:"4.5"`
+	NumberOfReviews     int       `json:"number_of_reviews" example:"52"`
+	NumberOfArtToysSold int       `json:"number_of_art_toys_sold" example:"52"`
+	CreatedAt           time.Time `json:"created_at" gorm:"not null" example:"2021-01-01T00:00:00Z"`
 }
 
 type Address struct {
@@ -39,5 +53,6 @@ func NewUser(email string, passwordHash string) *User {
 		ID:           GenID(),
 		Email:        email,
 		PasswordHash: passwordHash,
+		CreatedAt:    time.Now(),
 	}
 }

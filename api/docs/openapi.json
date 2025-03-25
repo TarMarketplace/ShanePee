@@ -85,6 +85,33 @@
         ],
         "type": "object"
       },
+      "ArrayResponseChat": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseChat.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/Chat"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ArrayResponseOrder": {
         "additionalProperties": false,
         "properties": {
@@ -391,6 +418,159 @@
         "required": [
           "old_password",
           "new_password"
+        ],
+        "type": "object"
+      },
+      "Chat": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/Chat.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "buyer_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "created_at": {
+            "examples": [
+              "2021-08-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "message": {
+            "examples": [
+              "Hello world"
+            ],
+            "type": "string"
+          },
+          "seller_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "sender": {
+            "enum": [
+              "BUYER",
+              "SELLER"
+            ],
+            "examples": [
+              "BUYER"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "buyer_id",
+          "seller_id",
+          "sender",
+          "message",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "ChatSentByBuyerCreateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ChatSentByBuyerCreateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "message": {
+            "examples": [
+              "Hello world"
+            ],
+            "type": "string"
+          },
+          "seller_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "sender": {
+            "enum": [
+              "BUYER",
+              "SELLER"
+            ],
+            "examples": [
+              "SELLER"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "seller_id",
+          "sender",
+          "message"
+        ],
+        "type": "object"
+      },
+      "ChatSentBySellerCreateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ChatSentBySellerCreateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "buyer_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "message": {
+            "examples": [
+              "Hello world"
+            ],
+            "type": "string"
+          },
+          "sender": {
+            "enum": [
+              "BUYER",
+              "SELLER"
+            ],
+            "examples": [
+              "SELLER"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "buyer_id",
+          "sender",
+          "message"
         ],
         "type": "object"
       },
@@ -1820,6 +2000,133 @@
         ]
       }
     },
+    "/v1/buyer/chat": {
+      "post": {
+        "description": "Send message by buyer",
+        "operationId": "send-message-by-buyer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatSentByBuyerCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Send Message By Buyer",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/v1/buyer/chat/poll": {
+      "get": {
+        "description": "Poll message by buyer",
+        "operationId": "poll-message-by-buyer",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Poll Message By Buyer",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/v1/buyer/chat/{sellerID}": {
+      "get": {
+        "description": "Get chat detail by buyer",
+        "operationId": "get-chat-detail-by-buyer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseChat"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Chat Detail By Buyer",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
     "/v1/buyer/order/{id}/complete": {
       "patch": {
         "description": "Update status to completed of an order by buyer",
@@ -2281,6 +2588,90 @@
         "summary": "Get Art Toy Reviews of seller",
         "tags": [
           "Art toy"
+        ]
+      }
+    },
+    "/v1/seller/chat": {
+      "post": {
+        "description": "Send message by seller",
+        "operationId": "send-message-by-seller",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatSentBySellerCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Send Message By Seller",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/v1/seller/chat/poll": {
+      "get": {
+        "description": "Poll message by seller",
+        "operationId": "poll-message-by-seller",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Poll Message By Seller",
+        "tags": [
+          "Chat"
         ]
       }
     },

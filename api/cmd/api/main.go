@@ -103,6 +103,12 @@ func main() {
 	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
+	app.chatHdr.RegisterGetChatDetailByBuyer(api)
+	app.chatHdr.RegisterSendMessageByBuyer(api)
+	app.chatHdr.RegisterSendMessageBySeller(api)
+	app.chatHdr.RegisterPollMessageByBuyer(api)
+	app.chatHdr.RegisterPollMessageBySeller(api)
+
 	flag.Parse()
 
 	if cmd == nil {

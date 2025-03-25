@@ -30,7 +30,7 @@ func (r *reviewRepositoryImpl) CreateReview(ctx context.Context, review *domain.
 
 func (r *reviewRepositoryImpl) FindReviewsBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error) {
 	var reviews []*domain.Review
-	err := r.db.Table("reviews").
+	err := r.db.Model(&domain.Review{}).
 		Joins("JOIN orders ON orders.id = reviews.order_id").
 		Where("orders.seller_id = ?", sellerID).
 		Find(&reviews).Error

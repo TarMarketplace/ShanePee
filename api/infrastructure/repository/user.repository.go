@@ -82,17 +82,15 @@ func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*dom
 		return nil, err
 	}
 
-	var totalArtToys int
-	err = u.db.Table("art_toys").
-		Select("COUNT(art_toys.id)").
+	var totalArtToys int64
+	err = u.db.Model(&domain.ArtToy{}).
 		Where("art_toys.owner_id = ?", id).
-		Group("art_toys.owner_id").
-		Scan(&totalArtToys).Error
+		Count(&totalArtToys).Error
 	if err != nil {
 		return nil, err
 	}
 
-	user.TotalArtToys = totalArtToys
+	user.TotalArtToys = int(totalArtToys)
 	return user, nil
 }
 

@@ -25,12 +25,12 @@ type SendMessageByBuyerOutput struct {
 
 func (h *ChatHandler) RegisterSendMessageByBuyer(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "send-message-by-seller",
+		OperationID: "send-message-by-buyer",
 		Method:      http.MethodPost,
-		Path:        "/v1/seller/chat",
+		Path:        "/v1/buyer/chat",
 		Tags:        []string{"Chat"},
 		Summary:     "Send Message By Buyer",
-		Description: "Send message by seller",
+		Description: "Send message by buyer",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},

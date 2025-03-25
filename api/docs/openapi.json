@@ -2311,38 +2311,8 @@
     },
     "/v1/seller": {
       "get": {
-<<<<<<< HEAD
         "description": "Get sellers",
         "operationId": "get-sellers",
-||||||| parent of 92ad948 (feat: stripe)
-        "description": "Get art toy reviews of seller",
-        "operationId": "get-review",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sellerID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-=======
-        "description": "Get art toy reviews of seller",
-        "operationId": "get-reviews-of-seller",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sellerID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
->>>>>>> 92ad948 (feat: stripe)
         "responses": {
           "200": {
             "content": {
@@ -2532,7 +2502,7 @@
     "/v1/seller/review/{sellerID}": {
       "get": {
         "description": "Get order reviews of seller",
-        "operationId": "get-review",
+        "operationId": "get-reviews-of-seller",
         "parameters": [
           {
             "in": "path",

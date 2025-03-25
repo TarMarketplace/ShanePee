@@ -119,8 +119,8 @@ func (s *stripeServiceImpl) PaymentSuccessCallback(ctx context.Context, body []b
 			logrus.Warnf("Error parsing user ID: %v", err)
 			return nil
 		}
-		s.cartSvc.Checkout(ctx, int64(v))
-		return nil
+		err = s.cartSvc.Checkout(ctx, int64(v))
+		return err
 	}
 
 	logrus.Warn("Invalid event type")

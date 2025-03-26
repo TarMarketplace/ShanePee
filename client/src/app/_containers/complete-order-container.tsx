@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover'
 
 import { type Order, completeOrder } from '@/generated/api'
 
-import CompleteOrderModal from '../_components/complete-order-modal'
+import CompleteOrderModal from '../../components/complete-order-modal'
 
 interface CompleteOrderContainerProps {
   order: Order

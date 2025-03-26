@@ -1,10 +1,12 @@
+import Link from 'next/link'
+
 import { Button } from '@/components/button'
 import { Text } from '@/components/text'
 
+import AddReviewContainer from '@/app/_containers/add-review-container'
 import { type Order } from '@/generated/api'
 
-import AddReviewContainer from './add-review-container'
-import CompleteOrderContainer from './complete-order-container'
+import CompleteOrderContainer from '../../../_containers/complete-order-container'
 
 interface OrderCardFooterProps {
   order: Order
@@ -29,9 +31,11 @@ export default function OrderCardFooter({ order }: OrderCardFooterProps) {
         ) : order.status === 'DELIVERING' ? (
           <CompleteOrderContainer order={order} />
         ) : null}
-        <Button variant='outline' colorVariant='outline'>
-          รายละเอียด
-        </Button>
+        <Link href={`/buyer/order-detail/${order.id}`}>
+          <Button variant='outline' colorVariant='outline'>
+            รายละเอียด
+          </Button>
+        </Link>
       </div>
     </div>
   )

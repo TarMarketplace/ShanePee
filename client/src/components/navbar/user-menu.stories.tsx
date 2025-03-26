@@ -41,6 +41,7 @@ export const Default: Story = {
         expire_date: undefined,
       },
       photo: undefined,
+      created_at: '2021-10-01T00:00:00Z',
     },
   },
   render: ({ user, onLogout }) => (

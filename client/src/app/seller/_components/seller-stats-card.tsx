@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { AvatarImage } from '@radix-ui/react-avatar'
+import { useMemo } from 'react'
 
 import { Avatar, AvatarFallback } from '@/components/avatar'
 import { Button } from '@/components/button'
@@ -12,24 +13,30 @@ export interface SellerStatsCardProps {
   isSeller: boolean
 }
 
-function SellerStatsCard({ stats, isSeller }: SellerStatsCardProps) {
-  const joined_for = Math.floor(
-    (new Date().getTime() - new Date(stats.created_at).getTime()) /
-      (1000 * 60 * 60 * 24)
-  )
-  const sellerName = stats.first_name + ' ' + stats.last_name
+export function SellerStatsCard({ stats, isSeller }: SellerStatsCardProps) {
+  const joined_for = useMemo(() => {
+    return Math.floor(
+      (new Date().getTime() - new Date(stats.created_at).getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
+  }, [stats.created_at])
 
   return (
     <div className='grid grid-cols-1 items-center justify-center gap-1 md:grid-cols-3 md:gap-6'>
       <div className='flex size-full items-center gap-2 rounded-md border border-grey-50 bg-grey-50 p-4 shadow'>
         <Avatar className='size-20'>
-          <AvatarImage src={stats.photo} alt={sellerName} />
+          <AvatarImage
+            src={stats.photo}
+            alt={stats.first_name + ' ' + stats.last_name}
+          />
           <AvatarFallback>
             {stats?.first_name?.[0]?.toUpperCase()}
             {stats?.last_name?.[0]?.toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <Text variant='lg-semibold'>{sellerName}</Text>
+        <Text variant='lg-semibold'>
+          {stats.first_name} {stats.last_name}
+        </Text>
       </div>
       <div className='flex h-full flex-col justify-between gap-1 pt-4 md:p-1 md:pt-0'>
         <span className='flex items-center gap-2'>
@@ -83,5 +90,3 @@ function SellerStatsCard({ stats, isSeller }: SellerStatsCardProps) {
     </div>
   )
 }
-
-export { SellerStatsCard }

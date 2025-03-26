@@ -9,7 +9,9 @@ export interface SellerProductCardDesktopProps {
   product: ArtToy
 }
 
-function SellerProductCardDesktop({ product }: SellerProductCardDesktopProps) {
+export function SellerProductCardDesktop({
+  product,
+}: SellerProductCardDesktopProps) {
   const formattedDate = useMemo(() => {
     const date = new Date(product.release_date)
     return `${date.getDate()}-${date.getMonth()}-${date.getFullYear() + 543}`
@@ -48,5 +50,3 @@ function SellerProductCardDesktop({ product }: SellerProductCardDesktopProps) {
     </div>
   )
 }
-
-export { SellerProductCardDesktop }

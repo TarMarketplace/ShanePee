@@ -12,7 +12,7 @@ export interface SellerReviewCardProps {
   sellerName: string
 }
 
-function SellerReviewCard({
+export function SellerReviewCard({
   review,
   photo,
   sellerName,
@@ -22,7 +22,7 @@ function SellerReviewCard({
       <div className='flex h-10 w-full items-center gap-2 p-1'>
         <Avatar className='size-8'>
           <AvatarImage src={photo} alt={sellerName} />
-          <AvatarFallback>JD</AvatarFallback>
+          <AvatarFallback>{sellerName}</AvatarFallback>
         </Avatar>
         <div className='w-full'>{sellerName}</div>
       </div>
@@ -60,5 +60,3 @@ function SellerReviewCard({
     </div>
   )
 }
-
-export { SellerReviewCard }

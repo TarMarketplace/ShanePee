@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
-import type { ArrayResponseReview } from '@/generated/api'
+import type { Review } from '@/generated/api'
 import { getReview } from '@/generated/api'
 
 import { SellerReviewCard } from '../_components/seller-review-card'
@@ -18,9 +18,7 @@ type SellerAllReviewContainerProps = {
 export function SellerAllReviewContainer({
   sellerId,
 }: SellerAllReviewContainerProps) {
-  const [reviews, setReviews] = useState<ArrayResponseReview>({
-    data: [],
-  })
+  const [reviews, setReviews] = useState<Review[]>([])
 
   useEffect(() => {
     getReview({
@@ -29,10 +27,11 @@ export function SellerAllReviewContainer({
       },
     })
       .then((response) => {
-        if (response?.data) {
-          setReviews(response.data)
+        if (Array.isArray(response.data?.data)) {
+          setReviews(response.data.data)
         } else {
-          toast.error('Something went wrong')
+          setReviews([])
+          toast.error('No reviews found')
         }
       })
       .catch(() => {
@@ -51,7 +50,7 @@ export function SellerAllReviewContainer({
         </div>
       </div>
       <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
-        {reviews.data?.map((review) => {
+        {reviews.map((review) => {
           return (
             <SellerReviewCard
               key={review.id}

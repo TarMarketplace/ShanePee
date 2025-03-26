@@ -107,9 +107,9 @@ func main() {
 	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
-	app.chatHdr.RegisterGetChatDetail(api)
+	app.chatHdr.RegisterGetChatList(api)
 	app.chatHdr.RegisterSendMessage(api)
-	app.chatHdr.RegisterPollMessage(api)
+	app.chatHdr.RegisterGetChatMessage(api)
 
 	flag.Parse()
 

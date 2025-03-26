@@ -53,7 +53,7 @@ func InitializeApp() (App, error) {
 	orderService := service.NewOrderService(orderRepository)
 	orderHandler := order.NewHandler(orderService)
 	chatRepository := repository.NewChatRepository(db)
-	chatService := service.NewChatService(chatRepository)
+	chatService := service.NewChatService(chatRepository, userRepository)
 	chatHandler := chat.NewHandler(chatService)
 	store := session.NewStore(configConfig, options, db)
 	app := NewApp(authHandler, userHandler, artToyHandler, reviewHandler, cartHandler, orderHandler, chatHandler, configConfig, store)

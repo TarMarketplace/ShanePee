@@ -12,28 +12,29 @@ import (
 	"shanepee.com/api/service"
 )
 
-type PollMessageInput struct {
+type GetChatMessageInput struct {
 	UserID int64           `path:"userID"`
 	As     domain.UserType `query:"as"`
 	ChatID int64           `query:"chatID"`
+	Poll   bool            `query:"poll"`
 }
 
-type PollMessageOutput struct {
+type GetChatMessageOutput struct {
 	Body handler.ArrayResponse[domain.ChatMessage]
 }
 
-func (h *ChatHandler) RegisterPollMessage(api huma.API) {
+func (h *ChatHandler) RegisterGetChatMessage(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "poll-message",
+		OperationID: "get-chat-message",
 		Method:      http.MethodGet,
-		Path:        "/v1/chat/poll/{userID}",
+		Path:        "/v1/chat/{userID}",
 		Tags:        []string{"Chat"},
-		Summary:     "Poll Message",
-		Description: "Poll message. In the chat as a seller or a buyer with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
+		Summary:     "Get Chat Message",
+		Description: "Get chat message. In the chat as a seller or a buyer with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
-	}, func(ctx context.Context, i *PollMessageInput) (*PollMessageOutput, error) {
+	}, func(ctx context.Context, i *GetChatMessageInput) (*GetChatMessageOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
@@ -43,9 +44,9 @@ func (h *ChatHandler) RegisterPollMessage(api huma.API) {
 		var err error
 
 		if i.As == domain.Seller {
-			data, err = h.chatSvc.PollMessageBySeller(ctx, i.UserID, *userID, i.ChatID)
+			data, err = h.chatSvc.GetChatMessageBySeller(ctx, i.UserID, *userID, i.ChatID, i.Poll)
 		} else {
-			data, err = h.chatSvc.PollMessageByBuyer(ctx, *userID, i.UserID, i.ChatID)
+			data, err = h.chatSvc.GetChatMessageByBuyer(ctx, *userID, i.UserID, i.ChatID, i.Poll)
 		}
 
 		if err != nil {
@@ -58,7 +59,7 @@ func (h *ChatHandler) RegisterPollMessage(api huma.API) {
 			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
-		return &PollMessageOutput{
+		return &GetChatMessageOutput{
 			Body: handler.ArrayResponse[domain.ChatMessage]{
 				Data: data,
 			},

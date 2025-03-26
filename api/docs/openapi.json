@@ -85,6 +85,33 @@
         ],
         "type": "object"
       },
+      "ArrayResponseChatList": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ArrayResponseChatList.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ChatList"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ArrayResponseChatMessage": {
         "additionalProperties": false,
         "properties": {
@@ -450,6 +477,74 @@
         "required": [
           "old_password",
           "new_password"
+        ],
+        "type": "object"
+      },
+      "ChatList": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "last_chat_message": {
+            "examples": [
+              "Hello world"
+            ],
+            "type": "string"
+          },
+          "last_chat_time": {
+            "examples": [
+              "2021-08-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "target_first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": "string"
+          },
+          "target_id": {
+            "examples": [
+              97
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "target_last_name": {
+            "examples": [
+              "Doe"
+            ],
+            "type": "string"
+          },
+          "target_photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "target_type": {
+            "enum": [
+              "BUYER",
+              "SELLER"
+            ],
+            "examples": [
+              "BUYER"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "target_id",
+          "target_type",
+          "last_chat_message",
+          "last_chat_time"
         ],
         "type": "object"
       },
@@ -2340,71 +2435,6 @@
         ]
       }
     },
-    "/v1/chat/poll/{userID}": {
-      "get": {
-        "description": "Poll message. In the chat as a seller or a buyer with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
-        "operationId": "poll-message",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "required": true,
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          },
-          {
-            "explode": false,
-            "in": "query",
-            "name": "as",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "explode": false,
-            "in": "query",
-            "name": "chatID",
-            "schema": {
-              "format": "int64",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseChatMessage"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Poll Message",
-        "tags": [
-          "Chat"
-        ]
-      }
-    },
     "/v1/chat/send/{userID}": {
       "post": {
         "description": "Send new message by a buyer or a seller to the user id",
@@ -2465,8 +2495,8 @@
     },
     "/v1/chat/{userID}": {
       "get": {
-        "description": "Get chat detail as a buyer or a seller with the user id",
-        "operationId": "get-chat-detail-by-buyer",
+        "description": "Get chat message. In the chat as a seller or a buyer with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
+        "operationId": "get-chat-message",
         "parameters": [
           {
             "in": "path",
@@ -2483,6 +2513,23 @@
             "name": "as",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "chatID",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "poll",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -2508,7 +2555,63 @@
             "description": "Error"
           }
         },
-        "summary": "Get Chat Detail",
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get Chat Message",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/v1/chatlist": {
+      "get": {
+        "description": "Get chat list",
+        "operationId": "get-chat-list",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "chatID",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "poll",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseChatList"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get Chat List",
         "tags": [
           "Chat"
         ]

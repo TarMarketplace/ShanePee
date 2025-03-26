@@ -15,8 +15,8 @@ var (
 
 type ChatService interface {
 	GetChatDetail(ctx context.Context, buyerID int64, sellerID int64) ([]*domain.ChatMessage, error)
-	SendMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, message string) (*domain.ChatMessage, error)
-	SendMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, message string) (*domain.ChatMessage, error)
+	SendMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error)
+	SendMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error)
 	PollMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, chatID int64) ([]*domain.ChatMessage, error)
 	PollMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, chatID int64) ([]*domain.ChatMessage, error)
 }
@@ -46,8 +46,8 @@ func (s *chatServiceImpl) GetChatDetail(ctx context.Context, buyerID int64, sell
 	return chats, err
 }
 
-func (s *chatServiceImpl) SendMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, message string) (*domain.ChatMessage, error) {
-	chat := domain.NewChatMessage(buyerID, sellerID, sender, message)
+func (s *chatServiceImpl) SendMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error) {
+	chat := domain.NewChatMessage(buyerID, sellerID, sender, content)
 	if err := s.chatRepo.CreateChat(ctx, chat); err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (s *chatServiceImpl) SendMessageByBuyer(ctx context.Context, buyerID int64,
 	return chat, nil
 }
 
-func (s *chatServiceImpl) SendMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, message string) (*domain.ChatMessage, error) {
-	chat := domain.NewChatMessage(buyerID, sellerID, sender, message)
+func (s *chatServiceImpl) SendMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error) {
+	chat := domain.NewChatMessage(buyerID, sellerID, sender, content)
 	if err := s.chatRepo.CreateChat(ctx, chat); err != nil {
 		return nil, err
 	}

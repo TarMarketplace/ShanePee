@@ -11,6 +11,14 @@ type Review struct {
 	Order     Order     `json:"-" gorm:"foreignKey:OrderID;constraint:OnDelete:CASCADE;"`
 }
 
+type ReviewWithTruncatedBuyer struct {
+	Rating                  int     `json:"rating" example:"5"`
+	Comment                 string  `json:"comment" example:"This is a great art toy"`
+	BuyerTruncatedFirstName *string `json:"buyer_truncated_first_name,omitempty" example:"John"`
+	BuyerTruncatedLastName  *string `json:"buyer_truncated_last_name,omitempty" example:"Doe"`
+	BuyerPhoto              *string `json:"buyer_photo,omitempty" example:"data:image/png;base64,mfkirjIDSFIj324if..."`
+}
+
 func NewReview(rating int, comment string, orderID int64) *Review {
 	return &Review{
 		ID:        GenID(),

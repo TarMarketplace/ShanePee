@@ -55,10 +55,34 @@ func (u *userRepositoryImpl) FindUserByID(ctx context.Context, id int64) (*domai
 func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWithReview, error) {
 	var users []*domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(reviews.id) AS number_of_reviews").
-		Joins("LEFT JOIN orders ON orders.seller_id = users.id").
-		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
-		Group("users.id").
+		Select(`
+			*,
+			users.id, 
+			users.photo,
+			COALESCE(reviews_data.rating, 0) AS rating,
+			COALESCE(reviews_data.number_of_reviews, 0) AS number_of_reviews,
+			COALESCE(art_toys_data.number_of_art_toys_sold, 0) AS number_of_art_toys_sold,
+			COALESCE(art_toys_data.total_art_toys_remaining, 0) AS total_art_toys_remaining
+		`).
+		Joins(`
+			LEFT JOIN (
+				SELECT owner_id, 
+				COUNT(CASE WHEN availability = false THEN id END) AS number_of_art_toys_sold,
+				COUNT(CASE WHEN availability = true THEN id END) AS total_art_toys_remaining
+				FROM art_toys
+				GROUP BY owner_id
+			) AS art_toys_data ON art_toys_data.owner_id = users.id
+		`).
+		Joins(`
+			LEFT JOIN (
+				SELECT orders.seller_id,
+				AVG(reviews.rating) AS rating,
+				COUNT(reviews.id) AS number_of_reviews
+				FROM reviews
+				JOIN orders ON reviews.order_id = orders.id
+				GROUP BY orders.seller_id
+			) AS reviews_data ON reviews_data.seller_id = users.id
+		`).
 		Find(&users).Error
 	if err != nil {
 		return nil, err
@@ -69,11 +93,34 @@ func (u *userRepositoryImpl) FindSellers(ctx context.Context) ([]*domain.UserWit
 func (u *userRepositoryImpl) FindSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error) {
 	var user *domain.UserWithReview
 	err := u.db.Model(&domain.User{}).
-		Select("*, users.id AS id, users.photo AS photo, COALESCE(AVG(reviews.rating), 0) AS rating, COUNT(DISTINCT reviews.id) AS number_of_reviews, COUNT(order_items.id) AS number_of_art_toys_sold").
-		Joins("LEFT JOIN orders ON orders.seller_id = users.id").
-		Joins("LEFT JOIN order_items ON order_items.order_id = orders.id").
-		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
-		Group("users.id").
+		Select(`
+			*,
+			users.id, 
+			users.photo,
+			COALESCE(reviews_data.rating, 0) AS rating,
+			COALESCE(reviews_data.number_of_reviews, 0) AS number_of_reviews,
+			COALESCE(art_toys_data.number_of_art_toys_sold, 0) AS number_of_art_toys_sold,
+			COALESCE(art_toys_data.total_art_toys_remaining, 0) AS total_art_toys_remaining
+		`).
+		Joins(`
+			LEFT JOIN (
+				SELECT owner_id, 
+				COUNT(CASE WHEN availability = false THEN id END) AS number_of_art_toys_sold,
+				COUNT(CASE WHEN availability = true THEN id END) AS total_art_toys_remaining
+				FROM art_toys
+				GROUP BY owner_id
+			) AS art_toys_data ON art_toys_data.owner_id = users.id
+		`).
+		Joins(`
+			LEFT JOIN (
+				SELECT orders.seller_id,
+				AVG(reviews.rating) AS rating,
+				COUNT(reviews.id) AS number_of_reviews
+				FROM reviews
+				JOIN orders ON reviews.order_id = orders.id
+				GROUP BY orders.seller_id
+			) AS reviews_data ON reviews_data.seller_id = users.id
+		`).
 		Take(&user, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

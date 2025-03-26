@@ -139,13 +139,13 @@
         ],
         "type": "object"
       },
-      "ArrayResponseReview": {
+      "ArrayResponseReviewWithTruncatedBuyer": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "https://example.com/schemas/ArrayResponseReview.json"
+              "https://example.com/schemas/ArrayResponseReviewWithTruncatedBuyer.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -153,7 +153,7 @@
           },
           "data": {
             "items": {
-              "$ref": "#/components/schemas/Review"
+              "$ref": "#/components/schemas/ReviewWithTruncatedBuyer"
             },
             "type": [
               "array",
@@ -1100,6 +1100,47 @@
         ],
         "type": "object"
       },
+      "ReviewWithTruncatedBuyer": {
+        "additionalProperties": false,
+        "properties": {
+          "buyer_photo": {
+            "examples": [
+              "data:image/png;base64,mfkirjIDSFIj324if..."
+            ],
+            "type": "string"
+          },
+          "buyer_truncated_first_name": {
+            "examples": [
+              "John"
+            ],
+            "type": "string"
+          },
+          "buyer_truncated_last_name": {
+            "examples": [
+              "Doe"
+            ],
+            "type": "string"
+          },
+          "comment": {
+            "examples": [
+              "This is a great art toy"
+            ],
+            "type": "string"
+          },
+          "rating": {
+            "examples": [
+              5
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rating",
+          "comment"
+        ],
+        "type": "object"
+      },
       "User": {
         "additionalProperties": false,
         "properties": {
@@ -1298,6 +1339,13 @@
             ],
             "format": "double",
             "type": "number"
+          },
+          "total_art_toys_remaining": {
+            "examples": [
+              52
+            ],
+            "format": "int64",
+            "type": "integer"
           }
         },
         "required": [
@@ -1305,6 +1353,7 @@
           "rating",
           "number_of_reviews",
           "number_of_art_toys_sold",
+          "total_art_toys_remaining",
           "created_at"
         ],
         "type": "object"
@@ -1871,6 +1920,58 @@
         ]
       }
     },
+    "/v1/buyer/order": {
+      "get": {
+        "description": "Get orders of buyer",
+        "operationId": "get-orders-of-buyer",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "PREPARING",
+                "DELIVERING",
+                "COMPLETED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of buyer",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/buyer/order/{id}/complete": {
       "patch": {
         "description": "Update status to completed of an order by buyer",
@@ -1962,58 +2063,6 @@
           }
         ],
         "summary": "Get order detail of buyer",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
-    "/v1/buyer/orders": {
-      "get": {
-        "description": "Get orders of buyer",
-        "operationId": "get-orders-of-buyer",
-        "parameters": [
-          {
-            "explode": false,
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get orders of buyer",
         "tags": [
           "Order"
         ]
@@ -2644,6 +2693,58 @@
         ]
       }
     },
+    "/v1/seller/order": {
+      "get": {
+        "description": "Get orders of seller",
+        "operationId": "get-orders-of-seller",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "PREPARING",
+                "DELIVERING",
+                "COMPLETED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayResponseOrder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Get orders of seller",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/v1/seller/order/{id}": {
       "patch": {
         "description": "Update tracking number, delivery service, status of an order by seller",
@@ -2750,58 +2851,6 @@
         ]
       }
     },
-    "/v1/seller/orders": {
-      "get": {
-        "description": "Get orders of seller",
-        "operationId": "get-orders-of-seller",
-        "parameters": [
-          {
-            "explode": false,
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get orders of seller",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
     "/v1/seller/review/{sellerID}": {
       "get": {
         "description": "Get order reviews of seller",
@@ -2822,7 +2871,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseReview"
+                  "$ref": "#/components/schemas/ArrayResponseReviewWithTruncatedBuyer"
                 }
               }
             },

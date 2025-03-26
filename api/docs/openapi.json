@@ -329,6 +329,27 @@
         "required": ["old_password", "new_password"],
         "type": "object"
       },
+      "CheckoutOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/CheckoutOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      },
       "ErrorDetail": {
         "additionalProperties": false,
         "properties": {
@@ -1617,8 +1638,15 @@
         "description": "Place a new order from items in the cart",
         "operationId": "checkout",
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutOutputBody"
+                }
+              }
+            },
+            "description": "OK"
           },
           "default": {
             "content": {
@@ -1631,6 +1659,11 @@
             "description": "Error"
           }
         },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
         "summary": "Checkout Items In Cart",
         "tags": ["Cart"]
       }
@@ -1661,6 +1694,82 @@
         ],
         "summary": "Clear Items From Cart",
         "tags": ["Cart"]
+      }
+    },
+    "/v1/cart/debug-checkout": {
+      "post": {
+        "description": "Checkout in debug mode, bypass payment step",
+        "operationId": "debug-checkout",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Checkout in debug mode",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/v1/cart/payment-success-callback": {
+      "post": {
+        "description": "Callback after stripe payment success",
+        "operationId": "payment-success-callback",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Stripe-Signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "contentMediaType": "application/octet-stream",
+                "format": "binary",
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Callback after stripe payment success",
+        "tags": [
+          "Cart"
+        ]
       }
     },
     "/v1/cart/remove-item/{id}": {
@@ -2022,7 +2131,7 @@
     "/v1/seller/review/{sellerID}": {
       "get": {
         "description": "Get order reviews of seller",
-        "operationId": "get-review",
+        "operationId": "get-reviews-of-seller",
         "parameters": [
           {
             "in": "path",

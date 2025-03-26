@@ -5,11 +5,13 @@ import (
 )
 
 type CartHandler struct {
-	cartSvc service.CartService
+	cartSvc   service.CartService
+	stripeSvc service.StripeService
 }
 
-func NewHandler(cartSvc service.CartService) CartHandler {
+func NewHandler(cartSvc service.CartService, stripeSvc service.StripeService) CartHandler {
 	return CartHandler{
 		cartSvc,
+		stripeSvc,
 	}
 }

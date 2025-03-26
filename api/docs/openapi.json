@@ -2417,7 +2417,7 @@
     "/v1/chat/{userID}": {
       "get": {
         "description": "Get chat detail as a buyer or a seller with the user id",
-        "operationId": "get-chat-detail-by-buyer",
+        "operationId": "get-chat-detail",
         "parameters": [
           {
             "in": "path",

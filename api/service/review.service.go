@@ -12,7 +12,7 @@ var (
 
 type ReviewService interface {
 	CreateReview(ctx context.Context, rating int, comment string, orderID int64, buyerID int64) (*domain.Review, error)
-	GetReviewsBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error)
+	GetReviewsWithTruncatedBuyerBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithTruncatedBuyer, error)
 }
 
 type reviewServiceImpl struct {
@@ -45,8 +45,8 @@ func (s *reviewServiceImpl) CreateReview(ctx context.Context, rating int, commen
 	return review, nil
 }
 
-func (s *reviewServiceImpl) GetReviewsBySellerID(ctx context.Context, sellerID int64) ([]*domain.Review, error) {
-	reviews, err := s.reviewRepo.FindReviewsBySellerID(ctx, sellerID)
+func (s *reviewServiceImpl) GetReviewsWithTruncatedBuyerBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithTruncatedBuyer, error) {
+	reviews, err := s.reviewRepo.FindReviewsWithTruncatedBuyerBySellerID(ctx, sellerID)
 	if err != nil {
 		return nil, err
 	}

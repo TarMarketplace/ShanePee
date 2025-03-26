@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { Text } from '@/components/text'
 
 import type { Review } from '@/generated/api'
-import { getReview } from '@/generated/api'
+import { getReviewsOfSeller } from '@/generated/api'
 
 import { SellerReviewCard } from '../_components/seller-review-card'
 
@@ -21,7 +21,7 @@ export function SellerAllReviewContainer({
   const [reviews, setReviews] = useState<Review[]>([])
 
   useEffect(() => {
-    getReview({
+    getReviewsOfSeller({
       path: {
         sellerID: parseInt(sellerId),
       },

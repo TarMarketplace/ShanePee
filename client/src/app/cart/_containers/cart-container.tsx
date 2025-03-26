@@ -78,6 +78,7 @@ export function CartContainer() {
       } else {
         toast.error('Error checking out')
       }
+      setCheckingOut(false)
       return
     }
 

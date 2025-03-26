@@ -93,11 +93,22 @@ export function ProductPageContainer({ product }: ProductPageProps) {
     setCartButtonLoading(false)
   }
 
+  const handleGotoStore = () => {
+    router.push(`/seller/${product.owner_id}`)
+  }
+
+  const handleGotoChat = () => {
+    // TODO: open chat with seller
+    router.push(`/chat`)
+  }
+
   return (
     <>
       <ProductPage
         product={product}
-        handleCartButton={handleCartButton}
+        onClickCartButton={handleCartButton}
+        onGotoStore={handleGotoStore}
+        onGotoChat={handleGotoChat}
         isInCart={isInCart}
         cartButtonLoading={cartButtonLoading}
       />

@@ -8,7 +8,11 @@ import { useCart } from '@/providers/cart-provider'
 import { useUser } from '@/providers/user-provider'
 
 import type { ArtToy } from '@/generated/api'
-import { addItemToCart, removeItemFromCart } from '@/generated/api'
+import {
+  addItemToCart,
+  clearItemsFromCart,
+  removeItemFromCart,
+} from '@/generated/api'
 
 import { ChangeSellerDialog } from '../_components/change-seller-dialog'
 import { ProductPage } from '../_components/product-page'
@@ -78,10 +82,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
   }
 
   const handleConfirmDifferentSeller = async () => {
-    // TODO: BE API to clear cart
-    for (const item of cartItems) {
-      await removeItemFromCart({ path: { id: item.id } })
-    }
+    await clearItemsFromCart()
     const { response } = await addItemToCart({
       body: { art_toy_id: product.id },
     })

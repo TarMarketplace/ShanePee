@@ -5,6 +5,8 @@ import { useState } from 'react'
 
 import { Text } from '@/components/text'
 
+import { cn } from '@/lib/utils'
+
 import { Chat } from '../_components/chat'
 import { ChatBox } from '../_components/chat-box'
 
@@ -40,13 +42,12 @@ export function ChatListContainer() {
   return (
     <div className='flex min-h-[calc(100dvh-60px-236px)] divide-x-2 divide-grey-200'>
       <div
-        className={
-          activeChat == 0
-            ? 'flex w-full flex-col divide-y-2 divide-grey-200 md:min-w-[350px] md:max-w-[350px]'
-            : 'hidden w-full flex-col divide-y-2 divide-grey-200 md:flex md:min-w-[350px] md:max-w-[350px]'
-        }
+        className={cn(
+          'w-full flex-col md:min-w-[350px] md:max-w-[350px]',
+          activeChat == 0 ? 'flex' : 'hidden md:flex'
+        )}
       >
-        {chats?.map((chat) => {
+        {chats.map((chat) => {
           if (chat) {
             return (
               <div
@@ -67,7 +68,6 @@ export function ChatListContainer() {
             )
           }
         })}
-        <div></div>
       </div>
       {activeChat == 0 ? (
         <div className='hidden size-full min-h-[calc(100dvh-60px-236px)] flex-col place-items-center justify-center gap-2 md:flex'>

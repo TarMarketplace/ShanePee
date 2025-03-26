@@ -8,7 +8,7 @@ interface ProductResultsProps {
 
 export function ProductResults({ products }: ProductResultsProps) {
   return (
-    <div className='grid grid-cols-[repeat(auto-fit,minmax(170px,max-content))] place-content-center gap-3 p-3 sm:grid-cols-[repeat(auto-fit,minmax(250px,max-content))]'>
+    <div className='grid size-full grid-cols-2 place-content-center gap-3 p-3 sm:grid-cols-4'>
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

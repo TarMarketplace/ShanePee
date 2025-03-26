@@ -45,8 +45,10 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
           <Link href='/user/account'>
             <DropdownMenuItem>บัญชีของฉัน</DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>การซื้อของฉัน</DropdownMenuItem>
-          <DropdownMenuItem>ยืนยันตัวตนผู้ขาย</DropdownMenuItem>
+          <Link href='/buyer/order-history'>
+            <DropdownMenuItem>การซื้อของฉัน</DropdownMenuItem>
+          </Link>
+          {/* <DropdownMenuItem>ยืนยันตัวตนผู้ขาย</DropdownMenuItem> */}
           <DropdownMenuItem onClick={onLogout} className='text-error'>
             ออกจากระบบ
           </DropdownMenuItem>

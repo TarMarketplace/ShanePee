@@ -11,14 +11,18 @@ import { AddToCartButton } from '../_containers/add-to-cart-button'
 
 type ProductPageProps = {
   product: ArtToy
-  handleCartButton: () => void
+  onClickCartButton: () => void
+  onGotoStore: () => void
+  onGotoChat: () => void
   isInCart: boolean
   cartButtonLoading: boolean
 }
 
 export function ProductPage({
   product,
-  handleCartButton,
+  onClickCartButton,
+  onGotoStore,
+  onGotoChat,
   isInCart,
   cartButtonLoading,
 }: ProductPageProps) {
@@ -67,7 +71,11 @@ export function ProductPage({
                 </div>
               </div>
             </div>
-            <Button variant='filled' colorVariant='outline'>
+            <Button
+              variant='filled'
+              colorVariant='outline'
+              onClick={onGotoStore}
+            >
               <Icon icon='ri:store-3-fill' className='size-4' />
               ดูร้านค้า
             </Button>
@@ -83,10 +91,14 @@ export function ProductPage({
               <AddToCartButton
                 product={product}
                 isInCart={isInCart}
-                handleAddToCart={handleCartButton}
+                handleAddToCart={onClickCartButton}
                 loading={cartButtonLoading}
               />
-              <Button variant='filled' colorVariant='outline'>
+              <Button
+                variant='filled'
+                colorVariant='outline'
+                onClick={onGotoChat}
+              >
                 <Icon icon='material-symbols:chat' className='size-4' />
                 สอบถามข้อมูล
               </Button>

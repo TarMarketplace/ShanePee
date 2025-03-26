@@ -21,7 +21,7 @@ func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 }
 
 func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) error {
-	return r.db.Model(&artToy).Omit("average_rating").Create(artToy).Error
+	return r.db.Model(&artToy).Create(artToy).Error
 }
 
 func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {
@@ -31,7 +31,8 @@ func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtTo
 		art_toys.*, 
 		ROUND(AVG(reviews.rating), 1) AS average_rating
 	`).
-	Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
+	Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+	Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 	Group("art_toys.id").
 	Find(&artToys).Error; err != nil {
 		return nil, err
@@ -46,7 +47,8 @@ func (r *artToyRepositoryImpl) FindArtToysByOwnerID(ctx context.Context, ownerID
 		art_toys.*, 
 		ROUND(AVG(reviews.rating), 1) AS average_rating
 	`).
-	Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
+	Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+	Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 	Where("art_toys.owner_id = ?", ownerID).
 	Group("art_toys.id").
 	Find(&artToys).Error; err != nil {
@@ -62,7 +64,8 @@ func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*d
 		art_toys.*, 
 		ROUND(AVG(reviews.rating), 1) AS average_rating
 	`).
-	Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
+	Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+	Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 	Where("art_toys.id = ?", id).
 	Group("art_toys.id").
 	Take(&artToy).Error; err != nil {
@@ -76,12 +79,13 @@ func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*d
 
 func (r *artToyRepositoryImpl) FindArtToysBySearchParams(ctx context.Context, searchParams *domain.ArtToySearchParams) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
-	query := r.db.Table("art_toys").
+	query := r.db.
 	Select(`
 		art_toys.*, 
 		ROUND(AVG(reviews.rating), 1) AS average_rating
 	`).
-	Joins("LEFT JOIN reviews ON reviews.art_toy_id = art_toys.id").
+	Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+	Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 	Group("art_toys.id")
 
 	if searchParams != nil {

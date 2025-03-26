@@ -107,6 +107,10 @@ func main() {
 	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
+	app.chatHdr.RegisterGetChatDetail(api)
+	app.chatHdr.RegisterSendMessage(api)
+	app.chatHdr.RegisterPollMessage(api)
+
 	flag.Parse()
 
 	log.Info("Starting server...")

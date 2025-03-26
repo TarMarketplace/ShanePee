@@ -15,7 +15,7 @@ import (
 type OrderUpdateBody struct {
 	TrackingNumber  *string             `json:"tracking_number,omitempty" example:"TH1234567890"`
 	DeliveryService *string             `json:"delivery_service,omitempty" example:"Kerry Express"`
-	Status          *domain.OrderStatus `json:"status,omitempty" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`
+	Status          *domain.OrderStatus `json:"status,omitempty" enum:"PREPARING,DELIVERING,COMPLETED" example:"PREPARING"`
 }
 
 type UpdateOrderInput struct {

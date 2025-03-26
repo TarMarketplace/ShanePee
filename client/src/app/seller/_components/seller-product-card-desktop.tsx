@@ -9,14 +9,16 @@ export interface SellerProductCardDesktopProps {
   product: ArtToy
 }
 
-function SellerProductCardDesktop({ product }: SellerProductCardDesktopProps) {
+export function SellerProductCardDesktop({
+  product,
+}: SellerProductCardDesktopProps) {
   const formattedDate = useMemo(() => {
     const date = new Date(product.release_date)
     return `${date.getDate()}-${date.getMonth()}-${date.getFullYear() + 543}`
   }, [product])
 
   return (
-    <div className='aspect-[250/320] size-full overflow-hidden rounded-xl shadow-sm'>
+    <div className='aspect-[250/320] size-full overflow-hidden rounded-xl shadow'>
       <div className='relative h-2/5 w-full'>
         <Image src={product.photo as string} alt={product.name} fill />
       </div>
@@ -48,5 +50,3 @@ function SellerProductCardDesktop({ product }: SellerProductCardDesktopProps) {
     </div>
   )
 }
-
-export { SellerProductCardDesktop }

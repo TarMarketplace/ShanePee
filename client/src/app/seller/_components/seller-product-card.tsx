@@ -7,7 +7,7 @@ export interface SellerProductCardProps {
   product: ArtToy
 }
 
-function SellerProductCard(props: SellerProductCardProps) {
+export function SellerProductCard(props: SellerProductCardProps) {
   return (
     <>
       <div className='hidden sm:flex'>
@@ -19,5 +19,3 @@ function SellerProductCard(props: SellerProductCardProps) {
     </>
   )
 }
-
-export { SellerProductCard }

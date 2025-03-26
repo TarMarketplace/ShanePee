@@ -10,7 +10,7 @@ export default function PaymentSuccess() {
   const router = useRouter()
 
   const handleGoToOrderHistory = () => {
-    router.push('/order-history')
+    router.push('/buyer/order-history')
   }
 
   const handleGoToHome = () => {

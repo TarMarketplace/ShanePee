@@ -37,11 +37,11 @@ export function ProductPageContainer({ product }: ProductPageProps) {
     return (
       product &&
       cartItems.length > 0 &&
-      cartItems[0].owner_id !== product.owner_id
+      cartItems[0].art_toy?.owner_id !== product.owner_id
     )
   }, [cartItems, product])
 
-  const getOwnerName = (ownerId: number) => {
+  const getOwnerName = (ownerId: number | undefined) => {
     // TODO: get owner name from owner id
     return ownerId?.toString() || ''
   }
@@ -102,7 +102,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
         cartButtonLoading={cartButtonLoading}
       />
       <ChangeSellerDialog
-        sellerNameFrom={getOwnerName(cartItems[0]?.owner_id)}
+        sellerNameFrom={getOwnerName(cartItems[0]?.art_toy?.owner_id)}
         sellerNameTo={getOwnerName(product.owner_id)}
         showDialog={showDialog}
         setShowDialog={setShowDialog}

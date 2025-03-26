@@ -20,7 +20,7 @@ type GetChatDetailOutput struct {
 
 func (h *ChatHandler) RegisterGetChatDetail(api huma.API) {
 	huma.Register(api, huma.Operation{
-		OperationID: "get-chat-detail-by-buyer",
+		OperationID: "get-chat-detail",
 		Method:      http.MethodGet,
 		Path:        "/v1/chat/{userID}",
 		Tags:        []string{"Chat"},

@@ -538,13 +538,6 @@
             ],
             "type": "string"
           },
-          "seller_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
           "sender": {
             "enum": [
               "BUYER",
@@ -557,7 +550,6 @@
           }
         },
         "required": [
-          "seller_id",
           "sender",
           "message"
         ],
@@ -574,13 +566,6 @@
             "format": "uri",
             "readOnly": true,
             "type": "string"
-          },
-          "buyer_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
           },
           "message": {
             "examples": [
@@ -600,7 +585,6 @@
           }
         },
         "required": [
-          "buyer_id",
           "sender",
           "message"
         ],
@@ -1922,53 +1906,6 @@
         ]
       }
     },
-    "/v1/buyer/chat": {
-      "post": {
-        "description": "Send message by buyer",
-        "operationId": "send-message-by-buyer",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatSentByBuyerCreateBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChatMessage"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Send Message By Buyer",
-        "tags": [
-          "Chat"
-        ]
-      }
-    },
     "/v1/buyer/chat/poll/{chatID}": {
       "get": {
         "description": "Poll message by buyer. In the chat with seller, poll message to wait for new message sent by the seller. When receiving messages from the seller or time out, polling again",
@@ -2064,6 +2001,62 @@
           }
         },
         "summary": "Get Chat Detail By Buyer",
+        "tags": [
+          "Chat"
+        ]
+      },
+      "post": {
+        "description": "Send message by buyer to seller",
+        "operationId": "send-message-by-buyer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sellerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatSentByBuyerCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatMessage"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Send Message By Buyer",
         "tags": [
           "Chat"
         ]
@@ -2668,53 +2661,6 @@
         ]
       }
     },
-    "/v1/seller/chat": {
-      "post": {
-        "description": "Send message by seller",
-        "operationId": "send-message-by-seller",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatSentBySellerCreateBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChatMessage"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Send Message By Seller",
-        "tags": [
-          "Chat"
-        ]
-      }
-    },
     "/v1/seller/chat/poll/{buyerID}": {
       "get": {
         "description": "Poll message by seller. In the chat with buyer, poll message to wait for new message sent by the buyer. When receiving messages from the buyer or time out, polling again",
@@ -2767,6 +2713,64 @@
           }
         ],
         "summary": "Poll Message By Seller",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/v1/seller/chat/{buyerID}": {
+      "post": {
+        "description": "Send message by seller to buyer",
+        "operationId": "send-message-by-seller",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "buyerID",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatSentBySellerCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatMessage"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "sessionId": []
+          }
+        ],
+        "summary": "Send Message By Seller",
         "tags": [
           "Chat"
         ]

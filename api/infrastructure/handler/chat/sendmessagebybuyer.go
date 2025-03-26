@@ -10,13 +10,13 @@ import (
 )
 
 type ChatSentByBuyerCreateBody struct {
-	SellerID int64           `json:"seller_id" example:"97"`
-	Sender   domain.UserType `json:"sender" enum:"BUYER,SELLER" example:"SELLER"`
-	Message  string          `json:"message" example:"Hello world"`
+	Sender  domain.UserType `json:"sender" enum:"BUYER,SELLER" example:"SELLER"`
+	Message string          `json:"message" example:"Hello world"`
 }
 
 type SendMessageByBuyerInput struct {
-	Body ChatSentByBuyerCreateBody
+	SellerID int64 `path:"sellerID"`
+	Body     ChatSentByBuyerCreateBody
 }
 
 type SendMessageByBuyerOutput struct {
@@ -27,10 +27,10 @@ func (h *ChatHandler) RegisterSendMessageByBuyer(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "send-message-by-buyer",
 		Method:      http.MethodPost,
-		Path:        "/v1/buyer/chat",
+		Path:        "/v1/buyer/chat/{sellerID}",
 		Tags:        []string{"Chat"},
 		Summary:     "Send Message By Buyer",
-		Description: "Send message by buyer",
+		Description: "Send message by buyer to seller",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
@@ -39,7 +39,7 @@ func (h *ChatHandler) RegisterSendMessageByBuyer(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		chat, err := h.chatSvc.SendMessageByBuyer(ctx, *userID, i.Body.SellerID, i.Body.Sender, i.Body.Message)
+		chat, err := h.chatSvc.SendMessageByBuyer(ctx, *userID, i.SellerID, i.Body.Sender, i.Body.Message)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

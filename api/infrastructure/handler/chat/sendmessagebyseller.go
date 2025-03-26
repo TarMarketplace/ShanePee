@@ -10,13 +10,13 @@ import (
 )
 
 type ChatSentBySellerCreateBody struct {
-	BuyerID int64           `json:"buyer_id" example:"97"`
 	Sender  domain.UserType `json:"sender" enum:"BUYER,SELLER" example:"SELLER"`
 	Message string          `json:"message" example:"Hello world"`
 }
 
 type SendMessageBySellerInput struct {
-	Body ChatSentBySellerCreateBody
+	BuyerID int64 `path:"buyerID"`
+	Body    ChatSentBySellerCreateBody
 }
 
 type SendMessageBySellerOutput struct {
@@ -27,10 +27,10 @@ func (h *ChatHandler) RegisterSendMessageBySeller(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "send-message-by-seller",
 		Method:      http.MethodPost,
-		Path:        "/v1/seller/chat",
+		Path:        "/v1/seller/chat/{buyerID}",
 		Tags:        []string{"Chat"},
 		Summary:     "Send Message By Seller",
-		Description: "Send message by seller",
+		Description: "Send message by seller to buyer",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
@@ -39,7 +39,7 @@ func (h *ChatHandler) RegisterSendMessageBySeller(api huma.API) {
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
-		chat, err := h.chatSvc.SendMessageBySeller(ctx, i.Body.BuyerID, *userID, i.Body.Sender, i.Body.Message)
+		chat, err := h.chatSvc.SendMessageBySeller(ctx, i.BuyerID, *userID, i.Body.Sender, i.Body.Message)
 		if err != nil {
 			return nil, handler.ErrIntervalServerError
 		}

@@ -7,6 +7,7 @@ var (
 	ErrForbidden                = huma.Error403Forbidden("Forbidden")
 	ErrIntervalServerError      = huma.Error500InternalServerError("Internal server error")
 	ErrArtToyNotFound           = huma.Error404NotFound("Art toy not found")
+	ErrArtToyBelongToOwner      = huma.Error403Forbidden("Art toy is bought by the owner")
 	ErrArtToyNotBelongToOwner   = huma.Error403Forbidden("Art toy does not belong to the owner")
 	ErrReviewNotFound           = huma.Error404NotFound("Review not found")
 	ErrUserNotFound             = huma.Error404NotFound("User not found")

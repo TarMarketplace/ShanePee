@@ -4,7 +4,6 @@ import "time"
 
 type OrderStatus string
 
-// TODO: Wait for the design from the frontend team
 const (
 	Preparing  OrderStatus = "PREPARING"
 	Delivering OrderStatus = "DELIVERING"
@@ -17,7 +16,7 @@ type Order struct {
 	DeliveryService *string     `json:"delivery_service,omitempty" example:"Kerry Express"`
 	SellerID        int64       `json:"seller_id" gorm:"not null" example:"97"`
 	BuyerID         int64       `json:"buyer_id" gorm:"not null" example:"97"`
-	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"pending"`
+	Status          OrderStatus `json:"status" gorm:"not null" enum:"PREPARING,DELIVERING,COMPLETED" example:"PREPARING"`
 	CreatedAt       time.Time   `json:"created_at" gorm:"autoCreateTime" example:"2021-08-01T00:00:00Z"`
 	OrderItems      []OrderItem `json:"order_items,omitempty" gorm:"foreignKey:OrderID"`
 }

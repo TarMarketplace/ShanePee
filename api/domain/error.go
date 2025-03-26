@@ -15,4 +15,6 @@ var (
 	ErrPasswordResetRequestNotFound error = errors.New("password reset request not found")
 	ErrCartItemNotFound             error = errors.New("cart item not found")
 	ErrCartItemNotBelongToOwner     error = errors.New("cart item does not belong to the owner")
+	ErrChatNotFound                 error = errors.New("chat not found")
+	ErrChatNotBelongToOwner         error = errors.New("chat does not belong to the owner")
 )

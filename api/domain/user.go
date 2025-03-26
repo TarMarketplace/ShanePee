@@ -2,6 +2,13 @@ package domain
 
 import "time"
 
+type UserType string
+
+const (
+	Buyer  UserType = "BUYER"
+	Seller UserType = "SELLER"
+)
+
 type User struct {
 	ID            int64         `json:"id" gorm:"primaryKey" example:"97"`
 	Email         string        `json:"email" gorm:"unique;not null" example:"johndoe@example.com"`

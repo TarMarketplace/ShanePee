@@ -8,10 +8,15 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
-import { Address } from '../_components/address'
+import { Address } from '../../components/address'
 
-export function AddressContainer() {
+interface AddressContainerProps {
+  enablePencil?: boolean
+}
+
+export function AddressContainer({ enablePencil }: AddressContainerProps) {
   const { user } = useUser()
+  const pencilOn = enablePencil ?? false
 
   return (
     <div className='flex flex-col gap-2'>
@@ -19,9 +24,11 @@ export function AddressContainer() {
         <Text desktopVariant='heading-sm' variant='md-semibold'>
           ที่อยู่สำหรับการจัดส่ง
         </Text>
-        <Link href='user/account?mode=address'>
-          <Icon icon='mdi:pencil' className='size-5 md:size-6' />
-        </Link>
+        {pencilOn ? (
+          <Link href='user/account?mode=address'>
+            <Icon icon='mdi:pencil' className='size-5 md:size-6' />
+          </Link>
+        ) : null}
       </div>
       {!user ? (
         <div className='flex flex-col gap-2'>

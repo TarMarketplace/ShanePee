@@ -44,7 +44,7 @@ export function Sidebar({ isOpen, setIsOpen, onLogout }: SidebarProps) {
             <Link href='/user/account'>บัญชีของฉัน</Link>
           </div>
           <div className='p-3'>การซื้อของฉัน</div>
-          <div className='p-3'>ยืนยันตัวตนผู้ขาย</div>
+          {/* <div className='p-3'>ยืนยันตัวตนผู้ขาย</div> */}
           <div className='p-3'>
             <button onClick={onLogout} className='text-error'>
               ออกจากระบบ

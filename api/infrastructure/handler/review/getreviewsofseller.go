@@ -15,7 +15,7 @@ type GetReviewsOfSellerInput struct {
 }
 
 type GetReviewsOfSellerOutput struct {
-	Body handler.ArrayResponse[domain.Review]
+	Body handler.ArrayResponse[domain.ReviewWithTruncatedBuyer]
 }
 
 func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
@@ -27,13 +27,13 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 		Summary:     "Get Order Reviews of seller",
 		Description: "Get order reviews of seller",
 	}, func(ctx context.Context, i *GetReviewsOfSellerInput) (*GetReviewsOfSellerOutput, error) {
-		data, err := h.reviewSvc.GetReviewsBySellerID(ctx, i.SellerID)
+		data, err := h.reviewSvc.GetReviewsWithTruncatedBuyerBySellerID(ctx, i.SellerID)
 		if err != nil {
 			logrus.Error(err)
 			return nil, handler.ErrIntervalServerError
 		}
 		return &GetReviewsOfSellerOutput{
-			Body: handler.ArrayResponse[domain.Review]{
+			Body: handler.ArrayResponse[domain.ReviewWithTruncatedBuyer]{
 				Data: data,
 			},
 		}, nil

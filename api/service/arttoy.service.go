@@ -8,7 +8,7 @@ import (
 
 var (
 	ErrArtToyNotFound         error = domain.ErrArtToyNotFound
-	ErrArtToyBelongToOwner    error = domain.ErrArtToyNotBelongToOwner
+	ErrArtToyBelongToOwner    error = domain.ErrArtToyBelongToOwner
 	ErrArtToyNotBelongToOwner error = domain.ErrArtToyNotBelongToOwner
 )
 

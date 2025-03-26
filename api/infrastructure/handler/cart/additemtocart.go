@@ -42,6 +42,9 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 		}
 		cartItem, err := h.cartSvc.AddItemToCart(ctx, *userID, i.Body.ArtToyID)
 		if err != nil {
+			if errors.Is(err, service.ErrArtToyBelongToOwner) {
+				return nil, handler.ErrArtToyBelongToOwner
+			}
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
 			}

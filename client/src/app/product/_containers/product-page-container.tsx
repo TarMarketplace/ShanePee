@@ -8,7 +8,11 @@ import { useCart } from '@/providers/cart-provider'
 import { useUser } from '@/providers/user-provider'
 
 import type { ArtToy } from '@/generated/api'
-import { addItemToCart, removeItemFromCart } from '@/generated/api'
+import {
+  addItemToCart,
+  clearItemsFromCart,
+  removeItemFromCart,
+} from '@/generated/api'
 
 import { ChangeSellerDialog } from '../_components/change-seller-dialog'
 import { ProductPage } from '../_components/product-page'
@@ -33,11 +37,11 @@ export function ProductPageContainer({ product }: ProductPageProps) {
     return (
       product &&
       cartItems.length > 0 &&
-      cartItems[0].owner_id !== product.owner_id
+      cartItems[0].art_toy?.owner_id !== product.owner_id
     )
   }, [cartItems, product])
 
-  const getOwnerName = (ownerId: number) => {
+  const getOwnerName = (ownerId: number | undefined) => {
     // TODO: get owner name from owner id
     return ownerId?.toString() || ''
   }
@@ -78,10 +82,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
   }
 
   const handleConfirmDifferentSeller = async () => {
-    // TODO: BE API to clear cart
-    for (const item of cartItems) {
-      await removeItemFromCart({ path: { id: item.id } })
-    }
+    await clearItemsFromCart()
     const { response } = await addItemToCart({
       body: { art_toy_id: product.id },
     })
@@ -92,16 +93,27 @@ export function ProductPageContainer({ product }: ProductPageProps) {
     setCartButtonLoading(false)
   }
 
+  const handleGotoStore = () => {
+    router.push(`/seller/${product.owner_id}`)
+  }
+
+  const handleGotoChat = () => {
+    // TODO: open chat with seller
+    router.push(`/chat`)
+  }
+
   return (
     <>
       <ProductPage
         product={product}
-        handleCartButton={handleCartButton}
+        onClickCartButton={handleCartButton}
+        onGotoStore={handleGotoStore}
+        onGotoChat={handleGotoChat}
         isInCart={isInCart}
         cartButtonLoading={cartButtonLoading}
       />
       <ChangeSellerDialog
-        sellerNameFrom={getOwnerName(cartItems[0]?.owner_id)}
+        sellerNameFrom={getOwnerName(cartItems[0]?.art_toy?.owner_id)}
         sellerNameTo={getOwnerName(product.owner_id)}
         showDialog={showDialog}
         setShowDialog={setShowDialog}

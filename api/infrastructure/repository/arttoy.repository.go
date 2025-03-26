@@ -21,12 +21,20 @@ func NewArtToyRepository(db *gorm.DB) domain.ArtToyRepository {
 }
 
 func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.ArtToy) error {
-	return r.db.Create(artToy).Error
+	return r.db.Model(&artToy).Create(artToy).Error
 }
 
 func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
-	if err := r.db.Find(&artToys).Error; err != nil {
+	if err := r.db.
+		Select(`
+		art_toys.*, 
+		ROUND(AVG(reviews.rating), 1) AS average_rating
+	`).
+		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
+		Group("art_toys.id").
+		Find(&artToys).Error; err != nil {
 		return nil, err
 	}
 	return artToys, nil
@@ -34,7 +42,16 @@ func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtTo
 
 func (r *artToyRepositoryImpl) FindArtToysByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
-	if err := r.db.Where("owner_id = ?", ownerID).Find(&artToys).Error; err != nil {
+	if err := r.db.
+		Select(`
+		art_toys.*, 
+		ROUND(AVG(reviews.rating), 1) AS average_rating
+	`).
+		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
+		Where("art_toys.owner_id = ?", ownerID).
+		Group("art_toys.id").
+		Find(&artToys).Error; err != nil {
 		return nil, err
 	}
 	return artToys, nil
@@ -42,7 +59,16 @@ func (r *artToyRepositoryImpl) FindArtToysByOwnerID(ctx context.Context, ownerID
 
 func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error) {
 	var artToy domain.ArtToy
-	if err := r.db.Where("id = ?", id).Take(&artToy).Error; err != nil {
+	if err := r.db.
+		Select(`
+		art_toys.*, 
+		ROUND(AVG(reviews.rating), 1) AS average_rating
+	`).
+		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
+		Where("art_toys.id = ?", id).
+		Group("art_toys.id").
+		Take(&artToy).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, domain.ErrArtToyNotFound
 		}
@@ -53,7 +79,14 @@ func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*d
 
 func (r *artToyRepositoryImpl) FindArtToysBySearchParams(ctx context.Context, searchParams *domain.ArtToySearchParams) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
-	query := r.db
+	query := r.db.
+		Select(`
+		art_toys.*, 
+		ROUND(AVG(reviews.rating), 1) AS average_rating
+	`).
+		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
+		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
+		Group("art_toys.id")
 
 	if searchParams != nil {
 		if searchParams.Keyword != "" {

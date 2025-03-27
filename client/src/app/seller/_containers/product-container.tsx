@@ -42,12 +42,10 @@ export function ProductContainer({ sellerId }: ProductContainerProps) {
           if (response?.data) {
             setProducts(response.data)
           } else {
-            toast.info('3')
             toast.error('Something went wrong')
           }
         })
         .catch(() => {
-          toast.info('1')
           toast.error('Something went wrong')
         })
     } else {
@@ -60,12 +58,10 @@ export function ProductContainer({ sellerId }: ProductContainerProps) {
           if (response?.data) {
             setProducts(response.data.data)
           } else {
-            toast.info('1')
             toast.error('Something went wrong')
           }
         })
         .catch(() => {
-          toast.info('1')
           toast.error('Something went wrong')
         })
     }

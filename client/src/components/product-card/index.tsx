@@ -1,16 +1,36 @@
 import { Icon } from '@iconify/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
-import type { ArtToy } from '@/generated/api'
+import { type ArtToy, getSellerById } from '@/generated/api'
 
 export interface ProductCardProps {
   product: ArtToy
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const [sellerName, setSellerName] = useState('')
+
+  getSellerById({
+    path: {
+      id: product.owner_id,
+    },
+  })
+    .then((response) => {
+      if (response.data) {
+        setSellerName(response.data.first_name + ' ' + response.data.last_name)
+      } else {
+        toast.error('No reviews found')
+      }
+    })
+    .catch(() => {
+      toast.error('Something went wrong')
+    })
+
   return (
     <Link
       href={`/product/${product.id}`}
@@ -61,19 +81,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
           )} */}
         </div>
         <div className='flex items-center gap-4'>
-          <div className='flex items-center'>
+          <div className='flex items-center gap-1'>
             <Icon
               icon='material-symbols:star-rounded'
               className='size-5 text-warning md:size-6'
             />
             <Text variant='xs-regular' desktopVariant='sm-regular'>
-              4.5
+              {product.average_rating ? product.average_rating : '-'}
             </Text>
           </div>
-          <div className='flex items-center text-grey-500'>
-            <Icon icon='typcn:location' className='size-4 md:size-5' />
+          <div className='flex items-center gap-1 text-grey-500'>
+            <Icon icon='tdesign:store-filled' className='size-4 md:size-5' />
             <Text variant='xs-regular' desktopVariant='sm-regular'>
-              Bangkok
+              {sellerName}
             </Text>
           </div>
         </div>

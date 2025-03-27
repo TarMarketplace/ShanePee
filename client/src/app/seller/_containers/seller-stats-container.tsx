@@ -26,6 +26,7 @@ export function SellerStatsContainer({ sellerId }: SellerStatsContainerProps) {
     number_of_reviews: 0,
     photo: '',
     rating: 0,
+    total_art_toys_remaining: 0,
   })
 
   useEffect(() => {

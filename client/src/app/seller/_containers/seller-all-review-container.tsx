@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
-import type { Review } from '@/generated/api'
+import type { ReviewWithTruncatedBuyer } from '@/generated/api'
 import { getReviewsOfSeller } from '@/generated/api'
 
 import { SellerReviewCard } from '../_components/seller-review-card'
@@ -18,7 +18,7 @@ type SellerAllReviewContainerProps = {
 export function SellerAllReviewContainer({
   sellerId,
 }: SellerAllReviewContainerProps) {
-  const [reviews, setReviews] = useState<Review[]>([])
+  const [reviews, setReviews] = useState<ReviewWithTruncatedBuyer[]>([])
 
   useEffect(() => {
     getReviewsOfSeller({
@@ -53,7 +53,7 @@ export function SellerAllReviewContainer({
         {reviews.map((review) => {
           return (
             <SellerReviewCard
-              key={review.id}
+              key={review.buyer_truncated_first_name}
               review={review} // TODO add photo and sellerName in review response
               photo='data:image/png;base64,mfkirjIDSFIj32asdf...'
               sellerName='John Doe'

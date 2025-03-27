@@ -15,13 +15,13 @@ type ArtToySortKey string
 
 const (
 	ArtToyReleaseDateSortKey = "release_date"
-	ArtToyPriceSortKey = "price"
+	ArtToyPriceSortKey       = "price"
 )
 
 type SearchArtToysInput struct {
-	Keyword string       `query:"keyword"`
+	Keyword string        `query:"keyword"`
 	SortKey ArtToySortKey `query:"sort_key" enum:"release_date,price" doc:"Sorting key. Available values: 'release_date', 'price'."`
-	Reverse bool         `query:"reverse" doc:"If true, sorting is in descending order. Sorting is applied only if 'sort_key' is defined."`
+	Reverse bool          `query:"reverse" doc:"If true, sorting is in descending order. Sorting is applied only if 'sort_key' is defined."`
 }
 
 type SearchArtToysOutput struct {
@@ -57,7 +57,7 @@ func (h *ArtToyHandler) RegisterSearchArtToys(api huma.API) {
 		data, err := h.artToySvc.GetArtToysBySearchParams(ctx, searchParams)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &SearchArtToysOutput{
 			Body: handler.ArrayResponse[domain.ArtToy]{Data: data},

@@ -33,7 +33,7 @@ func (h *ArtToyHandler) RegisterGetArtToysOfSeller(api huma.API) {
 		data, err := h.artToySvc.GetArtToysByOwnerID(ctx, i.ID)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetArtToysOfSellerOutput{
 			Body: handler.ArrayResponse[domain.ArtToy]{

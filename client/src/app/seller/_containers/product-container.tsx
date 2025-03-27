@@ -10,7 +10,7 @@ import { Text } from '@/components/text'
 
 import { useUser } from '@/providers/user-provider'
 
-import { type ArtToy, getMyArtToys } from '@/generated/api'
+import { type ArtToy, getArtToysOfSeller, getMyArtToys } from '@/generated/api'
 
 import { SellerProductCard } from '../_components/seller-product-card'
 
@@ -36,18 +36,36 @@ export function ProductContainer({ sellerId }: ProductContainerProps) {
   const isSeller = user?.id.toString() == sellerId
 
   useEffect(() => {
-    getMyProducts()
-      .then((response) => {
-        if (response?.data) {
-          setProducts(response.data)
-        } else {
+    if (isSeller) {
+      getMyProducts()
+        .then((response) => {
+          if (response?.data) {
+            setProducts(response.data)
+          } else {
+            toast.error('Something went wrong')
+          }
+        })
+        .catch(() => {
           toast.error('Something went wrong')
-        }
+        })
+    } else {
+      getArtToysOfSeller({
+        path: {
+          id: parseInt(sellerId),
+        },
       })
-      .catch(() => {
-        toast.error('Something went wrong')
-      })
-  }, [])
+        .then((response) => {
+          if (response?.data) {
+            setProducts(response.data.data)
+          } else {
+            toast.error('Something went wrong')
+          }
+        })
+        .catch(() => {
+          toast.error('Something went wrong')
+        })
+    }
+  }, [isSeller, sellerId])
 
   return (
     <div className='flex w-full max-w-5xl flex-col sm:min-w-[60%] sm:divide-y-4 sm:divide-primary'>
@@ -72,7 +90,14 @@ export function ProductContainer({ sellerId }: ProductContainerProps) {
       <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
         {products?.map((product) => {
           return (
-            <Link key={product.id} href={`/product/edit/${product.id}`}>
+            <Link
+              key={product.id}
+              href={
+                isSeller
+                  ? `/product/edit/${product.id}`
+                  : `/product/${product.id}`
+              }
+            >
               <SellerProductCard key={product.id} product={product} />
             </Link>
           )

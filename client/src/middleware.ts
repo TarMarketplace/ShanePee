@@ -14,7 +14,10 @@ const AUTH_ROUTES = ['/login', '/register']
 export default async function middleware(request: NextRequest) {
   const session = request.cookies.get('session')?.value
 
-  const isProtectedRoute = PROTECTED_ROUTES.includes(request.nextUrl.pathname)
+  const isProtectedRoute = PROTECTED_ROUTES.some((path) => {
+    const regex = new RegExp(`^${path}`)
+    return regex.test(request.nextUrl.pathname)
+  })
   const isAuthRoute = AUTH_ROUTES.includes(request.nextUrl.pathname)
 
   if (isProtectedRoute && !session) {

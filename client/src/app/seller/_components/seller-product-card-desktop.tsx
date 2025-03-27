@@ -20,7 +20,12 @@ export function SellerProductCardDesktop({
   return (
     <div className='aspect-[250/320] size-full overflow-hidden rounded-xl shadow'>
       <div className='relative h-2/5 w-full'>
-        <Image src={product.photo as string} alt={product.name} fill />
+        <Image
+          src={product.photo as string}
+          alt={product.name}
+          fill
+          className='object-cover'
+        />
       </div>
       <div className='flex h-3/5 w-full flex-col justify-between p-3'>
         <div className='flex flex-col gap-2'>

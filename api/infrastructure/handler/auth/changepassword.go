@@ -43,7 +43,7 @@ func (h *AuthHandler) RegisterChangePassword(api huma.API) {
 				return nil, handler.ErrIncorrectOldPassword
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

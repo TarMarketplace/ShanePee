@@ -57,7 +57,7 @@ func (h *ChatHandler) RegisterGetChatMessage(api huma.API) {
 				return nil, handler.ErrChatNotFound
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetChatMessageOutput{
 			Body: handler.ArrayResponse[domain.ChatMessage]{

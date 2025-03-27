@@ -26,7 +26,7 @@ func (h *ArtToyHandler) RegisterGetArtToys(api huma.API) {
 		data, err := h.artToySvc.GetArtToys(ctx)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetArtToysOutput{
 			Body: handler.ArrayResponse[domain.ArtToy]{

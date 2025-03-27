@@ -34,7 +34,7 @@ func (h *ChatHandler) RegisterGetChatList(api huma.API) {
 
 		data, err := h.chatSvc.GetChatList(ctx, *userID, i.ChatID, i.Poll)
 		if err != nil {
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetChatListOutput{
 			Body: handler.ArrayResponse[domain.ChatList]{

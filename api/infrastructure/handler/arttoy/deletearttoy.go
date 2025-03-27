@@ -41,7 +41,7 @@ func (h *ArtToyHandler) RegisterDeleteArtToy(api huma.API) {
 				return nil, handler.ErrArtToyNotFound
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 
 		return nil, nil

@@ -222,6 +222,9 @@
           "name": {
             "type": "string"
           },
+          "owner": {
+            "$ref": "#/components/schemas/User"
+          },
           "owner_id": {
             "format": "int64",
             "type": "integer"
@@ -252,7 +255,8 @@
           "availability",
           "owner_id",
           "release_date",
-          "average_rating"
+          "average_rating",
+          "owner"
         ],
         "type": "object"
       },

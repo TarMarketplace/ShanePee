@@ -57,7 +57,7 @@ func (r *chatRepositoryImpl) FindChatListByUserID(ctx context.Context, userID in
 			) AS latest ON latest.buyer_id = chat_messages.buyer_id AND chat_messages.created_at = latest.max_created_at`).
 			Joins("JOIN users ON users.id = chat_messages.seller_id").
 			Where("chat_messages.seller_id = ? AND chat_messages.created_at > ?", userID, latestChatTime),
-	).Order("chat_messaages.created_at ASC").
+	).Order("chat_messages.created_at ASC").
 		Find(&chatList).Error
 	if err != nil {
 		return nil, err

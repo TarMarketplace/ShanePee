@@ -179,7 +179,7 @@ func (s *chatServiceImpl) notifySubscribedBuyer(buyerID int64, chat *domain.Chat
 	for subscribedBuyer := range s.subscribedBuyers[buyerID] {
 		subscribedBuyer <- chat
 	}
-	delete(s.subscribedSellers, buyerID)
+	delete(s.subscribedBuyers, buyerID)
 }
 
 func (s *chatServiceImpl) notifySubscribedSeller(sellerID int64, chat *domain.ChatMessage) {

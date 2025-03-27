@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
-import type { Review } from '@/generated/api'
+import type { ReviewWithTruncatedBuyer } from '@/generated/api'
 import { getReviewsOfSeller } from '@/generated/api'
 
 import { SellerReviewCard } from '../_components/seller-review-card'
@@ -18,7 +18,7 @@ type SellerAllReviewContainerProps = {
 export function SellerAllReviewContainer({
   sellerId,
 }: SellerAllReviewContainerProps) {
-  const [reviews, setReviews] = useState<Review[]>([])
+  const [reviews, setReviews] = useState<ReviewWithTruncatedBuyer[]>([])
 
   useEffect(() => {
     getReviewsOfSeller({
@@ -50,10 +50,10 @@ export function SellerAllReviewContainer({
         </div>
       </div>
       <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
-        {reviews.map((review) => {
+        {reviews.map((review, i) => {
           return (
             <SellerReviewCard
-              key={review.id}
+              key={i}
               review={review} // TODO add photo and sellerName in review response
               photo='data:image/png;base64,mfkirjIDSFIj32asdf...'
               sellerName='John Doe'

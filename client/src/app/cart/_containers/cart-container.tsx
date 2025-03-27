@@ -28,7 +28,6 @@ export function CartContainer() {
   const { user } = useUser()
   const [loading, setLoading] = useState(true)
   const [checkingOut, setCheckingOut] = useState(false)
-  const [checkoutSuccess, setCheckoutSuccess] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const router = useRouter()
 
@@ -85,7 +84,6 @@ export function CartContainer() {
     router.push(data.url)
 
     setCheckingOut(false)
-    setCheckoutSuccess(true)
   }
 
   if (loading) {
@@ -119,11 +117,7 @@ export function CartContainer() {
           <DialogHeader className='text-left'>
             <DialogTitle asChild>
               <Text variant='heading-md'>
-                {checkingOut
-                  ? 'กำลังชำระเงิน'
-                  : checkoutSuccess
-                    ? 'ชำระเงินสำเร็จ'
-                    : 'กรุณาตรวจสอบข้อมูล'}
+                {checkingOut ? 'กำลังชำระเงิน' : 'กรุณาตรวจสอบข้อมูล'}
               </Text>
             </DialogTitle>
           </DialogHeader>
@@ -135,14 +129,6 @@ export function CartContainer() {
                 className='animate-spin text-4xl text-primary-500'
               />
               <Text className='mt-4'>กำลังชำระเงิน...</Text>
-            </div>
-          ) : checkoutSuccess ? (
-            <div className='flex flex-col items-center justify-center'>
-              <Icon
-                icon='mdi:check-circle'
-                className='text-6xl text-success-500'
-              />
-              <Text className='mt-4 text-lg'>การชำระเงินเสร็จสิ้น</Text>
             </div>
           ) : (
             <>

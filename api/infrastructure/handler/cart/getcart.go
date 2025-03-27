@@ -33,7 +33,7 @@ func (h *CartHandler) RegisterGetCart(api huma.API) {
 		cart, err := h.cartSvc.GetCartWithItemByOwnerID(ctx, *userID)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetCartOutput{
 			Body: handler.ArrayResponse[domain.CartItem]{Data: cart},

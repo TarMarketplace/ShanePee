@@ -30,7 +30,7 @@ func (h *ReviewHandler) RegisterGetReviewsOfSeller(api huma.API) {
 		data, err := h.reviewSvc.GetReviewsWithTruncatedBuyerBySellerID(ctx, i.SellerID)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetReviewsOfSellerOutput{
 			Body: handler.ArrayResponse[domain.ReviewWithTruncatedBuyer]{

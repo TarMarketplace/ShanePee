@@ -39,7 +39,7 @@ func (h *CartHandler) RegisterRemoveItemFromCart(api huma.API) {
 				return nil, handler.ErrCartItemNotBelongToOwner
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

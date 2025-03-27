@@ -58,7 +58,7 @@ func (h *UserHandler) RegisterUpdateUser(api huma.API) {
 		err := h.userSvc.UpdateUser(ctx, *userID, updateBody)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

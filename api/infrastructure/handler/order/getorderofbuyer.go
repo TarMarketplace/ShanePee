@@ -45,7 +45,7 @@ func (h *OrderHandler) RegisterGetOrderOfBuyer(api huma.API) {
 				return nil, handler.ErrOrderNotFound
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetOrderOfBuyerOutput{
 			Body: order,

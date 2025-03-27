@@ -38,7 +38,7 @@ func (h *OrderHandler) RegisterGetOrdersByStatus(api huma.API) {
 
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetOrdersByStatusOutput{
 			Body: handler.ArrayResponse[domain.Order]{

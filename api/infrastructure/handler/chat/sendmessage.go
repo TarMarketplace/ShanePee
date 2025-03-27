@@ -49,7 +49,7 @@ func (h *ChatHandler) RegisterSendMessage(api huma.API) {
 		}
 
 		if err != nil {
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &SendMessageOutput{
 			Body: chat,

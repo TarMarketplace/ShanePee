@@ -12,7 +12,6 @@ var (
 )
 
 type OrderService interface {
-	GetOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error)
 	GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error)
 	GetOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64, status string) ([]*domain.Order, error)
 	GetOrderWithArtToysBySellerID(ctx context.Context, orderID int64, sellerID int64) (*domain.Order, error)
@@ -32,14 +31,6 @@ func NewOrderService(orderRepo domain.OrderRepository) OrderService {
 }
 
 var _ OrderService = &orderServiceImpl{}
-
-func (s *orderServiceImpl) GetOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error) {
-	orders, err := s.orderRepo.FindOrdersByStatus(ctx, status, sellerID)
-	if err != nil {
-		return nil, err
-	}
-	return orders, nil
-}
 
 func (s *orderServiceImpl) GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error) {
 	return s.orderRepo.FindOrdersWithArtToysBySellerID(ctx, sellerID, status)

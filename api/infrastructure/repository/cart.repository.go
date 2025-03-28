@@ -41,7 +41,7 @@ func (r *cartRepositoryImpl) ClearItemsByOwnerID(ctx context.Context, ownerID in
 
 func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) {
 	var cartItems []*domain.CartItem
-	err := r.db.Preload("ArtToy").Where("owner_id = ?", ownerID).Find(&cartItems).Error
+	err := r.db.Preload("ArtToy.Owner").Where("owner_id = ?", ownerID).Find(&cartItems).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return []*domain.CartItem{}, nil
 	}

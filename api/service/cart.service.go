@@ -44,6 +44,9 @@ func (s *cartServiceImpl) AddItemToCart(ctx context.Context, buyerID int64, artT
 	if artToy.OwnerID == buyerID {
 		return nil, ErrArtToyBelongToOwner
 	}
+	if artToy.Availability == false {
+		return nil, ErrArtToyNotFound
+	}
 
 	cartItem := domain.NewCartItem(buyerID, artToyID)
 	if err := s.cartRepo.AddItemToCart(ctx, cartItem); err != nil {

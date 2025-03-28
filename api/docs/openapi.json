@@ -2613,58 +2613,6 @@
         ]
       }
     },
-    "/v1/order/{status}": {
-      "get": {
-        "description": "Get orders by status",
-        "operationId": "get-orders-by-status",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "status",
-            "required": true,
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get Orders by Status",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
     "/v1/seller": {
       "get": {
         "description": "Get sellers",

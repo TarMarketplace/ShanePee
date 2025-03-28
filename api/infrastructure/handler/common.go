@@ -23,6 +23,7 @@ var (
 	ErrUserEmailAlreadyExist    = huma.Error403Forbidden("User with this email already exists")
 	ErrChatNotFound             = huma.Error404NotFound("Chat not found")
 	ErrChatNotBelongToOwner     = huma.Error403Forbidden("Chat does not belong to the owner")
+	ErrItemAlreadyAddedToCart   = huma.Error403Forbidden("Item already added to the cart")
 )
 
 type ArrayResponse[T any] struct {

@@ -51,6 +51,18 @@ func (r *cartRepositoryImpl) GetCartWithItemByOwnerID(ctx context.Context, owner
 	return cartItems, err
 }
 
+func (r *cartRepositoryImpl) GetCartWithItemByOwnerIDAndArtToyID(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error) {
+	var cartItem domain.CartItem
+	err := r.db.Preload("ArtToy.Owner").Where("owner_id = ? AND art_toy_id = ?", ownerID, artToyID).Take(&cartItem).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, domain.ErrCartItemNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &cartItem, err
+}
+
 var _ domain.CartRepository = &cartRepositoryImpl{}
 
 func NewCartRepository(db *gorm.DB) domain.CartRepository {

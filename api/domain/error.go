@@ -17,4 +17,5 @@ var (
 	ErrCartItemNotBelongToOwner     error = errors.New("cart item does not belong to the owner")
 	ErrChatNotFound                 error = errors.New("chat not found")
 	ErrChatNotBelongToOwner         error = errors.New("chat does not belong to the owner")
+	ErrItemAlreadyAddedToCart       error = errors.New("item already added to the cart")
 )

@@ -48,6 +48,9 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 			if errors.Is(err, service.ErrArtToyNotFound) {
 				return nil, handler.ErrArtToyNotFound
 			}
+			if errors.Is(err, service.ErrItemAlreadyAddedToCart) {
+				return nil, handler.ErrItemAlreadyAddedToCart
+			}
 			logrus.Error(err)
 			return nil, handler.ErrInternalServerError
 		}

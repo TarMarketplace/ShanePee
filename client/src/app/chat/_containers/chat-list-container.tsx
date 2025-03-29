@@ -1,41 +1,136 @@
 'use client'
 
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
+import { useUser } from '@/providers/user-provider'
+
 import { cn } from '@/lib/utils'
+
+import type {
+  ChatMessage} from '@/generated/api';
+import {
+  getChatDetail,
+  pollMessage,
+  sendMessage,
+} from '@/generated/api'
 
 import { Chat } from '../_components/chat'
 import { ChatBox } from '../_components/chat-box'
 
 export function ChatListContainer() {
   const [activeChat, setActiveChat] = useState(0)
+  const [chat, setChat] = useState<ChatMessage[]>([])
+  const [input, setInput] = useState('')
+  const pollChatIdRef = useRef(0)
+  const { user } = useUser()
 
   const chats = [
     {
       id: 1,
       photo: 'photo',
-      sellerName: 'John Doe',
+      sellerName: 'John Do b@b',
       date: new Date(),
       message: 'last message',
+      user_id: 3523329031,
     },
     {
       id: 2,
       photo: 'photo',
-      sellerName: 'John Doe 2',
+      sellerName: 'John Doe a@b',
       date: new Date(),
       message: 'last message',
-    },
-    {
-      id: 3,
-      photo: 'photo',
-      sellerName: 'John Doe 3',
-      date: new Date(),
-      message: 'last message',
+      user_id: 4105047913,
     },
   ]
+
+  const handleSendMessage = () => {
+    sendMessage({
+      path: {
+        userID: activeChat,
+      },
+      body: {
+        content: input,
+        sender: 'BUYER',
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          setInput('')
+          setChat((prevChat) => [...prevChat, response.data])
+          pollChatIdRef.current = response.data.id
+          toast.success('Message sent')
+        } else {
+          toast.error('Error sending message')
+        }
+      })
+      .catch(() => {
+        toast.error('Error sending message')
+      })
+  }
+
+  const pollChat = useCallback(async () => {
+    await pollMessage({
+      path: {
+        userID: activeChat,
+      },
+      query: {
+        as: 'BUYER',
+        chatID: pollChatIdRef.current,
+      },
+    })
+      .then((response) => {
+        const message = response?.data?.data
+        if (Array.isArray(message)) {
+          setChat((prevChat) => [...prevChat, ...message])
+          pollChatIdRef.current = message[message.length - 1].id
+        } else {
+          toast.error('Something went wrong')
+        }
+      })
+      .then(() => {
+        pollChat()
+      })
+      .catch(() => {
+        toast.error('Something went wrong')
+      })
+  }, [activeChat])
+
+  const getChat = useCallback(async () => {
+    await getChatDetail({
+      path: {
+        userID: activeChat,
+      },
+    })
+      .then((response) => {
+        const message = response?.data?.data
+        if (Array.isArray(message)) {
+          if (message.length < 1) return
+          setChat(message)
+          pollChatIdRef.current = message[message.length - 1].id
+        } else {
+          console.log(message)
+          toast.error('Something went wrong')
+        }
+      })
+      .then(() => {
+        pollChat()
+      })
+      .catch((e) => {
+        console.log(e)
+        toast.error('Something went wrong')
+      })
+  }, [activeChat, pollChat])
+
+  useEffect(() => {
+    if (activeChat) {
+      setChat([])
+      if (activeChat != user?.id) getChat()
+    }
+  }, [activeChat, user?.id, getChat])
 
   const selectedChat = chats.find((chat) => chat?.id == activeChat)
 
@@ -53,7 +148,7 @@ export function ChatListContainer() {
               <div
                 key={chat.id}
                 onClick={() =>
-                  setActiveChat(activeChat == chat.id ? 0 : chat.id)
+                  setActiveChat(activeChat == chat.user_id ? 0 : chat.user_id)
                 }
                 className='cursor-pointer'
               >
@@ -62,7 +157,7 @@ export function ChatListContainer() {
                   sellerName={chat.sellerName}
                   date={chat.date}
                   message={chat.message}
-                  selected={activeChat == chat.id}
+                  selected={activeChat == chat.user_id}
                 />
               </div>
             )
@@ -78,6 +173,10 @@ export function ChatListContainer() {
         <Chat
           sellerName={selectedChat?.sellerName || ''}
           handleBackButton={() => setActiveChat(0)}
+          chat={chat}
+          input={input}
+          setInput={setInput}
+          handleSendMessage={handleSendMessage}
         />
       )}
     </div>

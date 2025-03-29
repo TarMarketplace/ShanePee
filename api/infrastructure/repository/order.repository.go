@@ -24,16 +24,8 @@ func (r *orderRepositoryImpl) CreateOrderItems(ctx context.Context, orderItems [
 	return err
 }
 
-func (r *orderRepositoryImpl) FindOrdersByStatus(ctx context.Context, status string, sellerID int64) ([]*domain.Order, error) {
-	var order []*domain.Order
-	if err := r.db.Where("seller_id = ? AND status = ?", sellerID, status).Find(&order).Error; err != nil {
-		return nil, err
-	}
-	return order, nil
-}
-
 func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error) {
-	query := r.db.Preload("OrderItems.ArtToy").Where("seller_id = ?", sellerID)
+	query := r.db.Preload("OrderItems.ArtToy.Owner").Where("seller_id = ?", sellerID)
 	if status != "" {
 		query = query.Where("status = ?", status)
 	}
@@ -46,7 +38,7 @@ func (r *orderRepositoryImpl) FindOrdersWithArtToysBySellerID(ctx context.Contex
 }
 
 func (r *orderRepositoryImpl) FindOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64, status string) ([]*domain.Order, error) {
-	query := r.db.Preload("OrderItems.ArtToy").Where("buyer_id = ?", buyerID)
+	query := r.db.Preload("OrderItems.ArtToy.Owner").Where("buyer_id = ?", buyerID)
 	if status != "" {
 		query = query.Where("status = ?", status)
 	}
@@ -60,7 +52,7 @@ func (r *orderRepositoryImpl) FindOrdersWithArtToysByBuyerID(ctx context.Context
 
 func (r *orderRepositoryImpl) FindOrderByID(ctx context.Context, id int64) (*domain.Order, error) {
 	var order domain.Order
-	if err := r.db.Preload("OrderItems.ArtToy").Where("id = ?", id).Take(&order).Error; err != nil {
+	if err := r.db.Preload("OrderItems.ArtToy.Owner").Where("id = ?", id).Take(&order).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, domain.ErrOrderNotFound
 		}

@@ -45,11 +45,14 @@ func (h *CartHandler) RegisterAddItemToCart(api huma.API) {
 			if errors.Is(err, service.ErrArtToyBelongToOwner) {
 				return nil, handler.ErrArtToyBelongToOwner
 			}
-			if errors.Is(err, service.ErrArtToyNotFound) {
-				return nil, handler.ErrArtToyNotFound
+			if errors.Is(err, service.ErrArtToyWasPurchased) {
+				return nil, handler.ErrArtToyWasPurchased
+			}
+			if errors.Is(err, service.ErrItemAlreadyAddedToCart) {
+				return nil, handler.ErrItemAlreadyAddedToCart
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &AddItemToCartOutput{
 			Body: cartItem,

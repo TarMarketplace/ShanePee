@@ -35,7 +35,7 @@ func (h *AuthHandler) RegisterResetPassword(api huma.API) {
 				return nil, handler.ErrInvalidToken
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

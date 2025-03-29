@@ -9,4 +9,5 @@ type CartRepository interface {
 	RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error
 	ClearItemsByOwnerID(ctx context.Context, ownerID int64) error
 	GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*CartItem, error)
+	GetCartWithItemByOwnerIDAndArtToyID(ctx context.Context, ownerID int64, artToyID int64) (*CartItem, error)
 }

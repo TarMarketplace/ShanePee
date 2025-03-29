@@ -28,7 +28,7 @@ func (h *AuthHandler) RegisterCreatePasswordResetRequests(api huma.API) {
 	}, func(ctx context.Context, i *CreateRequestPasswordResetInput) (*struct{}, error) {
 		if err := h.authSvc.RequestPasswordReset(ctx, i.Body.Email); err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

@@ -49,7 +49,7 @@ func (h *ReviewHandler) RegisterCreateReview(api huma.API) {
 			if errors.Is(err, service.ErrOrderNotFound) {
 				return nil, handler.ErrOrderNotFound
 			}
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &CreateReviewOutput{
 			Body: review,

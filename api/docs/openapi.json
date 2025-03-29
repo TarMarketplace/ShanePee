@@ -222,6 +222,9 @@
           "name": {
             "type": "string"
           },
+          "owner": {
+            "$ref": "#/components/schemas/User"
+          },
           "owner_id": {
             "format": "int64",
             "type": "integer"
@@ -252,7 +255,8 @@
           "availability",
           "owner_id",
           "release_date",
-          "average_rating"
+          "average_rating",
+          "owner"
         ],
         "type": "object"
       },
@@ -2606,58 +2610,6 @@
         "summary": "Create Order Review",
         "tags": [
           "Review"
-        ]
-      }
-    },
-    "/v1/order/{status}": {
-      "get": {
-        "description": "Get orders by status",
-        "operationId": "get-orders-by-status",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "status",
-            "required": true,
-            "schema": {
-              "enum": [
-                "PREPARING",
-                "DELIVERING",
-                "COMPLETED"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayResponseOrder"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorModel"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "security": [
-          {
-            "sessionId": []
-          }
-        ],
-        "summary": "Get Orders by Status",
-        "tags": [
-          "Order"
         ]
       }
     },

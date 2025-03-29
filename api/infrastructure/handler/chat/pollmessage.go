@@ -56,7 +56,7 @@ func (h *ChatHandler) RegisterPollMessage(api huma.API) {
 				return nil, handler.ErrChatNotFound
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &PollMessageOutput{
 			Body: handler.ArrayResponse[domain.ChatMessage]{

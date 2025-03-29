@@ -37,7 +37,7 @@ func (h *OrderHandler) RegisterGetOrdersOfSeller(api huma.API) {
 		data, err := h.orderSvc.GetOrdersWithArtToysBySellerID(ctx, *userId, i.Status)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetOrdersOfSellerOutput{
 			Body: handler.ArrayResponse[domain.Order]{

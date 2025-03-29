@@ -7,7 +7,7 @@ import (
 var (
 	ErrAuthenticationRequired   = huma.Error401Unauthorized("Authentication required")
 	ErrForbidden                = huma.Error403Forbidden("Forbidden")
-	ErrIntervalServerError      = huma.Error500InternalServerError("Internal server error")
+	ErrInternalServerError      = huma.Error500InternalServerError("Internal server error")
 	ErrArtToyNotFound           = huma.Error404NotFound("Art toy not found")
 	ErrArtToyBelongToOwner      = huma.Error403Forbidden("Art toy is bought by the owner")
 	ErrArtToyNotBelongToOwner   = huma.Error403Forbidden("Art toy does not belong to the owner")
@@ -23,6 +23,8 @@ var (
 	ErrUserEmailAlreadyExist    = huma.Error403Forbidden("User with this email already exists")
 	ErrChatNotFound             = huma.Error404NotFound("Chat not found")
 	ErrChatNotBelongToOwner     = huma.Error403Forbidden("Chat does not belong to the owner")
+	ErrItemAlreadyAddedToCart   = huma.Error403Forbidden("Item already added to the cart")
+	ErrArtToyWasPurchased       = huma.Error403Forbidden("Art toy was purchased")
 )
 
 type ArrayResponse[T any] struct {

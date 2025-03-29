@@ -11,6 +11,7 @@ var (
 	ErrCartItemNotFound         error = domain.ErrCartItemNotFound
 	ErrCartItemNotBelongToOwner error = domain.ErrCartItemNotBelongToOwner
 	ErrItemAlreadyAddedToCart   error = domain.ErrItemAlreadyAddedToCart
+	ErrArtToyWasPurchased       error = domain.ErrArtToyWasPurchased
 )
 
 type CartService interface {
@@ -46,7 +47,7 @@ func (s *cartServiceImpl) AddItemToCart(ctx context.Context, buyerID int64, artT
 		return nil, ErrArtToyBelongToOwner
 	}
 	if !artToy.Availability {
-		return nil, ErrArtToyNotFound
+		return nil, ErrArtToyWasPurchased
 	}
 
 	_, err = s.cartRepo.GetCartWithItemByOwnerIDAndArtToyID(ctx, buyerID, artToyID)

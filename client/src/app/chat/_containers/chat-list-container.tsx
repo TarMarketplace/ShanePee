@@ -1,6 +1,7 @@
 'use client'
 
 import { Icon } from '@iconify/react/dist/iconify.js'
+import imageCompression from 'browser-image-compression'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -21,6 +22,7 @@ export function ChatListContainer() {
   const [activeChat, setActiveChat] = useState(0)
   const [chat, setChat] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
+  const [previewImages, setPreviewImages] = useState<string[]>([])
   const pollChatIdRef = useRef(0)
   const isPollingRef = useRef(false)
   const { user } = useUser()
@@ -45,7 +47,73 @@ export function ChatListContainer() {
     },
   ]
 
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      const files = Array.from(event.target.files)
+      const imageUrls: string[] = []
+
+      for (const file of files) {
+        try {
+          const compressedFile = await imageCompression(file, {
+            maxWidthOrHeight: 800,
+            maxSizeMB: 1,
+          })
+
+          const base64String = await convertToBase64(compressedFile)
+          imageUrls.push(base64String)
+        } catch (error) {
+          console.error('Error during image compression:', error)
+        }
+      }
+
+      setPreviewImages((prev) => [...prev, ...imageUrls])
+    }
+  }
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
+  const removeImage = (index: number) => {
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index))
+  }
+
   const handleSendMessage = () => {
+    if (previewImages.length > 0) {
+      previewImages.forEach((image) => {
+        sendMessage({
+          path: {
+            userID: activeChat,
+          },
+          body: {
+            content: image,
+            sender: 'BUYER',
+          },
+        })
+          .then((response) => {
+            if (response.data) {
+              setInput('')
+              setChat((prevChat) => [...prevChat, response.data])
+              pollChatIdRef.current = response.data.id
+              toast.success('Image sent')
+            } else {
+              toast.error('Error sending image')
+            }
+          })
+          .catch(() => {
+            toast.error('Error sending image')
+          })
+      })
+      setPreviewImages([])
+    }
+
     sendMessage({
       path: {
         userID: activeChat,
@@ -180,10 +248,13 @@ export function ChatListContainer() {
       ) : (
         <Chat
           sellerName={selectedChat?.sellerName || ''}
-          handleBackButton={() => setActiveChat(0)}
           chat={chat}
           input={input}
           setInput={setInput}
+          previewImages={previewImages}
+          handleImageUpload={handleImageUpload}
+          removeImage={removeImage}
+          handleBackButton={() => setActiveChat(0)}
           handleSendMessage={handleSendMessage}
         />
       )}

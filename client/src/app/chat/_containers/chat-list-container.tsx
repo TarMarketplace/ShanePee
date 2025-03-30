@@ -1,6 +1,7 @@
 'use client'
 
 import { Icon } from '@iconify/react/dist/iconify.js'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -10,13 +11,8 @@ import { useUser } from '@/providers/user-provider'
 
 import { cn } from '@/lib/utils'
 
-import type {
-  ChatMessage} from '@/generated/api';
-import {
-  getChatDetail,
-  pollMessage,
-  sendMessage,
-} from '@/generated/api'
+import type { ChatMessage } from '@/generated/api'
+import { getChatDetail, pollMessage, sendMessage } from '@/generated/api'
 
 import { Chat } from '../_components/chat'
 import { ChatBox } from '../_components/chat-box'
@@ -26,7 +22,9 @@ export function ChatListContainer() {
   const [chat, setChat] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const pollChatIdRef = useRef(0)
+  const isPollingRef = useRef(false)
   const { user } = useUser()
+  const router = useRouter()
 
   const chats = [
     {
@@ -73,6 +71,8 @@ export function ChatListContainer() {
   }
 
   const pollChat = useCallback(async () => {
+    if (!isPollingRef.current) return
+
     await pollMessage({
       path: {
         userID: activeChat,
@@ -87,6 +87,9 @@ export function ChatListContainer() {
         if (Array.isArray(message)) {
           setChat((prevChat) => [...prevChat, ...message])
           pollChatIdRef.current = message[message.length - 1].id
+        } else if (response.response.status == 401) {
+          isPollingRef.current = false
+          router.push('/login')
         } else {
           toast.error('Something went wrong')
         }
@@ -97,9 +100,11 @@ export function ChatListContainer() {
       .catch(() => {
         toast.error('Something went wrong')
       })
-  }, [activeChat])
+  }, [activeChat, router])
 
   const getChat = useCallback(async () => {
+    isPollingRef.current = true
+
     await getChatDetail({
       path: {
         userID: activeChat,
@@ -111,6 +116,9 @@ export function ChatListContainer() {
           if (message.length < 1) return
           setChat(message)
           pollChatIdRef.current = message[message.length - 1].id
+        } else if (response.response.status == 401) {
+          isPollingRef.current = false
+          router.push('/login')
         } else {
           console.log(message)
           toast.error('Something went wrong')
@@ -123,7 +131,7 @@ export function ChatListContainer() {
         console.log(e)
         toast.error('Something went wrong')
       })
-  }, [activeChat, pollChat])
+  }, [activeChat, pollChat, router])
 
   useEffect(() => {
     if (activeChat) {

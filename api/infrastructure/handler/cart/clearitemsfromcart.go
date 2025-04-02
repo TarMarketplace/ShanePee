@@ -28,7 +28,7 @@ func (h *CartHandler) RegisterClearItemsFromCart(api huma.API) {
 		err := h.cartSvc.ClearItemsByOwnerID(ctx, *userID)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

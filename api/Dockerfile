@@ -15,6 +15,8 @@ RUN make
 
 FROM debian:bookworm-slim
 
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /build/out/api /usr/local/bin/api
 
 ENTRYPOINT [ "api" ]

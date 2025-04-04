@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { Text } from '@/components/text'
 
-import type { ArrayResponseReview } from '@/generated/api'
+import type { ArrayResponseReviewWithTruncatedBuyer } from '@/generated/api'
 import { getReviewsOfSeller } from '@/generated/api'
 
 import { SellerReviewCard } from '../_components/seller-review-card'
@@ -18,9 +18,11 @@ type SellerReviewContainerProps = {
 export function SellerReviewContainer({
   sellerId,
 }: SellerReviewContainerProps) {
-  const [reviews, setReviews] = useState<ArrayResponseReview>({
-    data: [],
-  })
+  const [reviews, setReviews] = useState<ArrayResponseReviewWithTruncatedBuyer>(
+    {
+      data: [],
+    }
+  )
 
   useEffect(() => {
     getReviewsOfSeller({
@@ -52,11 +54,11 @@ export function SellerReviewContainer({
           </Text>
         </Link>
       </div>
-      <div className='flex gap-3 overflow-x-auto p-4'>
-        {reviews.data?.map((review) => {
+      <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
+        {reviews.data?.map((review, i) => {
           return (
             <SellerReviewCard
-              key={review.id}
+              key={i}
               review={review} // TODO add photo and sellerName in review response
               photo='data:image/png;base64,mfkirjIDSFIj32asdf...'
               sellerName='John Doe'

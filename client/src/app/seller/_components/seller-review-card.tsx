@@ -4,10 +4,10 @@ import { AvatarImage } from '@radix-ui/react-avatar'
 import { Avatar, AvatarFallback } from '@/components/avatar'
 import { Text } from '@/components/text'
 
-import type { Review } from '@/generated/api'
+import type { ReviewWithTruncatedBuyer } from '@/generated/api'
 
 export interface SellerReviewCardProps {
-  review: Review
+  review: ReviewWithTruncatedBuyer
   photo: string
   sellerName: string
 }

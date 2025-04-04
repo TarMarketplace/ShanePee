@@ -99,6 +99,7 @@ export function RegisterContainer({ onSwitchMode }: RegisterContainerProps) {
     if (response.ok) {
       toast.success('Registered successfully')
       await handleUpdateUserDetails(step1Form.getValues())
+      window.location.reload()
     } else {
       toast.error('Something went wrong')
     }

@@ -134,8 +134,8 @@ func (s *chatServiceImpl) notifySubscriberForChatList(userID int64, chat *domain
 	s.Lock()
 	defer s.Unlock()
 
-	for subscribedUser := range s.subscribersForChatList[userID] {
-		subscribedUser <- chat
+	for subscriber := range s.subscribersForChatList[userID] {
+		subscriber <- chat
 	}
 	delete(s.subscribersForChatList, userID)
 }

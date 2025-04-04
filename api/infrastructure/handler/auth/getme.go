@@ -39,7 +39,7 @@ func (h *AuthHandler) RegisterGetMe(api huma.API) {
 				return nil, handler.ErrUserNotFound
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetMeOutput{
 			Body: data,

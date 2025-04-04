@@ -41,7 +41,7 @@ func (h *ChatHandler) RegisterGetChatDetail(api huma.API) {
 		}
 
 		if err != nil {
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetChatDetailOutput{
 			Body: handler.ArrayResponse[domain.ChatMessage]{

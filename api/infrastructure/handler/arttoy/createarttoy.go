@@ -44,7 +44,7 @@ func (h *ArtToyHandler) RegisterCreateArtToy(api huma.API) {
 		artToy, err := h.artToySvc.CreateArtToy(ctx, i.Body.Name, i.Body.Description, i.Body.Price, i.Body.Photo, *userID)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &CreateArtToyOutput{
 			Body: artToy,

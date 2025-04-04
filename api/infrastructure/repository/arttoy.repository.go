@@ -27,10 +27,11 @@ func (r *artToyRepositoryImpl) CreateArtToy(ctx context.Context, artToy *domain.
 func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
 	if err := r.db.
+		Preload("Owner").
 		Select(`
-		art_toys.*, 
-		ROUND(AVG(reviews.rating), 1) AS average_rating
-	`).
+			art_toys.*, 
+			ROUND(AVG(reviews.rating), 1) AS average_rating
+		`).
 		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 		Group("art_toys.id").
@@ -43,10 +44,11 @@ func (r *artToyRepositoryImpl) FindArtToys(ctx context.Context) ([]*domain.ArtTo
 func (r *artToyRepositoryImpl) FindArtToysByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
 	if err := r.db.
+		Preload("Owner").
 		Select(`
-		art_toys.*, 
-		ROUND(AVG(reviews.rating), 1) AS average_rating
-	`).
+			art_toys.*, 
+			ROUND(AVG(reviews.rating), 1) AS average_rating
+		`).
 		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 		Where("art_toys.owner_id = ?", ownerID).
@@ -60,10 +62,11 @@ func (r *artToyRepositoryImpl) FindArtToysByOwnerID(ctx context.Context, ownerID
 func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error) {
 	var artToy domain.ArtToy
 	if err := r.db.
+		Preload("Owner").
 		Select(`
-		art_toys.*, 
-		ROUND(AVG(reviews.rating), 1) AS average_rating
-	`).
+			art_toys.*, 
+			ROUND(AVG(reviews.rating), 1) AS average_rating
+		`).
 		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 		Where("art_toys.id = ?", id).
@@ -80,10 +83,11 @@ func (r *artToyRepositoryImpl) FindArtToyByID(ctx context.Context, id int64) (*d
 func (r *artToyRepositoryImpl) FindArtToysBySearchParams(ctx context.Context, searchParams *domain.ArtToySearchParams) ([]*domain.ArtToy, error) {
 	var artToys []*domain.ArtToy
 	query := r.db.
+		Preload("Owner").
 		Select(`
-		art_toys.*, 
-		ROUND(AVG(reviews.rating), 1) AS average_rating
-	`).
+			art_toys.*, 
+			ROUND(AVG(reviews.rating), 1) AS average_rating
+		`).
 		Joins("LEFT JOIN orders ON art_toys.owner_id = orders.seller_id").
 		Joins("LEFT JOIN reviews ON reviews.order_id = orders.id").
 		Group("art_toys.id")

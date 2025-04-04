@@ -65,6 +65,7 @@ export type ArtToy = {
     description: string;
     id: number;
     name: string;
+    owner: User;
     owner_id: number;
     photo?: string;
     price: number;
@@ -1103,33 +1104,6 @@ export type CreateReviewResponses = {
 };
 
 export type CreateReviewResponse = CreateReviewResponses[keyof CreateReviewResponses];
-
-export type GetOrdersByStatusData = {
-    body?: never;
-    path: {
-        status: 'PREPARING' | 'DELIVERING' | 'COMPLETED';
-    };
-    query?: never;
-    url: '/v1/order/{status}';
-};
-
-export type GetOrdersByStatusErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type GetOrdersByStatusError = GetOrdersByStatusErrors[keyof GetOrdersByStatusErrors];
-
-export type GetOrdersByStatusResponses = {
-    /**
-     * OK
-     */
-    200: ArrayResponseOrder;
-};
-
-export type GetOrdersByStatusResponse = GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses];
 
 export type GetSellersData = {
     body?: never;

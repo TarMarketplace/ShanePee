@@ -13,10 +13,9 @@ import (
 )
 
 type GetChatMessageInput struct {
-	UserID int64           `path:"userID"`
-	As     domain.UserType `query:"as"`
-	ChatID int64           `query:"chatID"`
-	Poll   bool            `query:"poll"`
+	UserID int64 `path:"userID"`
+	Poll   bool  `query:"poll"`
+	ChatID int64 `query:"chatID"`
 }
 
 type GetChatMessageOutput struct {
@@ -30,7 +29,7 @@ func (h *ChatHandler) RegisterGetChatMessage(api huma.API) {
 		Path:        "/v1/chat/{userID}",
 		Tags:        []string{"Chat"},
 		Summary:     "Get Chat Message",
-		Description: "Get chat message. In the chat as a seller or a buyer with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
+		Description: "Get chat message. In the chat with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
 		Security: []map[string][]string{
 			{"sessionId": {}},
 		},
@@ -40,15 +39,7 @@ func (h *ChatHandler) RegisterGetChatMessage(api huma.API) {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		var data []*domain.ChatMessage
-		var err error
-
-		if i.As == domain.Seller {
-			data, err = h.chatSvc.GetChatMessageBySeller(ctx, i.UserID, *userID, i.ChatID, i.Poll)
-		} else {
-			data, err = h.chatSvc.GetChatMessageByBuyer(ctx, *userID, i.UserID, i.ChatID, i.Poll)
-		}
-
+		data, err := h.chatSvc.GetChatMessage(ctx, *userID, i.UserID, i.Poll, i.ChatID)
 		if err != nil {
 			if errors.Is(err, service.ErrChatNotBelongToOwner) {
 				return nil, handler.ErrChatNotBelongToOwner

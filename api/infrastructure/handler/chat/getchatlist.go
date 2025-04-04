@@ -25,14 +25,14 @@ func (h *ChatHandler) RegisterGetChatList(api huma.API) {
 		Path:        "/v1/chatlist",
 		Tags:        []string{"Chat"},
 		Summary:     "Get Chat List",
-		Description: "Get chat list",
+		Description: "Get chat list. From all chats with the user id, poll chat to wait for new message sent by users connected with the user id. When receiving messages from the users or time out, polling again",
 	}, func(ctx context.Context, i *GetChatListInput) (*GetChatListOutput, error) {
 		userID := handler.GetUserID(ctx)
 		if userID == nil {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		data, err := h.chatSvc.GetChatList(ctx, *userID, i.ChatID, i.Poll)
+		data, err := h.chatSvc.GetChatList(ctx, *userID, i.Poll, i.ChatID)
 		if err != nil {
 			return nil, handler.ErrInternalServerError
 		}

@@ -531,22 +531,11 @@
               "data:image/png;base64,mfkirjIDSFIj324if..."
             ],
             "type": "string"
-          },
-          "target_type": {
-            "enum": [
-              "BUYER",
-              "SELLER"
-            ],
-            "examples": [
-              "BUYER"
-            ],
-            "type": "string"
           }
         },
         "required": [
           "id",
           "target_id",
-          "target_type",
           "last_chat_message",
           "last_chat_time"
         ],
@@ -563,13 +552,6 @@
             "format": "uri",
             "readOnly": true,
             "type": "string"
-          },
-          "buyer_id": {
-            "examples": [
-              97
-            ],
-            "format": "int64",
-            "type": "integer"
           },
           "content": {
             "examples": [
@@ -591,29 +573,25 @@
             "format": "int64",
             "type": "integer"
           },
-          "seller_id": {
+          "receiver_id": {
             "examples": [
               97
             ],
             "format": "int64",
             "type": "integer"
           },
-          "sender": {
-            "enum": [
-              "BUYER",
-              "SELLER"
-            ],
+          "sender_id": {
             "examples": [
-              "BUYER"
+              97
             ],
-            "type": "string"
+            "format": "int64",
+            "type": "integer"
           }
         },
         "required": [
           "id",
-          "buyer_id",
-          "seller_id",
-          "sender",
+          "sender_id",
+          "receiver_id",
           "content",
           "created_at"
         ],
@@ -636,20 +614,9 @@
               "Hello world"
             ],
             "type": "string"
-          },
-          "sender": {
-            "enum": [
-              "BUYER",
-              "SELLER"
-            ],
-            "examples": [
-              "SELLER"
-            ],
-            "type": "string"
           }
         },
         "required": [
-          "sender",
           "content"
         ],
         "type": "object"
@@ -2441,7 +2408,7 @@
     },
     "/v1/chat/send/{userID}": {
       "post": {
-        "description": "Send new message by a buyer or a seller to the user id",
+        "description": "Send new message to the user id",
         "operationId": "send-message",
         "parameters": [
           {
@@ -2499,7 +2466,7 @@
     },
     "/v1/chat/{userID}": {
       "get": {
-        "description": "Get chat message. In the chat as a seller or a buyer with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
+        "description": "Get chat message. In the chat with the user id, poll message to wait for new message sent by the user id. When receiving messages from the user id or time out, polling again",
         "operationId": "get-chat-message",
         "parameters": [
           {
@@ -2514,9 +2481,9 @@
           {
             "explode": false,
             "in": "query",
-            "name": "as",
+            "name": "poll",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -2526,14 +2493,6 @@
             "schema": {
               "format": "int64",
               "type": "integer"
-            }
-          },
-          {
-            "explode": false,
-            "in": "query",
-            "name": "poll",
-            "schema": {
-              "type": "boolean"
             }
           }
         ],
@@ -2572,7 +2531,7 @@
     },
     "/v1/chatlist": {
       "get": {
-        "description": "Get chat list",
+        "description": "Get chat list. From all chats with the user id, poll chat to wait for new message sent by users connected with the user id. When receiving messages from the users or time out, polling again",
         "operationId": "get-chat-list",
         "parameters": [
           {

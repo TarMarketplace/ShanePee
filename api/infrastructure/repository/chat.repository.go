@@ -24,10 +24,13 @@ func (r *chatRepositoryImpl) FindChatByID(ctx context.Context, chatID int64) (*d
 	return &chat, nil
 }
 
-func (r *chatRepositoryImpl) FindLatestChatsByBuyerIDAndSellerID(ctx context.Context, buyerID int64, sellerID int64, latestChatTime time.Time) ([]*domain.ChatMessage, error) {
+func (r *chatRepositoryImpl) FindLatestChatsBySenderIDAndReceiverID(ctx context.Context, senderID int64, receiverID int64, latestChatTime time.Time) ([]*domain.ChatMessage, error) {
 	var chats []*domain.ChatMessage
-	err := r.db.Model(&domain.ChatMessage{}).
-		Where("buyer_id = ? AND seller_id = ? AND created_at > ?", buyerID, sellerID, latestChatTime).
+	err := r.db.Raw("? UNION ?",
+		r.db.Model(&domain.ChatMessage{}).
+			Where("sender_id = ? AND receiver_id = ? AND created_at > ?", senderID, receiverID, latestChatTime),
+		r.db.Model(&domain.ChatMessage{}).
+			Where("sender_id = ? AND receiver_id = ? AND created_at > ?", receiverID, senderID, latestChatTime)).
 		Order("created_at ASC").
 		Find(&chats).Error
 	if err != nil {
@@ -38,26 +41,28 @@ func (r *chatRepositoryImpl) FindLatestChatsByBuyerIDAndSellerID(ctx context.Con
 
 func (r *chatRepositoryImpl) FindChatListByUserID(ctx context.Context, userID int64, latestChatTime time.Time) ([]*domain.ChatList, error) {
 	var chatList []*domain.ChatList
-	err := r.db.Raw("? UNION ?",
-		r.db.Model(&domain.ChatMessage{}).
-			Select("chat_messages.id AS id, chat_messages.buyer_id AS target_id, chat_messages.sender AS target_type, users.first_name AS target_first_name, users.last_name AS target_last_name, users.photo AS target_photo, chat_messages.content AS last_chat_message, chat_messages.created_at AS last_chat_time").
-			Joins(`JOIN (
-				SELECT seller_id, MAX(chat_messages.created_at) AS max_created_at
-				FROM chat_messages
-				GROUP BY seller_id
-			) AS latest ON latest.seller_id = chat_messages.seller_id AND chat_messages.created_at = latest.max_created_at`).
-			Joins("JOIN users ON users.id = chat_messages.buyer_id").
-			Where("chat_messages.buyer_id = ? AND chat_messages.created_at > ?", userID, latestChatTime),
-		r.db.Model(&domain.ChatMessage{}).
-			Select("chat_messages.id AS id, chat_messages.seller_id AS target_id, chat_messages.sender AS target_type, users.first_name AS target_first_name, users.last_name AS target_last_name, users.photo AS target_photo, chat_messages.content AS last_chat_message, chat_messages.created_at AS last_chat_time").
-			Joins(`JOIN (
-				SELECT buyer_id, MAX(chat_messages.created_at) AS max_created_at
-				FROM chat_messages
-				GROUP BY buyer_id
-			) AS latest ON latest.buyer_id = chat_messages.buyer_id AND chat_messages.created_at = latest.max_created_at`).
-			Joins("JOIN users ON users.id = chat_messages.seller_id").
-			Where("chat_messages.seller_id = ? AND chat_messages.created_at > ?", userID, latestChatTime),
-	).Order("chat_messages.created_at ASC").
+
+	queryLatestChat := r.db.Model(&domain.ChatMessage{}).
+		Select(`
+			CASE 
+				WHEN sender_id < receiver_id THEN sender_id
+				ELSE receiver_id
+			END AS user1, 
+			CASE
+				WHEN sender_id < receiver_id THEN receiver_id
+				ELSE sender_id
+			END AS user2,
+			MAX(created_at) AS last_chat_time`).
+		Where("sender_id = ? OR receiver_id = ?", userID, userID).
+		Group("user1, user2")
+
+	err := r.db.Model(&domain.ChatMessage{}).
+		Select("chat_messages.id AS id, users.id AS target_id, users.first_name AS target_first_name, users.last_name AS target_last_name, users.photo AS target_photo, chat_messages.content AS last_chat_message, chat_messages.created_at AS last_chat_time").
+		Joins(`JOIN (?) AS latest_chat ON 
+			(CASE WHEN chat_messages.sender_id < chat_messages.receiver_id THEN chat_messages.sender_id ELSE chat_messages.receiver_id END) = latest_chat.user1 AND 
+			(CASE WHEN chat_messages.sender_id < chat_messages.receiver_id THEN chat_messages.receiver_id ELSE chat_messages.sender_id END) = latest_chat.user2 AND
+			chat_messages.created_at = latest_chat.last_chat_time AND chat_messages.created_at > ?`, queryLatestChat, latestChatTime).
+		Joins("JOIN users ON (chat_messages.sender_id = users.id OR chat_messages.receiver_id = users.id) AND users.id != ?", userID).
 		Find(&chatList).Error
 	if err != nil {
 		return nil, err

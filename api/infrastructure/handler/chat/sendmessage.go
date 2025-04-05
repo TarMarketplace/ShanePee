@@ -10,7 +10,8 @@ import (
 )
 
 type ChatMessageCreateBody struct {
-	Content string `json:"content" example:"Hello world"`
+	MessageType domain.ChatType `json:"message_type" enum:"MESSAGE,IMAGE" example:"MESSAGE"`
+	Content     string          `json:"content" example:"Hello world"`
 }
 
 type SendMessageInput struct {
@@ -39,7 +40,7 @@ func (h *ChatHandler) RegisterSendMessage(api huma.API) {
 			return nil, handler.ErrAuthenticationRequired
 		}
 
-		chat, err := h.chatSvc.SendMessage(ctx, *userID, i.UserID, i.Body.Content)
+		chat, err := h.chatSvc.SendMessage(ctx, *userID, i.UserID, i.Body.MessageType, i.Body.Content)
 		if err != nil {
 			return nil, handler.ErrInternalServerError
 		}

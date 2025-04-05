@@ -3,13 +3,16 @@
 import { Icon } from '@iconify/react'
 import Link from 'next/link'
 
+import type { User } from '@/generated/api'
+
 interface SidebarProps {
+  user: User | null
   isOpen: boolean
   setIsOpen: (open: boolean) => void
   onLogout: () => void
 }
 
-export function Sidebar({ isOpen, setIsOpen, onLogout }: SidebarProps) {
+export function Sidebar({ user, isOpen, setIsOpen, onLogout }: SidebarProps) {
   const handleBackdropClick = () => {
     setIsOpen(false)
   }
@@ -43,7 +46,18 @@ export function Sidebar({ isOpen, setIsOpen, onLogout }: SidebarProps) {
           <div className='p-3'>
             <Link href='/user/account'>บัญชีของฉัน</Link>
           </div>
-          <div className='p-3'>การซื้อของฉัน</div>
+          <div className='p-3'>
+            <Link href='/buyer/order-history'>การซื้อของฉัน</Link>
+          </div>
+          <div className='p-3'>
+            <Link href='/chat'>แชทของฉัน</Link>
+          </div>
+          <div className='p-3'>
+            <Link href={`/seller/${user?.id}`}>ร้านค้าของฉัน</Link>
+          </div>
+          <div className='p-3'>
+            <Link href='/order-history'>ประวัติการขาย</Link>
+          </div>
           {/* <div className='p-3'>ยืนยันตัวตนผู้ขาย</div> */}
           <div className='p-3'>
             <button onClick={onLogout} className='text-error'>

@@ -41,12 +41,21 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
             )}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='divide-y divide-grey-200'>
+        <DropdownMenuContent className='flex flex-col divide-y divide-grey-200'>
           <Link href='/user/account'>
             <DropdownMenuItem>บัญชีของฉัน</DropdownMenuItem>
           </Link>
           <Link href='/buyer/order-history'>
             <DropdownMenuItem>การซื้อของฉัน</DropdownMenuItem>
+          </Link>
+          <Link href='/chat'>
+            <DropdownMenuItem>แชทของฉัน</DropdownMenuItem>
+          </Link>
+          <Link href={`/seller/${user?.id}`}>
+            <DropdownMenuItem>ร้านค้าของฉัน</DropdownMenuItem>
+          </Link>
+          <Link href='/order-history'>
+            <DropdownMenuItem>ประวัติการขาย</DropdownMenuItem>
           </Link>
           {/* <DropdownMenuItem>ยืนยันตัวตนผู้ขาย</DropdownMenuItem> */}
           <DropdownMenuItem onClick={onLogout} className='text-error'>
@@ -56,6 +65,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
       </DropdownMenu>
       <div className='md:hidden'>
         <Sidebar
+          user={user}
           isOpen={isSideMenuOpen}
           setIsOpen={setIsSideMenuOpen}
           onLogout={onLogout}

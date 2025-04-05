@@ -14,72 +14,44 @@ var (
 )
 
 type ChatService interface {
-	GetChatDetail(ctx context.Context, buyerID int64, sellerID int64) ([]*domain.ChatMessage, error)
-	SendMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error)
-	SendMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error)
-	PollMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, chatID int64) ([]*domain.ChatMessage, error)
-	PollMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, chatID int64) ([]*domain.ChatMessage, error)
+	GetChatList(ctx context.Context, userID int64, poll bool, chatID int64) ([]*domain.ChatList, error)
+	SendMessage(ctx context.Context, senderID int64, receiverID int64, content string) (*domain.ChatMessage, error)
+	GetChatMessage(ctx context.Context, senderID int64, receiverID int64, poll bool, chatID int64) ([]*domain.ChatMessage, error)
 }
 
 type chatServiceImpl struct {
-	chatRepo          domain.ChatRepository
-	subscribedBuyers  map[int64]map[chan *domain.ChatMessage]struct{}
-	subscribedSellers map[int64]map[chan *domain.ChatMessage]struct{}
+	chatRepo               domain.ChatRepository
+	userRepo               domain.UserRepository
+	subscribers            map[int64]map[chan *domain.ChatMessage]struct{}
+	subscribersForChatList map[int64]map[chan *domain.ChatList]struct{}
 	sync.Mutex
 }
 
-func NewChatService(chatRepo domain.ChatRepository) ChatService {
+func NewChatService(chatRepo domain.ChatRepository, userRepo domain.UserRepository) ChatService {
 	return &chatServiceImpl{
-		chatRepo:          chatRepo,
-		subscribedBuyers:  make(map[int64]map[chan *domain.ChatMessage]struct{}),
-		subscribedSellers: make(map[int64]map[chan *domain.ChatMessage]struct{}),
+		chatRepo:               chatRepo,
+		userRepo:               userRepo,
+		subscribers:            make(map[int64]map[chan *domain.ChatMessage]struct{}),
+		subscribersForChatList: make(map[int64]map[chan *domain.ChatList]struct{}),
 	}
 }
 
 var _ ChatService = &chatServiceImpl{}
 
-func (s *chatServiceImpl) GetChatDetail(ctx context.Context, buyerID int64, sellerID int64) ([]*domain.ChatMessage, error) {
-	chats, err := s.chatRepo.FindChatsByBuyerIDAndSellerID(ctx, buyerID, sellerID)
-	if err != nil {
-		return nil, err
-	}
-	return chats, err
-}
-
-func (s *chatServiceImpl) SendMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error) {
-	chat := domain.NewChatMessage(buyerID, sellerID, sender, content)
-	if err := s.chatRepo.CreateChat(ctx, chat); err != nil {
-		return nil, err
-	}
-
-	s.notifySubscribedSeller(sellerID, chat)
-	return chat, nil
-}
-
-func (s *chatServiceImpl) SendMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, sender domain.UserType, content string) (*domain.ChatMessage, error) {
-	chat := domain.NewChatMessage(buyerID, sellerID, sender, content)
-	if err := s.chatRepo.CreateChat(ctx, chat); err != nil {
-		return nil, err
-	}
-
-	s.notifySubscribedBuyer(buyerID, chat)
-	return chat, nil
-}
-
-func (s *chatServiceImpl) PollMessageByBuyer(ctx context.Context, buyerID int64, sellerID int64, chatID int64) ([]*domain.ChatMessage, error) {
+func (s *chatServiceImpl) GetChatList(ctx context.Context, userID int64, poll bool, chatID int64) ([]*domain.ChatList, error) {
 	latestChatTime := time.Time{}
-	if chatID != 0 {
+	if poll {
 		chat, err := s.chatRepo.FindChatByID(ctx, chatID)
 		if err != nil {
 			return nil, err
 		}
-		if chat.BuyerID != buyerID || chat.SellerID != sellerID {
+		if chat.SenderID != userID && chat.ReceiverID != userID {
 			return nil, ErrChatNotBelongToOwner
 		}
 		latestChatTime = chat.CreatedAt
 	}
 
-	newChats, err := s.chatRepo.FindLatestChatsByBuyerIDAndSellerID(ctx, buyerID, sellerID, latestChatTime)
+	newChats, err := s.chatRepo.FindChatListByUserID(ctx, userID, latestChatTime)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +59,58 @@ func (s *chatServiceImpl) PollMessageByBuyer(ctx context.Context, buyerID int64,
 		return newChats, nil
 	}
 
-	newChan := s.addSubscribedBuyers(buyerID)
-	defer s.removeSubscribedBuyer(buyerID, newChan)
+	newChan := s.addSubscriberForChatList(userID)
+	defer s.removeSubscriberForChatList(userID, newChan)
+
+	select {
+	case newChat := <-newChan:
+		return []*domain.ChatList{newChat}, nil
+	case <-time.After(60 * time.Second):
+		return []*domain.ChatList{}, nil
+	}
+}
+
+func (s *chatServiceImpl) SendMessage(ctx context.Context, senderID int64, receiverID int64, content string) (*domain.ChatMessage, error) {
+	chat := domain.NewChatMessage(senderID, receiverID, content)
+
+	receiver, err := s.userRepo.FindUserByID(ctx, receiverID)
+	if err != nil {
+		return nil, err
+	}
+	chatList := domain.NewChatList(chat.ID, receiverID, receiver.FirstName, receiver.LastName, receiver.Photo, content, chat.CreatedAt)
+	if err := s.chatRepo.CreateChat(ctx, chat); err != nil {
+		return nil, err
+	}
+
+	s.notifySubscriber(senderID, chat)
+	s.notifySubscriber(receiverID, chat)
+	s.notifySubscriberForChatList(receiverID, chatList)
+	return chat, nil
+}
+
+func (s *chatServiceImpl) GetChatMessage(ctx context.Context, receiverID int64, senderID int64, poll bool, chatID int64) ([]*domain.ChatMessage, error) {
+	latestChatTime := time.Time{}
+	if poll {
+		chat, err := s.chatRepo.FindChatByID(ctx, chatID)
+		if err != nil {
+			return nil, err
+		}
+		if !((chat.ReceiverID == receiverID && chat.SenderID == senderID) || (chat.ReceiverID == senderID && chat.SenderID == receiverID)) {
+			return nil, ErrChatNotBelongToOwner
+		}
+		latestChatTime = chat.CreatedAt
+	}
+
+	newChats, err := s.chatRepo.FindLatestChatsBySenderIDAndReceiverID(ctx, senderID, receiverID, latestChatTime)
+	if err != nil {
+		return nil, err
+	}
+	if len(newChats) > 0 {
+		return newChats, nil
+	}
+
+	newChan := s.addSubscriber(receiverID)
+	defer s.removeSubscriber(receiverID, newChan)
 
 	select {
 	case newChat := <-newChan:
@@ -98,92 +120,62 @@ func (s *chatServiceImpl) PollMessageByBuyer(ctx context.Context, buyerID int64,
 	}
 }
 
-func (s *chatServiceImpl) PollMessageBySeller(ctx context.Context, buyerID int64, sellerID int64, chatID int64) ([]*domain.ChatMessage, error) {
-	latestChatTime := time.Time{}
-	if chatID != 0 {
-		chat, err := s.chatRepo.FindChatByID(ctx, chatID)
-		if err != nil {
-			return nil, err
-		}
-		if chat.BuyerID != buyerID || chat.SellerID != sellerID {
-			return nil, ErrChatNotBelongToOwner
-		}
-		latestChatTime = chat.CreatedAt
-	}
-
-	newChats, err := s.chatRepo.FindLatestChatsByBuyerIDAndSellerID(ctx, buyerID, sellerID, latestChatTime)
-	if err != nil {
-		return nil, err
-	}
-	if len(newChats) > 0 {
-		return newChats, nil
-	}
-
-	newChan := s.addSubscribedSellers(sellerID)
-	defer s.removeSubscribedSeller(sellerID, newChan)
-
-	select {
-	case newChat := <-newChan:
-		return []*domain.ChatMessage{newChat}, nil
-	case <-time.After(60 * time.Second):
-		return []*domain.ChatMessage{}, nil
-	}
-}
-
-func (s *chatServiceImpl) notifySubscribedBuyer(buyerID int64, chat *domain.ChatMessage) {
+func (s *chatServiceImpl) notifySubscriber(userID int64, chat *domain.ChatMessage) {
 	s.Lock()
 	defer s.Unlock()
 
-	for subscribedBuyer := range s.subscribedBuyers[buyerID] {
-		subscribedBuyer <- chat
+	for subscriber := range s.subscribers[userID] {
+		subscriber <- chat
 	}
+	delete(s.subscribers, userID)
 }
 
-func (s *chatServiceImpl) notifySubscribedSeller(sellerID int64, chat *domain.ChatMessage) {
+func (s *chatServiceImpl) notifySubscriberForChatList(userID int64, chat *domain.ChatList) {
 	s.Lock()
 	defer s.Unlock()
 
-	for subscribedSeller := range s.subscribedSellers[sellerID] {
-		subscribedSeller <- chat
+	for subscriber := range s.subscribersForChatList[userID] {
+		subscriber <- chat
 	}
+	delete(s.subscribersForChatList, userID)
 }
 
-func (s *chatServiceImpl) addSubscribedBuyers(buyerID int64) chan *domain.ChatMessage {
+func (s *chatServiceImpl) addSubscriber(userID int64) chan *domain.ChatMessage {
 	s.Lock()
 	defer s.Unlock()
 
 	newChan := make(chan *domain.ChatMessage, 10)
 
-	if _, ok := s.subscribedBuyers[buyerID]; !ok {
-		s.subscribedBuyers[buyerID] = make(map[chan *domain.ChatMessage]struct{})
+	if _, ok := s.subscribers[userID]; !ok {
+		s.subscribers[userID] = make(map[chan *domain.ChatMessage]struct{})
 	}
-	s.subscribedBuyers[buyerID][newChan] = struct{}{}
+	s.subscribers[userID][newChan] = struct{}{}
 	return newChan
 }
 
-func (s *chatServiceImpl) addSubscribedSellers(sellerID int64) chan *domain.ChatMessage {
+func (s *chatServiceImpl) addSubscriberForChatList(userID int64) chan *domain.ChatList {
 	s.Lock()
 	defer s.Unlock()
 
-	newChan := make(chan *domain.ChatMessage, 10)
+	newChan := make(chan *domain.ChatList, 10)
 
-	if _, ok := s.subscribedSellers[sellerID]; !ok {
-		s.subscribedSellers[sellerID] = make(map[chan *domain.ChatMessage]struct{})
+	if _, ok := s.subscribersForChatList[userID]; !ok {
+		s.subscribersForChatList[userID] = make(map[chan *domain.ChatList]struct{})
 	}
-	s.subscribedSellers[sellerID][newChan] = struct{}{}
+	s.subscribersForChatList[userID][newChan] = struct{}{}
 	return newChan
 }
 
-func (s *chatServiceImpl) removeSubscribedBuyer(buyerID int64, sub chan *domain.ChatMessage) {
+func (s *chatServiceImpl) removeSubscriber(userID int64, sub chan *domain.ChatMessage) {
 	s.Lock()
 	defer s.Unlock()
 
-	delete(s.subscribedBuyers[buyerID], sub)
+	delete(s.subscribers[userID], sub)
 }
 
-func (s *chatServiceImpl) removeSubscribedSeller(sellerID int64, sub chan *domain.ChatMessage) {
+func (s *chatServiceImpl) removeSubscriberForChatList(userID int64, sub chan *domain.ChatList) {
 	s.Lock()
 	defer s.Unlock()
 
-	delete(s.subscribedSellers[sellerID], sub)
+	delete(s.subscribersForChatList[userID], sub)
 }

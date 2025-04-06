@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify/react/dist/iconify.js'
+import imageCompression from 'browser-image-compression'
 import { useRouter } from 'next/navigation'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -69,8 +70,52 @@ export function UserInfoContainer({ user }: UserInfoContainerProps) {
     }
   }
 
-  const handleChangePicture = () => {
-    console.log('handleChangePicture')
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      const files = Array.from(event.target.files)
+      const imageUrls: string[] = []
+
+      for (const file of files) {
+        try {
+          const compressedFile = await imageCompression(file, {
+            maxWidthOrHeight: 400,
+            maxSizeMB: 1,
+          })
+
+          const base64String = await convertToBase64(compressedFile)
+          imageUrls.push(base64String)
+        } catch (error) {
+          console.error('Error during image compression:', error)
+        }
+      }
+
+      const { response, error } = await updateUser({
+        body: {
+          photo: imageUrls[0],
+        },
+      })
+
+      if (response.ok) {
+        toast.success('Updated picture successfully')
+        fetchUser()
+      } else if (response.status == 401) {
+        router.push('/login')
+      } else {
+        toast.error('Something went wrong')
+        toast.error(error?.detail)
+      }
+    }
+  }
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
   }
 
   return (
@@ -81,7 +126,8 @@ export function UserInfoContainer({ user }: UserInfoContainerProps) {
       </div>
       <UserInfoForm
         onSubmit={onSubmit}
-        handleChangePicture={handleChangePicture}
+        userImage={user.photo ?? null}
+        handleImageUpload={handleImageUpload}
         form={form}
       />
     </div>

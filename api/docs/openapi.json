@@ -494,9 +494,19 @@
             "format": "int64",
             "type": "integer"
           },
-          "last_chat_message": {
+          "last_chat_content": {
             "examples": [
               "Hello world"
+            ],
+            "type": "string"
+          },
+          "last_chat_message_type": {
+            "enum": [
+              "MESSAGE",
+              "IMAGE"
+            ],
+            "examples": [
+              "MESSAGE"
             ],
             "type": "string"
           },
@@ -536,7 +546,8 @@
         "required": [
           "id",
           "target_id",
-          "last_chat_message",
+          "last_chat_message_type",
+          "last_chat_content",
           "last_chat_time"
         ],
         "type": "object"
@@ -573,6 +584,16 @@
             "format": "int64",
             "type": "integer"
           },
+          "message_type": {
+            "enum": [
+              "MESSAGE",
+              "IMAGE"
+            ],
+            "examples": [
+              "MESSAGE"
+            ],
+            "type": "string"
+          },
           "receiver_id": {
             "examples": [
               97
@@ -592,6 +613,7 @@
           "id",
           "sender_id",
           "receiver_id",
+          "message_type",
           "content",
           "created_at"
         ],
@@ -614,9 +636,20 @@
               "Hello world"
             ],
             "type": "string"
+          },
+          "message_type": {
+            "enum": [
+              "MESSAGE",
+              "IMAGE"
+            ],
+            "examples": [
+              "MESSAGE"
+            ],
+            "type": "string"
           }
         },
         "required": [
+          "message_type",
           "content"
         ],
         "type": "object"

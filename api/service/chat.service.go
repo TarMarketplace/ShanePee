@@ -15,7 +15,7 @@ var (
 
 type ChatService interface {
 	GetChatList(ctx context.Context, userID int64, poll bool, chatID int64) ([]*domain.ChatList, error)
-	SendMessage(ctx context.Context, senderID int64, receiverID int64, content string) (*domain.ChatMessage, error)
+	SendMessage(ctx context.Context, senderID int64, receiverID int64, messageType domain.ChatType, content string) (*domain.ChatMessage, error)
 	GetChatMessage(ctx context.Context, senderID int64, receiverID int64, poll bool, chatID int64) ([]*domain.ChatMessage, error)
 }
 
@@ -70,14 +70,14 @@ func (s *chatServiceImpl) GetChatList(ctx context.Context, userID int64, poll bo
 	}
 }
 
-func (s *chatServiceImpl) SendMessage(ctx context.Context, senderID int64, receiverID int64, content string) (*domain.ChatMessage, error) {
-	chat := domain.NewChatMessage(senderID, receiverID, content)
+func (s *chatServiceImpl) SendMessage(ctx context.Context, senderID int64, receiverID int64, messageType domain.ChatType, content string) (*domain.ChatMessage, error) {
+	chat := domain.NewChatMessage(senderID, receiverID, messageType, content)
 
 	receiver, err := s.userRepo.FindUserByID(ctx, receiverID)
 	if err != nil {
 		return nil, err
 	}
-	chatList := domain.NewChatList(chat.ID, receiverID, receiver.FirstName, receiver.LastName, receiver.Photo, content, chat.CreatedAt)
+	chatList := domain.NewChatList(chat.ID, receiverID, receiver.FirstName, receiver.LastName, receiver.Photo, messageType, content, chat.CreatedAt)
 	if err := s.chatRepo.CreateChat(ctx, chat); err != nil {
 		return nil, err
 	}

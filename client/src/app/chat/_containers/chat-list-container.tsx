@@ -11,54 +11,110 @@ import { useUser } from '@/providers/user-provider'
 
 import { cn } from '@/lib/utils'
 
-import type { ChatMessage } from '@/generated/api'
-import { getChatDetail, pollMessage, sendMessage } from '@/generated/api'
+import type { ChatMessage ,
+  ChatList} from '@/generated/api'
+import {
+  getChatList,
+  getChatMessage,
+  sendMessage,
+} from '@/generated/api'
 
 import { Chat } from '../_components/chat'
 import { ChatBox } from '../_components/chat-box'
 
 export function ChatListContainer() {
+  const [chatList, setChatList] = useState<ChatList[]>([])
   const [activeChat, setActiveChat] = useState(0)
   const [chat, setChat] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const pollChatIdRef = useRef(0)
   const isPollingRef = useRef(false)
+  const pollChatListIdRef = useRef(0)
+  const isPollingChatListRef = useRef(false)
   const { user } = useUser()
   const router = useRouter()
 
-  const chats = [
-    {
-      id: 1,
-      photo: 'photo',
-      sellerName: 'John Do b@b',
-      date: new Date(),
-      message: 'last message',
-      user_id: 3523329031,
-    },
-    {
-      id: 2,
-      photo: 'photo',
-      sellerName: 'John Doe a@b',
-      date: new Date(),
-      message: 'last message',
-      user_id: 4105047913,
-    },
-  ]
+  const pollChatList = useCallback(async () => {
+    if (!isPollingChatListRef.current) return
 
-  const handleSendMessage = () => {
+    await getChatList({
+      query: {
+        poll: true,
+        chatID: pollChatListIdRef.current,
+      },
+    })
+      .then((response) => {
+        const list = response?.data?.data
+        if (Array.isArray(list)) {
+          setChatList((prevChatList) => [...prevChatList, ...list])
+          pollChatListIdRef.current = list[list.length - 1].id
+        } else if (response.response.status == 401) {
+          isPollingChatListRef.current = false
+          router.push('/login')
+        } else {
+          toast.error('Something went wrong')
+        }
+      })
+      .then(() => {
+        pollChatList()
+      })
+      .catch(() => {
+        toast.error('Something went wrong')
+      })
+  }, [router])
+
+  const getUserChatList = useCallback(async () => {
+    isPollingChatListRef.current = true
+
+    await getChatList({
+      query: {
+        poll: false,
+      },
+    })
+      .then((response) => {
+        const list = response?.data?.data
+        if (Array.isArray(list)) {
+          if (list.length < 1) return
+          setChatList(list)
+          pollChatListIdRef.current = list[list.length - 1].id
+        } else if (response.response.status == 401) {
+          isPollingChatListRef.current = false
+          router.push('/login')
+        } else {
+          toast.error('Something went wrong')
+        }
+      })
+      .then(() => {
+        pollChatList()
+      })
+      .catch((e) => {
+        console.log(e)
+        toast.error('Something went wrong')
+      })
+  }, [pollChatList, router])
+
+  useEffect(() => {
+    getUserChatList()
+  }, [getUserChatList])
+
+  const handleSendMessage = (message_type: 'MESSAGE' | 'IMAGE') => {
+    if (!input) {
+      toast.warning('Please enter a message')
+      return
+    }
+
     sendMessage({
       path: {
         userID: activeChat,
       },
       body: {
         content: input,
-        sender: 'BUYER',
+        message_type: message_type,
       },
     })
       .then((response) => {
         if (response.data) {
           setInput('')
-          setChat((prevChat) => [...prevChat, response.data])
           pollChatIdRef.current = response.data.id
           toast.success('Message sent')
         } else {
@@ -73,12 +129,12 @@ export function ChatListContainer() {
   const pollChat = useCallback(async () => {
     if (!isPollingRef.current) return
 
-    await pollMessage({
+    await getChatMessage({
       path: {
         userID: activeChat,
       },
       query: {
-        as: 'BUYER',
+        poll: true,
         chatID: pollChatIdRef.current,
       },
     })
@@ -105,9 +161,12 @@ export function ChatListContainer() {
   const getChat = useCallback(async () => {
     isPollingRef.current = true
 
-    await getChatDetail({
+    await getChatMessage({
       path: {
         userID: activeChat,
+      },
+      query: {
+        poll: false,
       },
     })
       .then((response) => {
@@ -120,7 +179,6 @@ export function ChatListContainer() {
           isPollingRef.current = false
           router.push('/login')
         } else {
-          console.log(message)
           toast.error('Something went wrong')
         }
       })
@@ -140,7 +198,7 @@ export function ChatListContainer() {
     }
   }, [activeChat, user?.id, getChat])
 
-  const selectedChat = chats.find((chat) => chat?.id == activeChat)
+  const selectedChat = chatList.find((chat) => chat?.target_id == activeChat)
 
   return (
     <div className='flex min-h-[calc(100dvh-60px-236px)] divide-x-2 divide-grey-200'>
@@ -150,22 +208,34 @@ export function ChatListContainer() {
           activeChat == 0 ? 'flex' : 'hidden md:flex'
         )}
       >
-        {chats.map((chat) => {
+        {chatList.map((chat) => {
           if (chat) {
             return (
               <div
                 key={chat.id}
                 onClick={() =>
-                  setActiveChat(activeChat == chat.user_id ? 0 : chat.user_id)
+                  setActiveChat(
+                    activeChat == chat.target_id ? 0 : chat.target_id
+                  )
                 }
                 className='cursor-pointer'
               >
                 <ChatBox
-                  photo={chat.photo}
-                  sellerName={chat.sellerName}
-                  date={chat.date}
-                  message={chat.message}
-                  selected={activeChat == chat.user_id}
+                  photo={chat.target_photo ?? undefined}
+                  sellerName={
+                    chat.target_first_name + ' ' + chat.target_last_name
+                  }
+                  sellerNameFallback={
+                    (chat.target_first_name?.charAt(0).toUpperCase() ?? '') +
+                    (chat.target_last_name?.charAt(0).toUpperCase() ?? '')
+                  }
+                  date={new Date(chat.last_chat_time)}
+                  message={
+                    chat.last_chat_message_type == 'MESSAGE'
+                      ? chat.last_chat_content
+                      : 'Image'
+                  }
+                  selected={activeChat == chat.target_id}
                 />
               </div>
             )
@@ -179,7 +249,12 @@ export function ChatListContainer() {
         </div>
       ) : (
         <Chat
-          sellerName={selectedChat?.sellerName || ''}
+          sender_id={user?.id ?? null}
+          sellerName={
+            (selectedChat?.target_first_name ?? '') +
+            ' ' +
+            (selectedChat?.target_last_name ?? '')
+          }
           handleBackButton={() => setActiveChat(0)}
           chat={chat}
           input={input}

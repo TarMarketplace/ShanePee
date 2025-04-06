@@ -40,14 +40,14 @@ func (h *AuthHandler) RegisterLogin(api huma.API) {
 				return nil, handler.ErrIncorrectCredential
 			}
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 
 		session := handler.GetSession(ctx)
 		session.Set(handler.UserIDSessionKey, data.ID)
 		if err := session.Save(); err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 
 		return &LoginOutput{

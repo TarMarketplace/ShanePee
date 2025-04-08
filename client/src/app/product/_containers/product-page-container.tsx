@@ -1,16 +1,17 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import { useCart } from '@/providers/cart-provider'
 import { useUser } from '@/providers/user-provider'
 
-import type { ArtToy } from '@/generated/api'
+import type { ArtToy, UserWithReview } from '@/generated/api'
 import {
   addItemToCart,
   clearItemsFromCart,
+  getSellerById,
   removeItemFromCart,
 } from '@/generated/api'
 
@@ -27,6 +28,8 @@ export function ProductPageContainer({ product }: ProductPageProps) {
   const { cartItems, fetchCart } = useCart()
   const [showDialog, setShowDialog] = useState(false)
   const [cartButtonLoading, setCartButtonLoading] = useState(false)
+  const [sellerNameFrom, setSellerNameFrom] = useState('')
+  const [seller, setSeller] = useState<UserWithReview>()
 
   const isInCart = useMemo(() => {
     return product
@@ -41,10 +44,60 @@ export function ProductPageContainer({ product }: ProductPageProps) {
     )
   }, [cartItems, product])
 
-  const getOwnerName = (ownerId: number | undefined) => {
-    // TODO: get owner name from owner id
-    return ownerId?.toString() || ''
-  }
+  const getSellerNameFrom = useCallback(
+    async (ownerId: number) => {
+      await getSellerById({
+        path: {
+          id: ownerId,
+        },
+      })
+        .then((response) => {
+          if (response.response.ok) {
+            setSellerNameFrom(
+              response.data?.first_name + ' ' + response.data?.last_name
+            )
+          } else if (response.response.status == 401) {
+            router.push('/login')
+          } else {
+            toast.error('Something went wrong')
+          }
+        })
+        .catch(() => {
+          toast.error('Something went wrong')
+        })
+    },
+    [router]
+  )
+
+  const fetchSeller = useCallback(
+    async (ownerId: number) => {
+      await getSellerById({
+        path: {
+          id: ownerId,
+        },
+      })
+        .then((response) => {
+          if (response.response.ok) {
+            setSeller(response?.data)
+          } else if (response.response.status == 401) {
+            router.push('/login')
+          } else {
+            toast.error('Something went wrong')
+          }
+        })
+        .catch(() => {
+          toast.error('Something went wrong')
+        })
+    },
+    [router]
+  )
+
+  useEffect(() => {
+    if (product) {
+      fetchSeller(product.owner_id)
+    }
+    getSellerNameFrom(cartItems[0]?.art_toy?.owner_id ?? 0)
+  }, [product, cartItems, fetchSeller, getSellerNameFrom])
 
   if (!product) return <p>Product not found.</p>
 
@@ -106,6 +159,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
     <>
       <ProductPage
         product={product}
+        seller={seller}
         onClickCartButton={handleCartButton}
         onGotoStore={handleGotoStore}
         onGotoChat={handleGotoChat}
@@ -113,8 +167,8 @@ export function ProductPageContainer({ product }: ProductPageProps) {
         cartButtonLoading={cartButtonLoading}
       />
       <ChangeSellerDialog
-        sellerNameFrom={getOwnerName(cartItems[0]?.art_toy?.owner_id)}
-        sellerNameTo={getOwnerName(product.owner_id)}
+        sellerNameFrom={sellerNameFrom}
+        sellerNameTo={seller?.first_name + ' ' + seller?.last_name}
         showDialog={showDialog}
         setShowDialog={setShowDialog}
         handleConfirmDifferentSeller={handleConfirmDifferentSeller}

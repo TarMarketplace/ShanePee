@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -7,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover'
 import { TrackingInputCard } from '@/components/tracking-input-card'
 import type { TrackingInputCardSchema } from '@/components/tracking-input-card/index.stories'
 
-import { type Order } from '@/generated/api'
+import { type Order, updateOrder } from '@/generated/api'
 
 const trackingInputCardSchema = z.object({
   trackingNumberValue: z.string().min(1, 'Tracking number is required'),
@@ -39,7 +41,14 @@ export function TrackingInputContainer({
           name={order.order_items?.[0].art_toy?.name ?? ''}
           form={form}
           onSubmit={(data) => {
-            console.log(data)
+            updateOrder({
+              path: { id: order.id },
+              body: {
+                tracking_number: data.trackingNumberValue,
+                delivery_service: data.deliveryCompanyValue,
+                status: 'DELIVERING',
+              },
+            })
           }}
         />
       </PopoverContent>

@@ -5,12 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/avatar'
 import { Button } from '@/components/button'
 import { Text } from '@/components/text'
 
-import type { ArtToy } from '@/generated/api'
+import type { ArtToy, UserWithReview } from '@/generated/api'
 
 import { AddToCartButton } from '../_containers/add-to-cart-button'
 
 type ProductPageProps = {
   product: ArtToy
+  seller: UserWithReview | undefined
   onClickCartButton: () => void
   onGotoStore: () => void
   onGotoChat: () => void
@@ -20,6 +21,7 @@ type ProductPageProps = {
 
 export function ProductPage({
   product,
+  seller,
   onClickCartButton,
   onGotoStore,
   onGotoChat,
@@ -41,16 +43,12 @@ export function ProductPage({
           <div className='flex items-center justify-between rounded-lg bg-grey-50 p-2 shadow-sm'>
             <div className='flex items-center gap-2'>
               <Avatar className='size-20'>
-                <AvatarImage
-                  src='https://placehold.co/80x80.png'
-                  width={80}
-                  height={80}
-                />
+                <AvatarImage src={seller?.photo ?? ''} width={80} height={80} />
                 <AvatarFallback>{product.owner_id}</AvatarFallback>
               </Avatar>
               <div className='flex flex-col'>
                 <span className='text-sm font-semibold'>
-                  {product.owner_id}
+                  {seller?.first_name} {seller?.last_name}
                 </span>
                 <div className='flex items-center gap-2'>
                   <div className='flex items-center'>
@@ -59,7 +57,7 @@ export function ProductPage({
                       className='size-5 text-warning md:size-6'
                     />
                     <Text variant='xs-regular' desktopVariant='sm-regular'>
-                      4.6
+                      {seller?.rating}
                     </Text>
                   </div>
                   <div className='flex items-center text-grey-500'>

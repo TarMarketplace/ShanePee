@@ -26,7 +26,7 @@ func (h *UserHandler) RegisterGetSellers(api huma.API) {
 		data, err := h.userSvc.GetSellers(ctx)
 		if err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return &GetSellersOutput{
 			Body: handler.ArrayResponse[domain.UserWithReview]{

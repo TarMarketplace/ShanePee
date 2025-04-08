@@ -50,10 +50,10 @@ export function SellerAllReviewContainer({
         </div>
       </div>
       <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
-        {reviews.map((review) => {
+        {reviews.map((review, i) => {
           return (
             <SellerReviewCard
-              key={review.buyer_truncated_first_name}
+              key={i}
               review={review} // TODO add photo and sellerName in review response
               photo='data:image/png;base64,mfkirjIDSFIj32asdf...'
               sellerName='John Doe'

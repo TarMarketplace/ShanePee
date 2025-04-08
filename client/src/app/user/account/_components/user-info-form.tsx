@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import { type SubmitHandler, type UseFormReturn } from 'react-hook-form'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/avatar'
 import { Button } from '@/components/button'
 import {
   Form,
@@ -26,13 +26,17 @@ import { type UserInfoFormSchema } from '../_containers/user-info-container'
 
 interface UserInfoFormProps {
   onSubmit: SubmitHandler<UserInfoFormSchema>
-  handleChangePicture: () => void
+  userImage: string | null
+  handleImageUpload: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => Promise<void>
   form: UseFormReturn<UserInfoFormSchema>
 }
 
 export function UserInfoForm({
   onSubmit,
-  handleChangePicture,
+  userImage,
+  handleImageUpload,
   form,
 }: UserInfoFormProps) {
   return (
@@ -43,18 +47,27 @@ export function UserInfoForm({
       >
         <div className='flex flex-col items-center gap-4 md:flex-row'>
           <div className='w-32'>
-            <Image
-              src='https://placehold.co/128x128.png'
-              alt=''
-              width={128}
-              height={128}
-            />
-            <button
-              className={`mt-2 inline-flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-white`}
-              onClick={() => handleChangePicture()}
+            <Avatar className='size-32'>
+              <AvatarImage
+                src={userImage ?? undefined}
+                alt={form.getValues('name')}
+              />
+              <AvatarFallback />
+            </Avatar>
+            <label
+              htmlFor='image-upload'
+              className='mt-2 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-white'
             >
               <Text variant='sm-semibold'>เปลี่ยนรูป</Text>
-            </button>
+              <input
+                type='file'
+                id='image-upload'
+                className='hidden'
+                accept='image/*'
+                multiple
+                onChange={handleImageUpload}
+              />
+            </label>
           </div>
           <div className='grid w-full grid-cols-2 gap-4'>
             {/* <div className='col-span-2 md:col-span-6'>

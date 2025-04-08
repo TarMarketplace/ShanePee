@@ -49,14 +49,14 @@ export function ChatListContainer() {
           isPollingChatListRef.current = false
           router.push('/login')
         } else {
-          toast.error('Something went wrong')
+          toast.error('Something went wrong (PollChatList)')
         }
       })
       .then(() => {
         pollChatList()
       })
       .catch(() => {
-        toast.error('Something went wrong')
+        toast.error('Something went wrong (PollChatList)')
       })
   }, [router])
 
@@ -78,7 +78,7 @@ export function ChatListContainer() {
           isPollingChatListRef.current = false
           router.push('/login')
         } else {
-          toast.error('Something went wrong')
+          toast.error('Something went wrong (ChatList)')
         }
       })
       .then(() => {
@@ -86,7 +86,7 @@ export function ChatListContainer() {
       })
       .catch((e) => {
         console.log(e)
-        toast.error('Something went wrong')
+        toast.error('Something went wrong (ChatList)')
       })
   }, [pollChatList, router])
 
@@ -132,33 +132,62 @@ export function ChatListContainer() {
     setPreviewImages((prev) => prev.filter((_, i) => i !== index))
   }
 
-  const handleSendMessage = (message_type: 'MESSAGE' | 'IMAGE') => {
-    if (!input) {
-      toast.warning('Please enter a message')
-      return
-    }
+  const handleSendMessage = async () => {
+    if (previewImages.length == 0) {
+      if (!input) {
+        toast.warning('Please enter a message')
+        return
+      }
 
-    sendMessage({
-      path: {
-        userID: activeChat,
-      },
-      body: {
-        content: input,
-        message_type: message_type,
-      },
-    })
-      .then((response) => {
-        if (response.data) {
-          setInput('')
-          pollChatIdRef.current = response.data.id
-          toast.success('Message sent')
-        } else {
+      await sendMessage({
+        path: {
+          userID: activeChat,
+        },
+        body: {
+          content: input,
+          message_type: 'MESSAGE',
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            setInput('')
+            pollChatIdRef.current = response.data.id
+            toast.success('Message sent')
+          } else {
+            toast.error('Error sending message')
+          }
+        })
+        .catch(() => {
           toast.error('Error sending message')
-        }
-      })
-      .catch(() => {
-        toast.error('Error sending message')
-      })
+        })
+    } else {
+      const promises = previewImages.map(
+        async (img) =>
+          await sendMessage({
+            path: {
+              userID: activeChat,
+            },
+            body: {
+              content: img,
+              message_type: 'IMAGE',
+            },
+          })
+      )
+
+      Promise.all(promises)
+        .then((responses) => {
+          const hasError = responses.some((res) => !res?.data)
+          if (hasError) {
+            toast.error('Some images failed to send')
+          } else {
+            toast.success('Image(s) sent')
+            setPreviewImages([])
+          }
+        })
+        .catch(() => {
+          toast.error('Error sending images')
+        })
+    }
   }
 
   const pollChat = useCallback(async () => {
@@ -176,20 +205,21 @@ export function ChatListContainer() {
       .then((response) => {
         const message = response?.data?.data
         if (Array.isArray(message)) {
+          if (message.length < 1) return
           setChat((prevChat) => [...prevChat, ...message])
           pollChatIdRef.current = message[message.length - 1].id
         } else if (response.response.status == 401) {
           isPollingRef.current = false
           router.push('/login')
         } else {
-          toast.error('Something went wrong')
+          toast.error('Something went wrong (PollChat)')
         }
       })
       .then(() => {
         pollChat()
       })
       .catch(() => {
-        toast.error('Something went wrong')
+        toast.error('Something went wrong (PollChat)')
       })
   }, [activeChat, router])
 
@@ -214,7 +244,7 @@ export function ChatListContainer() {
           isPollingRef.current = false
           router.push('/login')
         } else {
-          toast.error('Something went wrong')
+          toast.error('Something went wrong (GetChat)')
         }
       })
       .then(() => {
@@ -222,7 +252,7 @@ export function ChatListContainer() {
       })
       .catch((e) => {
         console.log(e)
-        toast.error('Something went wrong')
+        toast.error('Something went wrong (GetChat)')
       })
   }, [activeChat, pollChat, router])
 
@@ -236,7 +266,7 @@ export function ChatListContainer() {
   const selectedChat = chatList.find((chat) => chat?.target_id == activeChat)
 
   return (
-    <div className='flex min-h-[calc(100dvh-60px-236px)] divide-x-2 divide-grey-200'>
+    <div className='flex max-h-[calc(100dvh-62px-256px)] divide-x-2 divide-grey-200'>
       <div
         className={cn(
           'w-full flex-col md:min-w-[350px] md:max-w-[350px]',

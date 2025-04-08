@@ -38,7 +38,7 @@ export default function RootLayout({
         <UserProvider>
           <CartProvider>
             <NavbarContainer />
-            <main className='min-h-[calc(100dvh-60px-236px)]'>{children}</main>
+            <main className='min-h-[calc(100dvh-62px-256px)]'>{children}</main>
             <Footer />
             <Toaster richColors />
           </CartProvider>

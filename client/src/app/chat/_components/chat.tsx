@@ -26,22 +26,6 @@ function Chat({
   setInput,
   handleSendMessage,
 }: ChatProps) {
-  // const chat = [
-  // {
-  //   receive: true,
-  //   message:
-  //     'สวัสดีครับรบกวนสอบถามว่ามีถั่วมั้ย ไม่ได้หมายถึงถั่ว เป็นเม็ดนะครับ แต่หมายถึงน้องอาเนียจาก SpyXFamily',
-  //   dateTime: new Date(),
-  // },
-  // {
-  //   receive: false,
-  //   message:
-  //     'สวัสดีครับ ติดต่อจากร้าน POP MART นะครับ แอดมินเจมส์พร้อมให้บริการครับ ทางร้านเรามีแต่ตุ๊กตา CRYBABY x Powerpuff Girls Series Figures พอจะสนใจไหมครับ',
-  //   dateTime: new Date(),
-  // },
-  // { receive: true, message: 'อ๋อ งั้นไม่เป็นไรครับ', dateTime: new Date() },
-  // ]
-
   return (
     <div className='flex min-h-[calc(100dvh-60px-236px)] w-full flex-col divide-y-2 divide-grey-200 truncate'>
       <span className='flex h-12 items-center p-4'>

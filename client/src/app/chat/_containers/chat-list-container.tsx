@@ -11,13 +11,8 @@ import { useUser } from '@/providers/user-provider'
 
 import { cn } from '@/lib/utils'
 
-import type { ChatMessage ,
-  ChatList} from '@/generated/api'
-import {
-  getChatList,
-  getChatMessage,
-  sendMessage,
-} from '@/generated/api'
+import type { ChatList, ChatMessage } from '@/generated/api'
+import { getChatList, getChatMessage, sendMessage } from '@/generated/api'
 
 import { Chat } from '../_components/chat'
 import { ChatBox } from '../_components/chat-box'

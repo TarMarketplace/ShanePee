@@ -103,7 +103,7 @@ function Chat({
                         onClick={() => handleDownload(message.content)}
                       />
                     ) : (
-                      <div className='p-2'>message.content</div>
+                      <div className='p-2'>{message.content}</div>
                     )}
                     <Text className='absolute bottom-[-30px] right-2 text-grey-500'>
                       {String(new Date(message.created_at).getHours()).padStart(
@@ -132,7 +132,7 @@ function Chat({
                         onClick={() => handleDownload(message.content)}
                       />
                     ) : (
-                      <div className='p-2'>message.content</div>
+                      <div className='p-2'>{message.content}</div>
                     )}
                     <Text className='absolute bottom-[-30px] left-2 text-grey-500'>
                       {String(new Date(message.created_at).getHours()).padStart(

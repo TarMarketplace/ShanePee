@@ -99,7 +99,6 @@ func main() {
 	app.cartHdr.RegisterDebugCheckout(api)
 	app.cartHdr.RegisterPaymentSuccessCallback(api)
 
-	app.orderHdr.RegisterGetOrdersByStatus(api)
 	app.orderHdr.RegisterGetOrdersOfSeller(api)
 	app.orderHdr.RegisterGetOrderOfSeller(api)
 	app.orderHdr.RegisterGetOrdersOfBuyer(api)
@@ -107,9 +106,9 @@ func main() {
 	app.orderHdr.RegisterGetOrderOfBuyer(api)
 	app.orderHdr.RegisterUpdateOrder(api)
 
-	app.chatHdr.RegisterGetChatDetail(api)
+	app.chatHdr.RegisterGetChatList(api)
 	app.chatHdr.RegisterSendMessage(api)
-	app.chatHdr.RegisterPollMessage(api)
+	app.chatHdr.RegisterGetChatMessage(api)
 
 	flag.Parse()
 

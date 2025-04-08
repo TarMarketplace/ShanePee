@@ -28,7 +28,7 @@ func (h *AuthHandler) RegisterLogout(api huma.API) {
 		session.Options(newSessionOpts)
 		if err := session.Save(); err != nil {
 			logrus.Error(err)
-			return nil, handler.ErrIntervalServerError
+			return nil, handler.ErrInternalServerError
 		}
 		return nil, nil
 	})

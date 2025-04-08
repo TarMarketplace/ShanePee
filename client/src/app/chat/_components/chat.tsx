@@ -10,6 +10,7 @@ import { Text } from '@/components/text'
 import type { ChatMessage } from '@/generated/api'
 
 export interface ChatProps {
+  sender_id: number | null
   sellerName: string
   chat: ChatMessage[]
   input: string
@@ -18,10 +19,11 @@ export interface ChatProps {
   handleImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
   removeImage: (index: number) => void
   handleBackButton: () => void
-  handleSendMessage: () => void
+  handleSendMessage: (message_type: 'MESSAGE' | 'IMAGE') => void
 }
 
 function Chat({
+  sender_id,
   sellerName,
   chat,
   input,
@@ -73,12 +75,12 @@ function Chat({
       <div className='h-0 grow overflow-y-auto'>
         {chat?.map((message) => {
           if (message) {
-            if (message.sender == 'SELLER') {
+            if (message.sender_id == sender_id) {
               return (
-                <div className='flex w-full justify-start p-4' key={message.id}>
-                  <div className='relative mb-3 max-w-[60%] text-wrap rounded-lg bg-secondary-100 p-2 shadow'>
+                <div className='flex w-full justify-end p-4' key={message.id}>
+                  <div className='relative mb-3 max-w-[60%] text-wrap rounded-lg bg-primary-500 p-2 text-white shadow'>
                     {message.content}
-                    <Text className='absolute bottom-[-30px] left-2 text-grey-500'>
+                    <Text className='absolute bottom-[-30px] right-2 text-grey-500'>
                       {String(new Date(message.created_at).getHours()).padStart(
                         2,
                         '0'
@@ -93,10 +95,10 @@ function Chat({
               )
             } else {
               return (
-                <div className='flex w-full justify-end p-4' key={message.id}>
-                  <div className='relative mb-3 max-w-[60%] text-wrap rounded-lg bg-primary-500 p-2 text-white shadow'>
+                <div className='flex w-full justify-start p-4' key={message.id}>
+                  <div className='relative mb-3 max-w-[60%] text-wrap rounded-lg bg-secondary-100 p-2 shadow'>
                     {message.content}
-                    <Text className='absolute bottom-[-30px] right-2 text-grey-500'>
+                    <Text className='absolute bottom-[-30px] left-2 text-grey-500'>
                       {String(new Date(message.created_at).getHours()).padStart(
                         2,
                         '0'
@@ -156,7 +158,7 @@ function Chat({
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault()
-              handleSendMessage()
+              handleSendMessage('MESSAGE')
             }
           }}
         ></Input>
@@ -174,7 +176,7 @@ function Chat({
         <Icon
           icon='ic:baseline-send'
           className='size-8 cursor-pointer'
-          onClick={handleSendMessage}
+          onClick={() => handleSendMessage('MESSAGE')}
         />
       </span>
     </div>

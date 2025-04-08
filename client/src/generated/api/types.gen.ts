@@ -23,6 +23,14 @@ export type ArrayResponseCartItem = {
     data: Array<CartItem> | null;
 };
 
+export type ArrayResponseChatList = {
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    readonly $schema?: string;
+    data: Array<ChatList> | null;
+};
+
 export type ArrayResponseChatMessage = {
     /**
      * A URL to the JSON Schema for this object.
@@ -65,6 +73,7 @@ export type ArtToy = {
     description: string;
     id: number;
     name: string;
+    owner: User;
     owner_id: number;
     photo?: string;
     price: number;
@@ -123,17 +132,28 @@ export type ChangePasswordBody = {
     old_password: string;
 };
 
+export type ChatList = {
+    id: number;
+    last_chat_content: string;
+    last_chat_message_type: 'MESSAGE' | 'IMAGE';
+    last_chat_time: string;
+    target_first_name?: string;
+    target_id: number;
+    target_last_name?: string;
+    target_photo?: string;
+};
+
 export type ChatMessage = {
     /**
      * A URL to the JSON Schema for this object.
      */
     readonly $schema?: string;
-    buyer_id: number;
     content: string;
     created_at: string;
     id: number;
-    seller_id: number;
-    sender: 'BUYER' | 'SELLER';
+    message_type: 'MESSAGE' | 'IMAGE';
+    receiver_id: number;
+    sender_id: number;
 };
 
 export type ChatMessageCreateBody = {
@@ -142,7 +162,7 @@ export type ChatMessageCreateBody = {
      */
     readonly $schema?: string;
     content: string;
-    sender: 'BUYER' | 'SELLER';
+    message_type: 'MESSAGE' | 'IMAGE';
 };
 
 export type CheckoutOutputBody = {
@@ -966,36 +986,6 @@ export type RemoveItemFromCartResponses = {
 
 export type RemoveItemFromCartResponse = RemoveItemFromCartResponses[keyof RemoveItemFromCartResponses];
 
-export type PollMessageData = {
-    body?: never;
-    path: {
-        userID: number;
-    };
-    query?: {
-        as?: string;
-        chatID?: number;
-    };
-    url: '/v1/chat/poll/{userID}';
-};
-
-export type PollMessageErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type PollMessageError = PollMessageErrors[keyof PollMessageErrors];
-
-export type PollMessageResponses = {
-    /**
-     * OK
-     */
-    200: ArrayResponseChatMessage;
-};
-
-export type PollMessageResponse = PollMessageResponses[keyof PollMessageResponses];
-
 export type SendMessageData = {
     body: ChatMessageCreateBody;
     path: {
@@ -1023,34 +1013,63 @@ export type SendMessageResponses = {
 
 export type SendMessageResponse = SendMessageResponses[keyof SendMessageResponses];
 
-export type GetChatDetailData = {
+export type GetChatMessageData = {
     body?: never;
     path: {
         userID: number;
     };
     query?: {
-        as?: string;
+        poll?: boolean;
+        chatID?: number;
     };
     url: '/v1/chat/{userID}';
 };
 
-export type GetChatDetailErrors = {
+export type GetChatMessageErrors = {
     /**
      * Error
      */
     default: ErrorModel;
 };
 
-export type GetChatDetailError = GetChatDetailErrors[keyof GetChatDetailErrors];
+export type GetChatMessageError = GetChatMessageErrors[keyof GetChatMessageErrors];
 
-export type GetChatDetailResponses = {
+export type GetChatMessageResponses = {
     /**
      * OK
      */
     200: ArrayResponseChatMessage;
 };
 
-export type GetChatDetailResponse = GetChatDetailResponses[keyof GetChatDetailResponses];
+export type GetChatMessageResponse = GetChatMessageResponses[keyof GetChatMessageResponses];
+
+export type GetChatListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        chatID?: number;
+        poll?: boolean;
+    };
+    url: '/v1/chatlist';
+};
+
+export type GetChatListErrors = {
+    /**
+     * Error
+     */
+    default: ErrorModel;
+};
+
+export type GetChatListError = GetChatListErrors[keyof GetChatListErrors];
+
+export type GetChatListResponses = {
+    /**
+     * OK
+     */
+    200: ArrayResponseChatList;
+};
+
+export type GetChatListResponse = GetChatListResponses[keyof GetChatListResponses];
 
 export type GetMyArtToysData = {
     body?: never;
@@ -1103,33 +1122,6 @@ export type CreateReviewResponses = {
 };
 
 export type CreateReviewResponse = CreateReviewResponses[keyof CreateReviewResponses];
-
-export type GetOrdersByStatusData = {
-    body?: never;
-    path: {
-        status: 'PREPARING' | 'DELIVERING' | 'COMPLETED';
-    };
-    query?: never;
-    url: '/v1/order/{status}';
-};
-
-export type GetOrdersByStatusErrors = {
-    /**
-     * Error
-     */
-    default: ErrorModel;
-};
-
-export type GetOrdersByStatusError = GetOrdersByStatusErrors[keyof GetOrdersByStatusErrors];
-
-export type GetOrdersByStatusResponses = {
-    /**
-     * OK
-     */
-    200: ArrayResponseOrder;
-};
-
-export type GetOrdersByStatusResponse = GetOrdersByStatusResponses[keyof GetOrdersByStatusResponses];
 
 export type GetSellersData = {
     body?: never;

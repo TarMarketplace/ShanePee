@@ -6,14 +6,22 @@ import { Text } from '@/components/text'
 import { cn } from '@/lib/utils'
 
 export interface ChatBoxProps {
-  photo: string
+  photo: string | undefined
   sellerName: string
+  sellerNameFallback: string
   date: Date
   message: string
   selected: boolean
 }
 
-function ChatBox({ photo, sellerName, date, message, selected }: ChatBoxProps) {
+function ChatBox({
+  photo,
+  sellerName,
+  sellerNameFallback,
+  date,
+  message,
+  selected,
+}: ChatBoxProps) {
   return (
     <div
       className={cn(
@@ -22,8 +30,8 @@ function ChatBox({ photo, sellerName, date, message, selected }: ChatBoxProps) {
       )}
     >
       <Avatar className='size-14'>
-        <AvatarImage src={photo} alt={sellerName} />
-        <AvatarFallback>JD</AvatarFallback>
+        <AvatarImage src={photo ?? undefined} alt={sellerName} />
+        <AvatarFallback>{sellerNameFallback}</AvatarFallback>
       </Avatar>
       <div className='flex w-full flex-col justify-center gap-1 truncate'>
         <span className='flex justify-between'>

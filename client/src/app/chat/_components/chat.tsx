@@ -11,6 +11,7 @@ import type { ChatMessage } from '@/generated/api'
 
 export interface ChatProps {
   sender_id: number | null
+  seller_id: number | null
   sellerName: string
   chat: ChatMessage[]
   input: string
@@ -24,6 +25,7 @@ export interface ChatProps {
 
 function Chat({
   sender_id,
+  seller_id,
   sellerName,
   chat,
   input,
@@ -79,7 +81,7 @@ function Chat({
         <Text variant='lg-semibold' className='w-full'>
           {sellerName}
         </Text>
-        <Link href={'/seller/' + sender_id}>
+        <Link href={'/seller/' + seller_id}>
           <Button variant='filled' className='h-8'>
             <Icon icon='tdesign:store-filled' className='size-5' />
             <Text variant='md-regular'>หน้าร้านค้า</Text>

@@ -2,7 +2,7 @@
 
 import { Icon } from '@iconify/react/dist/iconify.js'
 import imageCompression from 'browser-image-compression'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -13,12 +13,18 @@ import { useUser } from '@/providers/user-provider'
 import { cn } from '@/lib/utils'
 
 import type { ChatList, ChatMessage } from '@/generated/api'
-import { getChatList, getChatMessage, sendMessage } from '@/generated/api'
+import {
+  getChatList,
+  getChatMessage,
+  getSellerById,
+  sendMessage,
+} from '@/generated/api'
 
 import { Chat } from '../_components/chat'
 import { ChatBox } from '../_components/chat-box'
 
 export function ChatListContainer() {
+  const [newChat, setNewChat] = useState<ChatList>()
   const [chatList, setChatList] = useState<ChatList[]>([])
   const [activeChat, setActiveChat] = useState(0)
   const [chat, setChat] = useState<ChatMessage[]>([])
@@ -30,6 +36,7 @@ export function ChatListContainer() {
   const isPollingChatListRef = useRef(false)
   const { user } = useUser()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const pollChatList = useCallback(async () => {
     if (!isPollingChatListRef.current) return
@@ -61,8 +68,6 @@ export function ChatListContainer() {
   }, [router])
 
   const getUserChatList = useCallback(async () => {
-    isPollingChatListRef.current = true
-
     await getChatList({
       query: {
         poll: false,
@@ -72,8 +77,18 @@ export function ChatListContainer() {
         const list = response?.data?.data
         if (Array.isArray(list)) {
           if (list.length < 1) return
+          isPollingChatListRef.current = true
           setChatList(list)
           pollChatListIdRef.current = list[list.length - 1].id
+
+          const personId = searchParams.get('id')
+          if (personId) {
+            if (list.find((chat) => chat?.target_id == Number(personId))) {
+              setActiveChat(Number(personId))
+            } else {
+              fetchNewChat(Number(personId))
+            }
+          }
         } else if (response.response.status == 401) {
           isPollingChatListRef.current = false
           router.push('/login')
@@ -88,11 +103,28 @@ export function ChatListContainer() {
         console.log(e)
         toast.error('Something went wrong (ChatList)')
       })
-  }, [pollChatList, router])
+  }, [searchParams, pollChatList, router])
 
   useEffect(() => {
     getUserChatList()
   }, [getUserChatList])
+
+  const fetchNewChat = async (newPersonId: number) => {
+    const response = await getSellerById({ path: { id: newPersonId } })
+    const newPerson = response?.data
+    const newChatListItem: ChatList = {
+      id: 0,
+      last_chat_content: '',
+      last_chat_message_type: 'MESSAGE',
+      last_chat_time: Date.now().toString(),
+      target_first_name: newPerson?.first_name || '',
+      target_id: newPerson?.id ?? 0,
+      target_last_name: newPerson?.last_name || '',
+      target_photo: newPerson?.photo || '',
+    }
+    setActiveChat(newPersonId)
+    setNewChat(newChatListItem)
+  }
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -224,7 +256,7 @@ export function ChatListContainer() {
   }, [activeChat, router])
 
   const getChat = useCallback(async () => {
-    isPollingRef.current = true
+    if (!chatList.find((chat) => chat?.target_id == activeChat)) return
 
     await getChatMessage({
       path: {
@@ -238,6 +270,7 @@ export function ChatListContainer() {
         const message = response?.data?.data
         if (Array.isArray(message)) {
           if (message.length < 1) return
+          isPollingRef.current = true
           setChat(message)
           pollChatIdRef.current = message[message.length - 1].id
         } else if (response.response.status == 401) {
@@ -254,7 +287,7 @@ export function ChatListContainer() {
         console.log(e)
         toast.error('Something went wrong (GetChat)')
       })
-  }, [activeChat, pollChat, router])
+  }, [activeChat, pollChat, router, chatList])
 
   useEffect(() => {
     if (activeChat) {
@@ -263,7 +296,9 @@ export function ChatListContainer() {
     }
   }, [activeChat, user?.id, getChat])
 
-  const selectedChat = chatList.find((chat) => chat?.target_id == activeChat)
+  const selectedChat = [...chatList, newChat].find(
+    (chat) => chat?.target_id == activeChat
+  )
 
   return (
     <div className='flex max-h-[calc(100dvh-62px-256px)] divide-x-2 divide-grey-200'>
@@ -273,6 +308,35 @@ export function ChatListContainer() {
           activeChat == 0 ? 'flex' : 'hidden md:flex'
         )}
       >
+        {newChat && (
+          <div
+            key={newChat.id}
+            onClick={() =>
+              setActiveChat(
+                activeChat == newChat.target_id ? 0 : newChat.target_id
+              )
+            }
+            className='cursor-pointer'
+          >
+            <ChatBox
+              photo={newChat.target_photo ?? undefined}
+              sellerName={
+                newChat.target_first_name + ' ' + newChat.target_last_name
+              }
+              sellerNameFallback={
+                (newChat.target_first_name?.charAt(0).toUpperCase() ?? '') +
+                (newChat.target_last_name?.charAt(0).toUpperCase() ?? '')
+              }
+              date={new Date()}
+              message={
+                newChat.last_chat_message_type == 'MESSAGE'
+                  ? newChat.last_chat_content
+                  : 'Image'
+              }
+              selected={activeChat == newChat.target_id}
+            />
+          </div>
+        )}
         {chatList.map((chat) => {
           if (chat) {
             return (
@@ -315,6 +379,7 @@ export function ChatListContainer() {
       ) : (
         <Chat
           sender_id={user?.id ?? null}
+          seller_id={selectedChat?.target_id ?? null}
           sellerName={
             (selectedChat?.target_first_name ?? '') +
             ' ' +

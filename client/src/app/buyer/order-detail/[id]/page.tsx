@@ -9,7 +9,7 @@ import { Text } from '@/components/text'
 import AddReviewContainer from '@/app/_containers/add-review-container'
 import CompleteOrderContainer from '@/app/_containers/complete-order-container'
 import { OrderDetail } from '@/app/_containers/order-detail'
-import { type Order, getOrderOfBuyer } from '@/generated/api'
+import { type Order, getOrderOfBuyer, getSellerById } from '@/generated/api'
 
 export default function BuyerOrderDetailPage({
   params,
@@ -17,6 +17,10 @@ export default function BuyerOrderDetailPage({
   params: { id: string }
 }) {
   const [order, setOrder] = useState<Order | undefined>(undefined)
+  const [seller, setSeller] = useState<
+    { name: string; photo: string } | undefined
+  >(undefined)
+
   useEffect(() => {
     const fetchOrder = async () => {
       const { data, error } = await getOrderOfBuyer({
@@ -26,8 +30,17 @@ export default function BuyerOrderDetailPage({
         console.error(error)
       }
 
-      console.log(data)
       setOrder(data)
+
+      if (data) {
+        const sellerData = await getSellerById({ path: { id: data.seller_id } })
+        if (sellerData.data) {
+          setSeller({
+            name: `${sellerData.data.first_name} ${sellerData.data.last_name}`,
+            photo: sellerData.data.photo || '',
+          })
+        }
+      }
     }
 
     fetchOrder()
@@ -40,9 +53,12 @@ export default function BuyerOrderDetailPage({
           <>
             <OrderDetail order={order} />
             <div className='ml-auto flex gap-2.5 sm:px-6'>
-              {/* TODO: check using new review field of order */}
-              {order.status === 'COMPLETED' ? (
-                <AddReviewContainer />
+              {order.status === 'COMPLETED' && seller ? (
+                <AddReviewContainer
+                  name={seller.name}
+                  photo={seller.photo}
+                  orderID={order.id}
+                />
               ) : order.status === 'DELIVERING' ? (
                 <CompleteOrderContainer order={order} />
               ) : null}

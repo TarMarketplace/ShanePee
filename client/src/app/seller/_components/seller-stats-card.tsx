@@ -51,8 +51,7 @@ export function SellerStatsCard({ stats, isSeller }: SellerStatsCardProps) {
           <Icon icon='material-symbols-light:box-rounded' className='size-5' />
           <Text variant='md-regular'>จำนวนสินค้าทั้งหมด: </Text>
           <Text variant='md-regular' className='text-primary'>
-            {/* TODO chage to total number of art toy selling */}
-            {stats.number_of_art_toys_sold} ชิ้น
+            {stats.total_art_toys_remaining} ชิ้น
           </Text>
         </span>
         <span className='flex items-center gap-2'>

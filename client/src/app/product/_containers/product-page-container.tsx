@@ -151,8 +151,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
   }
 
   const handleGotoChat = () => {
-    // TODO: open chat with seller
-    router.push(`/chat`)
+    router.push(`/chat?id=${product.owner_id}`)
   }
 
   return (

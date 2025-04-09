@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { AvatarImage } from '@radix-ui/react-avatar'
+import Link from 'next/link'
 import { useMemo } from 'react'
 
 import { Avatar, AvatarFallback } from '@/components/avatar'
@@ -79,10 +80,14 @@ export function SellerStatsCard({ stats, isSeller }: SellerStatsCardProps) {
         <span className='mt-4 flex items-center gap-2 md:mt-0'>
           <Button
             variant='filled'
-            className={isSeller ? 'invisible h-8 md:h-6' : 'h-8 md:h-6'}
+            className={
+              isSeller ? 'invisible h-8 md:h-6' : 'h-8 cursor-pointer md:h-6'
+            }
           >
             <Icon icon='material-symbols:chat' className='size-5' />
-            <Text variant='md-regular'>แชทเลย</Text>
+            <Link href={'/chat?id=' + stats.id}>
+              <Text variant='md-regular'>แชทเลย</Text>
+            </Link>
           </Button>
         </span>
       </div>

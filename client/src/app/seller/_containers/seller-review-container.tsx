@@ -54,7 +54,7 @@ export function SellerReviewContainer({
           </Text>
         </Link>
       </div>
-      <div className='flex flex-col gap-3 sm:grid sm:grid-cols-[repeat(2,minmax(0,1fr))] sm:p-3 md:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]'>
+      <div className='flex gap-3 overflow-x-auto p-4'>
         {reviews.data?.map((review, i) => {
           return (
             <SellerReviewCard

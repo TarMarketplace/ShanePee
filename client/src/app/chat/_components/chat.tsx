@@ -91,7 +91,7 @@ function Chat({
       <div className='h-0 grow overflow-y-auto'>
         {chat?.map((message) => {
           if (message) {
-            if (message.sender_id == sender_id) {
+            if (message.sender_id === sender_id) {
               return (
                 <div className='flex w-full justify-end p-4' key={message.id}>
                   <div className='relative mb-3 max-w-[60%] text-wrap rounded-lg bg-primary-500 text-white shadow'>

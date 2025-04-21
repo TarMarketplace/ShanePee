@@ -67,12 +67,20 @@ export function ChatListContainer() {
       })
   }, [router])
 
+  function timeoutPromise<T>(
+    promise: Promise<T>,
+    timeoutMs: number
+  ): Promise<T> {
+    return Promise.race([
+      promise,
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('getChatList timeout')), timeoutMs)
+      ),
+    ])
+  }
+
   const getUserChatList = useCallback(async () => {
-    await getChatList({
-      query: {
-        poll: false,
-      },
-    })
+    timeoutPromise(getChatList({ query: { poll: false } }), 500)
       .then((response) => {
         const list = response?.data?.data
         if (Array.isArray(list)) {
@@ -101,7 +109,12 @@ export function ChatListContainer() {
       })
       .catch((e) => {
         console.log(e)
-        toast.error('Something went wrong (ChatList)')
+        const personId = searchParams.get('id')
+        if (personId) {
+          fetchNewChat(Number(personId))
+        } else {
+          toast.error('Something went wrong (ChatList)')
+        }
       })
   }, [searchParams, pollChatList, router])
 
@@ -219,6 +232,9 @@ export function ChatListContainer() {
         .catch(() => {
           toast.error('Error sending images')
         })
+    }
+    if (activeChat == newChat?.target_id) {
+      window.location.reload()
     }
   }
 

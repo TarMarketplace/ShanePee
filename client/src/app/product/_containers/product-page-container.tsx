@@ -46,6 +46,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
 
   const getSellerNameFrom = useCallback(
     async (ownerId: number) => {
+      if (!ownerId) return
       await getSellerById({
         path: {
           id: ownerId,
@@ -71,6 +72,7 @@ export function ProductPageContainer({ product }: ProductPageProps) {
 
   const fetchSeller = useCallback(
     async (ownerId: number) => {
+      if (!ownerId) return
       await getSellerById({
         path: {
           id: ownerId,

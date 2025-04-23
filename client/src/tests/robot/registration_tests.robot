@@ -28,7 +28,9 @@ Invalid Registration - Invalid Domain Format
 
 Invalid Registration - Existing Email
     [Documentation]    EC5: Email that already exists should be invalid
-    Create Existing User
+    Go To Registration Page
+    Input Registration Data    ${VALID_EMAIL}    ${VALID_PASSWORD}    ${VALID_PASSWORD}
+    Submit Registration
     Go To Registration Page
     Input Registration Data    ${VALID_EMAIL}    ${VALID_PASSWORD}    ${VALID_PASSWORD}
     Submit Registration
@@ -92,7 +94,3 @@ Toast Message Should appear
 
 Registration Should Succeed
 		Wait Until Element Is Visible    xpath=//h5[contains(text(), 'Art Toys แนะนำสำหรับคุณ')]
-
-Create Existing User
-    # This would need to be implemented based on your test database setup
-    Log    Creating existing user in test database

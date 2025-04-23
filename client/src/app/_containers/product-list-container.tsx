@@ -21,7 +21,9 @@ export function ProductListContainer() {
         toast.error(error.title ?? 'Cannot get products')
       }
 
-      setProducts(data?.data ?? [])
+      setProducts(
+        data?.data?.filter((product) => product.availability).slice(0, 8) ?? []
+      )
       setLoading(false)
     }
 

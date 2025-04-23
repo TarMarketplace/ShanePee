@@ -30,6 +30,14 @@ clean:
 	@echo "$(ORANGE)Cleaning$(RESET)"
 	rm -rf out/* cmd/api/wire_gen.go docs
 
+test: coverage/coverage.html
+
+coverage/coverage.html: coverage/coverage.out
+	$(GO) tool cover -html coverage/coverage.out -o coverage/coverage.html
+
+coverage/coverage.out:
+	$(GO) test -coverprofile coverage/coverage.out ./service/...
+
 docs: docs/openapi.json
 
 docs/openapi.json: out/api

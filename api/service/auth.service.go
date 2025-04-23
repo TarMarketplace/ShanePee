@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
+	"regexp"
 
 	"crypto/rand"
 
@@ -16,7 +17,7 @@ var (
 )
 
 type AuthService interface {
-	Register(ctx context.Context, username string, password string) (*domain.User, error)
+	Register(ctx context.Context, email string, password string) (*domain.User, error)
 	Login(ctx context.Context, email string, password string) (*domain.User, error)
 	RequestPasswordReset(ctx context.Context, email string) error
 	GetUserByID(ctx context.Context, id int64) (*domain.User, error)
@@ -48,9 +49,21 @@ var (
 	ErrInvalidToken        error = errors.New("Invalid token or request id")
 	ErrUserNotFound        error = domain.ErrUserNotFound
 	ErrInvalidOldPassword  error = errors.New("Invalid old password")
+	ErrInvalidEmail        error = errors.New("Invalid email format")
 )
 
-func (s *authServiceImpl) Register(ctx context.Context, username string, password string) (*domain.User, error) {
+// isValidEmail checks if the provided email has a valid format
+func isValidEmail(email string) bool {
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	return emailRegex.MatchString(email)
+}
+
+func (s *authServiceImpl) Register(ctx context.Context, email string, password string) (*domain.User, error) {
+	// Validate email format
+	if !isValidEmail(email) {
+		return nil, ErrInvalidEmail
+	}
+
 	passwordByte := []byte(password)
 	// TODO: salt
 	// TODO: validate password
@@ -60,7 +73,7 @@ func (s *authServiceImpl) Register(ctx context.Context, username string, passwor
 		// TODO: properly handle this error
 		return nil, err
 	}
-	user := domain.NewUser(username, hashStr)
+	user := domain.NewUser(email, hashStr)
 	err = s.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		// TODO: properly handle this error

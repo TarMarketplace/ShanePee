@@ -1,0 +1,1098 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>service: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">shanepee.com/api/service/arttoy.service.go (0.0%)</option>
+				
+				<option value="file1">shanepee.com/api/service/auth.service.go (16.1%)</option>
+				
+				<option value="file2">shanepee.com/api/service/cart.service.go (0.0%)</option>
+				
+				<option value="file3">shanepee.com/api/service/chat.service.go (0.0%)</option>
+				
+				<option value="file4">shanepee.com/api/service/order.service.go (0.0%)</option>
+				
+				<option value="file5">shanepee.com/api/service/review.service.go (0.0%)</option>
+				
+				<option value="file6">shanepee.com/api/service/stripe.service.go (0.0%)</option>
+				
+				<option value="file7">shanepee.com/api/service/user.service.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package service
+
+import (
+        "context"
+
+        "shanepee.com/api/domain"
+)
+
+var (
+        ErrArtToyNotFound         error = domain.ErrArtToyNotFound
+        ErrArtToyBelongToOwner    error = domain.ErrArtToyBelongToOwner
+        ErrArtToyNotBelongToOwner error = domain.ErrArtToyNotBelongToOwner
+)
+
+type ArtToySearchParams = domain.ArtToySearchParams
+
+type ArtToySortKey = domain.ArtToySortKey
+
+const (
+        ArtToyReleaseDateSortKey = domain.ArtToyReleaseDateSortKey
+        ArtToyPriceSortKey       = domain.ArtToyPriceSortKey
+)
+
+type ArtToyService interface {
+        CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error)
+        UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error)
+        GetArtToys(ctx context.Context) ([]*domain.ArtToy, error)
+        GetArtToysBySearchParams(ctx context.Context, searchParams *ArtToySearchParams) ([]*domain.ArtToy, error)
+        GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error)
+        GetArtToysByOwnerID(ctx context.Context, id int64) ([]*domain.ArtToy, error)
+        DeleteArtToy(ctx context.Context, id int64, ownerID int64) error
+}
+
+type artToyServiceImpl struct {
+        artToyRepo domain.ArtToyRepository
+}
+
+func NewArtToyService(artToyRepo domain.ArtToyRepository) ArtToyService <span class="cov0" title="0">{
+        return &amp;artToyServiceImpl{
+                artToyRepo,
+        }
+}</span>
+
+var _ ArtToyService = &amp;artToyServiceImpl{}
+
+func (s *artToyServiceImpl) CreateArtToy(ctx context.Context, name string, description string, price float64, photo *string, ownerID int64) (*domain.ArtToy, error) <span class="cov0" title="0">{
+        artToy := domain.NewArtToy(name, description, price, photo, ownerID)
+        if err := s.artToyRepo.CreateArtToy(ctx, artToy); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return artToy, nil</span>
+}
+
+func (s *artToyServiceImpl) UpdateArtToy(ctx context.Context, id int64, updateBody map[string]any, ownerID int64) (*domain.ArtToy, error) <span class="cov0" title="0">{
+        artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if artToy.OwnerID != ownerID </span><span class="cov0" title="0">{
+                return nil, ErrArtToyNotBelongToOwner
+        }</span>
+        <span class="cov0" title="0">if err = s.artToyRepo.UpdateArtToy(ctx, id, updateBody); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">updatedArtToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return updatedArtToy, nil</span>
+}
+
+func (s *artToyServiceImpl) GetArtToys(ctx context.Context) ([]*domain.ArtToy, error) <span class="cov0" title="0">{
+        artToys, err := s.artToyRepo.FindArtToys(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return artToys, nil</span>
+}
+
+func (s *artToyServiceImpl) GetArtToysBySearchParams(ctx context.Context, searchParams *ArtToySearchParams) ([]*domain.ArtToy, error) <span class="cov0" title="0">{
+        return s.artToyRepo.FindArtToysBySearchParams(ctx, searchParams)
+}</span>
+
+func (s *artToyServiceImpl) GetArtToysByOwnerID(ctx context.Context, ownerID int64) ([]*domain.ArtToy, error) <span class="cov0" title="0">{
+        artToys, err := s.artToyRepo.FindArtToysByOwnerID(ctx, ownerID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return artToys, nil</span>
+}
+
+func (s *artToyServiceImpl) GetArtToyByID(ctx context.Context, id int64) (*domain.ArtToy, error) <span class="cov0" title="0">{
+        artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return artToy, nil</span>
+}
+
+func (s *artToyServiceImpl) DeleteArtToy(ctx context.Context, id int64, ownerID int64) error <span class="cov0" title="0">{
+        artToy, err := s.artToyRepo.FindArtToyByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if artToy.OwnerID != ownerID </span><span class="cov0" title="0">{
+                return ErrArtToyNotBelongToOwner
+        }</span>
+        <span class="cov0" title="0">return s.artToyRepo.DeleteArtToy(ctx, id)</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package service
+
+import (
+        "context"
+        "encoding/base64"
+        "errors"
+        "regexp"
+
+        "crypto/rand"
+
+        "golang.org/x/crypto/bcrypt"
+        "shanepee.com/api/domain"
+)
+
+var (
+        ErrUserEmailAlreadyExist error = domain.ErrUserEmailAlreadyExist
+)
+
+type AuthService interface {
+        Register(ctx context.Context, email string, password string) (*domain.User, error)
+        Login(ctx context.Context, email string, password string) (*domain.User, error)
+        RequestPasswordReset(ctx context.Context, email string) error
+        GetUserByID(ctx context.Context, id int64) (*domain.User, error)
+        ResetPassword(ctx context.Context, requestID int64, token string, newPassword string) error
+        ChangePassword(ctx context.Context, userID int64, oldPassword string, newPassword string) error
+}
+
+type EmailSender interface {
+        SendResetPasswordEmail(ctx context.Context, to string, token string, requestID int64) error
+}
+
+func NewAuthService(userRepo domain.UserRepository, emailSender EmailSender) AuthService <span class="cov8" title="1">{
+        return &amp;authServiceImpl{
+                userRepo,
+                emailSender,
+        }
+}</span>
+
+type authServiceImpl struct {
+        userRepo    domain.UserRepository
+        emailSender EmailSender
+}
+
+var _ AuthService = &amp;authServiceImpl{}
+
+var (
+        ErrUnauthorized        error = errors.New("Unauthorized access")
+        ErrIncorrectCredential error = errors.New("Invalid email or password")
+        ErrInvalidToken        error = errors.New("Invalid token or request id")
+        ErrUserNotFound        error = domain.ErrUserNotFound
+        ErrInvalidOldPassword  error = errors.New("Invalid old password")
+        ErrInvalidEmail        error = errors.New("Invalid email format")
+)
+
+// isValidEmail checks if the provided email has a valid format
+func isValidEmail(email string) bool <span class="cov8" title="1">{
+        emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+        return emailRegex.MatchString(email)
+}</span>
+
+func (s *authServiceImpl) Register(ctx context.Context, email string, password string) (*domain.User, error) <span class="cov8" title="1">{
+        // Validate email format
+        if !isValidEmail(email) </span><span class="cov8" title="1">{
+                return nil, ErrInvalidEmail
+        }</span>
+
+        <span class="cov8" title="1">passwordByte := []byte(password)
+        // TODO: salt
+        // TODO: validate password
+        hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+        hashStr := string(hash)
+        if err != nil </span><span class="cov0" title="0">{
+                // TODO: properly handle this error
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">user := domain.NewUser(email, hashStr)
+        err = s.userRepo.CreateUser(ctx, user)
+        if err != nil </span><span class="cov8" title="1">{
+                // TODO: properly handle this error
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (s *authServiceImpl) Login(ctx context.Context, email string, password string) (*domain.User, error) <span class="cov0" title="0">{
+        user, err := s.userRepo.FindUserByEmail(ctx, email)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, domain.ErrUserNotFound) </span><span class="cov0" title="0">{
+                        return nil, ErrIncorrectCredential
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+
+        <span class="cov0" title="0">passwordByte := []byte(password)
+        err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), passwordByte)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) </span><span class="cov0" title="0">{
+                        return nil, ErrIncorrectCredential
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func (s *authServiceImpl) RequestPasswordReset(ctx context.Context, email string) error <span class="cov0" title="0">{
+        user, err := s.userRepo.FindUserByEmail(ctx, email)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, domain.ErrUserNotFound) </span><span class="cov0" title="0">{
+                        // This avoids exposing whether an email/user exists in the system.
+                        return nil
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov0" title="0">token := make([]byte, 72)
+        if _, err := rand.Read(token); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">hash, err := bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">tokenHash := string(hash)
+        passwordResetRequest := domain.NewPasswordResetRequest(tokenHash, user.ID)
+        if err := s.userRepo.CreatePasswordResetRequest(ctx, passwordResetRequest); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">encodedToken := base64.RawURLEncoding.EncodeToString(token)
+        if err := s.emailSender.SendResetPasswordEmail(ctx, user.Email, encodedToken, passwordResetRequest.ID); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *authServiceImpl) ResetPassword(ctx context.Context, requestID int64, token string, newPassword string) error <span class="cov0" title="0">{
+        passwordResetRequest, err := s.userRepo.FindPasswordResetRequestWithUserByID(ctx, requestID)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, domain.ErrPasswordResetRequestNotFound) </span><span class="cov0" title="0">{
+                        return ErrInvalidToken
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov0" title="0">decodedToken, err := base64.RawURLEncoding.DecodeString(token)
+        if err != nil </span><span class="cov0" title="0">{
+                return ErrInvalidToken
+        }</span>
+
+        <span class="cov0" title="0">if err := bcrypt.CompareHashAndPassword([]byte(passwordResetRequest.TokenHash), decodedToken); err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) </span><span class="cov0" title="0">{
+                        return ErrInvalidToken
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov0" title="0">passwordByte := []byte(newPassword)
+        hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+        hashStr := string(hash)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if err := s.userRepo.UpdateUserPasswordHash(ctx, passwordResetRequest.UserID, hashStr); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if err := s.userRepo.DeletePasswordResetRequestByID(ctx, passwordResetRequest.ID); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *authServiceImpl) GetUserByID(ctx context.Context, id int64) (*domain.User, error) <span class="cov0" title="0">{
+        user, err := s.userRepo.FindUserByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func (s *authServiceImpl) ChangePassword(ctx context.Context, userID int64, oldPassword string, newPassword string) error <span class="cov0" title="0">{
+        user, err := s.userRepo.FindUserByID(ctx, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(oldPassword)); err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) </span><span class="cov0" title="0">{
+                        return ErrInvalidOldPassword
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov0" title="0">passwordByte := []byte(newPassword)
+        hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
+        hashStr := string(hash)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if err := s.userRepo.UpdateUserPasswordHash(ctx, userID, hashStr); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package service
+
+import (
+        "context"
+        "errors"
+
+        "shanepee.com/api/domain"
+)
+
+var (
+        ErrCartItemNotFound         error = domain.ErrCartItemNotFound
+        ErrCartItemNotBelongToOwner error = domain.ErrCartItemNotBelongToOwner
+        ErrItemAlreadyAddedToCart   error = domain.ErrItemAlreadyAddedToCart
+        ErrArtToyWasPurchased       error = domain.ErrArtToyWasPurchased
+)
+
+type CartService interface {
+        AddItemToCart(ctx context.Context, ownerID int64, artToyID int64) (*domain.CartItem, error)
+        RemoveItemFromCart(ctx context.Context, ownerID int64, artToyID int64) error
+        ClearItemsByOwnerID(ctx context.Context, ownerID int64) error
+        GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error)
+        Checkout(ctx context.Context, ownerID int64) error
+}
+
+type cartServiceImpl struct {
+        artToyRepo domain.ArtToyRepository
+        cartRepo   domain.CartRepository
+        orderRepo  domain.OrderRepository
+}
+
+func NewCartService(artToyRepo domain.ArtToyRepository, cartRepo domain.CartRepository, orderRepo domain.OrderRepository) CartService <span class="cov0" title="0">{
+        return &amp;cartServiceImpl{
+                artToyRepo,
+                cartRepo,
+                orderRepo,
+        }
+}</span>
+
+var _ CartService = &amp;cartServiceImpl{}
+
+func (s *cartServiceImpl) AddItemToCart(ctx context.Context, buyerID int64, artToyID int64) (*domain.CartItem, error) <span class="cov0" title="0">{
+        artToy, err := s.artToyRepo.FindArtToyByID(ctx, artToyID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if artToy.OwnerID == buyerID </span><span class="cov0" title="0">{
+                return nil, ErrArtToyBelongToOwner
+        }</span>
+        <span class="cov0" title="0">if !artToy.Availability </span><span class="cov0" title="0">{
+                return nil, ErrArtToyWasPurchased
+        }</span>
+
+        <span class="cov0" title="0">_, err = s.cartRepo.GetCartWithItemByOwnerIDAndArtToyID(ctx, buyerID, artToyID)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, ErrCartItemNotFound) </span>{<span class="cov0" title="0">
+                }</span> else<span class="cov0" title="0"> {
+                        return nil, err
+                }</span>
+        } else<span class="cov0" title="0"> {
+                return nil, ErrItemAlreadyAddedToCart
+        }</span>
+
+        <span class="cov0" title="0">cartItem := domain.NewCartItem(buyerID, artToyID)
+        if err := s.cartRepo.AddItemToCart(ctx, cartItem); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return cartItem, nil</span>
+}
+
+func (s *cartServiceImpl) RemoveItemFromCart(ctx context.Context, ownerID int64, ID int64) error <span class="cov0" title="0">{
+        if err := s.cartRepo.RemoveItemFromCart(ctx, ownerID, ID); err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, domain.ErrCartItemNotFound) </span><span class="cov0" title="0">{
+                        return ErrCartItemNotFound
+                }</span>
+                <span class="cov0" title="0">if errors.Is(err, domain.ErrCartItemNotBelongToOwner) </span><span class="cov0" title="0">{
+                        return ErrCartItemNotBelongToOwner
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *cartServiceImpl) ClearItemsByOwnerID(ctx context.Context, ownerID int64) error <span class="cov0" title="0">{
+        if err := s.cartRepo.ClearItemsByOwnerID(ctx, ownerID); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *cartServiceImpl) GetCartWithItemByOwnerID(ctx context.Context, ownerID int64) ([]*domain.CartItem, error) <span class="cov0" title="0">{
+        cart, err := s.cartRepo.GetCartWithItemByOwnerID(ctx, ownerID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return cart, nil</span>
+}
+
+func (s *cartServiceImpl) Checkout(ctx context.Context, ownerID int64) error <span class="cov0" title="0">{
+        cartItems, err := s.cartRepo.GetCartWithItemByOwnerID(ctx, ownerID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // All items should be owned by the same seller
+        <span class="cov0" title="0">sellerID := cartItems[0].ArtToy.OwnerID
+        order := domain.NewOrder(sellerID, ownerID)
+
+        orderItems := make([]*domain.OrderItem, 0)
+        artToyIDs := make([]int64, 0)
+        for _, cartItem := range cartItems </span><span class="cov0" title="0">{
+                artToyIDs = append(artToyIDs, cartItem.ArtToyID)
+
+                if !cartItem.ArtToy.Availability </span><span class="cov0" title="0">{
+                        return ErrArtToyNotFound
+                }</span>
+                <span class="cov0" title="0">orderItem := domain.NewOrderItem(cartItem.ArtToyID, order.ID)
+                orderItems = append(orderItems, orderItem)</span>
+        }
+
+        <span class="cov0" title="0">if err := s.orderRepo.CreateOrder(ctx, order); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if err := s.orderRepo.CreateOrderItems(ctx, orderItems); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if err := s.artToyRepo.UpdateArtToysAvailability(ctx, artToyIDs, false); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if err = s.cartRepo.ClearItemsByOwnerID(ctx, ownerID); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // TODO: make transaction
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package service
+
+import (
+        "context"
+        "sync"
+        "time"
+
+        "shanepee.com/api/domain"
+)
+
+var (
+        ErrChatNotFound         error = domain.ErrChatNotFound
+        ErrChatNotBelongToOwner error = domain.ErrChatNotBelongToOwner
+)
+
+type ChatService interface {
+        GetChatList(ctx context.Context, userID int64, poll bool, chatID int64) ([]*domain.ChatList, error)
+        SendMessage(ctx context.Context, senderID int64, receiverID int64, messageType domain.ChatType, content string) (*domain.ChatMessage, error)
+        GetChatMessage(ctx context.Context, senderID int64, receiverID int64, poll bool, chatID int64) ([]*domain.ChatMessage, error)
+}
+
+type chatServiceImpl struct {
+        chatRepo               domain.ChatRepository
+        userRepo               domain.UserRepository
+        subscribers            map[int64]map[chan *domain.ChatMessage]struct{}
+        subscribersForChatList map[int64]map[chan *domain.ChatList]struct{}
+        sync.Mutex
+}
+
+func NewChatService(chatRepo domain.ChatRepository, userRepo domain.UserRepository) ChatService <span class="cov0" title="0">{
+        return &amp;chatServiceImpl{
+                chatRepo:               chatRepo,
+                userRepo:               userRepo,
+                subscribers:            make(map[int64]map[chan *domain.ChatMessage]struct{}),
+                subscribersForChatList: make(map[int64]map[chan *domain.ChatList]struct{}),
+        }
+}</span>
+
+var _ ChatService = &amp;chatServiceImpl{}
+
+func (s *chatServiceImpl) GetChatList(ctx context.Context, userID int64, poll bool, chatID int64) ([]*domain.ChatList, error) <span class="cov0" title="0">{
+        latestChatTime := time.Time{}
+        if poll </span><span class="cov0" title="0">{
+                chat, err := s.chatRepo.FindChatByID(ctx, chatID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov0" title="0">if chat.SenderID != userID &amp;&amp; chat.ReceiverID != userID </span><span class="cov0" title="0">{
+                        return nil, ErrChatNotBelongToOwner
+                }</span>
+                <span class="cov0" title="0">latestChatTime = chat.CreatedAt</span>
+        }
+
+        <span class="cov0" title="0">newChats, err := s.chatRepo.FindChatListByUserID(ctx, userID, latestChatTime)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if len(newChats) &gt; 0 </span><span class="cov0" title="0">{
+                return newChats, nil
+        }</span>
+
+        <span class="cov0" title="0">newChan := s.addSubscriberForChatList(userID)
+        defer s.removeSubscriberForChatList(userID, newChan)
+
+        select </span>{
+        case newChat := &lt;-newChan:<span class="cov0" title="0">
+                return []*domain.ChatList{newChat}, nil</span>
+        case &lt;-time.After(60 * time.Second):<span class="cov0" title="0">
+                return []*domain.ChatList{}, nil</span>
+        }
+}
+
+func (s *chatServiceImpl) SendMessage(ctx context.Context, senderID int64, receiverID int64, messageType domain.ChatType, content string) (*domain.ChatMessage, error) <span class="cov0" title="0">{
+        chat := domain.NewChatMessage(senderID, receiverID, messageType, content)
+
+        receiver, err := s.userRepo.FindUserByID(ctx, receiverID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">chatList := domain.NewChatList(chat.ID, receiverID, receiver.FirstName, receiver.LastName, receiver.Photo, messageType, content, chat.CreatedAt)
+        if err := s.chatRepo.CreateChat(ctx, chat); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">s.notifySubscriber(senderID, chat)
+        s.notifySubscriber(receiverID, chat)
+        s.notifySubscriberForChatList(receiverID, chatList)
+        return chat, nil</span>
+}
+
+func (s *chatServiceImpl) GetChatMessage(ctx context.Context, receiverID int64, senderID int64, poll bool, chatID int64) ([]*domain.ChatMessage, error) <span class="cov0" title="0">{
+        latestChatTime := time.Time{}
+        if poll </span><span class="cov0" title="0">{
+                chat, err := s.chatRepo.FindChatByID(ctx, chatID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov0" title="0">if !((chat.ReceiverID == receiverID &amp;&amp; chat.SenderID == senderID) || (chat.ReceiverID == senderID &amp;&amp; chat.SenderID == receiverID)) </span><span class="cov0" title="0">{
+                        return nil, ErrChatNotBelongToOwner
+                }</span>
+                <span class="cov0" title="0">latestChatTime = chat.CreatedAt</span>
+        }
+
+        <span class="cov0" title="0">newChats, err := s.chatRepo.FindLatestChatsBySenderIDAndReceiverID(ctx, senderID, receiverID, latestChatTime)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if len(newChats) &gt; 0 </span><span class="cov0" title="0">{
+                return newChats, nil
+        }</span>
+
+        <span class="cov0" title="0">newChan := s.addSubscriber(receiverID)
+        defer s.removeSubscriber(receiverID, newChan)
+
+        select </span>{
+        case newChat := &lt;-newChan:<span class="cov0" title="0">
+                return []*domain.ChatMessage{newChat}, nil</span>
+        case &lt;-time.After(60 * time.Second):<span class="cov0" title="0">
+                return []*domain.ChatMessage{}, nil</span>
+        }
+}
+
+func (s *chatServiceImpl) notifySubscriber(userID int64, chat *domain.ChatMessage) <span class="cov0" title="0">{
+        s.Lock()
+        defer s.Unlock()
+
+        for subscriber := range s.subscribers[userID] </span><span class="cov0" title="0">{
+                subscriber &lt;- chat
+        }</span>
+        <span class="cov0" title="0">delete(s.subscribers, userID)</span>
+}
+
+func (s *chatServiceImpl) notifySubscriberForChatList(userID int64, chat *domain.ChatList) <span class="cov0" title="0">{
+        s.Lock()
+        defer s.Unlock()
+
+        for subscriber := range s.subscribersForChatList[userID] </span><span class="cov0" title="0">{
+                subscriber &lt;- chat
+        }</span>
+        <span class="cov0" title="0">delete(s.subscribersForChatList, userID)</span>
+}
+
+func (s *chatServiceImpl) addSubscriber(userID int64) chan *domain.ChatMessage <span class="cov0" title="0">{
+        s.Lock()
+        defer s.Unlock()
+
+        newChan := make(chan *domain.ChatMessage, 10)
+
+        if _, ok := s.subscribers[userID]; !ok </span><span class="cov0" title="0">{
+                s.subscribers[userID] = make(map[chan *domain.ChatMessage]struct{})
+        }</span>
+        <span class="cov0" title="0">s.subscribers[userID][newChan] = struct{}{}
+        return newChan</span>
+}
+
+func (s *chatServiceImpl) addSubscriberForChatList(userID int64) chan *domain.ChatList <span class="cov0" title="0">{
+        s.Lock()
+        defer s.Unlock()
+
+        newChan := make(chan *domain.ChatList, 10)
+
+        if _, ok := s.subscribersForChatList[userID]; !ok </span><span class="cov0" title="0">{
+                s.subscribersForChatList[userID] = make(map[chan *domain.ChatList]struct{})
+        }</span>
+        <span class="cov0" title="0">s.subscribersForChatList[userID][newChan] = struct{}{}
+        return newChan</span>
+}
+
+func (s *chatServiceImpl) removeSubscriber(userID int64, sub chan *domain.ChatMessage) <span class="cov0" title="0">{
+        s.Lock()
+        defer s.Unlock()
+
+        delete(s.subscribers[userID], sub)
+}</span>
+
+func (s *chatServiceImpl) removeSubscriberForChatList(userID int64, sub chan *domain.ChatList) <span class="cov0" title="0">{
+        s.Lock()
+        defer s.Unlock()
+
+        delete(s.subscribersForChatList[userID], sub)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package service
+
+import (
+        "context"
+
+        "shanepee.com/api/domain"
+)
+
+var (
+        ErrOrderNotFound         error = domain.ErrOrderNotFound
+        ErrOrderNotBelongToOwner error = domain.ErrOrderNotBelongToOwner
+)
+
+type OrderService interface {
+        GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error)
+        GetOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64, status string) ([]*domain.Order, error)
+        GetOrderWithArtToysBySellerID(ctx context.Context, orderID int64, sellerID int64) (*domain.Order, error)
+        GetOrderWithArtToysByBuyerID(ctx context.Context, orderID int64, buyerID int64) (*domain.Order, error)
+        UpdateOrder(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error)
+        CompleteOrder(ctx context.Context, id int64, buyerID int64) (*domain.Order, error)
+}
+
+type orderServiceImpl struct {
+        orderRepo domain.OrderRepository
+}
+
+func NewOrderService(orderRepo domain.OrderRepository) OrderService <span class="cov0" title="0">{
+        return &amp;orderServiceImpl{
+                orderRepo,
+        }
+}</span>
+
+var _ OrderService = &amp;orderServiceImpl{}
+
+func (s *orderServiceImpl) GetOrdersWithArtToysBySellerID(ctx context.Context, sellerID int64, status string) ([]*domain.Order, error) <span class="cov0" title="0">{
+        return s.orderRepo.FindOrdersWithArtToysBySellerID(ctx, sellerID, status)
+}</span>
+
+func (s *orderServiceImpl) GetOrdersWithArtToysByBuyerID(ctx context.Context, buyerID int64, status string) ([]*domain.Order, error) <span class="cov0" title="0">{
+        return s.orderRepo.FindOrdersWithArtToysByBuyerID(ctx, buyerID, status)
+}</span>
+
+func (s *orderServiceImpl) GetOrderWithArtToysBySellerID(ctx context.Context, orderID int64, sellerID int64) (*domain.Order, error) <span class="cov0" title="0">{
+        order, err := s.orderRepo.FindOrderByID(ctx, orderID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if order.SellerID != sellerID </span><span class="cov0" title="0">{
+                return nil, ErrOrderNotBelongToOwner
+        }</span>
+        <span class="cov0" title="0">return order, nil</span>
+}
+
+func (s *orderServiceImpl) GetOrderWithArtToysByBuyerID(ctx context.Context, orderID int64, buyerID int64) (*domain.Order, error) <span class="cov0" title="0">{
+        order, err := s.orderRepo.FindOrderByID(ctx, orderID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if order.BuyerID != buyerID </span><span class="cov0" title="0">{
+                return nil, ErrOrderNotBelongToOwner
+        }</span>
+        <span class="cov0" title="0">return order, nil</span>
+}
+
+func (s *orderServiceImpl) UpdateOrder(ctx context.Context, id int64, updateBody map[string]any, sellerID int64) (*domain.Order, error) <span class="cov0" title="0">{
+        order, err := s.orderRepo.FindOrderByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if order.SellerID != sellerID </span><span class="cov0" title="0">{
+                return nil, ErrOrderNotBelongToOwner
+        }</span>
+
+        <span class="cov0" title="0">if err = s.orderRepo.UpdateOrder(ctx, id, updateBody); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">updatedOrder, err := s.orderRepo.FindOrderByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return updatedOrder, nil</span>
+}
+
+func (s *orderServiceImpl) CompleteOrder(ctx context.Context, id int64, buyerID int64) (*domain.Order, error) <span class="cov0" title="0">{
+        order, err := s.orderRepo.FindOrderByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if order.BuyerID != buyerID </span><span class="cov0" title="0">{
+                return nil, ErrOrderNotBelongToOwner
+        }</span>
+
+        <span class="cov0" title="0">updateBody := make(map[string]any)
+        updateBody["status"] = domain.Completed
+        if err = s.orderRepo.UpdateOrder(ctx, id, updateBody); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">updatedOrder, err := s.orderRepo.FindOrderByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return updatedOrder, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package service
+
+import (
+        "context"
+
+        "shanepee.com/api/domain"
+)
+
+var (
+        ErrReviewNotFound error = domain.ErrReviewNotFound
+)
+
+type ReviewService interface {
+        CreateReview(ctx context.Context, rating int, comment string, orderID int64, buyerID int64) (*domain.Review, error)
+        GetReviewsWithTruncatedBuyerBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithTruncatedBuyer, error)
+}
+
+type reviewServiceImpl struct {
+        orderRepo  domain.OrderRepository
+        reviewRepo domain.ReviewRepository
+}
+
+func NewReviewService(orderRepo domain.OrderRepository, reviewRepo domain.ReviewRepository) ReviewService <span class="cov0" title="0">{
+        return &amp;reviewServiceImpl{
+                orderRepo,
+                reviewRepo,
+        }
+}</span>
+
+var _ ReviewService = &amp;reviewServiceImpl{}
+
+func (s *reviewServiceImpl) CreateReview(ctx context.Context, rating int, comment string, orderID int64, buyerID int64) (*domain.Review, error) <span class="cov0" title="0">{
+        order, err := s.orderRepo.FindOrderByID(ctx, orderID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if order.BuyerID != buyerID </span><span class="cov0" title="0">{
+                return nil, ErrOrderNotBelongToOwner
+        }</span>
+
+        <span class="cov0" title="0">review := domain.NewReview(rating, comment, orderID)
+        if err := s.reviewRepo.CreateReview(ctx, review); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return review, nil</span>
+}
+
+func (s *reviewServiceImpl) GetReviewsWithTruncatedBuyerBySellerID(ctx context.Context, sellerID int64) ([]*domain.ReviewWithTruncatedBuyer, error) <span class="cov0" title="0">{
+        reviews, err := s.reviewRepo.FindReviewsWithTruncatedBuyerBySellerID(ctx, sellerID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return reviews, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package service
+
+import (
+        "context"
+        "encoding/json"
+        "errors"
+        "strconv"
+
+        "github.com/sirupsen/logrus"
+        "github.com/stripe/stripe-go/v81"
+        "github.com/stripe/stripe-go/v81/checkout/session"
+        "shanepee.com/api/config"
+        "shanepee.com/api/domain"
+)
+
+type StripeService interface {
+        Checkout(ctx context.Context, userID int64) (url string, err error)
+        PaymentSuccessCallback(ctx context.Context, body []byte, signature string) error
+}
+
+type stripeServiceImpl struct {
+        orderRepo                       domain.OrderRepository
+        reviewRepo                      domain.ReviewRepository
+        userRepo                        domain.UserRepository
+        cartRepo                        domain.CartRepository
+        cartSvc                         CartService
+        stripeKey                       string
+        stripePaymentSuccessRedirectURL string
+}
+
+func NewStripeService(orderRepo domain.OrderRepository, reviewRepo domain.ReviewRepository, userRepo domain.UserRepository, cartRepo domain.CartRepository, cartSvc CartService, cfg config.Config) StripeService <span class="cov0" title="0">{
+        return &amp;stripeServiceImpl{
+                orderRepo:                       orderRepo,
+                reviewRepo:                      reviewRepo,
+                userRepo:                        userRepo,
+                cartRepo:                        cartRepo,
+                cartSvc:                         cartSvc,
+                stripeKey:                       cfg.StripeKey,
+                stripePaymentSuccessRedirectURL: cfg.StripePaymentSuccessRedirectURL,
+        }
+}</span>
+
+var _ StripeService = &amp;stripeServiceImpl{}
+
+func (s *stripeServiceImpl) Checkout(ctx context.Context, userID int64) (string, error) <span class="cov0" title="0">{
+        _, err := s.userRepo.FindUserByID(ctx, userID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">cartItems, err := s.cartRepo.GetCartWithItemByOwnerID(ctx, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">var lineItems []*stripe.CheckoutSessionLineItemParams
+
+        for _, cartItem := range cartItems </span><span class="cov0" title="0">{
+                lineItems = append(lineItems, &amp;stripe.CheckoutSessionLineItemParams{
+                        PriceData: &amp;stripe.CheckoutSessionLineItemPriceDataParams{
+                                Currency: stripe.String("thb"),
+                                ProductData: &amp;stripe.CheckoutSessionLineItemPriceDataProductDataParams{
+                                        Name: stripe.String(cartItem.ArtToy.Name),
+                                },
+                                UnitAmount: stripe.Int64(int64(cartItem.ArtToy.Price * 100)),
+                        },
+                        Quantity: stripe.Int64(1),
+                })
+        }</span>
+
+        <span class="cov0" title="0">stripe.Key = s.stripeKey
+        params := &amp;stripe.CheckoutSessionParams{
+                SuccessURL: stripe.String(s.stripePaymentSuccessRedirectURL),
+                LineItems:  lineItems,
+                Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
+        }
+        params.AddMetadata("user_id", strconv.Itoa(int(userID)))
+        result, err := session.New(params)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov0" title="0">return result.URL, nil</span>
+}
+
+func (s *stripeServiceImpl) PaymentSuccessCallback(ctx context.Context, body []byte, signature string) error <span class="cov0" title="0">{
+        // Pass the request body &amp; Stripe-Signature header to ConstructEvent, along with the webhook signing key
+        // You can find your endpoint's secret in your webhook settings
+        // event, _ := webhook.ConstructEvent(body, signature, endpointSecret)
+
+        var event stripe.Event
+        err := json.Unmarshal(body, &amp;event)
+        if err != nil </span><span class="cov0" title="0">{
+                return errors.New("Unable to decode JSON")
+        }</span>
+
+        // if err != nil {
+        //         logrus.Info(err)
+        //         return errors.New("Invalid signature")
+        // }
+
+        <span class="cov0" title="0">if event.Type == "checkout.session.completed" </span><span class="cov0" title="0">{
+                var checkoutSession stripe.CheckoutSession
+                err := json.Unmarshal(event.Data.Raw, &amp;checkoutSession)
+                if err != nil </span><span class="cov0" title="0">{
+                        logrus.Warnf("Error parsing checkout session: %v", err)
+                        return nil
+                }</span>
+
+                // Access metadata directly from the Checkout Session
+                <span class="cov0" title="0">userID := checkoutSession.Metadata["user_id"]
+                logrus.Printf("Checkout session completed for user: %s", userID)
+
+                logrus.Printf("Payment status: %s", checkoutSession.PaymentStatus)
+                logrus.Printf("Customer email: %s", checkoutSession.CustomerDetails.Email)
+
+                v, err := strconv.Atoi(userID)
+                if err != nil </span><span class="cov0" title="0">{
+                        logrus.Warnf("Error parsing user ID: %v", err)
+                        return nil
+                }</span>
+                <span class="cov0" title="0">err = s.cartSvc.Checkout(ctx, int64(v))
+                return err</span>
+        }
+
+        <span class="cov0" title="0">logrus.Warn("Invalid event type")
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package service
+
+import (
+        "context"
+
+        "shanepee.com/api/domain"
+)
+
+type UserService interface {
+        UpdateUser(ctx context.Context, id int64, body map[string]any) error
+        GetSellers(ctx context.Context) ([]*domain.UserWithReview, error)
+        GetSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error)
+}
+
+func NewUserService(userRepo domain.UserRepository) UserService <span class="cov0" title="0">{
+        return &amp;userServiceImpl{
+                userRepo,
+        }
+}</span>
+
+type userServiceImpl struct {
+        userRepo domain.UserRepository
+}
+
+var _ UserService = &amp;userServiceImpl{}
+
+func (s *userServiceImpl) UpdateUser(ctx context.Context, id int64, body map[string]any) error <span class="cov0" title="0">{
+        if err := s.userRepo.UpdateUser(ctx, id, body); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *userServiceImpl) GetSellers(ctx context.Context) ([]*domain.UserWithReview, error) <span class="cov0" title="0">{
+        sellers, err := s.userRepo.FindSellers(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return sellers, nil</span>
+}
+
+func (s *userServiceImpl) GetSellerByID(ctx context.Context, id int64) (*domain.UserWithReview, error) <span class="cov0" title="0">{
+        seller, err := s.userRepo.FindSellerByID(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return seller, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

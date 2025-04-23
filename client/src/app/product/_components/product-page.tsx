@@ -44,7 +44,10 @@ export function ProductPage({
             <div className='flex items-center gap-2'>
               <Avatar className='size-20'>
                 <AvatarImage src={seller?.photo ?? ''} width={80} height={80} />
-                <AvatarFallback>{product.owner_id}</AvatarFallback>
+                <AvatarFallback>
+                  {seller?.first_name?.[0]?.toUpperCase()}
+                  {seller?.last_name?.[0]?.toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <div className='flex flex-col'>
                 <span className='text-sm font-semibold'>

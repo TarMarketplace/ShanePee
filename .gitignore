@@ -3,3 +3,8 @@ api/out/*
 api/test.db
 .DS_Store
 .env
+
+
+log.html
+output.xml
+report.html

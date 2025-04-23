@@ -95,12 +95,14 @@ export function RegisterStep1Form({ onSubmit, form }: RegisterStep1FormProps) {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid='gender-select'>
                       <SelectValue placeholder='กรุณาเลือก' />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value='MALE'>ชาย</SelectItem>
+                    <SelectItem value='MALE' data-testid='male-option'>
+                      ชาย
+                    </SelectItem>
                     <SelectItem value='FEMALE'>หญิง</SelectItem>
                     <SelectItem value='OTHER'>ไม่ระบุ</SelectItem>
                   </SelectContent>

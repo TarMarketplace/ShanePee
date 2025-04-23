@@ -29,13 +29,15 @@ fmt:
 clean:
 	@echo "$(ORANGE)Cleaning$(RESET)"
 	rm -rf out/* cmd/api/wire_gen.go docs
+	rm -rf coverage
 
-test: coverage/coverage.html
+test: coverage/coverage.html $(SRCS)
 
 coverage/coverage.html: coverage/coverage.out
 	$(GO) tool cover -html coverage/coverage.out -o coverage/coverage.html
 
 coverage/coverage.out:
+	mkdir -p coverage
 	$(GO) test -coverprofile coverage/coverage.out ./service/...
 
 docs: docs/openapi.json

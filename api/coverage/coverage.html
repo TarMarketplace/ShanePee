@@ -57,7 +57,7 @@
 				
 				<option value="file0">shanepee.com/api/service/arttoy.service.go (0.0%)</option>
 				
-				<option value="file1">shanepee.com/api/service/auth.service.go (16.1%)</option>
+				<option value="file1">shanepee.com/api/service/auth.service.go (17.2%)</option>
 				
 				<option value="file2">shanepee.com/api/service/cart.service.go (0.0%)</option>
 				
@@ -265,7 +265,7 @@ func (s *authServiceImpl) Register(ctx context.Context, email string, password s
         // TODO: validate password
         hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
         hashStr := string(hash)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 // TODO: properly handle this error
                 return nil, err
         }</span>

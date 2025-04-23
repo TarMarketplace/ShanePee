@@ -195,3 +195,20 @@ func TestAuthServiceImpl_Register_EmailAlreadyExists(t *testing.T) {
 
 	runAuthRegisterTest(t, tc)
 }
+
+// bcrypt fail
+func TestAuthServiceImpl_Register_BcryptFail(t *testing.T) {
+	tc := authRegisterTestCase{
+		name:     "TC1-4: Email already exists",
+		email:    "exist@abcd.com",
+		password: "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
+		wantErr:  true,
+		mockSetup: func(userRepo *MockUserRepository, emailSender *MockEmailSender) {
+			userRepo.On("CreateUser", mock.Anything, mock.MatchedBy(func(user *domain.User) bool {
+				return user.Email == "exist@abcd.com"
+			})).Return(domain.ErrUserEmailAlreadyExist)
+		},
+	}
+
+	runAuthRegisterTest(t, tc)
+}

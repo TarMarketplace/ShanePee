@@ -44,7 +44,7 @@ export default function OrderCardFooter({ order }: OrderCardFooterProps) {
         </span>
       </Text>
       <div className='flex items-center justify-center gap-3'>
-        {order.status === 'PREPARING' && seller ? (
+        {order.status === 'COMPLETED' && seller ? (
           <AddReviewContainer
             name={seller.name}
             photo={seller.photo}

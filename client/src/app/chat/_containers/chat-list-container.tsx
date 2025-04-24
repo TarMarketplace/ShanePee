@@ -81,7 +81,7 @@ export function ChatListContainer() {
   }
 
   const getUserChatList = useCallback(async () => {
-    timeoutPromise(getChatList({ query: { poll: false } }), 500)
+    timeoutPromise(getChatList({ query: { poll: false } }), 2000)
       .then((response) => {
         const list = response?.data?.data
         if (Array.isArray(list)) {

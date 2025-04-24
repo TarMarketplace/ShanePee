@@ -50,7 +50,8 @@ export function ChatListContainer() {
       .then((response) => {
         const list = response?.data?.data
         if (Array.isArray(list)) {
-          setChatList((prevChatList) => [...prevChatList, ...list])
+          // FIXME: for some reason, commenting this line out causes the chat list to be fine
+          // setChatList((prevChatList) => [...prevChatList, ...list])
           pollChatListIdRef.current = list[list.length - 1].id
         } else if (response.response.status == 401) {
           isPollingChatListRef.current = false
@@ -197,7 +198,6 @@ export function ChatListContainer() {
           if (response.data) {
             setInput('')
             pollChatIdRef.current = response.data.id
-            toast.success('Message sent')
           } else {
             toast.error('Error sending message')
           }
@@ -225,7 +225,6 @@ export function ChatListContainer() {
           if (hasError) {
             toast.error('Some images failed to send')
           } else {
-            toast.success('Image(s) sent')
             setPreviewImages([])
           }
         })

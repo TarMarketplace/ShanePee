@@ -46,6 +46,7 @@ export function RecommendedStoreContainer() {
             average_rating={seller.rating}
             review_count={seller.number_of_reviews}
             image_src={seller.photo ?? ''}
+            seller_id={seller.id}
           />
         ))}
       </div>

@@ -42,9 +42,11 @@ export function CartBox({ items, onDeleteItem }: CartBoxProps) {
         className='pb-2.5'
       >
         ร้านค้า:{' '}
-        {items[0].owner &&
-        (items[0].owner.first_name || items[0].owner.last_name)
-          ? items[0].owner.first_name + ' ' + items[0].owner.last_name
+        {items[0].art_toy?.owner &&
+        (items[0].art_toy.owner.first_name || items[0].art_toy.owner.last_name)
+          ? items[0].art_toy.owner.first_name +
+            ' ' +
+            items[0].art_toy.owner.last_name
           : 'ไม่พบชื่อร้านค้า'}
       </Text>
       <AnimatePresence mode='sync' initial={false}>

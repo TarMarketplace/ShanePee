@@ -1,0 +1,33 @@
+services:
+  backend:
+    image: ghcr.io/tarmarketplace/shanepee-api:w17-01
+    restart: unless-stopped
+    volumes:
+    - db:/var/lib/shanepee
+    ports:
+    - 8080:8080
+    environment:
+    - APP_SERVER_URL=http://localhost:8080
+    - APP_DEBUG=1
+    - APP_DATABASE_FILE=/var/lib/shanepee/test.db
+    - APP_CORS_ALLOW_ORIGINS=http://localhost:3000
+    - APP_SESSION_COOKIE_DOMAIN=localhost:3000
+    - APP_SESSION_COOKIE_MAX_AGE=24h
+    - APP_SESSION_COOKIE_NAME=session
+    - APP_SESSION_COOKIE_SECURE=false
+    - APP_SESSION_KEY=secret
+    - APP_RESET_PASSWORD_FRONTEND_ENDPOINT=http://localhost:3000/reset-password
+    - APP_EMAIL_NAME=noreply
+    - APP_EMAIL_ADDRESS=noreply@shanepee.lackadaisical.dev
+    - APP_EMAIL_PROVIDER=debug
+    - APP_EMAIL_SENDGRID_API_KEY=
+    - APP_STRIPE_KEY=
+    - APP_STRIPE_PAYMENT_SUCCESS_REDIRECT_URL=http://localhost:3000/checkout/payment-success
+  client:
+    image: ghcr.io/tarmarketplace/shanepee-client:62cf9cf052a73d992d463a5b8e97e6f646ec0fbf
+    restart: unless-stopped
+    ports:
+    - 3000:3000
+
+volumes:
+  db:
